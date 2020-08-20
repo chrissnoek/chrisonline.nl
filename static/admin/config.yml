@@ -132,8 +132,8 @@ collections:
             }
           - { label: "Title", name: "title", widget: "string" }
           - { label: "Body", name: "body", widget: "markdown" }
-      - file: "src/pages/conditions/index.md"
-        label: "Conditions"
+      - file: "src/pages/algemene-voorwaarden/index.md"
+        label: "Algemene voorwaarden"
         name: "conditions"
         fields:
           - {
