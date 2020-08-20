@@ -51,7 +51,7 @@ ConditionPage.propTypes = {
 
 export default ConditionPage;
 
-export const aboutPageQuery = graphql`
+export const conditionPageQuery = graphql`
 	query ConditionPage($id: String!) {
 		markdownRemark(id: { eq: $id }) {
 			html
