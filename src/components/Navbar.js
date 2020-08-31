@@ -33,21 +33,17 @@ const Navbar = class extends React.Component {
 
 	render() {
 		return (
-			<nav
-				className="navbar is-transparent"
-				role="navigation"
-				aria-label="main-navigation"
-			>
+			<nav className="py-8" role="navigation" aria-label="main-navigation">
 				<div className="container">
 					<div className="navbar-brand">
 						<Link to="/" className="navbar-item" title="Logo">
-							<h1>
-								💻 <span className="text-white">Chris</span>{" "}
-								<span className="">Online</span>
+							<h1 className="text-white text-2xl font-bold">
+								💻 Chris
+								<span className="text-teal-400 font-normal">Online</span>
 							</h1>
 						</Link>
 						{/* Hamburger menu */}
-						<div
+						{/* <div
 							className={`navbar-burger burger ${this.state.navBarActiveClass}`}
 							data-target="navMenu"
 							onClick={() => this.toggleHamburger()}
@@ -55,33 +51,30 @@ const Navbar = class extends React.Component {
 							<span />
 							<span />
 							<span />
-						</div>
+						</div> */}
 					</div>
 					<div
 						id="navMenu"
 						className={`navbar-menu ${this.state.navBarActiveClass}`}
 					>
 						<div className="navbar-start has-text-centered">
-							<Link className="navbar-item" to="/about">
-								About
-							</Link>
-							<Link className="navbar-item" to="/products">
-								Products
-							</Link>
-							<Link className="navbar-item" to="/blog">
-								Blog
+							{/* <Link className="navbar-item" to="/portfolio">
+								Portfolio
+							</Link> */}
+							{/* <Link className="navbar-item" to="/diensten">
+								Diensten
 							</Link>
 							<Link className="navbar-item" to="/algemene-voorwaarden">
 								Algemene voorwaarden
 							</Link>
 							<Link className="navbar-item" to="/contact">
 								Contact
-							</Link>
-							<Link className="navbar-item" to="/contact/examples">
+							</Link> */}
+							{/* <Link className="navbar-item" to="/contact/examples">
 								Form Examples
-							</Link>
+							</Link> */}
 						</div>
-						<div className="navbar-end has-text-centered">
+						{/* <div className="navbar-end has-text-centered">
 							<a
 								className="navbar-item"
 								href="https://github.com/netlify-templates/gatsby-starter-netlify-cms"
@@ -92,7 +85,7 @@ const Navbar = class extends React.Component {
 									<img src={github} alt="Github" />
 								</span>
 							</a>
-						</div>
+						</div> */}
 					</div>
 				</div>
 			</nav>

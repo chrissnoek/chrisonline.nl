@@ -2,7 +2,7 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import "./all.sass";
+import "./all.scss";
 import useSiteMetadata from "./SiteMetadata";
 import { withPrefix } from "gatsby";
 
@@ -48,9 +48,13 @@ const TemplateWrapper = ({ children }) => {
 					content={`${withPrefix("/")}img/og-image.jpg`}
 				/>
 			</Helmet>
-			{/* <Navbar /> */}
-			<div className="bg-gray-900 text-white">{children}</div>
-			{/* <Footer /> */}
+			<div className=" bg-gray-900 text-white">
+				<div className="content px-8">
+					<Navbar />
+					{children}
+					<Footer />
+				</div>
+			</div>
 		</div>
 	);
 };
