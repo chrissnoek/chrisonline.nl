@@ -8,6 +8,18 @@ import { withPrefix } from "gatsby";
 
 const TemplateWrapper = ({ children }) => {
 	const { title, description } = useSiteMetadata();
+	const onLinkClick = (e) => {
+		e.preventDefault();
+		const splittedUrl = e.target.href.split("/");
+		const segment = splittedUrl[splittedUrl.length - 1];
+		const element = document.querySelector(segment);
+		const topPos = element.getBoundingClientRect().top;
+
+		window.scroll({
+			top: topPos,
+			behavior: "smooth", // чтобы было плавным
+		});
+	};
 	return (
 		<div>
 			<Helmet>
@@ -48,6 +60,17 @@ const TemplateWrapper = ({ children }) => {
 					content={`${withPrefix("/")}img/og-image.jpg`}
 				/>
 			</Helmet>
+
+			<aside class="top-0 left-0 w-full z-10 flex justify-center items-center p-3 bg-blue-500 text-white font-bold">
+				<div class="text-2xl">&zwj;🚀️&zwj;&nbsp;</div>
+				<p>
+					Beschikbaar voor nieuwe projecten. Aarzel niet om{" "}
+					<a className="underline" onClick={onLinkClick} href="#contact">
+						contact
+					</a>{" "}
+					op te nemen!
+				</p>
+			</aside>
 			<div className=" bg-gray-900 text-white">
 				<div className="content px-8">
 					<Navbar />

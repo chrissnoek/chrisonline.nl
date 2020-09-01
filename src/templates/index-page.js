@@ -36,10 +36,10 @@ export const IndexPageTemplate = ({
 				<div className="sm:text-center lg:text-left">
 					<h2 className="text-white text-4xl tracking-tight leading-10 font-extrabold sm:text-5xl sm:leading-none md:text-6xl">
 						Een <span className="text-teal-400"> razendsnelle website</span>{" "}
-						voor uw bedrijf
+						voor je bedrijf
 					</h2>
 					<p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-						Geen trage wordpress installatie, maar een razendsnelle website die
+						Geen trage WordPress installatie, maar een razendsnelle website die
 						zorgt voor betere posities in Google, hogere conversie ratio en een
 						uitstekende user experience.
 						<br />
@@ -52,7 +52,7 @@ export const IndexPageTemplate = ({
 								href="#contact"
 								className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-teal-400 hover:bg-teal-200 focus:outline-none focus:border-teal-700 focus:shadow-outline-teal transition duration-150 ease-in-out md:py-4 md:text-lg md:px-10"
 							>
-								Contact opnemen
+								Razendsnel contact opnemen »
 							</a>
 						</div>
 						{/* <div className="mt-3 sm:mt-0 sm:ml-3">
@@ -163,7 +163,7 @@ export const IndexPageTemplate = ({
 											Content Management systeem
 										</h4>
 										<p className="mt-2 text-base leading-6 text-gray-500">
-											Eenvoudig je website aanpassen en up to date houden door
+											Eenvoudig je website aanpassen en up-to-date houden door
 											je content aan te passen via jouw CMS systeem.
 										</p>
 									</div>
@@ -174,27 +174,28 @@ export const IndexPageTemplate = ({
 				</div>
 			</div>
 
-			<div className="bg-white flex rounded p-12">
+			<div className="bg-white relative sm:flex rounded p-12">
 				<div className="flex flex-col justify-between mr-8 w-full">
 					<div>
 						<h2
 							id="contact"
 							className="text-gray-800 text-4xl lg:text-5xl font-bold leading-tight"
 						>
-							Project starten met Chris?
+							Project starten met Chris?{" "}
+							<span className="hidden sm:inline-block">👉</span>{" "}
+							<span className="inline-block sm:hidden">👇</span>
 						</h2>
-						<div className="text-gray-700 mt-8">
-							Haat aan formulieren? Stuur dan een{" "}
-							<a href="mailto:info@chrisoline.nl" className="underline">
-								email
-							</a>{" "}
-							.
-						</div>
 					</div>
 					<div className="mt-8 text-center"></div>
 				</div>
 				<div className="w-full">
 					<Index />
+					<a
+						href="mailto:info@chrisoline.nl"
+						className="block underline text-2xl text-gray-700 mt-8"
+					>
+						Liever een mailtje?
+					</a>
 				</div>
 			</div>
 
