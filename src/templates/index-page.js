@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link, graphql } from "gatsby";
 import { FaMobile, FaMedal, FaBolt } from "react-icons/fa";
+import Index from "../pages/contact/index.js";
 
 import Layout from "../components/Layout";
 import Features from "../components/Features";
@@ -20,9 +21,6 @@ export const IndexPageTemplate = ({
 		e.preventDefault();
 		const splittedUrl = e.target.href.split("/");
 		const segment = splittedUrl[splittedUrl.length - 1];
-		console.log(splittedUrl, segment);
-
-		console.log(segment);
 		const element = document.querySelector(segment);
 		const topPos = element.getBoundingClientRect().top;
 
@@ -162,12 +160,11 @@ export const IndexPageTemplate = ({
 									</div>
 									<div className="ml-4">
 										<h4 className="text-lg leading-6 font-medium text-white">
-											Mobile notifications
+											Content Management systeem
 										</h4>
 										<p className="mt-2 text-base leading-6 text-gray-500">
-											Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-											Maiores impedit perferendis suscipit eaque, iste dolor
-											cupiditate blanditiis ratione.
+											Eenvoudig je website aanpassen en up to date houden door
+											je content aan te passen via jouw CMS systeem.
 										</p>
 									</div>
 								</div>
@@ -197,36 +194,7 @@ export const IndexPageTemplate = ({
 					<div className="mt-8 text-center"></div>
 				</div>
 				<div className="w-full">
-					<div>
-						<span className="uppercase text-sm text-gray-600 font-bold">
-							Naam
-						</span>
-						<input
-							className="w-full bg-gray-300 text-white mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"
-							type="text"
-							placeholder=""
-						/>
-					</div>
-					<div className="mt-8">
-						<span className="uppercase text-sm text-gray-600 font-bold">
-							Email
-						</span>
-						<input
-							className="w-full bg-gray-300 text-white mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"
-							type="text"
-						/>
-					</div>
-					<div className="mt-8">
-						<span className="uppercase text-sm text-gray-600 font-bold">
-							Bericht
-						</span>
-						<textarea className="w-full h-32 bg-gray-300 text-white mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"></textarea>
-					</div>
-					<div className="mt-8">
-						<button className="uppercase text-sm font-bold tracking-wide bg-indigo-500 text-gray-100 p-3 rounded-lg w-full focus:outline-none focus:shadow-outline">
-							Bericht versturen
-						</button>
-					</div>
+					<Index />
 				</div>
 			</div>
 
