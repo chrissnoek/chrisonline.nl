@@ -35,7 +35,7 @@ export const IndexPageTemplate = ({
 			<main className="py-10 mx-auto max-w-screen-xl sm:py-12 md:py-16 lg:py-20 xl:py-28">
 				<div className="sm:text-center lg:text-left">
 					<h2 className="text-white text-4xl tracking-tight leading-10 font-extrabold sm:text-5xl sm:leading-none md:text-6xl">
-						Een <span className="text-teal-400"> razendsnelle website</span>{" "}
+						Een <span className="text-chris-light"> razendsnelle website</span>{" "}
 						voor je bedrijf
 					</h2>
 					<p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
@@ -50,7 +50,7 @@ export const IndexPageTemplate = ({
 							<a
 								onClick={onLinkClick}
 								href="#contact"
-								className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-teal-400 hover:bg-teal-200 focus:outline-none focus:border-teal-700 focus:shadow-outline-teal transition duration-150 ease-in-out md:py-4 md:text-lg md:px-10"
+								className="bg-gradient-to-r from-chris-light to-chris-dark w-full hover:via-chris-light transition duration-500 ease-in-out flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-chris-light hover:bg-teal-200 focus:outline-none focus:border-teal-700 focus:shadow-outline-teal md:py-4 md:text-lg md:px-10"
 							>
 								Razendsnel contact opnemen »
 							</a>
@@ -58,7 +58,7 @@ export const IndexPageTemplate = ({
 						{/* <div className="mt-3 sm:mt-0 sm:ml-3">
 						<a
 							href="#"
-							className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-teal-700 bg-teal-100 hover:text-teal-600 hover:bg-teal-50 focus:outline-none focus:shadow-outline-teal focus:border-teal-300 transition duration-150 ease-in-out md:py-4 md:text-lg md:px-10"
+							className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-teal-700 bg-teal-100 hover:text-chris-light hover:bg-teal-50 focus:outline-none focus:shadow-outline-teal focus:border-teal-300 transition duration-150 ease-in-out md:py-4 md:text-lg md:px-10"
 						>
 							Live demo
 						</a>
@@ -70,7 +70,7 @@ export const IndexPageTemplate = ({
 			<div className="py-12">
 				<div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div className="lg:text-center">
-						<p className="text-base leading-6 text-teal-600 font-semibold tracking-wide uppercase">
+						<p className="text-base leading-6 text-chris-light font-semibold tracking-wide uppercase">
 							Waarom ChrisOnline?
 						</p>
 						<h3 className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-white sm:text-4xl sm:leading-10">
@@ -87,7 +87,7 @@ export const IndexPageTemplate = ({
 							<li className=" mb-8 mr-8">
 								<div className="flex">
 									<div className="flex-shrink-0">
-										<div className="flex items-center justify-center h-12 w-12 rounded-md bg-teal-500 text-white">
+										<div className="flex items-center justify-center h-12 w-12 rounded-md bg-chris-light text-white">
 											<FaMedal className="fill-current text-white" />
 										</div>
 									</div>
@@ -106,7 +106,7 @@ export const IndexPageTemplate = ({
 							<li className="mt-10 md:mt-0 mb-8">
 								<div className="flex">
 									<div className="flex-shrink-0">
-										<div className="flex items-center justify-center h-12 w-12 rounded-md bg-teal-500 text-white">
+										<div className="flex items-center justify-center h-12 w-12 rounded-md bg-chris-light text-white">
 											<FaMobile className="fill-current text-white" />
 										</div>
 									</div>
@@ -124,7 +124,7 @@ export const IndexPageTemplate = ({
 							<li className="mt-10 md:mt-0 mb-4">
 								<div className="flex">
 									<div className="flex-shrink-0">
-										<div className="flex items-center justify-center h-12 w-12 rounded-md bg-teal-500 text-white">
+										<div className="flex items-center justify-center h-12 w-12 rounded-md bg-chris-light text-white">
 											<FaBolt className="fill-current text-white" />
 										</div>
 									</div>
@@ -142,7 +142,7 @@ export const IndexPageTemplate = ({
 							<li className="mt-10 md:mt-0">
 								<div className="flex">
 									<div className="flex-shrink-0">
-										<div className="flex items-center justify-center h-12 w-12 rounded-md bg-teal-500 text-white">
+										<div className="flex items-center justify-center h-12 w-12 rounded-md bg-chris-light text-white">
 											<svg
 												className="h-6 w-6"
 												fill="none"

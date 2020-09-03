@@ -7,8 +7,8 @@ module.exports = {
 		extend: {
 			colors: {
 				chris: {
-					light: "#0bb5d6",
-					dark: "#2369b3",
+					light: "#00b0d5",
+					dark: "#0266d5",
 				},
 			},
 		},
