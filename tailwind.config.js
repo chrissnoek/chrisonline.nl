@@ -9,6 +9,7 @@ module.exports = {
 				chris: {
 					light: "#00b0d5",
 					dark: "#0266d5",
+					black: "#08101f"
 				},
 			},
 		},
