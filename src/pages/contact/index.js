@@ -109,7 +109,7 @@ export default class Index extends React.Component {
 							</div>
 							<div className="field">
 								<button
-									className="transition duration-500 ease-in-out bg-chris-light hover:bg-chris-dark text-white rounded w-full py-4"
+									className="gradient text-white rounded w-full py-4"
 									type="submit"
 								>
 									Verzenden

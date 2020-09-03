@@ -35,8 +35,7 @@ export const IndexPageTemplate = ({
 			<main className="py-10 mx-auto max-w-screen-xl sm:py-12 md:py-16 lg:py-20 xl:py-28">
 				<div className="sm:text-center lg:text-left">
 					<h2 className="text-white text-4xl tracking-tight leading-10 font-extrabold sm:text-5xl sm:leading-none md:text-6xl">
-						Een <span className="text-chris-light"> razendsnelle website</span>{" "}
-						voor je bedrijf
+						Een <span className="gradient gradient-text"> razendsnelle website</span> voor je bedrijf
 					</h2>
 					<p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
 						Geen trage WordPress installatie, maar een razendsnelle website die
@@ -50,7 +49,7 @@ export const IndexPageTemplate = ({
 							<a
 								onClick={onLinkClick}
 								href="#contact"
-								className="bg-gradient-to-r from-chris-light to-chris-dark w-full hover:via-chris-light transition duration-500 ease-in-out flex items-center justify-center px-8 py-3  text-base leading-6 font-medium rounded-md text-white bg-chris-light hover:bg-teal-200  focus:shadow-outline-teal md:py-4 md:text-lg md:px-10"
+								className="gradient w-full  transition duration-500 ease-in-out flex items-center justify-center px-8 py-3  text-base leading-6 font-medium rounded-md text-white bg-chris-light hover:bg-teal-200  focus:shadow-outline-teal md:py-4 md:text-lg md:px-10"
 							>
 								Razendsnel contact opnemen »
 							</a>

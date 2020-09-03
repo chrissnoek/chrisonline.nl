@@ -12,3 +12,37 @@
 // 		color: #fff !important;
 // 	}
 // }
+
+.gradient {
+  position: relative;
+  background-image: linear-gradient( to right, #00b0d5,  #0266d5 );
+  z-index: 1;
+  
+    &.gradient-text {
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+}
+
+.gradient:not(.gradient-text) {
+    &::before {
+        position: absolute;
+        content: "";
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-image: linear-gradient( to right, #0266d5,#00b0d5 );
+        z-index: -1;
+        transition: opacity 0.2s linear;
+        opacity: 0;
+        @apply rounded;
+    }
+
+    &:hover {
+        &::before {
+            opacity: 1;
+        }
+    }
+}
