@@ -4,13 +4,14 @@ module.exports = {
 	},
 	purge: ["./src/**/*.js", "./src/**/*.jsx", "./src/**/*.ts", "./src/**/*.tsx"],
 	theme: {
-		colors: {
-			logo: {
-				light: "#0bb5d6",
-				dark: "#2369b3",
+		extend: {
+			colors: {
+				chris: {
+					light: "#0bb5d6",
+					dark: "#2369b3",
+				},
 			},
 		},
-		extend: {},
 	},
 	variants: {},
 	plugins: [],
