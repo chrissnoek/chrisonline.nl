@@ -39,7 +39,7 @@ export const IndexPageTemplate = ({
 					</h2>
 					<p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
 						Geen trage WordPress installatie, maar een razendsnelle website die
-						zorgt voor betere posities in Google, hogere conversie ratio en een
+						zorgt voor betere posities in Google, hogere conversieratio en een
 						uitstekende user experience.
 						<br />
 						Dat is toch wat je wil?
