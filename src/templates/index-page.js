@@ -50,7 +50,7 @@ export const IndexPageTemplate = ({
 							<a
 								onClick={onLinkClick}
 								href="#contact"
-								className="bg-gradient-to-r from-chris-light to-chris-dark w-full hover:via-chris-light transition duration-500 ease-in-out flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-chris-light hover:bg-teal-200 focus:outline-none focus:border-teal-700 focus:shadow-outline-teal md:py-4 md:text-lg md:px-10"
+								className="bg-gradient-to-r from-chris-light to-chris-dark w-full hover:via-chris-light transition duration-500 ease-in-out flex items-center justify-center px-8 py-3  text-base leading-6 font-medium rounded-md text-white bg-chris-light hover:bg-teal-200  focus:shadow-outline-teal md:py-4 md:text-lg md:px-10"
 							>
 								Razendsnel contact opnemen »
 							</a>
