@@ -35,12 +35,15 @@ export const IndexPageTemplate = ({
 			<main className="py-10 mx-auto max-w-screen-xl sm:py-12 md:py-16 lg:py-20 xl:py-28">
 				<div className="sm:text-center lg:text-left">
 					<h2 className="text-white text-4xl tracking-tight leading-10 font-extrabold sm:text-5xl sm:leading-none md:text-6xl">
-						Een{" "}
-						<div className="gradient gradient-text inline">
-							{" "}
+						Een&nbsp;
+						<div className="gradient gradient-text hidden sm:inline">
 							razendsnelle website
-						</div>{" "}
-						voor je bedrijf
+						</div>
+						<div className=" inline sm:hidden">
+							<span className="gradient gradient-text">razendsnelle</span>{" "}
+							website
+						</div>
+						&nbsp;voor je bedrijf
 					</h2>
 					<p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
 						Geen trage WordPress installatie, maar een razendsnelle website die
