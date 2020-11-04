@@ -190,7 +190,7 @@ export const IndexPageTemplate = ({
 				<div className="w-full">
 					<Index />
 					<a
-						href="mailto:info@chrisoline.nl"
+						href="mailto:info@chrisonline.nl"
 						className="block underline text-2xl text-gray-700 mt-8"
 					>
 						Liever een mailtje?
