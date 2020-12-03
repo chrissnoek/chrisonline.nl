@@ -8,18 +8,6 @@ import { withPrefix } from "gatsby";
 
 const TemplateWrapper = ({ children }) => {
 	const { title, description } = useSiteMetadata();
-	const onLinkClick = (e) => {
-		e.preventDefault();
-		const splittedUrl = e.target.href.split("/");
-		const segment = splittedUrl[splittedUrl.length - 1];
-		const element = document.querySelector(segment);
-		const topPos = element.getBoundingClientRect().top;
-
-		window.scroll({
-			top: topPos,
-			behavior: "smooth", // чтобы было плавным
-		});
-	};
 	return (
 		<div>
 			<Helmet>
@@ -61,8 +49,8 @@ const TemplateWrapper = ({ children }) => {
 				/>
 			</Helmet>
 
-			<aside class="top-0 left-0 w-full z-10 flex justify-center items-center p-3 bg-blue-500 text-white font-bold">
-				<div class="text-2xl">&zwj;🚀️&zwj;&nbsp;</div>
+			{/* <aside class="top-0 left-0 w-full z-10 flex justify-center items-center p-3 bg-blue-500 text-white font-bold">
+				<div class="text-2xl">&zwj;<span role="img" aria-label="rocket">🚀️</span>&zwj;&nbsp;</div>
 				<p>
 					Beschikbaar voor nieuwe projecten. Aarzel niet om{" "}
 					<a className="underline" onClick={onLinkClick} href="#contact">
@@ -70,9 +58,10 @@ const TemplateWrapper = ({ children }) => {
 					</a>{" "}
 					op te nemen!
 				</p>
-			</aside>
+			</aside> */}
+			
 			<div className=" bg-chris-black text-white">
-				<div className="content px-8">
+				<div className="">
 					<Navbar />
 					{children}
 					<Footer />

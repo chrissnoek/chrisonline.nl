@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "gatsby";
-import github from "../img/github-icon.svg";
 import { withPrefix } from "gatsby";
 
 const Navbar = class extends React.Component {
@@ -34,9 +33,9 @@ const Navbar = class extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div className="content">
 				<nav className="py-8" role="navigation" aria-label="main-navigation">
-					<div className="container">
+					<div className="container flex items-center">
 						<div className="navbar-brand">
 							<Link to="/" className="navbar-item" title="Logo">
 								<h1 className="text-white text-2xl font-bold">
@@ -60,12 +59,12 @@ const Navbar = class extends React.Component {
 						</div>
 						<div
 							id="navMenu"
-							className={`navbar-menu ${this.state.navBarActiveClass}`}
+							className={`ml-auto navbar-menu ${this.state.navBarActiveClass}`}
 						>
 							<div className="navbar-start has-text-centered">
-								{/* <Link className="navbar-item" to="/portfolio">
-								Portfolio
-							</Link> */}
+								<Link className="navbar-item font-bold text-white mr-4 text-lg" to="/">
+								Home
+							</Link>
 								{/* <Link className="navbar-item" to="/diensten">
 								Diensten
 							</Link>
@@ -75,9 +74,12 @@ const Navbar = class extends React.Component {
 							<Link className="navbar-item" to="/contact">
 								Contact
 							</Link> */}
-								{/* <Link className="navbar-item" to="/contact/examples">
-								Form Examples
-							</Link> */}
+							 {/* <Link className="navbar-item" to="/contact/examples">
+									Form Examples
+							</Link>  */}
+							<Link className="font-bold text-white text-lg mr-4" to="/website-abonnement">
+									Website abonnement paketten
+							</Link> 	
 							</div>
 							{/* <div className="navbar-end has-text-centered">
 							<a

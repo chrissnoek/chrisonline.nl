@@ -1,22 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Link, graphql } from "gatsby";
+import {  graphql } from "gatsby";
 import { FaMobile, FaMedal, FaBolt } from "react-icons/fa";
 import Index from "../pages/contact/index.js";
 
 import Layout from "../components/Layout";
-import Features from "../components/Features";
-import BlogRoll from "../components/BlogRoll";
 
-export const IndexPageTemplate = ({
-	image,
-	title,
-	heading,
-	subheading,
-	mainpitch,
-	description,
-	intro,
-}) => {
+export const IndexPageTemplate = () => {
 	const onLinkClick = (e) => {
 		e.preventDefault();
 		const splittedUrl = e.target.href.split("/");
@@ -173,6 +163,7 @@ export const IndexPageTemplate = ({
 				</div>
 			</div>
 
+			<div className="content">
 			<div className="bg-white relative sm:flex rounded p-12">
 				<div className="flex flex-col justify-between mr-8 w-full">
 					<div>
@@ -181,8 +172,8 @@ export const IndexPageTemplate = ({
 							className="text-gray-800 text-4xl lg:text-5xl font-bold leading-tight"
 						>
 							Project starten met Chris?{" "}
-							<span className="hidden sm:inline-block">👉</span>{" "}
-							<span className="inline-block sm:hidden">👇</span>
+							<span className="hidden sm:inline-block"><span aria-label="point-right" role="img">👉</span></span>{" "}
+							<span className="inline-block sm:hidden"><span aria-label="point-down" role="img">👇</span></span>
 						</h2>
 					</div>
 					<div className="mt-8 text-center"></div>
@@ -196,7 +187,8 @@ export const IndexPageTemplate = ({
 						Liever een mailtje?
 					</a>
 				</div>
-			</div>
+				</div>
+				</div>
 
 			{/* <div
       className="full-width-image margin-top-0"
