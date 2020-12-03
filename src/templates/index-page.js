@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {  graphql } from "gatsby";
+import { graphql } from "gatsby";
 import { FaMobile, FaMedal, FaBolt } from "react-icons/fa";
 import Index from "../pages/contact/index.js";
 
@@ -25,7 +25,12 @@ export const IndexPageTemplate = () => {
 			<main className="py-10 mx-auto max-w-screen-xl sm:py-12 md:py-16 lg:py-20 xl:py-28">
 				<div className="sm:text-center lg:text-left">
 					<h2 className="text-white text-4xl tracking-tight leading-10 font-extrabold sm:text-5xl sm:leading-none md:text-6xl">
-						Een <span className="gradient gradient-text"> razendsnelle website</span> voor je bedrijf
+						Een{" "}
+						<span className="gradient gradient-text">
+							{" "}
+							razendsnelle website
+						</span>{" "}
+						voor je bedrijf
 					</h2>
 					<p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
 						Geen trage WordPress installatie, maar een razendsnelle website die
@@ -164,31 +169,39 @@ export const IndexPageTemplate = () => {
 			</div>
 
 			<div className="content">
-			<div className="bg-white relative sm:flex rounded p-12">
-				<div className="flex flex-col justify-between mr-8 w-full">
-					<div>
-						<h2
-							id="contact"
-							className="text-gray-800 text-4xl lg:text-5xl font-bold leading-tight"
-						>
-							Project starten met Chris?{" "}
-							<span className="hidden sm:inline-block"><span aria-label="point-right" role="img">👉</span></span>{" "}
-							<span className="inline-block sm:hidden"><span aria-label="point-down" role="img">👇</span></span>
-						</h2>
+				<div className="bg-white relative sm:flex rounded p-12">
+					<div className="flex flex-col justify-between mr-8 w-full">
+						<div>
+							<h2
+								id="contact"
+								className="text-gray-800 text-4xl lg:text-5xl font-bold leading-tight"
+							>
+								Project starten met Chris?{" "}
+								<span className="hidden sm:inline-block">
+									<span aria-label="point-right" role="img">
+										👉
+									</span>
+								</span>{" "}
+								<span className="inline-block sm:hidden">
+									<span aria-label="point-down" role="img">
+										👇
+									</span>
+								</span>
+							</h2>
+						</div>
+						<div className="mt-8 text-center"></div>
 					</div>
-					<div className="mt-8 text-center"></div>
+					<div className="w-full">
+						<Index />
+						<a
+							href="mailto:info@chrisonline.nl"
+							className="block underline text-2xl text-gray-700 mt-8"
+						>
+							Liever een mailtje?
+						</a>
+					</div>
 				</div>
-				<div className="w-full">
-					<Index />
-					<a
-						href="mailto:info@chrisonline.nl"
-						className="block underline text-2xl text-gray-700 mt-8"
-					>
-						Liever een mailtje?
-					</a>
-				</div>
-				</div>
-				</div>
+			</div>
 
 			{/* <div
       className="full-width-image margin-top-0"
