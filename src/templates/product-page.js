@@ -59,10 +59,10 @@ export const ProductPageTemplate = () => {
 			<div className="content">
 				<div className="h-4/5 flex items-center justify-center text-center">
 					<div className="max-w-2xl mx-auto text-center">
-						<div className="gradient inline-block mx-auto mb-4 transition duration-500 ease-in-out px-8 py-3  text-base leading-6 font-medium rounded-md text-white bg-chris-light hover:bg-teal-200  focus:shadow-outline-teal md:py-2 md:text-lg md:px-5">
+						<div className="gradient inline-block mx-auto mb-4 text-sm transition duration-500 ease-in-out px-4 py-2  text-base leading-6 font-medium rounded-md text-white bg-chris-light hover:bg-teal-200  focus:shadow-outline-teal md:py-2 md:text-lg md:px-5">
 							Eerste maand gratis
 						</div>
-						<h1 className="font-bold w-full text-white text-5xl mb-4 leading-tight">
+						<h1 className="font-bold w-full text-white text-2xl sm:text-5xl mb-4 leading-tight">
 							Een professioneel handgemaakte website voor een vast bedrag per
 							maand.
 						</h1>
@@ -77,18 +77,18 @@ export const ProductPageTemplate = () => {
 					</div>
 				</div>
 				<div className="text-center">
-					<section className="flex items-center justify-center mt-10">
-						<div className="flex items-center justify-center mr-6">
+					<section className="block sm:flex items-center justify-center mt-10">
+						<div className="flex items-center justify-center mr-6 mb-3 sm:mb-0">
 							<FaCheck className="text-chris-dark mr-2" />
 							<span className="text-lg text-white font-bold">100% op maat</span>
 						</div>
-						<div className="flex items-center justify-center mr-6">
+						<div className="flex items-center justify-center mr-6 mb-3 sm:mb-0">
 							<FaCheck className="text-chris-dark mr-2" />
 							<span className="text-lg text-white font-bold">
 								Gratis onbeperkt website aanpassingen
 							</span>
 						</div>
-						<div className="flex items-center justify-center mr-6">
+						<div className="flex items-center justify-center mr-6 mb-3 sm:mb-0">
 							<FaCheck className="text-chris-dark mr-2" />
 							<span className="text-lg text-white font-bold">
 								Vast bedrag per maand
@@ -106,37 +106,37 @@ export const ProductPageTemplate = () => {
 			</div>
 			<section className="w-full mt-12 bg-chris-dark py-12 px-4">
 				<div className="content text-center">
-					<h2 className="text-white text-4xl font-bold mb-6">
+					<h2 className="text-white text-2xl sm:text-4xl font-bold mb-6">
 						Wanneer is het website abonnement voor jou geschikt?
 					</h2>
-					<div className="flex items-stretch justify-center mb-4">
-						<div className="bg-white px-6 py-4 rounded w-full mr-4">
+					<div className="block sm:flex items-stretch justify-center mb-4">
+						<div className="bg-white px-6 py-4 rounded w-full mr-4 mb-4 sm:mb-0">
 							<p className="font-bold text-black">
 								Je begrijpt het belang van een up-to-date website, maar hebt
 								zelf geen tijd of de nodige expertise om dit altijd goed te doen
 							</p>
 						</div>
-						<div className="bg-white px-6 py-4 rounded w-full mr-4 flex items-center">
+						<div className="bg-white px-6 py-4 rounded w-full mr-4 flex items-center mb-4 sm:mb-0">
 							<p className="font-bold text-black">
 								Je hebt iemand nodig die altijd klaarstaat om je site naar jouw
 								wensen aan te passen
 							</p>
 						</div>
-						<div className="bg-white px-6 py-4 rounde w-full">
+						<div className="bg-white px-6 py-4 rounde w-full mb-4 sm:mb-0">
 							<p className="font-bold text-black">
 								Je bent veel liever bezig zijn met het laten groeien van je
 								onderneming dan het bijhouden van je website
 							</p>
 						</div>
 					</div>
-					<div className="flex items-stretch justify-center ">
-						<div className="bg-white px-6 py-4 rounded w-full mr-4 max-w-md">
+					<div className="block sm:flex items-stretch justify-center ">
+						<div className="bg-white px-6 py-4 rounded w-full mr-4 max-w-md mb-4 sm:mb-0">
 							<p className="font-bold text-black">
 								Je wilt geen onverwachte kosten of een torenhoge factuur na elke
 								aanpassing, of zelfs hele nieuwe website
 							</p>
 						</div>
-						<div className="bg-white px-6 py-4 rounded w-full mr-4 max-w-md flex items-center">
+						<div className="bg-white px-6 py-4 rounded w-full mr-4 max-w-md flex items-center mb-4 sm:mb-0">
 							<p className="font-bold text-black">
 								Je hebt iemand nodig met expertise en die meedenkt vanuit het
 								belang van jouw bedrijf
@@ -167,19 +167,19 @@ export const ProductPageTemplate = () => {
 					</p>
 					<div className="flex items-center justify-center">
 						<a
-							className="flex items-center justify-center mr-6 block rounded py-2 px-5 mt-8 mb-4 border-2 border-chris-light hover:border-chris-dark inline-block  text-center"
+							className="flex items-center justify-center mr-6 block rounded py-1 px-3 sm:py-2 sm:px-5 mt-8 mb-4 border-2 border-chris-light hover:border-chris-dark inline-block  text-center"
 							rel="noreferrer"
 							href="https://www.linkedin.com/in/chrissnoek/"
 							target="_blank"
 						>
-							<span className="text-lg text-white font-bold mr-2">
+							<span className="text-sm sm:text-lg text-white font-bold mr-2">
 								Connect op Linkedin:{" "}
 							</span>
 							<FaLinkedin className="text-2xl text-white-800 hover:text-white" />
 						</a>
 					</div>
 				</div>
-				<div className="flex items-center justify-center mt-10 pt-10 text-center content">
+				<div className="block sm:flex items-center justify-center mt-10 pt-10 text-center content">
 					<div className="max-w-sm text-center w-full sm:mr-4">
 						<FaStar className="text-chris-dark mb-4 text-5xl text-center mx-auto" />
 						<h3 className="text-white font-bold mb-2">Kwaliteit en maatwerk</h3>
@@ -210,7 +210,7 @@ export const ProductPageTemplate = () => {
 
 			<section className="w-full mt-12 py-12 px-4 bg-white">
 				<div className=" text-center max-w-2xl mx-auto">
-					<h2 className="text-gray-800 text-4xl font-bold mb-6">
+					<h2 className="text-gray-800 text-2xl sm:text-4xl font-bold mb-2 sm:mb-6">
 						Veelgestelde vragen
 					</h2>
 					<p className="text-gray-800 mb-8">
@@ -236,11 +236,11 @@ export const ProductPageTemplate = () => {
 			<section className="w-full mt-12 py-12 px-4">
 				<div className=" text-center">
 					<h2 id="pakketten" className="text-white text-4xl font-bold mb-6">
-						Pakketten
+						Abonnementen
 					</h2>
 
-					<div className="flex items-center justify-center content">
-						<div className="px-10 py-10 bg-white rounded shadow-lg w-full max-w-md mr-4 self-stretch">
+					<div className="block sm:flex items-center justify-center content">
+						<div className="p-4 sm:p-10 bg-white rounded shadow-lg w-full max-w-md mr-4 self-stretch mb-4 sm:mb-0">
 							<div className="gradient text-sm inline-block mx-auto mb-2 transition duration-500 ease-in-out px-3 py-1 font-medium rounded-md text-white bg-chris-light">
 								Eerste maand gratis
 							</div>
@@ -292,7 +292,7 @@ export const ProductPageTemplate = () => {
 								</span>
 							</Link>
 						</div>
-						<div className="px-10 py-10 bg-white rounded shadow-lg w-full max-w-md">
+						<div className="p-4 sm:p-10 bg-white rounded shadow-lg w-full max-w-md">
 							<div className="gradient text-sm inline-block mx-auto mb-2 transition duration-500 ease-in-out px-3 py-1 font-medium rounded-md text-white bg-chris-light">
 								Eerste maand gratis
 							</div>

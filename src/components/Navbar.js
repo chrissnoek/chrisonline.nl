@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "gatsby";
 import { withPrefix } from "gatsby";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 const Navbar = class extends React.Component {
 	constructor(props) {
@@ -22,10 +23,10 @@ const Navbar = class extends React.Component {
 				// set the class in state for the navbar accordingly
 				this.state.active
 					? this.setState({
-							navBarActiveClass: "is-active",
+							navBarActiveClass: "block",
 					  })
 					: this.setState({
-							navBarActiveClass: "",
+							navBarActiveClass: "hidden",
 					  });
 			}
 		);
@@ -35,8 +36,8 @@ const Navbar = class extends React.Component {
 		return (
 			<div className="content">
 				<nav className="py-8" role="navigation" aria-label="main-navigation">
-					<div className="container flex items-center">
-						<div className="navbar-brand">
+					<div className="container block sm:flex items-center">
+						<div className="navbar-brand flex items-center sm:block">
 							<Link to="/" className="navbar-item" title="Logo">
 								<h1 className="text-white text-2xl font-bold">
 									<img
@@ -47,24 +48,27 @@ const Navbar = class extends React.Component {
 								</h1>
 							</Link>
 							{/* Hamburger menu */}
-							{/* <div
-							className={`navbar-burger burger ${this.state.navBarActiveClass}`}
-							data-target="navMenu"
-							onClick={() => this.toggleHamburger()}
-						>
-							<span />
-							<span />
-							<span />
-						</div> */}
+							<div
+								className={`navbar-burger burger block ml-auto sm:hidden`}
+								data-target="navMenu"
+								onClick={() => this.toggleHamburger()}
+							>
+								<GiHamburgerMenu />
+							</div>
 						</div>
 						<div
 							id="navMenu"
-							className={`ml-auto navbar-menu ${this.state.navBarActiveClass}`}
+							className={`ml-auto navbar-menu ${
+								this.state.active ? "block" : "hidden"
+							} sm:block`}
 						>
-							<div className="navbar-start has-text-centered">
-								<Link className="navbar-item font-bold text-white mr-4 text-lg" to="/">
-								Home
-							</Link>
+							<div className="navbar-start has-text-centered mt-6 sm:flex items-center">
+								<Link
+									className="navbar-item font-bold text-white mr-4 text-lg w-full block py-2"
+									to="/"
+								>
+									Home
+								</Link>
 								{/* <Link className="navbar-item" to="/diensten">
 								Diensten
 							</Link>
@@ -74,12 +78,15 @@ const Navbar = class extends React.Component {
 							<Link className="navbar-item" to="/contact">
 								Contact
 							</Link> */}
-							 {/* <Link className="navbar-item" to="/contact/examples">
+								{/* <Link className="navbar-item" to="/contact/examples">
 									Form Examples
 							</Link>  */}
-							<Link className="font-bold text-white text-lg mr-4" to="/website-abonnement">
-									Website abonnement paketten
-							</Link> 	
+								<Link
+									className="font-bold text-white text-lg mr-4 w-full block py-2"
+									to="/website-abonnement"
+								>
+									Website&nbsp;abonnementen
+								</Link>
 							</div>
 							{/* <div className="navbar-end has-text-centered">
 							<a

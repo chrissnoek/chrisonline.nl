@@ -59,8 +59,8 @@ const TemplateWrapper = ({ children }) => {
 					op te nemen!
 				</p>
 			</aside> */}
-			
-			<div className=" bg-chris-black text-white">
+
+			<div className=" bg-chris-black text-white px-6">
 				<div className="">
 					<Navbar />
 					{children}

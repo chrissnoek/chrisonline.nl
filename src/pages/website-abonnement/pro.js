@@ -39,13 +39,13 @@ export default class Index extends React.Component {
 				<section className="section">
 					<div className="container mx-auto">
 						<div className="content">
-							<h1 className="text-5xl font-bold text-white mb-2">
+							<h1 className="text-2xl sm:text-5xl font-bold text-white mb-2">
 								Website abonnement: Pro
 							</h1>
-							<div className="flex">
+							<div className="block sm:flex">
 								<form
 									name="pro"
-									className="w-full mr-12"
+									className="w-full mr-12 mb-6 sm:mb-0"
 									method="post"
 									action="/contact/thanks/"
 									data-netlify="true"
@@ -141,7 +141,24 @@ export default class Index extends React.Component {
 											className="label text-white mb-2 block"
 											htmlFor={"message"}
 										>
-											Bericht
+											Huidige website url
+										</label>
+										<div className="control">
+											<input
+												className="input bg-gray-200 rounded w-full px-4 py-2 text-black"
+												type={"text"}
+												name={"website"}
+												onChange={this.handleChange}
+												id={"website"}
+											/>
+										</div>
+									</div>
+									<div className="field mb-4">
+										<label
+											className="label text-white mb-2 block"
+											htmlFor={"message"}
+										>
+											Wat zijn de knelpunten waar je nu tegenaan loopt?
 										</label>
 										<div className="control">
 											<textarea
@@ -171,8 +188,8 @@ export default class Index extends React.Component {
 											1. Video call:{" "}
 										</span>
 										Ik neem zo spoedig mogelijk contact met je op om een
-										videocall in te plannen. We bespreken alle wensen en eisen
-										en maken we een plan van aanpak.
+										vrijblijvende videocall in te plannen. We bespreken alle
+										wensen en eisen en maken we een plan van aanpak.
 									</p>
 									<p className="text-black mb-2">
 										<span className="font-bold text-chris-dark">

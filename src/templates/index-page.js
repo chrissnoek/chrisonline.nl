@@ -169,7 +169,7 @@ export const IndexPageTemplate = () => {
 			</div>
 
 			<div className="content">
-				<div className="bg-white relative sm:flex rounded p-12">
+				<div className="bg-white relative sm:flex rounded p-6  lg:p-12">
 					<div className="flex flex-col justify-between mr-8 w-full">
 						<div>
 							<h2
