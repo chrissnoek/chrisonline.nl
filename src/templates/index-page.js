@@ -5,6 +5,7 @@ import { FaMobile, FaMedal, FaBolt } from "react-icons/fa";
 import Index from "../pages/contact/index.js";
 
 import Layout from "../components/Layout";
+import { Helmet } from "react-helmet";
 
 export const IndexPageTemplate = () => {
     const onLinkClick = (e) => {
@@ -36,9 +37,9 @@ export const IndexPageTemplate = () => {
                         Een{" "}
                         <span className="gradient gradient-text">
                             {" "}
-                            razendsnelle website
+                            razendsnelle
                         </span>{" "}
-                        voor je bedrijf
+                        website voor je bedrijf
                     </h2>
                     <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
                         Geen trage WordPress installatie, maar een razendsnelle
