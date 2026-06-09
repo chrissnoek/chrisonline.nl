@@ -122,6 +122,64 @@ const creativeWorkLd = {
       <Content />
     </div>
 
+    <!-- Externe links (bijv. live campagne-previews) -->
+    {
+      data.externalLinks.length > 0 && (
+        <div class="mx-auto mt-10 max-w-3xl">
+          <h2 class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
+            Bekijk live
+          </h2>
+          <div class="mt-4 flex flex-wrap gap-3">
+            {data.externalLinks.map((link) => (
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener"
+                class="hover:border-accent-500/50 rounded-pill inline-flex items-center gap-2 border border-[var(--border)] bg-[var(--bg-alt)] px-4 py-2.5 text-sm font-medium text-[var(--fg)] transition-colors hover:text-[var(--accent-text)]"
+              >
+                {link.label}
+                <Icon name="arrowUpRight" size={16} />
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    <!-- Ontwerpgalerij -->
+    {
+      data.gallery.length > 0 && (
+        <section class="mt-16" aria-labelledby="gallery-heading">
+          <h2 id="gallery-heading" class="text-h2 font-bold text-balance">
+            Uit het ontwerp
+          </h2>
+          <div class="mt-8 grid gap-5 sm:grid-cols-2">
+            {data.gallery.map((shot) => (
+              <figure
+                class:list={[
+                  'rounded-card overflow-hidden border border-[var(--border)] bg-[var(--bg-alt)]',
+                  // Liggende/brede beelden mogen de volle breedte pakken.
+                  shot.contain && 'sm:col-span-2',
+                ]}
+              >
+                <Image
+                  src={shot.src}
+                  alt={shot.alt}
+                  widths={[480, 768, 1024, 1280]}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 720px"
+                  format="avif"
+                  quality="mid"
+                  loading="lazy"
+                  class:list={['w-full', shot.contain ? 'object-contain' : 'object-cover']}
+                />
+                <figcaption class="sr-only">{shot.alt}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
     <!-- Vorige / volgende -->
     {
       (prev || next) && (

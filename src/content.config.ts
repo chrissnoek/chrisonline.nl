@@ -36,6 +36,31 @@ const projects = defineCollection({
       placeholder: z.boolean().default(false),
       /** Accentkleur die past bij de mockup-achtergrond (voor de kaart-gradient). */
       accent: z.string().default('#00B0D5'),
+      /**
+       * Galerij met extra ontwerpbeelden voor op de detailpagina.
+       * Leg de afbeeldingen in src/assets/projects/<slug>/ en verwijs relatief.
+       */
+      gallery: z
+        .array(
+          z.object({
+            src: image(),
+            alt: z.string(),
+            /** Toon de afbeelding volledig (object-contain) i.p.v. bijgesneden. */
+            contain: z.boolean().default(false),
+          }),
+        )
+        .default([]),
+      /**
+       * Externe links (bijv. live previews van campagnes). Worden als knoppen getoond.
+       */
+      externalLinks: z
+        .array(
+          z.object({
+            label: z.string(),
+            url: z.string().url(),
+          }),
+        )
+        .default([]),
     }),
 });
 

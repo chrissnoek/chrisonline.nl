@@ -61,10 +61,11 @@ export const SERVICES: Service[] = [
     icon: 'megaphone',
     title: 'High-impact display advertising',
     intro:
-      'Technische implementatie van opvallende advertentieformaten die aansluiten op je campagnedoelen.',
+      'Technische implementatie van opvallende, paginavullende advertentieformaten die aansluiten op je campagnedoelen — o.a. voor BetCity.',
     points: [
-      'HPTO-campagne-implementatie voor Weborama en PXR',
+      'Homepage Takeovers (HPTO) voor Weborama en PXR',
       'Rich media en high-visibility advertentie-integraties',
+      'Strakke, snelle creatives die de host-pagina niet vertragen',
       'Technische uitvoering afgestemd op campagne-performance',
     ],
   },
