@@ -48,13 +48,14 @@
   --font-sans:
     'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
-  /* Vloeiende type-schaal (clamp) voor grote koppen zonder media queries. */
-  --text-display: clamp(2.75rem, 1.6rem + 5.2vw, 5.25rem);
-  --text-display--line-height: 1.02;
+  /* Vloeiende type-schaal (clamp) voor grote koppen zonder media queries.
+     De min is bewust laag genoeg om lange NL-woorden op 320px-schermen te laten passen. */
+  --text-display: clamp(2.25rem, 1.1rem + 5.6vw, 5.25rem);
+  --text-display--line-height: 1.04;
   --text-display--letter-spacing: -0.03em;
   --text-display--font-weight: 700;
 
-  --text-h1: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+  --text-h1: clamp(2rem, 1.3rem + 3vw, 3.5rem);
   --text-h1--line-height: 1.07;
   --text-h1--letter-spacing: -0.025em;
 
@@ -121,6 +122,15 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.6;
+    /* Vangnet tegen horizontale overflow door lange woorden op smalle schermen. */
+    overflow-wrap: break-word;
+  }
+
+  /* Grote koppen mogen lange NL-woorden netjes afbreken i.p.v. overlopen. */
+  h1,
+  h2,
+  h3 {
+    overflow-wrap: break-word;
   }
 
   /* Eén consistente, zichtbare focus-stijl voor toetsenbordnavigatie. */

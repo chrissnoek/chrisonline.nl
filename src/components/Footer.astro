@@ -5,7 +5,10 @@ import Icon from './Icon.astro';
 const year = new Date().getFullYear();
 ---
 
-<footer class="mt-section border-t border-[var(--border)] bg-[var(--bg-alt)]">
+<footer
+  aria-label="Sitevoettekst"
+  class="mt-section border-t border-[var(--border)] bg-[var(--bg-alt)]"
+>
   <div class="container-page py-14">
     <div class="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
       <!-- Merk + pitch -->

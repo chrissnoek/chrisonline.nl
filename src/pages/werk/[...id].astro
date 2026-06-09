@@ -39,7 +39,7 @@ const creativeWorkLd = {
   dateCreated: data.pubDate.toISOString().split('T')[0],
   image: new URL(data.cover.src, Astro.site).href,
   creator: { '@id': `${origin}/#person` },
-  ...(data.url ? { sameAs: data.url } : {}),
+  ...(data.url ? { sameAs: [data.url] } : {}),
 };
 ---
 

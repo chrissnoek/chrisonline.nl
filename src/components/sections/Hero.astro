@@ -5,11 +5,11 @@ import Icon from '../Icon.astro';
 import chris from '../../assets/me/chris-snoek.jpg';
 ---
 
-<section class="relative overflow-hidden" aria-labelledby="hero-heading">
+<section class="relative isolate overflow-x-clip" aria-labelledby="hero-heading">
   <!-- Subtiele accent-gloed achter de hero -->
-  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+  <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
     <div
-      class="bg-accent-500/10 dark:bg-accent-500/15 absolute top-[-20%] right-[-10%] h-[42rem] w-[42rem] rounded-full blur-3xl"
+      class="bg-accent-500/10 dark:bg-accent-500/15 absolute top-[-20%] right-[-10%] h-[clamp(20rem,60vw,42rem)] w-[clamp(20rem,60vw,42rem)] rounded-full blur-3xl"
     >
     </div>
   </div>
@@ -62,18 +62,18 @@ import chris from '../../assets/me/chris-snoek.jpg';
       <dl class="mt-12 grid max-w-md grid-cols-3 gap-4 sm:gap-6">
         <div>
           <dt class="sr-only">Specialisatie</dt>
-          <dd class="text-xl font-bold tracking-tight sm:text-2xl">Maatwerk</dd>
-          <dd class="text-sm text-[var(--fg-muted)]">geen templates</dd>
+          <dd class="text-lg font-bold tracking-tight sm:text-2xl">Maatwerk</dd>
+          <dd class="mt-0.5 text-xs text-[var(--fg-muted)] sm:text-sm">geen templates</dd>
         </div>
         <div>
           <dt class="sr-only">Focus</dt>
-          <dd class="text-xl font-bold tracking-tight sm:text-2xl">Snelheid</dd>
-          <dd class="text-sm text-[var(--fg-muted)]">top performance</dd>
+          <dd class="text-lg font-bold tracking-tight sm:text-2xl">Snelheid</dd>
+          <dd class="mt-0.5 text-xs text-[var(--fg-muted)] sm:text-sm">top performance</dd>
         </div>
         <div>
           <dt class="sr-only">Resultaat</dt>
-          <dd class="text-xl font-bold tracking-tight sm:text-2xl">Conversie</dd>
-          <dd class="text-sm text-[var(--fg-muted)]">gericht ontwerp</dd>
+          <dd class="text-lg font-bold tracking-tight sm:text-2xl">Conversie</dd>
+          <dd class="mt-0.5 text-xs text-[var(--fg-muted)] sm:text-sm">gericht ontwerp</dd>
         </div>
       </dl>
     </div>
