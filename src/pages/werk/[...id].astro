@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
+import BrowserFrame from '../../components/BrowserFrame.astro';
 import { SITE } from '../../config/site';
 
 export async function getStaticPaths() {
@@ -146,36 +147,34 @@ const creativeWorkLd = {
       )
     }
 
-    <!-- Ontwerpgalerij -->
+    <!-- Ontwerpgalerij — uniform browser-frame raster -->
     {
       data.gallery.length > 0 && (
         <section class="mt-16" aria-labelledby="gallery-heading">
           <h2 id="gallery-heading" class="text-h2 font-bold text-balance">
             Uit het ontwerp
           </h2>
-          <div class="mt-8 grid gap-5 sm:grid-cols-2">
-            {data.gallery.map((shot) => (
-              <figure
+          <ul
+            class:list={[
+              'mt-8 grid gap-5 sm:grid-cols-2',
+              // Oneven aantal: laatste beeld centreren onder de twee erboven.
+              data.gallery.length % 2 === 1 && '[&>li:last-child]:sm:col-span-2',
+            ]}
+          >
+            {data.gallery.map((shot, i) => (
+              <li
                 class:list={[
-                  'rounded-card overflow-hidden border border-[var(--border)] bg-[var(--bg-alt)]',
-                  // Liggende/brede beelden mogen de volle breedte pakken.
-                  shot.contain && 'sm:col-span-2',
+                  // Bij een oneven laatste item: niet full-width oprekken, maar
+                  // gecentreerd op halve breedte houden.
+                  data.gallery.length % 2 === 1 &&
+                    i === data.gallery.length - 1 &&
+                    'sm:mx-auto sm:w-1/2',
                 ]}
               >
-                <Image
-                  src={shot.src}
-                  alt={shot.alt}
-                  widths={[480, 768, 1024, 1280]}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 720px"
-                  format="avif"
-                  quality="mid"
-                  loading="lazy"
-                  class:list={['w-full', shot.contain ? 'object-contain' : 'object-cover']}
-                />
-                <figcaption class="sr-only">{shot.alt}</figcaption>
-              </figure>
+                <BrowserFrame src={shot.src} alt={shot.alt} url={shot.url} eager={i < 2} />
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       )
     }

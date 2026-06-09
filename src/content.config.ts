@@ -45,8 +45,8 @@ const projects = defineCollection({
           z.object({
             src: image(),
             alt: z.string(),
-            /** Toon de afbeelding volledig (object-contain) i.p.v. bijgesneden. */
-            contain: z.boolean().default(false),
+            /** Optioneel label in de adresbalk van het browser-frame (bijv. een domein/pad). */
+            url: z.string().optional(),
           }),
         )
         .default([]),
