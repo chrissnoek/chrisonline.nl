@@ -1,0 +1,113 @@
+---
+import { Image } from 'astro:assets';
+import { SITE, CONTACT } from '../../config/site';
+import Icon from '../Icon.astro';
+import chris from '../../assets/me/chris-snoek.jpg';
+---
+
+<section class="relative isolate overflow-x-clip" aria-labelledby="hero-heading">
+  <!-- Subtiele accent-gloed achter de hero -->
+  <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
+    <div
+      class="bg-accent-500/10 dark:bg-accent-500/15 absolute top-[-20%] right-[-10%] h-[clamp(20rem,60vw,42rem)] w-[clamp(20rem,60vw,42rem)] rounded-full blur-3xl"
+    >
+    </div>
+  </div>
+
+  <div class="container-page grid items-center gap-12 py-20 md:py-28 lg:grid-cols-[1.15fr_0.85fr]">
+    <!-- Tekst -->
+    <div class="reveal-up">
+      <p
+        class="rounded-pill inline-flex items-center gap-2 border border-[var(--border)] bg-[var(--bg-alt)] px-3.5 py-1.5 text-sm font-medium text-[var(--fg-muted)]"
+      >
+        <span class="relative flex h-2 w-2" aria-hidden="true">
+          <span
+            class="bg-accent-500 absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
+          ></span>
+          <span class="bg-accent-500 relative inline-flex h-2 w-2 rounded-full"></span>
+        </span>
+        Beschikbaar voor nieuwe projecten
+      </p>
+
+      <h1 id="hero-heading" class="text-display mt-6 font-bold text-balance">
+        Razendsnelle <span class="text-[var(--accent-text)]">maatwerk-websites</span> die converteren.
+      </h1>
+
+      <p class="text-lead mt-6 max-w-xl text-pretty text-[var(--fg-muted)]">
+        Ik ben {SITE.author} — webdeveloper en designer achter {SITE.brand}. Ik bouw technisch
+        sterke websites en webshops waar snelheid, ontwerp en conversie samenkomen.
+      </p>
+
+      <div class="mt-9 flex flex-wrap items-center gap-3">
+        <a
+          href="/contact"
+          class="group rounded-pill bg-accent-500 hover:bg-accent-600 inline-flex items-center gap-2 px-6 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_30px_-8px_rgba(0,176,213,0.5)]"
+        >
+          Start een project
+          <Icon
+            name="arrowRight"
+            size={18}
+            class="transition-transform group-hover:translate-x-1"
+          />
+        </a>
+        <a
+          href="/#werk"
+          class="rounded-pill inline-flex items-center gap-2 border border-[var(--border)] px-6 py-3.5 font-semibold text-[var(--fg)] transition-colors hover:bg-[var(--bg-alt)]"
+        >
+          Bekijk mijn werk
+        </a>
+      </div>
+
+      <!-- Korte trust-strip -->
+      <dl class="mt-12 grid max-w-md grid-cols-3 gap-4 sm:gap-6">
+        <div>
+          <dt class="sr-only">Specialisatie</dt>
+          <dd class="text-lg font-bold tracking-tight sm:text-2xl">Maatwerk</dd>
+          <dd class="mt-0.5 text-xs text-[var(--fg-muted)] sm:text-sm">geen templates</dd>
+        </div>
+        <div>
+          <dt class="sr-only">Focus</dt>
+          <dd class="text-lg font-bold tracking-tight sm:text-2xl">Snelheid</dd>
+          <dd class="mt-0.5 text-xs text-[var(--fg-muted)] sm:text-sm">top performance</dd>
+        </div>
+        <div>
+          <dt class="sr-only">Resultaat</dt>
+          <dd class="text-lg font-bold tracking-tight sm:text-2xl">Conversie</dd>
+          <dd class="mt-0.5 text-xs text-[var(--fg-muted)] sm:text-sm">gericht ontwerp</dd>
+        </div>
+      </dl>
+    </div>
+
+    <!-- Foto -->
+    <div class="reveal relative mx-auto w-full max-w-sm lg:max-w-none">
+      <div
+        class="from-accent-500/20 absolute -inset-3 -z-10 rounded-[1.75rem] bg-gradient-to-tr to-transparent blur-2xl"
+        aria-hidden="true"
+      >
+      </div>
+      <Image
+        src={chris}
+        alt={`Portretfoto van ${SITE.author}`}
+        widths={[320, 480, 640, 800]}
+        sizes="(max-width: 1024px) 22rem, 28rem"
+        format="avif"
+        quality="high"
+        priority
+        class="rounded-card shadow-card aspect-[3/4] w-full object-cover"
+      />
+      <!-- Visitekaartje-overlay -->
+      <div
+        class="bg-ink-900/80 absolute bottom-4 left-1/2 w-[90%] -translate-x-1/2 rounded-2xl border border-white/10 px-5 py-4 text-white backdrop-blur-md"
+      >
+        <p class="font-semibold">{SITE.author}</p>
+        <p class="text-sm text-slate-300">{SITE.jobTitle}</p>
+        <a
+          href={`mailto:${CONTACT.email}`}
+          class="text-accent-300 mt-1 inline-block text-sm hover:underline"
+        >
+          {CONTACT.email}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

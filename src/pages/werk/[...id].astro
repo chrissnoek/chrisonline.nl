@@ -1,0 +1,303 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import BrowserFrame from '../../components/BrowserFrame.astro';
+import { SITE } from '../../config/site';
+
+export async function getStaticPaths() {
+  const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+  return projects.map((entry, index) => ({
+    params: { id: entry.id },
+    props: {
+      entry,
+      prev: index > 0 ? projects[index - 1] : null,
+      next: index < projects.length - 1 ? projects[index + 1] : null,
+    },
+  }));
+}
+
+const { entry, prev, next } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+
+const dateLabel = data.pubDate.toLocaleDateString('nl-NL', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const origin = Astro.site!.origin;
+const creativeWorkLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: data.title,
+  headline: data.title,
+  description: data.summary,
+  url: new URL(Astro.url.pathname, Astro.site).href,
+  about: data.skills.join(', '),
+  dateCreated: data.pubDate.toISOString().split('T')[0],
+  image: new URL(data.cover.src, Astro.site).href,
+  creator: { '@id': `${origin}/#person` },
+  ...(data.url ? { sameAs: [data.url] } : {}),
+};
+---
+
+<BaseLayout title={data.title} description={data.summary} type="article" jsonLd={[creativeWorkLd]}>
+  <article class="container-page py-16 md:py-20">
+    <!-- Terug-link -->
+    <a
+      href="/#werk"
+      class="group inline-flex items-center gap-2 text-sm font-medium text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
+    >
+      <Icon name="arrowRight" size={16} class="rotate-180" />
+      Terug naar werk
+    </a>
+
+    <!-- Kop -->
+    <header class="mt-6 max-w-3xl">
+      <div class="flex flex-wrap items-center gap-3 text-sm text-[var(--fg-muted)]">
+        <span class="font-medium text-[var(--accent-text)]">{data.role}</span>
+        <span aria-hidden="true">·</span>
+        <time datetime={data.pubDate.toISOString()}>{dateLabel}</time>
+        {
+          data.placeholder && (
+            <span class="rounded-pill bg-amber-500/15 px-2.5 py-0.5 text-xs font-medium text-amber-700 dark:text-amber-400">
+              placeholder-content
+            </span>
+          )
+        }
+      </div>
+      <h1 class="text-h1 mt-4 font-bold text-balance">{data.title}</h1>
+      <p class="text-lead mt-5 text-pretty text-[var(--fg-muted)]">{data.summary}</p>
+
+      <div class="mt-6 flex flex-wrap gap-2">
+        {
+          data.skills.map((skill) => (
+            <span class="rounded-pill border border-[var(--border)] px-3 py-1 text-sm font-medium text-[var(--fg-muted)]">
+              {skill}
+            </span>
+          ))
+        }
+      </div>
+
+      {
+        data.url && (
+          <a
+            href={data.url}
+            target="_blank"
+            rel="noopener"
+            class="mt-6 inline-flex items-center gap-2 font-semibold text-[var(--accent-text)] hover:underline"
+          >
+            Bekijk live
+            <Icon name="arrowUpRight" size={18} />
+          </a>
+        )
+      }
+    </header>
+
+    <!-- Cover -->
+    <figure class="mt-10">
+      <div
+        class="rounded-card overflow-hidden border border-[var(--border)]"
+        style={`background: radial-gradient(120% 120% at 80% 0%, ${data.accent}26, transparent 60%), var(--bg-alt);`}
+      >
+        <Image
+          src={data.cover}
+          alt={data.coverAlt}
+          widths={[640, 960, 1280, data.cover.width]}
+          sizes="(max-width: 880px) 100vw, 880px"
+          format="avif"
+          quality="high"
+          priority
+          transition:name={`cover-${entry.id}`}
+          class="w-full object-cover"
+        />
+      </div>
+      <figcaption class="sr-only">{data.coverAlt}</figcaption>
+    </figure>
+
+    <!-- Inhoud (Markdown/MDX) -->
+    <div class="prose-project mx-auto mt-12 max-w-3xl text-[var(--fg)]">
+      <Content />
+    </div>
+
+    <!-- Externe links (bijv. live campagne-previews) -->
+    {
+      data.externalLinks.length > 0 && (
+        <div class="mx-auto mt-10 max-w-3xl">
+          <h2 class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
+            Bekijk live
+          </h2>
+          <div class="mt-4 flex flex-wrap gap-3">
+            {data.externalLinks.map((link) => (
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener"
+                class="hover:border-accent-500/50 rounded-pill inline-flex items-center gap-2 border border-[var(--border)] bg-[var(--bg-alt)] px-4 py-2.5 text-sm font-medium text-[var(--fg)] transition-colors hover:text-[var(--accent-text)]"
+              >
+                {link.label}
+                <Icon name="arrowUpRight" size={16} />
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    <!-- Ontwerpgalerij — uniform browser-frame raster -->
+    {
+      data.gallery.length > 0 && (
+        <section class="mt-16" aria-labelledby="gallery-heading">
+          <h2 id="gallery-heading" class="text-h2 font-bold text-balance">
+            Uit het ontwerp
+          </h2>
+          <ul
+            class:list={[
+              'mt-8 grid gap-5 sm:grid-cols-2',
+              // Oneven aantal: laatste beeld centreren onder de twee erboven.
+              data.gallery.length % 2 === 1 && '[&>li:last-child]:sm:col-span-2',
+            ]}
+          >
+            {data.gallery.map((shot, i) => (
+              <li
+                class:list={[
+                  // Bij een oneven laatste item: niet full-width oprekken, maar
+                  // gecentreerd op halve breedte houden.
+                  data.gallery.length % 2 === 1 &&
+                    i === data.gallery.length - 1 &&
+                    'sm:mx-auto sm:w-1/2',
+                ]}
+              >
+                <BrowserFrame src={shot.src} alt={shot.alt} url={shot.url} eager={i < 2} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <!-- Vorige / volgende -->
+    {
+      (prev || next) && (
+        <nav
+          class="mt-16 grid gap-4 border-t border-[var(--border)] pt-8 sm:grid-cols-2"
+          aria-label="Meer projecten"
+        >
+          {prev ? (
+            <a
+              href={`/werk/${prev.id}`}
+              class="group rounded-card hover:border-accent-500/40 border border-[var(--border)] p-5 transition-colors"
+            >
+              <span class="text-xs font-medium tracking-wide text-[var(--fg-muted)] uppercase">
+                Vorige
+              </span>
+              <p class="mt-1 font-semibold transition-colors group-hover:text-[var(--accent-text)]">
+                {prev.data.title}
+              </p>
+            </a>
+          ) : (
+            <span />
+          )}
+          {next && (
+            <a
+              href={`/werk/${next.id}`}
+              class="group rounded-card hover:border-accent-500/40 border border-[var(--border)] p-5 text-right transition-colors sm:col-start-2"
+            >
+              <span class="text-xs font-medium tracking-wide text-[var(--fg-muted)] uppercase">
+                Volgende
+              </span>
+              <p class="mt-1 font-semibold transition-colors group-hover:text-[var(--accent-text)]">
+                {next.data.title}
+              </p>
+            </a>
+          )}
+        </nav>
+      )
+    }
+  </article>
+
+  <!-- CTA -->
+  <section class="container-page pb-section">
+    <div
+      class="rounded-card border border-[var(--border)] bg-[var(--bg-alt)] p-8 text-center sm:p-12"
+    >
+      <h2 class="text-h2 font-bold text-balance">Zoiets voor jouw merk?</h2>
+      <p class="mx-auto mt-3 max-w-md text-pretty text-[var(--fg-muted)]">
+        Laten we bespreken hoe ik {SITE.brand} kan inzetten voor jouw project.
+      </p>
+      <a
+        href="/contact"
+        class="rounded-pill bg-accent-500 hover:bg-accent-600 mt-6 inline-flex items-center gap-2 px-7 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5"
+      >
+        Neem contact op
+        <Icon name="arrowRight" size={18} />
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style is:global>
+  /* Toegankelijke, rustige typografie voor de projectinhoud. */
+  .prose-project {
+    line-height: 1.7;
+  }
+  .prose-project > * + * {
+    margin-top: 1.25rem;
+  }
+  .prose-project h2 {
+    margin-top: 2.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .prose-project h3 {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  .prose-project p {
+    color: var(--fg-muted);
+  }
+  .prose-project strong {
+    color: var(--fg);
+    font-weight: 600;
+  }
+  .prose-project a {
+    color: var(--accent-text);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .prose-project ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  .prose-project ul li {
+    position: relative;
+    padding-left: 1.6rem;
+    color: var(--fg-muted);
+  }
+  .prose-project ul li + li {
+    margin-top: 0.6rem;
+  }
+  .prose-project ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 9999px;
+    background: var(--color-accent-500);
+  }
+  .prose-project blockquote {
+    border-left: 3px solid var(--color-accent-500);
+    padding: 0.75rem 0 0.75rem 1.25rem;
+    color: var(--fg-muted);
+    font-style: italic;
+    background: var(--bg-alt);
+    border-radius: 0 0.5rem 0.5rem 0;
+  }
+</style>

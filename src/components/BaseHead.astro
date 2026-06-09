@@ -1,0 +1,101 @@
+---
+import { SITE, SEO, SOCIALS } from '../config/site';
+import { Font } from 'astro:assets';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Site-relatief pad naar de social-share-afbeelding, bijv. '/og/og-default.png'. */
+  image?: string;
+  type?: 'website' | 'article';
+  /** Extra JSON-LD nodes (bijv. CreativeWork op projectpagina's). */
+  jsonLd?: Record<string, unknown>[];
+  /** Voorkom indexering van deze pagina (bijv. de bedankt-pagina). */
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = SEO.defaultDescription,
+  image = SEO.defaultOgImage,
+  type = 'website',
+  jsonLd = [],
+  noindex = false,
+} = Astro.props;
+
+const pageTitle = title ? SEO.titleTemplate.replace('%s', title) : SEO.defaultTitle;
+
+// Absolute, query-vrije canonical (Astro v6-patroon).
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const socialImageURL = new URL(image, Astro.site);
+const origin = Astro.site!.origin;
+
+// Site-brede JSON-LD: Person + WebSite. Per-pagina nodes worden toegevoegd.
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': `${origin}/#person`,
+  name: SITE.author,
+  jobTitle: SITE.jobTitle,
+  url: origin,
+  image: new URL('/og/og-default.png', Astro.site).href,
+  sameAs: SOCIALS.filter((s) => s.url.startsWith('http')).map((s) => s.url),
+};
+
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${origin}/#website`,
+  name: `${SITE.author} — ${SITE.brand}`,
+  url: origin,
+  inLanguage: SITE.lang,
+  publisher: { '@id': `${origin}/#person` },
+};
+
+const allJsonLd = [personLd, websiteLd, ...jsonLd];
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+
+<title>{pageTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+<meta name="author" content={SITE.author} />
+<meta name="theme-color" content="#0E0F1C" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={socialImageURL} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name" content={SITE.brand} />
+<meta property="og:locale" content={SITE.ogLocale} />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={socialImageURL} />
+
+<!-- Favicons -->
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
+<!-- Fonts: Astro Fonts API injecteert preload + fallback-metrics (zero CLS). -->
+<Font cssVariable="--font-sans" preload />
+
+<!-- Structured data -->
+{
+  allJsonLd.map((node) => (
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(node)} />
+  ))
+}

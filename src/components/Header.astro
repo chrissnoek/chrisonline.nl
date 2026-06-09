@@ -1,0 +1,141 @@
+---
+import { SITE, NAV } from '../config/site';
+import ThemeToggle from './ThemeToggle.astro';
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+---
+
+<header
+  id="site-header"
+  aria-label="Sitekop"
+  class="sticky top-0 z-50 border-b border-transparent transition-[background-color,border-color,backdrop-filter] duration-300"
+>
+  <div class="container-page flex h-20 items-center justify-between gap-4">
+    <!-- Merk / logo -->
+    <a
+      href="/"
+      class="group flex items-center transition-opacity hover:opacity-80"
+      aria-label={`${SITE.brand} — naar de homepage`}
+    >
+      <Logo height={48} />
+    </a>
+
+    <!-- Desktop-navigatie -->
+    <nav class="hidden items-center gap-1 md:flex" aria-label="Hoofdnavigatie">
+      {
+        NAV.map((item) => (
+          <a
+            href={item.href}
+            class="rounded-pill px-3.5 py-2 text-sm font-medium text-[var(--fg-muted)] transition-colors hover:bg-[var(--bg-alt)] hover:text-[var(--fg)]"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <ThemeToggle />
+      <a
+        href="/contact"
+        class="rounded-pill hidden bg-[var(--fg)] px-4 py-2 text-sm font-semibold text-[var(--bg)] transition-transform hover:-translate-y-0.5 sm:inline-flex"
+      >
+        Start een project
+      </a>
+      <!-- Mobiele menu-knop -->
+      <button
+        type="button"
+        id="menu-toggle"
+        class="rounded-pill inline-flex h-10 w-10 items-center justify-center border border-[var(--border)] text-[var(--fg)] md:hidden"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <Icon name="menu" size={22} class="block" id="menu-icon-open" />
+        <Icon name="close" size={22} class="hidden" id="menu-icon-close" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobiel uitklapmenu -->
+  <div
+    id="mobile-menu"
+    class="hidden border-t border-[var(--border)] bg-[var(--bg)] md:hidden"
+    hidden
+  >
+    <nav class="container-page flex flex-col gap-1 py-4" aria-label="Mobiele navigatie">
+      {
+        NAV.map((item) => (
+          <a
+            href={item.href}
+            class="rounded-xl px-3 py-3 text-base font-medium text-[var(--fg)] transition-colors hover:bg-[var(--bg-alt)]"
+            data-mobile-link
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a
+        href="/contact"
+        class="rounded-pill bg-accent-500 mt-2 px-4 py-3 text-center text-base font-semibold text-white"
+        data-mobile-link
+      >
+        Start een project
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    // Achtergrond verschijnt zodra je scrollt (subtiel, performant via class-toggle).
+    const header = document.getElementById('site-header');
+    if (header && !header.dataset.scrollBound) {
+      header.dataset.scrollBound = 'true';
+      const onScroll = () => {
+        const scrolled = window.scrollY > 8;
+        header.classList.toggle('is-scrolled', scrolled);
+      };
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    }
+
+    // Mobiel menu.
+    const toggle = document.getElementById('menu-toggle');
+    const menu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('menu-icon-open');
+    const iconClose = document.getElementById('menu-icon-close');
+    if (toggle && menu && !toggle.dataset.bound) {
+      toggle.dataset.bound = 'true';
+      const setOpen = (open: boolean) => {
+        menu.hidden = !open;
+        menu.classList.toggle('hidden', !open);
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? 'Sluit menu' : 'Open menu');
+        iconOpen?.classList.toggle('hidden', open);
+        iconClose?.classList.toggle('hidden', !open);
+      };
+      toggle.addEventListener('click', () => setOpen(menu.hidden));
+      menu.querySelectorAll('[data-mobile-link]').forEach((link) => {
+        link.addEventListener('click', () => setOpen(false));
+      });
+      // Sluit op Escape.
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !menu.hidden) {
+          setOpen(false);
+          toggle.focus();
+        }
+      });
+    }
+  }
+
+  document.addEventListener('astro:page-load', initHeader);
+</script>
+
+<style>
+  #site-header.is-scrolled {
+    background-color: color-mix(in srgb, var(--bg) 80%, transparent);
+    border-bottom-color: var(--border);
+    backdrop-filter: saturate(180%) blur(12px);
+  }
+</style>
