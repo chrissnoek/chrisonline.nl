@@ -1,0 +1,65 @@
+---
+import Icon from '../Icon.astro';
+
+const pillars = [
+  {
+    icon: 'spark',
+    title: 'Technisch sterk',
+    text: 'Schone, schaalbare code-architectuur. Geen ballast, geen trage plugins — alleen wat de site beter maakt.',
+  },
+  {
+    icon: 'arrowUpRight',
+    title: 'Razendsnel',
+    text: 'Performance is geen bijzaak maar het uitgangspunt. Topscores op Lighthouse, omdat snelheid converteert.',
+  },
+  {
+    icon: 'check',
+    title: 'Conversiegericht',
+    text: 'Elk ontwerp begint bij de bezoeker. Heldere flows die van bezoek naar aanvraag leiden.',
+  },
+];
+---
+
+<section id="over" class="scroll-mt-24" aria-labelledby="about-heading">
+  <div class="container-page py-section">
+    <div class="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+      <div class="reveal-up">
+        <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
+          Over mij
+        </p>
+        <h2 id="about-heading" class="mt-3 text-h2 font-bold text-balance">
+          Ik bouw geen websites. Ik bouw digitale producten die je bedrijf laten groeien.
+        </h2>
+        <div class="mt-6 space-y-4 text-lead text-[var(--fg-muted)] text-pretty">
+          <p>
+            Als webdeveloper en designer help ik merken aan een website die niet alleen mooi is,
+            maar ook werkt: snel, vindbaar en gericht op resultaat. Van het eerste ontwerp in Figma
+            tot een pixel-perfecte, technisch nette livegang.
+          </p>
+          <p>
+            Of je nu alleen een ontwerp nodig hebt, een complete website of webshop, of het hele
+            traject inclusief branding en analytics — ik denk mee over het grotere geheel. Mijn doel
+            is niet om je een website op te leveren, maar om iets te bouwen dat je groei
+            ondersteunt.
+          </p>
+        </div>
+      </div>
+
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 lg:gap-5">
+        {
+          pillars.map((p) => (
+            <li class="reveal flex gap-4 rounded-card border border-[var(--border)] bg-[var(--bg-alt)] p-6">
+              <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-accent-500/12 text-[var(--accent-text)]">
+                <Icon name={p.icon} size={22} />
+              </span>
+              <div>
+                <h3 class="font-semibold">{p.title}</h3>
+                <p class="mt-1 text-sm leading-relaxed text-[var(--fg-muted)]">{p.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

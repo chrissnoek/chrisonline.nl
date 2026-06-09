@@ -1,0 +1,81 @@
+---
+import { SITE, SOCIALS, NAV, CONTACT } from '../config/site';
+import Icon from './Icon.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-section border-t border-[var(--border)] bg-[var(--bg-alt)]">
+  <div class="container-page py-14">
+    <div class="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
+      <!-- Merk + pitch -->
+      <div>
+        <a href="/" class="flex items-center gap-2.5 font-bold tracking-tight" aria-label={SITE.brand}>
+          <span
+            class="grid h-9 w-9 place-items-center rounded-[0.7rem] bg-accent-500 text-[0.95rem] font-bold text-white"
+            aria-hidden="true">CO</span
+          >
+          <span class="text-lg">Chris<span class="text-[var(--accent-text)]">Online</span></span>
+        </a>
+        <p class="mt-4 max-w-xs text-sm leading-relaxed text-[var(--fg-muted)]">
+          {SITE.tagline} Technisch sterke maatwerk-websites en webshops, gebouwd op snelheid en
+          conversie.
+        </p>
+      </div>
+
+      <!-- Navigatie -->
+      <nav aria-label="Footernavigatie">
+        <h2 class="text-sm font-semibold tracking-wide text-[var(--fg)] uppercase">Navigatie</h2>
+        <ul class="mt-4 space-y-2.5">
+          {
+            NAV.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class="text-sm text-[var(--fg-muted)] transition-colors hover:text-[var(--accent-text)]"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <!-- Contact + socials -->
+      <div>
+        <h2 class="text-sm font-semibold tracking-wide text-[var(--fg)] uppercase">Contact</h2>
+        <a
+          href={`mailto:${CONTACT.email}`}
+          class="mt-4 inline-block text-sm font-medium text-[var(--accent-text)] hover:underline"
+        >
+          {CONTACT.email}
+        </a>
+        <ul class="mt-5 flex gap-2.5">
+          {
+            SOCIALS.map((social) => (
+              <li>
+                <a
+                  href={social.url}
+                  class="grid h-10 w-10 place-items-center rounded-pill border border-[var(--border)] text-[var(--fg-muted)] transition-colors hover:border-accent-500 hover:text-[var(--accent-text)]"
+                  aria-label={`${social.name}${social.handle ? ` — ${social.handle}` : ''}`}
+                  rel={social.url.startsWith('http') ? 'me noopener' : undefined}
+                  target={social.url.startsWith('http') ? '_blank' : undefined}
+                >
+                  <Icon name={social.icon} size={20} />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div
+      class="mt-12 flex flex-col items-start justify-between gap-3 border-t border-[var(--border)] pt-6 text-sm text-[var(--fg-muted)] sm:flex-row sm:items-center"
+    >
+      <p>&copy; {year} {SITE.author} — {SITE.brand}. Alle rechten voorbehouden.</p>
+      <p>Gebouwd met Astro. Razendsnel & toegankelijk.</p>
+    </div>
+  </div>
+</footer>

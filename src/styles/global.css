@@ -1,0 +1,222 @@
+/* ──────────────────────────────────────────────────────────────────────────
+ *  Global stylesheet — Tailwind v4 (CSS-first) + design tokens
+ *  Merk: Chris Online. Palet, typografie, spacing & radius als @theme-tokens.
+ * ────────────────────────────────────────────────────────────────────────── */
+
+@import 'tailwindcss';
+
+/* Handmatige dark mode via .dark op <html> (i.p.v. enkel prefers-color-scheme),
+   zodat de toggle werkt. De toggle-init zet zelf de juiste class op basis van
+   opgeslagen voorkeur of het OS. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* ── Kleuren ─────────────────────────────────────────────────────────────
+     Accent-schaal rond het merk-cyaan #00B0D5. Lichtere tinten voor vlakken/
+     accenten, donkere tinten (700/800) voor leesbare accent-TEKST op wit (AA). */
+  --color-accent-50: #e6f8fc;
+  --color-accent-100: #c3eef7;
+  --color-accent-200: #8fe0f0;
+  --color-accent-300: #4fcde6;
+  --color-accent-400: #1bbcdd;
+  --color-accent-500: #00b0d5; /* primair merk-accent */
+  --color-accent-600: #008cab; /* AA voor grote tekst/UI op wit (3.93:1) */
+  --color-accent-700: #007a95; /* AA voor bodytekst op wit (4.98:1) */
+  --color-accent-800: #0a5f73;
+  --color-accent-900: #0e4a58;
+
+  /* Donkere basis (hero, dark mode) */
+  --color-ink-950: #0a0b15;
+  --color-ink-900: #0e0f1c; /* opgegeven donkere basis */
+  --color-ink-800: #16182b;
+  --color-ink-700: #20233c;
+
+  /* Tekst & neutralen */
+  --color-text: #1f2937; /* primaire tekst (light) — 14.68:1 op wit */
+  --color-muted: #6b7280; /* subtekst — 4.83:1 op wit (AA) */
+  --color-line: #e5e7eb; /* borders / sectiescheiding */
+  --color-surface: #ffffff;
+  --color-surface-alt: #f8fafc; /* subtiele sectie-achtergrond (light) */
+
+  /* Leesbare neutralen op donkere basis (dark mode) */
+  --color-text-invert: #f8fafc;
+  --color-muted-invert: #94a3b8; /* 7.42:1 op ink-900 */
+  --color-line-invert: #2a2d44;
+
+  /* ── Typografie ──────────────────────────────────────────────────────────
+     --font-sans wordt geleverd door de Astro Fonts API (Inter Variable). */
+  --font-sans:
+    'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  /* Vloeiende type-schaal (clamp) voor grote koppen zonder media queries. */
+  --text-display: clamp(2.75rem, 1.6rem + 5.2vw, 5.25rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.03em;
+  --text-display--font-weight: 700;
+
+  --text-h1: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+  --text-h1--line-height: 1.07;
+  --text-h1--letter-spacing: -0.025em;
+
+  --text-h2: clamp(1.75rem, 1.3rem + 1.8vw, 2.5rem);
+  --text-h2--line-height: 1.12;
+  --text-h2--letter-spacing: -0.02em;
+
+  --text-lead: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  --text-lead--line-height: 1.55;
+
+  /* ── Spacing & layout ──────────────────────────────────────────────────── */
+  --spacing-section: 7rem; /* verticale ruimte tussen secties */
+  --spacing-gutter: 1.5rem;
+
+  /* ── Radius ──────────────────────────────────────────────────────────────── */
+  --radius-card: 1.25rem;
+  --radius-pill: 9999px;
+
+  /* ── Schaduwen (zacht, modern) ───────────────────────────────────────────── */
+  --shadow-card: 0 1px 2px rgba(15, 16, 28, 0.04), 0 8px 24px -8px rgba(15, 16, 28, 0.12);
+  --shadow-card-hover: 0 2px 4px rgba(15, 16, 28, 0.06), 0 18px 40px -12px rgba(15, 16, 28, 0.22);
+
+  /* ── Easing & animatie ───────────────────────────────────────────────────── */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+ *  Basislaag — semantische standaardstijlen
+ * ────────────────────────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    color-scheme: light;
+    --bg: var(--color-surface);
+    --bg-alt: var(--color-surface-alt);
+    --fg: var(--color-text);
+    --fg-muted: var(--color-muted);
+    --border: var(--color-line);
+    --accent-text: var(--color-accent-700); /* leesbaar accent op licht */
+  }
+
+  :root.dark {
+    color-scheme: dark;
+    --bg: var(--color-ink-900);
+    --bg-alt: var(--color-ink-800);
+    --fg: var(--color-text-invert);
+    --fg-muted: var(--color-muted-invert);
+    --border: var(--color-line-invert);
+    --accent-text: var(--color-accent-300); /* leesbaar accent op donker */
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* Voorkom dat sticky-header content onder ankers verbergt. */
+    scroll-padding-top: 5.5rem;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+  }
+
+  /* Eén consistente, zichtbare focus-stijl voor toetsenbordnavigatie. */
+  :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-accent-500);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Respecteer reduced motion globaal (vangnet bovenop component-specifieke guards). */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+ *  Componentachtige utilities
+ * ────────────────────────────────────────────────────────────────────────── */
+@layer components {
+  /* Gecentreerde inhoudscontainer met responsive gutters. */
+  .container-page {
+    width: 100%;
+    max-width: 76rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* Skip-to-content link: verborgen tot focus. */
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -3.5rem;
+    z-index: 100;
+    padding: 0.625rem 1rem;
+    border-radius: 0.5rem;
+    background: var(--color-accent-600);
+    color: #fff;
+    font-weight: 600;
+    transition: top 0.2s var(--ease-out-soft);
+  }
+  .skip-link:focus {
+    top: 1rem;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+ *  Scroll-reveal — pure CSS, off-main-thread, volledig reduced-motion-proof.
+ *  Veilige default = ZICHTBAAR. Alleen wanneer motion mag én de browser
+ *  scroll-driven animaties ondersteunt, starten elementen verborgen.
+ * ────────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      opacity: 0;
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+    }
+    .reveal-up {
+      opacity: 0;
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 24%;
+    }
+  }
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

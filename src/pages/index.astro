@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+const projects = await getCollection('projects');
+---
+<BaseLayout title="Home">
+  <section class="container-page py-section">
+    <h1 class="text-h1 font-bold">Smoke test</h1>
+    <p class="text-lead text-[var(--fg-muted)]">{projects.length} projecten geladen.</p>
+  </section>
+</BaseLayout>
