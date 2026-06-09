@@ -7,7 +7,9 @@ import { SITE, CONTACT, SOCIALS } from '../config/site';
 const title = 'Contact';
 const description =
   'Neem contact op met Chris Snoek voor een nieuwe website, webshop of redesign. ' +
-  'Stuur een bericht of mail direct naar ' + CONTACT.email + '.';
+  'Stuur een bericht of mail direct naar ' +
+  CONTACT.email +
+  '.';
 ---
 
 <BaseLayout title={title} description={description}>
@@ -18,10 +20,10 @@ const description =
         <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
           Contact
         </p>
-        <h1 id="contact-heading" class="mt-3 text-h1 font-bold text-balance">
+        <h1 id="contact-heading" class="text-h1 mt-3 font-bold text-balance">
           Laten we je project bespreken
         </h1>
-        <p class="mt-5 max-w-md text-lead text-[var(--fg-muted)] text-pretty">
+        <p class="text-lead mt-5 max-w-md text-pretty text-[var(--fg-muted)]">
           Heb je een idee, een vraag of een concreet project? Vul het formulier in of neem direct
           contact op. Ik reageer meestal binnen één werkdag.
         </p>
@@ -29,7 +31,7 @@ const description =
         <dl class="mt-10 space-y-6">
           <div class="flex items-start gap-4">
             <span
-              class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-accent-500/12 text-[var(--accent-text)]"
+              class="bg-accent-500/12 grid h-11 w-11 shrink-0 place-items-center rounded-xl text-[var(--accent-text)]"
             >
               <Icon name="mail" size={22} />
             </span>
@@ -55,7 +57,7 @@ const description =
                 <li>
                   <a
                     href={social.url}
-                    class="grid h-11 w-11 place-items-center rounded-pill border border-[var(--border)] text-[var(--fg-muted)] transition-colors hover:border-accent-500 hover:text-[var(--accent-text)]"
+                    class="rounded-pill hover:border-accent-500 grid h-11 w-11 place-items-center border border-[var(--border)] text-[var(--fg-muted)] transition-colors hover:text-[var(--accent-text)]"
                     aria-label={`${social.name} — ${social.handle}`}
                     rel={social.url.startsWith('http') ? 'me noopener' : undefined}
                     target={social.url.startsWith('http') ? '_blank' : undefined}

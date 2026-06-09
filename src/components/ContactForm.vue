@@ -69,7 +69,7 @@ async function onSubmit() {
   <!-- Succes-status -->
   <div
     v-if="status === 'success'"
-    class="rounded-card border border-accent-500/40 bg-accent-500/10 p-8 text-center"
+    class="rounded-card border-accent-500/40 bg-accent-500/10 border p-8 text-center"
     role="status"
     aria-live="polite"
   >
@@ -79,7 +79,7 @@ async function onSubmit() {
     </p>
     <button
       type="button"
-      class="mt-5 rounded-pill border border-[var(--border)] px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-[var(--bg-alt)]"
+      class="rounded-pill mt-5 border border-[var(--border)] px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-[var(--bg-alt)]"
       @click="status = 'idle'"
     >
       Nog een bericht sturen
@@ -104,9 +104,7 @@ async function onSubmit() {
     </p>
 
     <div>
-      <label for="cf-name" class="mb-1.5 block text-sm font-medium text-[var(--fg)]">
-        Naam
-      </label>
+      <label for="cf-name" class="mb-1.5 block text-sm font-medium text-[var(--fg)]"> Naam </label>
       <input
         id="cf-name"
         v-model="name"
@@ -116,11 +114,15 @@ async function onSubmit() {
         required
         :aria-invalid="!!showError('name')"
         :aria-describedby="showError('name') ? 'cf-name-error' : undefined"
-        class="w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-[var(--fg)] transition-colors placeholder:text-[var(--fg-muted)] focus:border-accent-500"
+        class="focus:border-accent-500 w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-[var(--fg)] transition-colors placeholder:text-[var(--fg-muted)]"
         placeholder="Je naam"
         @blur="markTouched('name')"
       />
-      <p v-if="showError('name')" id="cf-name-error" class="mt-1.5 text-sm text-red-600 dark:text-red-400">
+      <p
+        v-if="showError('name')"
+        id="cf-name-error"
+        class="mt-1.5 text-sm text-red-600 dark:text-red-400"
+      >
         {{ errors.name }}
       </p>
     </div>
@@ -138,11 +140,15 @@ async function onSubmit() {
         required
         :aria-invalid="!!showError('email')"
         :aria-describedby="showError('email') ? 'cf-email-error' : undefined"
-        class="w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-[var(--fg)] transition-colors placeholder:text-[var(--fg-muted)] focus:border-accent-500"
+        class="focus:border-accent-500 w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-[var(--fg)] transition-colors placeholder:text-[var(--fg-muted)]"
         placeholder="naam@voorbeeld.nl"
         @blur="markTouched('email')"
       />
-      <p v-if="showError('email')" id="cf-email-error" class="mt-1.5 text-sm text-red-600 dark:text-red-400">
+      <p
+        v-if="showError('email')"
+        id="cf-email-error"
+        class="mt-1.5 text-sm text-red-600 dark:text-red-400"
+      >
         {{ errors.email }}
       </p>
     </div>
@@ -159,11 +165,15 @@ async function onSubmit() {
         required
         :aria-invalid="!!showError('message')"
         :aria-describedby="showError('message') ? 'cf-message-error' : undefined"
-        class="w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-[var(--fg)] transition-colors placeholder:text-[var(--fg-muted)] focus:border-accent-500"
+        class="focus:border-accent-500 w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-[var(--fg)] transition-colors placeholder:text-[var(--fg-muted)]"
         placeholder="Vertel kort over je project of vraag…"
         @blur="markTouched('message')"
       />
-      <p v-if="showError('message')" id="cf-message-error" class="mt-1.5 text-sm text-red-600 dark:text-red-400">
+      <p
+        v-if="showError('message')"
+        id="cf-message-error"
+        class="mt-1.5 text-sm text-red-600 dark:text-red-400"
+      >
         {{ errors.message }}
       </p>
     </div>
@@ -172,15 +182,11 @@ async function onSubmit() {
       <button
         type="submit"
         :disabled="status === 'submitting'"
-        class="inline-flex items-center justify-center rounded-pill bg-accent-500 px-7 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-accent-600 disabled:cursor-not-allowed disabled:opacity-60"
+        class="rounded-pill bg-accent-500 hover:bg-accent-600 inline-flex items-center justify-center px-7 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {{ status === 'submitting' ? 'Versturen…' : 'Verstuur bericht' }}
       </button>
-      <p
-        v-if="status === 'error'"
-        class="text-sm text-red-600 dark:text-red-400"
-        role="alert"
-      >
+      <p v-if="status === 'error'" class="text-sm text-red-600 dark:text-red-400" role="alert">
         Er ging iets mis. Probeer het later opnieuw of mail direct.
       </p>
     </div>

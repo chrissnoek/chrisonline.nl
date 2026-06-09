@@ -10,16 +10,19 @@ const year = new Date().getFullYear();
     <div class="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
       <!-- Merk + pitch -->
       <div>
-        <a href="/" class="flex items-center gap-2.5 font-bold tracking-tight" aria-label={SITE.brand}>
+        <a
+          href="/"
+          class="flex items-center gap-2.5 font-bold tracking-tight"
+          aria-label={SITE.brand}
+        >
           <span
-            class="grid h-9 w-9 place-items-center rounded-[0.7rem] bg-accent-500 text-[0.95rem] font-bold text-white"
+            class="bg-accent-500 grid h-9 w-9 place-items-center rounded-[0.7rem] text-[0.95rem] font-bold text-white"
             aria-hidden="true">CO</span
           >
           <span class="text-lg">Chris<span class="text-[var(--accent-text)]">Online</span></span>
         </a>
         <p class="mt-4 max-w-xs text-sm leading-relaxed text-[var(--fg-muted)]">
-          {SITE.tagline} Technisch sterke maatwerk-websites en webshops, gebouwd op snelheid en
-          conversie.
+          {SITE.tagline} Technisch sterke maatwerk-websites en webshops, gebouwd op snelheid en conversie.
         </p>
       </div>
 
@@ -57,7 +60,7 @@ const year = new Date().getFullYear();
               <li>
                 <a
                   href={social.url}
-                  class="grid h-10 w-10 place-items-center rounded-pill border border-[var(--border)] text-[var(--fg-muted)] transition-colors hover:border-accent-500 hover:text-[var(--accent-text)]"
+                  class="rounded-pill hover:border-accent-500 grid h-10 w-10 place-items-center border border-[var(--border)] text-[var(--fg-muted)] transition-colors hover:text-[var(--accent-text)]"
                   aria-label={`${social.name}${social.handle ? ` — ${social.handle}` : ''}`}
                   rel={social.url.startsWith('http') ? 'me noopener' : undefined}
                   target={social.url.startsWith('http') ? '_blank' : undefined}

@@ -96,6 +96,6 @@ const allJsonLd = [personLd, websiteLd, ...jsonLd];
 <!-- Structured data -->
 {
   allJsonLd.map((node) => (
-    <script type="application/ld+json" set:html={JSON.stringify(node)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(node)} />
   ))
 }

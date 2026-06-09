@@ -13,10 +13,10 @@ import Icon from '../Icon.astro';
       <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
         Diensten
       </p>
-      <h2 id="services-heading" class="mt-3 text-h2 font-bold text-balance">
+      <h2 id="services-heading" class="text-h2 mt-3 font-bold text-balance">
         Alles voor een digitaal product dat presteert
       </h2>
-      <p class="mt-4 text-lead text-[var(--fg-muted)] text-pretty">
+      <p class="text-lead mt-4 text-pretty text-[var(--fg-muted)]">
         Van ontwerp en development tot branding en analytics — los of als compleet traject.
       </p>
     </div>
@@ -24,15 +24,15 @@ import Icon from '../Icon.astro';
     <ul class="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
       {
         SERVICES.map((service) => (
-          <li class="reveal flex flex-col rounded-card border border-[var(--border)] bg-[var(--bg)] p-7 transition-all duration-300 hover:-translate-y-1 hover:border-accent-500/40 hover:shadow-card">
-            <span class="grid h-12 w-12 place-items-center rounded-xl bg-accent-500/12 text-[var(--accent-text)]">
+          <li class="reveal rounded-card hover:border-accent-500/40 hover:shadow-card flex flex-col border border-[var(--border)] bg-[var(--bg)] p-7 transition-all duration-300 hover:-translate-y-1">
+            <span class="bg-accent-500/12 grid h-12 w-12 place-items-center rounded-xl text-[var(--accent-text)]">
               <Icon name={service.icon} size={24} />
             </span>
             <div class="mt-5 flex items-center gap-2">
               <h3 class="text-lg font-bold tracking-tight">{service.title}</h3>
             </div>
             {service.badge && (
-              <span class="mt-1.5 inline-block w-fit rounded-pill bg-[var(--bg-alt)] px-2.5 py-0.5 text-xs font-medium text-[var(--fg-muted)]">
+              <span class="rounded-pill mt-1.5 inline-block w-fit bg-[var(--bg-alt)] px-2.5 py-0.5 text-xs font-medium text-[var(--fg-muted)]">
                 {service.badge}
               </span>
             )}
@@ -40,11 +40,7 @@ import Icon from '../Icon.astro';
             <ul class="mt-5 space-y-2.5 border-t border-[var(--border)] pt-5">
               {service.points.map((point) => (
                 <li class="flex gap-2.5 text-sm text-[var(--fg)]">
-                  <Icon
-                    name="check"
-                    size={18}
-                    class="mt-0.5 shrink-0 text-[var(--accent-text)]"
-                  />
+                  <Icon name="check" size={18} class="mt-0.5 shrink-0 text-[var(--accent-text)]" />
                   <span>{point}</span>
                 </li>
               ))}
@@ -60,7 +56,7 @@ import Icon from '../Icon.astro';
       <div class="mt-7 grid gap-5 md:grid-cols-3">
         {
           COLLAB_OPTIONS.map((opt, i) => (
-            <div class="relative rounded-card border border-[var(--border)] bg-[var(--bg)] p-6">
+            <div class="rounded-card relative border border-[var(--border)] bg-[var(--bg)] p-6">
               <span class="text-sm font-bold text-[var(--accent-text)]">0{i + 1}</span>
               <h4 class="mt-2 font-semibold">{opt.title}</h4>
               <p class="mt-2 text-sm leading-relaxed text-[var(--fg-muted)]">{opt.description}</p>

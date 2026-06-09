@@ -6,9 +6,7 @@ import Icon from '../../components/Icon.astro';
 import { SITE } from '../../config/site';
 
 export async function getStaticPaths() {
-  const projects = (await getCollection('projects')).sort(
-    (a, b) => a.data.order - b.data.order,
-  );
+  const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
   return projects.map((entry, index) => ({
     params: { id: entry.id },
     props: {
@@ -45,12 +43,7 @@ const creativeWorkLd = {
 };
 ---
 
-<BaseLayout
-  title={data.title}
-  description={data.summary}
-  type="article"
-  jsonLd={[creativeWorkLd]}
->
+<BaseLayout title={data.title} description={data.summary} type="article" jsonLd={[creativeWorkLd]}>
   <article class="container-page py-16 md:py-20">
     <!-- Terug-link -->
     <a
@@ -75,8 +68,8 @@ const creativeWorkLd = {
           )
         }
       </div>
-      <h1 class="mt-4 text-h1 font-bold text-balance">{data.title}</h1>
-      <p class="mt-5 text-lead text-[var(--fg-muted)] text-pretty">{data.summary}</p>
+      <h1 class="text-h1 mt-4 font-bold text-balance">{data.title}</h1>
+      <p class="text-lead mt-5 text-pretty text-[var(--fg-muted)]">{data.summary}</p>
 
       <div class="mt-6 flex flex-wrap gap-2">
         {
@@ -106,7 +99,7 @@ const creativeWorkLd = {
     <!-- Cover -->
     <figure class="mt-10">
       <div
-        class="overflow-hidden rounded-card border border-[var(--border)]"
+        class="rounded-card overflow-hidden border border-[var(--border)]"
         style={`background: radial-gradient(120% 120% at 80% 0%, ${data.accent}26, transparent 60%), var(--bg-alt);`}
       >
         <Image
@@ -117,6 +110,7 @@ const creativeWorkLd = {
           format="avif"
           quality="high"
           priority
+          transition:name={`cover-${entry.id}`}
           class="w-full object-cover"
         />
       </div>
@@ -124,9 +118,7 @@ const creativeWorkLd = {
     </figure>
 
     <!-- Inhoud (Markdown/MDX) -->
-    <div
-      class="prose-project mx-auto mt-12 max-w-3xl text-[var(--fg)]"
-    >
+    <div class="prose-project mx-auto mt-12 max-w-3xl text-[var(--fg)]">
       <Content />
     </div>
 
@@ -140,7 +132,7 @@ const creativeWorkLd = {
           {prev ? (
             <a
               href={`/werk/${prev.id}`}
-              class="group rounded-card border border-[var(--border)] p-5 transition-colors hover:border-accent-500/40"
+              class="group rounded-card hover:border-accent-500/40 border border-[var(--border)] p-5 transition-colors"
             >
               <span class="text-xs font-medium tracking-wide text-[var(--fg-muted)] uppercase">
                 Vorige
@@ -155,7 +147,7 @@ const creativeWorkLd = {
           {next && (
             <a
               href={`/werk/${next.id}`}
-              class="group rounded-card border border-[var(--border)] p-5 text-right transition-colors hover:border-accent-500/40 sm:col-start-2"
+              class="group rounded-card hover:border-accent-500/40 border border-[var(--border)] p-5 text-right transition-colors sm:col-start-2"
             >
               <span class="text-xs font-medium tracking-wide text-[var(--fg-muted)] uppercase">
                 Volgende
@@ -176,12 +168,12 @@ const creativeWorkLd = {
       class="rounded-card border border-[var(--border)] bg-[var(--bg-alt)] p-8 text-center sm:p-12"
     >
       <h2 class="text-h2 font-bold text-balance">Zoiets voor jouw merk?</h2>
-      <p class="mx-auto mt-3 max-w-md text-[var(--fg-muted)] text-pretty">
+      <p class="mx-auto mt-3 max-w-md text-pretty text-[var(--fg-muted)]">
         Laten we bespreken hoe ik {SITE.brand} kan inzetten voor jouw project.
       </p>
       <a
         href="/contact"
-        class="mt-6 inline-flex items-center gap-2 rounded-pill bg-accent-500 px-7 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-accent-600"
+        class="rounded-pill bg-accent-500 hover:bg-accent-600 mt-6 inline-flex items-center gap-2 px-7 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5"
       >
         Neem contact op
         <Icon name="arrowRight" size={18} />
