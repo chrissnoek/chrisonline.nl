@@ -63,12 +63,6 @@ export const SOCIALS = [
     icon: 'linkedin',
   },
   {
-    name: 'Instagram',
-    handle: '@chrisonline.nl',
-    url: 'https://www.instagram.com/chrisonline.nl',
-    icon: 'instagram',
-  },
-  {
     name: 'E-mail',
     handle: CONTACT.email,
     url: `mailto:${CONTACT.email}`,
