@@ -1,6 +1,7 @@
 ---
 import { SITE, SOCIALS, NAV, CONTACT } from '../config/site';
 import Icon from './Icon.astro';
+import Logo from './Logo.astro';
 
 const year = new Date().getFullYear();
 ---
@@ -15,14 +16,10 @@ const year = new Date().getFullYear();
       <div>
         <a
           href="/"
-          class="flex items-center gap-2.5 font-bold tracking-tight"
+          class="inline-flex items-center transition-opacity hover:opacity-80"
           aria-label={SITE.brand}
         >
-          <span
-            class="bg-accent-500 grid h-9 w-9 place-items-center rounded-[0.7rem] text-[0.95rem] font-bold text-white"
-            aria-hidden="true">CO</span
-          >
-          <span class="text-lg">Chris<span class="text-[var(--accent-text)]">Online</span></span>
+          <Logo height={30} />
         </a>
         <p class="mt-4 max-w-xs text-sm leading-relaxed text-[var(--fg-muted)]">
           {SITE.tagline} Technisch sterke maatwerk-websites en webshops, gebouwd op snelheid en conversie.

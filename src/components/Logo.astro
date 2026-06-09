@@ -1,0 +1,39 @@
+---
+import { SITE } from '../config/site';
+
+interface Props {
+  /** Hoogte in pixels; breedte schaalt mee (logo-ratio ≈ 4.06:1). */
+  height?: number;
+  class?: string;
+}
+
+const { height = 30, class: className } = Astro.props;
+const width = Math.round((height * 932.29) / 229.54);
+const alt = `${SITE.brand} logo`;
+---
+
+<span class:list={['inline-flex items-center', className]}>
+  <!-- Light mode: donkere tekst. Dark mode: witte tekst. Beide delen hetzelfde
+       gekleurde mark, zodat alleen de woordtekst van kleur wisselt. -->
+  <img
+    src="/logo/chrisonline-dark-text.svg"
+    alt={alt}
+    width={width}
+    height={height}
+    style={`height:${height}px;width:auto`}
+    class="block dark:hidden"
+    loading="eager"
+    decoding="async"
+  />
+  <img
+    src="/logo/chrisonline-light-text.svg"
+    alt=""
+    width={width}
+    height={height}
+    style={`height:${height}px;width:auto`}
+    class="hidden dark:block"
+    loading="eager"
+    decoding="async"
+    aria-hidden="true"
+  />
+</span>

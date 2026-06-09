@@ -2,6 +2,7 @@
 import { SITE, NAV } from '../config/site';
 import ThemeToggle from './ThemeToggle.astro';
 import Icon from './Icon.astro';
+import Logo from './Logo.astro';
 ---
 
 <header
@@ -13,16 +14,10 @@ import Icon from './Icon.astro';
     <!-- Merk / logo -->
     <a
       href="/"
-      class="group flex items-center gap-2.5 font-bold tracking-tight"
+      class="group flex items-center transition-opacity hover:opacity-80"
       aria-label={`${SITE.brand} — naar de homepage`}
     >
-      <span
-        class="bg-accent-500 grid h-9 w-9 place-items-center rounded-[0.7rem] text-[0.95rem] font-bold text-white shadow-[0_4px_14px_-4px_rgba(0,176,213,0.6)]"
-        aria-hidden="true">CO</span
-      >
-      <span class="text-lg">
-        Chris<span class="text-[var(--accent-text)]">Online</span>
-      </span>
+      <Logo height={28} />
     </a>
 
     <!-- Desktop-navigatie -->
