@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<BaseLayout title="Bedankt" description="Bedankt voor je bericht." noindex>
+  <section class="container-page flex min-h-[60vh] items-center justify-center py-section">
+    <div class="max-w-lg text-center">
+      <span
+        class="mx-auto grid h-16 w-16 place-items-center rounded-pill bg-accent-500/12 text-[var(--accent-text)]"
+      >
+        <Icon name="check" size={32} />
+      </span>
+      <h1 class="mt-6 text-h1 font-bold text-balance">Bedankt voor je bericht!</h1>
+      <p class="mt-4 text-lead text-[var(--fg-muted)] text-pretty">
+        Je bericht is verstuurd. Ik neem zo snel mogelijk contact met je op — meestal binnen één
+        werkdag.
+      </p>
+      <a
+        href="/"
+        class="mt-8 inline-flex items-center gap-2 rounded-pill bg-accent-500 px-7 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-accent-600"
+      >
+        Terug naar home
+        <Icon name="arrowRight" size={18} />
+      </a>
+    </div>
+  </section>
+</BaseLayout>
