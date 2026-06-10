@@ -21,7 +21,7 @@ export const SERVICES: Service[] = [
     icon: 'pen',
     title: 'Website-ontwerp & UI/UX',
     intro:
-      'Een ontwerp dat past bij je merk én je bezoekers overtuigt — van eerste schets tot ontwikkelklaar bestand in Figma.',
+      'Een ontwerp dat past bij je merk én je bezoekers overtuigt, van de eerste schets tot een ontwikkelklaar bestand in Figma.',
     points: [
       'Maatwerk website- en landingspagina-ontwerp afgestemd op je merk en doelgroep',
       'Conversiegericht UX-ontwerp dat betrokkenheid en leads verhoogt',
@@ -34,7 +34,7 @@ export const SERVICES: Service[] = [
     icon: 'code',
     title: 'Maatwerk website-development',
     intro:
-      'Technisch sterke, snelle websites — pixel-perfect gebouwd op een schone, schaalbare codebasis.',
+      'Technisch sterke en snelle websites, pixel-perfect gebouwd op een schone, schaalbare codebasis.',
     points: [
       'Moderne frontend-development met Vue en React',
       'Maatwerk marketingwebsites met ProcessWire CMS',
@@ -48,7 +48,7 @@ export const SERVICES: Service[] = [
     icon: 'cart',
     title: 'Shopify webshop-development',
     intro:
-      'Een webshop die verkoopt — van maatwerk thema tot een afrekenproces dat is geoptimaliseerd voor conversie.',
+      'Een webshop die verkoopt: van maatwerk thema tot een afrekenproces dat is geoptimaliseerd voor conversie.',
     points: [
       'Maatwerk Shopify-thema-development en -ontwerp',
       'Inrichting en configuratie van je Shopify-winkel',
@@ -61,7 +61,7 @@ export const SERVICES: Service[] = [
     icon: 'megaphone',
     title: 'High-impact display advertising',
     intro:
-      'Technische implementatie van opvallende, paginavullende advertentieformaten die aansluiten op je campagnedoelen — o.a. voor BetCity.',
+      'Technische implementatie van opvallende, paginavullende advertentieformaten die aansluiten op je campagnedoelen, onder andere voor BetCity.',
     points: [
       'Homepage Takeovers (HPTO) voor Weborama en PXR',
       'Rich media en high-visibility advertentie-integraties',
@@ -74,7 +74,7 @@ export const SERVICES: Service[] = [
     title: 'Branding & visuele identiteit',
     badge: 'via vertrouwd netwerk',
     intro:
-      'Een consistente merkidentiteit die overal klopt — van logo tot complete launch, samen met betrouwbare partners.',
+      'Samen met betrouwbare partners zorg ik voor een consistente merkidentiteit die overal klopt, van logo tot complete launch.',
     points: [
       'Logo-ontwerp en complete ontwikkeling van je merkidentiteit',
       'Merkrichtlijnen en visuele consistentie over alle platformen',
@@ -86,7 +86,7 @@ export const SERVICES: Service[] = [
     title: 'Tracking, analytics & performance',
     badge: 'via gespecialiseerde partners',
     intro:
-      'Meet wat ertoe doet — betrouwbare data en heldere attributie voor betere marketingbeslissingen.',
+      'Meet wat ertoe doet: betrouwbare data en heldere attributie voor betere marketingbeslissingen.',
     points: [
       'Google Analytics 4 inrichting en configuratie',
       'Google Tag Manager-implementatie en event-tracking',
@@ -114,6 +114,6 @@ export const COLLAB_OPTIONS = [
   {
     title: 'Full digital package',
     description:
-      'Branding, website of webshop én analytics — het hele traject van strategie tot livegang en onderhoud.',
+      'Branding, website of webshop én analytics: het hele traject van strategie tot livegang en onderhoud.',
   },
 ] as const;

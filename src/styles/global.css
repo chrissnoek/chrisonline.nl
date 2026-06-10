@@ -230,3 +230,46 @@
     transform: translateY(0);
   }
 }
+
+/* ──────────────────────────────────────────────────────────────────────────
+ *  Page-enter — entree voor content boven de vouw op subpagina's.
+ *  Scroll-reveals werken daar niet (het element is al in beeld bij load),
+ *  dus deze spelen één keer bij het tonen van de pagina — ook na een
+ *  View Transition. Stagger via --enter-delay (inline style).
+ *  Eindtoestand is de default; animatie alleen wanneer motion mag.
+ * ────────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  .enter-up {
+    animation: enter-up 0.65s var(--ease-out-soft) both;
+    animation-delay: var(--enter-delay, 0s);
+  }
+  .enter-pop {
+    animation: enter-pop 0.55s var(--ease-out-soft) both;
+    animation-delay: var(--enter-delay, 0s);
+  }
+}
+
+@keyframes enter-up {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes enter-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
