@@ -13,6 +13,10 @@
  * client-side navigatie), is volledig skipbaar (klik/toets/wheel/touch) en
  * wordt bij prefers-reduced-motion nooit getoond — de gate in BaseLayout
  * zet dan geen data-intro2 op <html> en de overlay blijft display:none.
+ *
+ * Events (voor o.a. het deeltjesveld, zie ParticleField.astro):
+ *   `intro:reveal` — het doek splijt open (1.85s)
+ *   `intro:end`    — overlay verdwijnt (natuurlijk einde óf skip)
  */
 ---
 
@@ -344,6 +348,9 @@
       finished = true;
       timers.forEach((t) => clearTimeout(t));
       events.forEach((e) => window.removeEventListener(e, skip));
+      // Vóór overlay.remove(), zodat luisteraars (deeltjesveld) hun canvas
+      // nog uit de overlay kunnen halen.
+      window.dispatchEvent(new Event('intro:end'));
       // Attributen weg → alle intro/montage-CSS vervalt → eindtoestand.
       root.removeAttribute('data-intro2');
       root.removeAttribute('data-intro');
@@ -354,7 +361,11 @@
     // FLIP-morph: het grote logo vliegt naar de header-positie.
     timers.push(
       window.setTimeout(() => {
-        if (finished || !fly || !headerLogo) return;
+        if (finished) return;
+        // Het doek splijt nu (CSS) → signaal voor het deeltjesveld om naar
+        // de rustige achtergrondrol te zakken.
+        window.dispatchEvent(new Event('intro:reveal'));
+        if (!fly || !headerLogo) return;
         const from = fly.getBoundingClientRect();
         const to = headerLogo.getBoundingClientRect();
         if (from.height === 0 || to.height === 0) return;
@@ -412,8 +423,20 @@
         if (finished) return;
         finished = true;
         events.forEach((e) => window.removeEventListener(e, skip));
+        window.dispatchEvent(new Event('intro:end'));
         overlay.remove();
       }, 2950),
+    );
+
+    // Nazorg: zodra ook de hero-montage is uitgespeeld (laatste animatie klaar
+    // rond 3.8s) gaan de attributen alsnog weg. De eindtoestand is de
+    // standaardstijl, maar zo vervalt de will-change-laagpromotie op alle
+    // [data-anim]-elementen voor de rest van de sessie.
+    timers.push(
+      window.setTimeout(() => {
+        root.removeAttribute('data-intro2');
+        root.removeAttribute('data-intro');
+      }, 4100),
     );
   }
 
