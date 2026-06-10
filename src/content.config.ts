@@ -16,6 +16,8 @@ const projects = defineCollection({
       title: z.string(),
       /** Klant/merknaam (kan afwijken van de titel). */
       client: z.string(),
+      /** Opdrachtgever — wie het werk in opdracht gaf (kan afwijken van de klant, bijv. een bureau). */
+      opdrachtgever: z.string().optional(),
       /** Korte samenvatting (gebruikt in de grid en als meta description). */
       summary: z.string(),
       /** Jouw rol, bijv. "Designer" of "Designer & Developer". */

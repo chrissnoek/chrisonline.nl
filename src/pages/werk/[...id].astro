@@ -69,6 +69,17 @@ const creativeWorkLd = {
         <span aria-hidden="true">·</span>
         <time datetime={data.pubDate.toISOString()}>{dateLabel}</time>
         {
+          data.opdrachtgever && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>
+                In opdracht van{' '}
+                <span class="font-medium text-[var(--fg)]">{data.opdrachtgever}</span>
+              </span>
+            </>
+          )
+        }
+        {
           data.placeholder && (
             <span class="rounded-pill bg-amber-500/15 px-2.5 py-0.5 text-xs font-medium text-amber-700 dark:text-amber-400">
               placeholder-content
