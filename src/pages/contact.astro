@@ -65,7 +65,7 @@ const description =
                   <a
                     href={social.url}
                     class="rounded-pill hover:border-accent-500 grid h-11 w-11 place-items-center border border-[var(--border)] text-[var(--fg-muted)] transition-all hover:-translate-y-0.5 hover:text-[var(--accent-text)]"
-                    aria-label={`${social.name} — ${social.handle}`}
+                    aria-label={`${social.name}, ${social.handle}`}
                     rel={social.url.startsWith('http') ? 'me noopener' : undefined}
                     target={social.url.startsWith('http') ? '_blank' : undefined}
                   >
