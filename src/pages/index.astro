@@ -9,8 +9,23 @@ import ContactCta from '../components/sections/ContactCta.astro';
 
 <BaseLayout>
   <Hero />
-  <About />
-  <Services />
-  <Projects />
+
+  <!-- Storytelling-traject: een "rode draad" loopt mee langs de secties en
+       vult zich naarmate je scrolt. Puur decoratief, dus aria-hidden. -->
+  <div class="relative">
+    <div
+      class="pointer-events-none absolute top-0 bottom-0 left-[max(1.25rem,calc((100vw-76rem)/2+2rem))] hidden w-px lg:block"
+      aria-hidden="true"
+    >
+      <div class="absolute inset-0 w-px bg-[var(--border)]/60"></div>
+      <div class="thread from-accent-500 to-accent-500/0 absolute inset-0 w-px bg-gradient-to-b">
+      </div>
+    </div>
+
+    <About />
+    <Services />
+    <Projects />
+  </div>
+
   <ContactCta />
 </BaseLayout>

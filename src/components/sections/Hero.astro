@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { SITE, CONTACT } from '../../config/site';
 import Icon from '../Icon.astro';
+import Stats from '../Stats.astro';
 import chris from '../../assets/me/chris-snoek.jpg';
 ---
 
@@ -9,15 +10,38 @@ import chris from '../../assets/me/chris-snoek.jpg';
   <!-- Subtiele accent-gloed achter de hero -->
   <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
     <div
+      data-anim="glow"
       class="bg-accent-500/10 dark:bg-accent-500/15 absolute top-[-20%] right-[-10%] h-[clamp(20rem,60vw,42rem)] w-[clamp(20rem,60vw,42rem)] rounded-full blur-3xl"
     >
     </div>
+    <!-- Logo-hexagon dat zich tekent bij de intro (decoratief). -->
+    <svg
+      data-anim="draw"
+      class="text-accent-500/20 dark:text-accent-500/25 absolute top-[6%] right-[4%] hidden h-[26rem] w-[26rem] lg:block"
+      viewBox="0 0 198.78 229.54"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="3"
+      style="--draw-len: 1400"
+      aria-hidden="true"
+    >
+      <polygon points="99.39 0 0 57.38 0 172.15 99.39 229.53 198.78 172.15 198.78 57.38 99.39 0"
+      ></polygon>
+      <polygon
+        points="99.39 37.83 32.76 76.3 32.76 153.24 99.39 191.7 166.02 153.24 166.02 76.3 99.39 37.83"
+      ></polygon>
+      <polygon
+        points="99.39 75.66 65.53 95.21 65.53 134.32 99.39 153.88 133.25 134.32 133.25 95.21 99.39 75.66"
+      ></polygon>
+    </svg>
   </div>
 
   <div class="container-page grid items-center gap-12 py-20 md:py-28 lg:grid-cols-[1.15fr_0.85fr]">
     <!-- Tekst -->
-    <div class="reveal-up">
+    <div>
       <p
+        data-anim="up"
+        style="--anim-delay: 0.05s"
         class="rounded-pill inline-flex items-center gap-2 border border-[var(--border)] bg-[var(--bg-alt)] px-3.5 py-1.5 text-sm font-medium text-[var(--fg-muted)]"
       >
         <span class="relative flex h-2 w-2" aria-hidden="true">
@@ -29,16 +53,32 @@ import chris from '../../assets/me/chris-snoek.jpg';
         Beschikbaar voor nieuwe projecten
       </p>
 
+      <!-- Titel valt woord-voor-woord (regel-voor-regel) in. -->
       <h1 id="hero-heading" class="text-display mt-6 font-bold text-balance">
-        Razendsnelle <span class="text-[var(--accent-text)]">maatwerk-websites</span> die converteren.
+        <span data-anim="up" style="--anim-delay: 0.18s" class="inline-block">Razendsnelle</span>
+        <span
+          data-anim="up"
+          style="--anim-delay: 0.3s"
+          class="inline-block text-[var(--accent-text)]">maatwerk-websites</span
+        >
+        <span data-anim="up" style="--anim-delay: 0.42s" class="inline-block">die converteren.</span
+        >
       </h1>
 
-      <p class="text-lead mt-6 max-w-xl text-pretty text-[var(--fg-muted)]">
+      <p
+        data-anim="up"
+        style="--anim-delay: 0.56s"
+        class="text-lead mt-6 max-w-xl text-pretty text-[var(--fg-muted)]"
+      >
         Ik ben {SITE.author} — webdeveloper en designer achter {SITE.brand}. Ik bouw technisch
         sterke websites en webshops waar snelheid, ontwerp en conversie samenkomen.
       </p>
 
-      <div class="mt-9 flex flex-wrap items-center gap-3">
+      <div
+        data-anim="up"
+        style="--anim-delay: 0.68s"
+        class="mt-9 flex flex-wrap items-center gap-3"
+      >
         <a
           href="/contact"
           class="group rounded-pill bg-accent-500 hover:bg-accent-600 inline-flex items-center gap-2 px-6 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_30px_-8px_rgba(0,176,213,0.5)]"
@@ -58,55 +98,44 @@ import chris from '../../assets/me/chris-snoek.jpg';
         </a>
       </div>
 
-      <!-- Korte trust-strip -->
-      <dl class="mt-12 grid max-w-md grid-cols-3 gap-4 sm:gap-6">
-        <div>
-          <dt class="sr-only">Specialisatie</dt>
-          <dd class="text-lg font-bold tracking-tight sm:text-2xl">Maatwerk</dd>
-          <dd class="mt-0.5 text-xs text-[var(--fg-muted)] sm:text-sm">geen templates</dd>
-        </div>
-        <div>
-          <dt class="sr-only">Focus</dt>
-          <dd class="text-lg font-bold tracking-tight sm:text-2xl">Snelheid</dd>
-          <dd class="mt-0.5 text-xs text-[var(--fg-muted)] sm:text-sm">top performance</dd>
-        </div>
-        <div>
-          <dt class="sr-only">Resultaat</dt>
-          <dd class="text-lg font-bold tracking-tight sm:text-2xl">Conversie</dd>
-          <dd class="mt-0.5 text-xs text-[var(--fg-muted)] sm:text-sm">gericht ontwerp</dd>
-        </div>
-      </dl>
+      <!-- Tellende statistieken -->
+      <div data-anim="up" style="--anim-delay: 0.8s">
+        <Stats />
+      </div>
     </div>
 
     <!-- Foto -->
-    <div class="reveal relative mx-auto w-full max-w-sm lg:max-w-none">
+    <div class="relative mx-auto w-full max-w-sm lg:max-w-none">
       <div
+        data-anim="glow"
         class="from-accent-500/20 absolute -inset-3 -z-10 rounded-[1.75rem] bg-gradient-to-tr to-transparent blur-2xl"
         aria-hidden="true"
       >
       </div>
-      <Image
-        src={chris}
-        alt={`Portretfoto van ${SITE.author}`}
-        widths={[320, 480, 640, 800]}
-        sizes="(max-width: 1024px) 22rem, 28rem"
-        format="avif"
-        quality="high"
-        priority
-        class="rounded-card shadow-card aspect-[3/4] w-full object-cover"
-      />
-      <!-- Visitekaartje-overlay -->
-      <div
-        class="bg-ink-900/80 absolute bottom-4 left-1/2 w-[90%] -translate-x-1/2 rounded-2xl border border-white/10 px-5 py-4 text-white backdrop-blur-md"
-      >
-        <p class="font-semibold">{SITE.author}</p>
-        <p class="text-sm text-slate-300">{SITE.jobTitle}</p>
-        <a
-          href={`mailto:${CONTACT.email}`}
-          class="text-accent-300 mt-1 inline-block text-sm hover:underline"
+      <div data-anim="photo" style="--anim-delay: 0.35s">
+        <Image
+          src={chris}
+          alt={`Portretfoto van ${SITE.author}`}
+          widths={[320, 480, 640, 800]}
+          sizes="(max-width: 1024px) 22rem, 28rem"
+          format="avif"
+          quality="high"
+          priority
+          class="rounded-card shadow-card aspect-[3/4] w-full object-cover"
+        />
+        <!-- Visitekaartje-overlay -->
+        <div
+          class="bg-ink-900/80 absolute bottom-4 left-1/2 w-[90%] -translate-x-1/2 rounded-2xl border border-white/10 px-5 py-4 text-white backdrop-blur-md"
         >
-          {CONTACT.email}
-        </a>
+          <p class="font-semibold">{SITE.author}</p>
+          <p class="text-sm text-slate-300">{SITE.jobTitle}</p>
+          <a
+            href={`mailto:${CONTACT.email}`}
+            class="text-accent-300 mt-1 inline-block text-sm hover:underline"
+          >
+            {CONTACT.email}
+          </a>
+        </div>
       </div>
     </div>
   </div>

@@ -5,6 +5,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
+import '../styles/intro.css';
 
 interface Props {
   title?: string;
@@ -29,6 +30,24 @@ const { title, description, image, type, jsonLd, noindex } = Astro.props;
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         if (stored === 'dark' || (!stored && prefersDark)) {
           document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+
+    <!-- Intro-montage: alleen op de homepage, één keer per sessie, en alleen
+         wanneer de bezoeker geen reduced-motion heeft. Vóór paint gezet zodat
+         elementen meteen in start-toestand staan (geen flits van de eindstaat). -->
+    <script is:inline>
+      (() => {
+        try {
+          const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          const seen = sessionStorage.getItem('intro-seen');
+          if (location.pathname === '/' && !reduce && !seen) {
+            document.documentElement.setAttribute('data-intro', 'play');
+            sessionStorage.setItem('intro-seen', '1');
+          }
+        } catch (_) {
+          /* sessionStorage geblokkeerd → geen intro, gewoon de eindtoestand */
         }
       })();
     </script>
@@ -62,6 +81,9 @@ const { title, description, image, type, jsonLd, noindex } = Astro.props;
           'dark',
           stored === 'dark' || (!stored && prefersDark),
         );
+        // De intro speelt alleen bij de eerste echte paginalading, nooit
+        // opnieuw na een client-side navigatie.
+        document.documentElement.removeAttribute('data-intro');
       });
     </script>
   </body>
