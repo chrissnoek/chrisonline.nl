@@ -1,0 +1,523 @@
+---
+/**
+ * Deeltjesveld — interactieve canvas-achtergrond met witte/cyaan gloeideeltjes.
+ *
+ * Twee fases, één canvas (naadloze overgang):
+ *   1. INTRO  — het canvas hangt ín #intro-overlay (boven de donkere panelen,
+ *               onder het logo), met exact dezelfde rustige sterkte als
+ *               straks achter de hero — geen aparte "intro-boost".
+ *   2. PAGINA — zodra het doek splijt (event `intro:reveal`, of `intro:end`
+ *               bij skip) verhuist het canvas naar een fixed laag áchter de
+ *               pagina (z-index -1): het openende doek onthult de deeltjes
+ *               die dan al achter de tekst leven; alleen de spritekleur
+ *               crossfadet mee met de paginakleur (light mode).
+ *
+ * Bewegingsmodel:
+ *   - Elk deeltje heeft een dwalend anker dat de vliegbeweging draagt; het
+ *     deeltje zit er met een zachte veer aan vast. De muis stoot deeltjes af
+ *     (lege cirkel rond de cursor) maar laat ankers met rust, dus het veld
+ *     dwarrelt binnen ~1s vanzelf weer dicht zodra de muis vertrekt.
+ *   - Het veld loopt van de paginatop tot de onderkant van #over (About);
+ *     vanaf de onderkant van de hero dunt het lineair uit (dichtheid × alpha
+ *     ≈ kwadratisch) naar nul.
+ *
+ * Performance:
+ *   - Vooraf gerenderde gloeisprites (geen gradients per frame).
+ *   - Eén Float32Array als deeltjesbuffer (geen GC-druk in de loop).
+ *   - Canvas is viewport-groot (fixed, 100lvh-maat) i.p.v. document-groot;
+ *     de wereld scrollt mee via een translate — minimaal geheugen, en de
+ *     mobiele URL-balk veroorzaakt geen hermetingen of kale randen.
+ *   - Render gecapt op ~60fps (120Hz-schermen betalen niet dubbel) en de
+ *     loop pauzeert volledig zodra het veld uit beeld is.
+ *   - prefers-reduced-motion → er wordt niets gestart, en live inschakelen
+ *     stopt een lopend veld direct.
+ */
+---
+
+<div id="particle-field" aria-hidden="true">
+  <canvas id="particle-canvas" class="pc-page"></canvas>
+</div>
+
+<style is:global>
+  /* Onzichtbare "meetlat" op documenthoogte: doel voor de IntersectionObserver
+     en thuishaven van het canvas. 1px breed zodat er nooit horizontale
+     overflow kan ontstaan. */
+  #particle-field {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  #particle-canvas {
+    display: block;
+    pointer-events: none;
+  }
+  /* In de overlay: boven de panelen, onder het podium (DOM-volgorde). */
+  #particle-canvas.pc-intro {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  /* Achter de pagina: fixed laag, content blijft erbovenop leesbaar. */
+  #particle-canvas.pc-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+</style>
+
+<script>
+  // Buffervelden per deeltje: x, y, drift-vx, drift-vy, impuls-vx, impuls-vy,
+  // fase, fasesnelheid, straal, alpha, anker-x, anker-y
+  const STRIDE = 12;
+  const MARGE = 24; // wikkelmarge rond de veldranden
+  const VEER = 0.008; // veerkracht richting het anker (terugdwarrel ~1s)
+
+  /** Zachte gloeisprite (radiale gradient), één keer gerenderd. */
+  function maakSprite(stops: [number, string][]): HTMLCanvasElement {
+    const size = 64;
+    const sprite = document.createElement('canvas');
+    sprite.width = size;
+    sprite.height = size;
+    const c = sprite.getContext('2d')!;
+    const g = c.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    stops.forEach(([at, kleur]) => g.addColorStop(at, kleur));
+    c.fillStyle = g;
+    c.fillRect(0, 0, size, size);
+    return sprite;
+  }
+
+  interface Veld {
+    canvas: HTMLCanvasElement;
+    destroy: () => void;
+  }
+
+  function startVeld(container: HTMLElement, canvas: HTMLCanvasElement): Veld | null {
+    const ctxOfNull = canvas.getContext('2d');
+    if (!ctxOfNull) return null;
+    const ctx = ctxOfNull;
+
+    const root = document.documentElement;
+    const overlay = document.getElementById('intro-overlay');
+    const introActief = !!overlay && root.getAttribute('data-intro2') === 'play';
+
+    // Witte kern met cyaan gloed (op donkere achtergrond: intro-doek & dark
+    // mode) en ink (accent-600/700 op de lichte pagina — wit is daar onzichtbaar).
+    const sprHelder = maakSprite([
+      [0, 'rgba(255, 255, 255, 1)'],
+      [0.22, 'rgba(236, 251, 255, 0.65)'],
+      [0.5, 'rgba(143, 224, 240, 0.2)'],
+      [1, 'rgba(143, 224, 240, 0)'],
+    ]);
+    const sprInk = maakSprite([
+      [0, 'rgba(0, 121, 148, 1)'],
+      [0.3, 'rgba(0, 150, 180, 0.55)'],
+      [0.62, 'rgba(0, 176, 213, 0.14)'],
+      [1, 'rgba(0, 176, 213, 0)'],
+    ]);
+
+    // ── Toestand ──────────────────────────────────────────────────────────
+    let modus: 'intro' | 'page' = introActief ? 'intro' : 'page';
+    let mix = introActief ? 0 : 1; // 0 = heldere sprite, 1 = themasprite
+    let mixDoel = mix;
+    let master = 0; // globale fade-in zodat het veld nooit "popt"
+    let mx = -9999;
+    let my = -9999; // muis in client-coördinaten; -9999 = geen muis
+
+    let vw = 0;
+    let vh = 0;
+    let veldH = 0; // wereldhoogte: tot onderkant About
+    let fadeStart = 0; // vanaf hier dunnen de deeltjes uit (onderkant hero)
+    let dpr = 1;
+    let P = new Float32Array(0);
+    let n = 0;
+
+    // Scrolloffset uit een passieve listener i.p.v. een read in de rAF —
+    // geen afhankelijkheid van handler-volgorde. NB: compositor-scrollen kan
+    // tijdens snelle scrolls één frame voorlopen op deze laag; dat is
+    // inherent aan een fixed canvas en op deze alpha niet waarneembaar.
+    let cachedSy = window.scrollY;
+    const onScroll = () => {
+      cachedSy = window.scrollY;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // 100lvh-meting: zo blijft het canvas op "grote viewport"-maat en geeft
+    // het inklappen van de mobiele URL-balk geen kale strook of hermeting.
+    const lvhProbe = document.createElement('div');
+    lvhProbe.style.cssText =
+      'position:fixed;top:0;left:0;width:0;height:100lvh;visibility:hidden;pointer-events:none;';
+    container.appendChild(lvhProbe);
+
+    function dichtheid(y: number): number {
+      if (y <= fadeStart) return 1;
+      const t = (y - fadeStart) / Math.max(1, veldH - fadeStart);
+      return Math.max(0, 1 - t);
+    }
+
+    function spawnY(): number {
+      // Verwerpingssampling: meer deeltjes bovenin, lineair aflopend naar de
+      // bodem van About (samen met de lineaire alpha ≈ kwadratische fade).
+      for (let i = 0; i < 8; i++) {
+        const y = Math.random() * veldH;
+        if (Math.random() < Math.max(0.05, dichtheid(y))) return y;
+      }
+      return Math.random() * Math.max(1, fadeStart);
+    }
+
+    function spawn(i: number): void {
+      const o = i * STRIDE;
+      const hoek = Math.random() * Math.PI * 2;
+      const tempo = 0.14 + Math.random() * 0.26; // px per frame @60fps
+      const groot = Math.random() < 0.08; // enkele grote, vage "diepte"-deeltjes
+      const x = Math.random() * vw;
+      const y = spawnY();
+      P[o] = x;
+      P[o + 1] = y;
+      P[o + 2] = Math.cos(hoek) * tempo;
+      P[o + 3] = Math.sin(hoek) * tempo;
+      P[o + 4] = 0;
+      P[o + 5] = 0;
+      P[o + 6] = Math.random() * Math.PI * 2;
+      P[o + 7] = 0.015 + Math.random() * 0.022;
+      P[o + 8] = groot ? 8 + Math.random() * 5 : 3 + Math.random() * 4.5;
+      P[o + 9] = groot ? 0.25 + Math.random() * 0.2 : 0.5 + Math.random() * 0.5;
+      P[o + 10] = x;
+      P[o + 11] = y;
+    }
+
+    function meet(): boolean {
+      const nieuwVw = root.clientWidth;
+      const nieuwVh = Math.max(window.innerHeight, lvhProbe.offsetHeight || 0);
+      const nieuwDpr = Math.min(window.devicePixelRatio || 1, 2);
+      const sy = window.scrollY;
+      const hero = document.querySelector('section[aria-labelledby="hero-heading"]');
+      const about = document.getElementById('over');
+      const nieuwFadeStart = hero ? hero.getBoundingClientRect().bottom + sy : nieuwVh;
+      let nieuwVeldH = about ? about.getBoundingClientRect().bottom + sy : nieuwVh * 1.8;
+      if (nieuwVeldH < nieuwFadeStart + 100) nieuwVeldH = nieuwFadeStart + nieuwVh;
+
+      const veranderd =
+        nieuwVw !== vw ||
+        nieuwVh !== vh ||
+        nieuwDpr !== dpr ||
+        Math.abs(nieuwVeldH - veldH) > 2 ||
+        Math.abs(nieuwFadeStart - fadeStart) > 2;
+      if (!veranderd) return false;
+
+      const bufferAnders = nieuwVw !== vw || nieuwVh !== vh || nieuwDpr !== dpr;
+      vw = nieuwVw;
+      vh = nieuwVh;
+      dpr = nieuwDpr;
+      veldH = nieuwVeldH;
+      fadeStart = nieuwFadeStart;
+      if (bufferAnders) {
+        canvas.width = Math.round(vw * dpr);
+        canvas.height = Math.round(vh * dpr);
+        canvas.style.width = vw + 'px';
+        canvas.style.height = vh + 'px';
+      }
+      container.style.height = veldH + 'px';
+      return true;
+    }
+
+    function herbouw(): void {
+      // Aantal schaalt met oppervlak; gecapt zodat het ook op grote schermen
+      // licht blijft. Kleine verschuivingen (<10%) negeren we; bestaande
+      // deeltjes behouden hun positie.
+      const doel = Math.max(
+        56,
+        Math.min(220, Math.round((vw * Math.min(veldH, vh * 2.5)) / 14000)),
+      );
+      if (doel === n || (n > 0 && Math.abs(doel - n) / n < 0.1)) return;
+      const nieuw = new Float32Array(doel * STRIDE);
+      nieuw.set(P.subarray(0, Math.min(P.length, nieuw.length)));
+      const oudN = n;
+      P = nieuw;
+      n = doel;
+      for (let i = oudN; i < n; i++) spawn(i);
+    }
+
+    meet();
+    herbouw();
+
+    // Tijdens de intro hangt het canvas in de overlay: ná de panelen (eronder
+    // in z-volgorde), vóór naadlijn en podium (logo blijft erbovenop).
+    if (introActief && overlay) {
+      canvas.classList.remove('pc-page');
+      canvas.classList.add('pc-intro');
+      const anker = overlay.querySelector('.io-seam') ?? overlay.querySelector('.io-stage');
+      if (anker) overlay.insertBefore(canvas, anker);
+      else overlay.appendChild(canvas);
+    }
+
+    /** Doek splijt (of skip): canvas achter de pagina, sprite naar themakleur. */
+    function handoff(): void {
+      if (modus !== 'intro') return;
+      modus = 'page';
+      mixDoel = 1;
+      canvas.classList.remove('pc-intro');
+      canvas.classList.add('pc-page');
+      container.appendChild(canvas);
+      // Wereld = documentcoördinaten; tijdens de intro waren dat viewport-
+      // coördinaten. Bij een herstelde scrollpositie (reload halverwege,
+      // /#werk-ankerlinks) verschuiven we alleen wat zichtbaar was en
+      // respawnen we de rest — een blinde shift zou het veld laten
+      // samenklappen op de wikkelrand.
+      cachedSy = window.scrollY;
+      const sy = cachedSy;
+      if (sy > vh) {
+        for (let i = 0; i < n; i++) spawn(i);
+      } else if (sy > 0.5) {
+        for (let i = 0; i < n; i++) {
+          const o = i * STRIDE;
+          if (P[o + 11] + sy > veldH + MARGE) {
+            spawn(i);
+          } else {
+            P[o + 1] += sy;
+            P[o + 11] += sy;
+          }
+        }
+      }
+      planMeting(); // scrollbar keert terug → breedte kan ~15px wijzigen
+      bijwerken(); // run/pauze her-evalueren nu het canvas weer in het veld hangt
+    }
+
+    // ── Animatielus ───────────────────────────────────────────────────────
+    let raf = 0;
+    let actief = false;
+    let zichtbaar = true;
+    let vorige = 0;
+
+    function frame(nu: number): void {
+      raf = requestAnimationFrame(frame);
+      if (nu - vorige < 15) return; // cap ~60fps; 120Hz betaalt niet dubbel
+      const dt = Math.min((nu - vorige) / 16.667 || 1, 3); // in 60fps-frames
+      vorige = nu;
+
+      // Vangnet: overlay weg (bv. skip vóór het event-systeem) → handoff.
+      if (modus === 'intro' && overlay && !overlay.isConnected) handoff();
+
+      mix += (mixDoel - mix) * (1 - Math.pow(0.9, dt));
+      master = Math.min(1, master + dt * 0.05);
+
+      const offset = modus === 'page' ? cachedSy : 0;
+      const lmx = mx;
+      const lmy = my + offset;
+      const tempo = 0.8 * dt;
+      const alphaMul = 0.45 * master;
+      const R = 190; // afstotingsstraal rond de muis
+      const R2 = R * R;
+      const kracht = 4.2 * dt;
+      const verval = Math.pow(0.9, dt);
+      const sprThema = root.classList.contains('dark') ? sprHelder : sprInk;
+      const zelfde = sprThema === sprHelder;
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, -offset * dpr);
+      ctx.clearRect(0, offset, vw, vh);
+
+      for (let i = 0; i < n; i++) {
+        const o = i * STRIDE;
+        let x = P[o];
+        let y = P[o + 1];
+        let hx = P[o + 10] + P[o + 2] * tempo;
+        let hy = P[o + 11] + P[o + 3] * tempo;
+
+        // Anker wikkelt rond de randen; het deeltje verspringt mee zodat de
+        // veer nooit dwars over het scherm trekt.
+        if (hx < -MARGE) {
+          hx += vw + 2 * MARGE;
+          x += vw + 2 * MARGE;
+        } else if (hx > vw + MARGE) {
+          hx -= vw + 2 * MARGE;
+          x -= vw + 2 * MARGE;
+        }
+        if (hy < -MARGE) {
+          hy += veldH + 2 * MARGE;
+          y += veldH + 2 * MARGE;
+        } else if (hy > veldH + MARGE) {
+          hy -= veldH + 2 * MARGE;
+          y -= veldH + 2 * MARGE;
+        }
+
+        // Impuls: veer richting het anker + muisafstoting, met demping.
+        let ivx = P[o + 4] * verval + (hx - x) * VEER * dt;
+        let ivy = P[o + 5] * verval + (hy - y) * VEER * dt;
+        const dx = x - lmx;
+        const dy = y - lmy;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < R2 && d2 > 0.01) {
+          const d = Math.sqrt(d2);
+          const f = 1 - d / R;
+          const imp = f * f * kracht;
+          ivx += (dx / d) * imp;
+          ivy += (dy / d) * imp;
+        }
+        x += ivx * dt;
+        y += ivy * dt;
+
+        const ph = P[o + 6] + P[o + 7] * dt;
+        P[o] = x;
+        P[o + 1] = y;
+        P[o + 4] = ivx;
+        P[o + 5] = ivy;
+        P[o + 6] = ph;
+        P[o + 10] = hx;
+        P[o + 11] = hy;
+
+        // Alleen tekenen wat in beeld is én zichtbaar genoeg.
+        if (y + 2 * MARGE < offset || y - 2 * MARGE > offset + vh) continue;
+        const fd = dichtheid(y);
+        if (fd <= 0.01) continue;
+        const twinkel = 0.78 + 0.22 * Math.sin(ph * 1.7);
+        const a = P[o + 9] * twinkel * fd * alphaMul;
+        if (a < 0.01) continue;
+
+        const s = P[o + 8];
+        const wx = x + Math.sin(ph) * 3.6;
+        const wy = y + Math.cos(ph * 0.83) * 3.6;
+        if (zelfde) {
+          ctx.globalAlpha = a;
+          ctx.drawImage(sprHelder, wx - s, wy - s, s * 2, s * 2);
+        } else {
+          // Crossfade tussen intro-sprite en themasprite (alleen light mode).
+          if (mix < 0.999) {
+            ctx.globalAlpha = a * (1 - mix);
+            ctx.drawImage(sprHelder, wx - s, wy - s, s * 2, s * 2);
+          }
+          if (mix > 0.001) {
+            ctx.globalAlpha = a * mix;
+            ctx.drawImage(sprInk, wx - s, wy - s, s * 2, s * 2);
+          }
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function bijwerken(): void {
+      // Tijdens de intro is het canvas viewport-gevuld in de overlay; de
+      // zichtbaarheid van het veld-element zegt dan niets (bv. herstelde
+      // scrollpositie) — de intro draait altijd.
+      const moetLopen = (modus === 'intro' || zichtbaar) && !document.hidden;
+      if (moetLopen && !actief) {
+        actief = true;
+        canvas.style.display = '';
+        vorige = performance.now();
+        raf = requestAnimationFrame(frame);
+      } else if (!moetLopen && actief) {
+        actief = false;
+        cancelAnimationFrame(raf);
+        canvas.style.display = 'none';
+      }
+    }
+
+    // ── Events & observers ────────────────────────────────────────────────
+    const onMove = (e: PointerEvent) => {
+      mx = e.clientX;
+      my = e.clientY;
+    };
+    const onWeg = () => {
+      mx = -9999;
+      my = -9999;
+    };
+    const onZicht = () => bijwerken();
+    const onIntroKlaar = () => handoff();
+
+    window.addEventListener('pointermove', onMove, { passive: true });
+    // Vinger los of gesture geannuleerd → geen blijvend "spookgat" op touch.
+    window.addEventListener('pointerup', onWeg, { passive: true });
+    window.addEventListener('pointercancel', onWeg, { passive: true });
+    window.addEventListener('blur', onWeg);
+    root.addEventListener('mouseleave', onWeg);
+    window.addEventListener('intro:reveal', onIntroKlaar);
+    window.addEventListener('intro:end', onIntroKlaar);
+    document.addEventListener('visibilitychange', onZicht);
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        zichtbaar = entries.some((e) => e.isIntersecting);
+        bijwerken();
+      },
+      { rootMargin: '160px 0px' },
+    );
+    io.observe(container);
+
+    // Hermeet bij layoutwijzigingen (fonts/afbeeldingen/viewport), licht gedebounced.
+    let meetTimer = 0;
+    const planMeting = () => {
+      window.clearTimeout(meetTimer);
+      meetTimer = window.setTimeout(() => {
+        if (meet()) herbouw();
+      }, 150);
+    };
+    const ro = new ResizeObserver(planMeting);
+    ro.observe(document.body);
+    window.addEventListener('resize', planMeting);
+
+    bijwerken();
+
+    return {
+      canvas,
+      destroy() {
+        actief = false;
+        cancelAnimationFrame(raf);
+        window.clearTimeout(meetTimer);
+        io.disconnect();
+        ro.disconnect();
+        lvhProbe.remove();
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onWeg);
+        window.removeEventListener('pointercancel', onWeg);
+        window.removeEventListener('blur', onWeg);
+        root.removeEventListener('mouseleave', onWeg);
+        window.removeEventListener('intro:reveal', onIntroKlaar);
+        window.removeEventListener('intro:end', onIntroKlaar);
+        document.removeEventListener('visibilitychange', onZicht);
+        window.removeEventListener('resize', planMeting);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      },
+    };
+  }
+
+  // ── Levenscyclus (ook na View Transitions) ─────────────────────────────
+  let huidig: Veld | null = null;
+
+  function setup(): void {
+    const container = document.getElementById('particle-field');
+    const canvas = document.getElementById('particle-canvas') as HTMLCanvasElement | null;
+    if (!container || !canvas) {
+      huidig?.destroy();
+      huidig = null;
+      return;
+    }
+    if (huidig?.canvas === canvas) return; // zelfde DOM → draait al
+    if (reduceMotion.matches) return;
+    huidig?.destroy();
+    huidig = startVeld(container, canvas);
+  }
+
+  // Live reageren op het (de)activeren van reduced motion — het canvas is
+  // anders de enige beweging op de site die de voorkeur zou negeren.
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  reduceMotion.addEventListener?.('change', () => {
+    if (reduceMotion.matches) {
+      huidig?.destroy();
+      huidig = null;
+    } else {
+      setup();
+    }
+  });
+
+  setup();
+  document.addEventListener('astro:page-load', setup);
+  document.addEventListener('astro:before-swap', () => {
+    huidig?.destroy();
+    huidig = null;
+  });
+</script>
