@@ -46,7 +46,7 @@ const pillars = [
       </div>
 
       <!-- Pijlers als verticale "spine": gradient-lijn met hexagon-knopen
-           (de vorm van het logo-mark) — sluit aan op de rode draad. -->
+           (de vorm van het logo-mark). -->
       <ul class="pillar-spine relative flex flex-col gap-12 self-center lg:gap-14">
         {
           pillars.map((p) => (
@@ -69,8 +69,7 @@ const pillars = [
 </section>
 
 <style>
-  /* Verbindingslijn door de knoop-centra; loopt onderaan uit in transparant,
-     net als de rode draad elders op de pagina. */
+  /* Verbindingslijn door de knoop-centra; loopt onderaan uit in transparant. */
   .pillar-spine::before {
     content: '';
     position: absolute;

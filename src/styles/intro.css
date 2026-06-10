@@ -90,31 +90,6 @@
   }
 }
 
-/* ── Storytelling: "rode draad" ───────────────────────────────────────────
- * Een verticale accent-lijn die zich vult naarmate de pagina scrolt.
- * Veilige default: lijn op volle hoogte (subtiel). Met motion + support:
- * groeit hij scroll-linked mee.
- */
-.thread {
-  transform-origin: top;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: scroll()) {
-    .thread {
-      transform: scaleY(0);
-      animation: thread-grow linear both;
-      animation-timeline: scroll(root);
-    }
-  }
-}
-
-@keyframes thread-grow {
-  to {
-    transform: scaleY(1);
-  }
-}
-
 /* ── Storytelling: oplichtende sectie-koppen ─────────────────────────────
  * De kop is standaard gewoon leesbaar (eindtoestand). Met motion + support
  * komt hij scroll-linked van licht-gedimd naar vol contrast.
