@@ -5,6 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
 import BrowserFrame from '../../components/BrowserFrame.astro';
 import { SITE } from '../../config/site';
+import { withUtm } from '../../utils/utm';
 
 export async function getStaticPaths() {
   const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
@@ -76,7 +77,7 @@ const creativeWorkLd = {
                 In opdracht van{' '}
                 {data.opdrachtgever.url ? (
                   <a
-                    href={data.opdrachtgever.url}
+                    href={withUtm(data.opdrachtgever.url)}
                     target="_blank"
                     rel="noopener"
                     class="font-medium text-[var(--fg)] underline decoration-[var(--border)] underline-offset-2 transition-colors hover:text-[var(--accent-text)] hover:decoration-current"
@@ -121,7 +122,7 @@ const creativeWorkLd = {
       {
         data.url && (
           <a
-            href={data.url}
+            href={withUtm(data.url)}
             target="_blank"
             rel="noopener"
             class="group enter-up mt-6 inline-flex items-center gap-2 font-semibold text-[var(--accent-text)] hover:underline"
@@ -174,7 +175,7 @@ const creativeWorkLd = {
           <div class="mt-4 flex flex-wrap gap-3">
             {data.externalLinks.map((link) => (
               <a
-                href={link.url}
+                href={withUtm(link.url)}
                 target="_blank"
                 rel="noopener"
                 class="group hover:border-accent-500/50 rounded-pill inline-flex items-center gap-2 border border-[var(--border)] bg-[var(--bg-alt)] px-4 py-2.5 text-sm font-medium text-[var(--fg)] transition-all hover:-translate-y-0.5 hover:text-[var(--accent-text)]"
