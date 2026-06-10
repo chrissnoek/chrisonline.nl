@@ -74,7 +74,18 @@ const creativeWorkLd = {
               <span aria-hidden="true">·</span>
               <span>
                 In opdracht van{' '}
-                <span class="font-medium text-[var(--fg)]">{data.opdrachtgever}</span>
+                {data.opdrachtgever.url ? (
+                  <a
+                    href={data.opdrachtgever.url}
+                    target="_blank"
+                    rel="noopener"
+                    class="font-medium text-[var(--fg)] underline decoration-[var(--border)] underline-offset-2 transition-colors hover:text-[var(--accent-text)] hover:decoration-current"
+                  >
+                    {data.opdrachtgever.name}
+                  </a>
+                ) : (
+                  <span class="font-medium text-[var(--fg)]">{data.opdrachtgever.name}</span>
+                )}
               </span>
             </>
           )
