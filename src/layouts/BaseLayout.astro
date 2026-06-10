@@ -34,20 +34,16 @@ const { title, description, image, type, jsonLd, noindex } = Astro.props;
       })();
     </script>
 
-    <!-- Intro-montage: alleen op de homepage, één keer per sessie, en alleen
-         wanneer de bezoeker geen reduced-motion heeft. Vóór paint gezet zodat
-         elementen meteen in start-toestand staan (geen flits van de eindstaat). -->
+    <!-- Brand-opening + hero-montage: alleen op de homepage, bij elke volledige
+         paginalading, en alleen zonder reduced-motion. Vóór paint gezet zodat
+         elementen meteen in start-toestand staan (geen flits van de eindstaat).
+         data-intro  = hero-montage, data-intro2 = cinematische opening. -->
     <script is:inline>
       (() => {
-        try {
-          const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-          const seen = sessionStorage.getItem('intro-seen');
-          if (location.pathname === '/' && !reduce && !seen) {
-            document.documentElement.setAttribute('data-intro', 'play');
-            sessionStorage.setItem('intro-seen', '1');
-          }
-        } catch (_) {
-          /* sessionStorage geblokkeerd → geen intro, gewoon de eindtoestand */
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (location.pathname === '/' && !reduce) {
+          document.documentElement.setAttribute('data-intro', 'play');
+          document.documentElement.setAttribute('data-intro2', 'play');
         }
       })();
     </script>
@@ -81,9 +77,10 @@ const { title, description, image, type, jsonLd, noindex } = Astro.props;
           'dark',
           stored === 'dark' || (!stored && prefersDark),
         );
-        // De intro speelt alleen bij de eerste echte paginalading, nooit
+        // De intro speelt alleen bij een volledige paginalading, nooit
         // opnieuw na een client-side navigatie.
         document.documentElement.removeAttribute('data-intro');
+        document.documentElement.removeAttribute('data-intro2');
       });
     </script>
   </body>

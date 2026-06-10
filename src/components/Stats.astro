@@ -43,6 +43,17 @@ const stats: Stat[] = [
     const root = document.querySelector('[data-stats]');
     if (!root || (root as HTMLElement).dataset.done) return;
 
+    // Tijdens de brand-opening is de pagina nog bedekt; wacht tot de overlay
+    // is opgeruimd (gebeurt zowel bij skip als bij natuurlijk einde) zodat de
+    // count-up zichtbaar gebeurt.
+    if (
+      document.documentElement.getAttribute('data-intro2') === 'play' &&
+      document.getElementById('intro-overlay')
+    ) {
+      setTimeout(animateStats, 400);
+      return;
+    }
+
     const nums = Array.from(root.querySelectorAll<HTMLElement>('.stat-num'));
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

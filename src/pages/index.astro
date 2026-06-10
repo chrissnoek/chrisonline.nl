@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import IntroOverlay from '../components/IntroOverlay.astro';
 import Hero from '../components/sections/Hero.astro';
 import About from '../components/sections/About.astro';
 import Services from '../components/sections/Services.astro';
@@ -8,6 +9,7 @@ import ContactCta from '../components/sections/ContactCta.astro';
 ---
 
 <BaseLayout>
+  <IntroOverlay />
   <Hero />
 
   <!-- Storytelling-traject: een "rode draad" loopt mee langs de secties en
