@@ -33,8 +33,8 @@ export const SITE = {
  * SEO-standaarden. Worden per pagina overschreven waar nodig.
  */
 export const SEO = {
-  defaultTitle: 'Chris Snoek — Webdeveloper & maatwerk-websites | Chris Online',
-  titleTemplate: '%s — Chris Online',
+  defaultTitle: 'Chris Snoek, webdeveloper & maatwerk-websites | Chris Online',
+  titleTemplate: '%s | Chris Online',
   defaultDescription:
     'Chris Snoek bouwt technisch sterke, razendsnelle maatwerk-websites en webshops. ' +
     'Van conversiegericht ontwerp tot pixel-perfecte frontend-development.',

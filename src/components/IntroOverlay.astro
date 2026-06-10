@@ -1,0 +1,423 @@
+---
+/**
+ * Cinematische brand-opening ("title sequence"):
+ *
+ *   0.15–1.05s  hexagon-outlines tekenen zich (stroke-draw, gestaggerd)
+ *   1.05–1.75s  het echte logo (mark + woordmerk) wipet in met een
+ *               gefeatherde mask van links naar rechts; outlines vervagen
+ *   1.85s       het doek splijt open (gloeiende naadlijn) en het logo
+ *               morpht via WAAPI/FLIP naar zijn plek in de header
+ *   2.45–2.85s  crossfade naar het echte header-logo, overlay verdwijnt
+ *
+ * Gedrag: speelt bij elke volledige paginalading van de homepage (niet na
+ * client-side navigatie), is volledig skipbaar (klik/toets/wheel/touch) en
+ * wordt bij prefers-reduced-motion nooit getoond — de gate in BaseLayout
+ * zet dan geen data-intro2 op <html> en de overlay blijft display:none.
+ */
+---
+
+<div id="intro-overlay" aria-hidden="true">
+  <!-- Doek: twee panelen die straks splijten -->
+  <div class="io-panel io-panel-top"></div>
+  <div class="io-panel io-panel-bottom"></div>
+  <!-- Gloeiende naadlijn op het splijtpunt -->
+  <div class="io-seam"></div>
+
+  <!-- Het podium: gecentreerde lockup -->
+  <div class="io-stage">
+    <div class="io-lockup">
+      <!-- Stylized outline-hexagons die zich tekenen (pre-echo van het mark) -->
+      <svg
+        class="io-mark"
+        viewBox="0 0 198.78 229.54"
+        fill="none"
+        stroke="url(#io-grad)"
+        stroke-width="3"
+        aria-hidden="true"
+      >
+        <defs>
+          <linearGradient
+            id="io-grad"
+            y1="114.77"
+            x2="198.78"
+            y2="114.77"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0" stop-color="#00b0d5"></stop>
+            <stop offset="1" stop-color="#0064d5"></stop>
+          </linearGradient>
+        </defs>
+        <polygon
+          class="io-draw"
+          points="99.39 0 0 57.38 0 172.15 99.39 229.53 198.78 172.15 198.78 57.38 99.39 0"
+        ></polygon>
+        <polygon
+          class="io-draw"
+          points="99.39 37.83 32.76 76.3 32.76 153.24 99.39 191.7 166.02 153.24 166.02 76.3 99.39 37.83"
+        ></polygon>
+        <polygon
+          class="io-draw"
+          points="99.39 75.66 65.53 95.21 65.53 134.32 99.39 153.88 133.25 134.32 133.25 95.21 99.39 75.66"
+        ></polygon>
+      </svg>
+      <!-- Het echte logo (zelfde bestanden als de header) — wipet in en vliegt
+           naar de header. Twee gestapelde varianten: tijdens de vlucht over de
+           lichte pagina crossfaden we naar de donkere-tekst-variant. -->
+      <div class="io-fly">
+        <img
+          class="io-fly-light"
+          src="/logo/chrisonline-light-text.svg"
+          alt=""
+          width="540"
+          height="133"
+          decoding="async"
+        />
+        <img
+          class="io-fly-dark"
+          src="/logo/chrisonline-dark-text.svg"
+          alt=""
+          width="540"
+          height="133"
+          decoding="async"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Voortgangs-hairline onderin -->
+  <div class="io-progress"></div>
+</div>
+
+<style is:global>
+  /* Verborgen tenzij de intro expliciet speelt (gate in BaseLayout). */
+  #intro-overlay {
+    display: none;
+  }
+
+  html[data-intro2='play'] #intro-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+  }
+
+  /* ── Doek ──────────────────────────────────────────────────────────── */
+  #intro-overlay .io-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background:
+      radial-gradient(120% 90% at 70% 10%, rgba(0, 176, 213, 0.07), transparent 60%),
+      linear-gradient(180deg, #0a0b15 0%, #0e0f1c 100%);
+  }
+  #intro-overlay .io-panel-top {
+    top: 0;
+    height: 50.05%; /* mini-overlap voorkomt 1px-kier op fractionele pixels */
+  }
+  #intro-overlay .io-panel-bottom {
+    bottom: 0;
+    height: 50.05%;
+    background:
+      radial-gradient(120% 90% at 30% 90%, rgba(0, 176, 213, 0.05), transparent 60%),
+      linear-gradient(0deg, #0a0b15 0%, #0e0f1c 100%);
+  }
+
+  /* Naadlijn: licht dat door de kier valt zodra het doek splijt. */
+  #intro-overlay .io-seam {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    transform: translateY(-50%) scaleX(0);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      #00b0d5 30%,
+      #4fcde6 50%,
+      #00b0d5 70%,
+      transparent
+    );
+    box-shadow: 0 0 24px 4px rgba(0, 176, 213, 0.55);
+    opacity: 0;
+  }
+
+  /* ── Podium & lockup ───────────────────────────────────────────────── */
+  #intro-overlay .io-stage {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+  #intro-overlay .io-lockup {
+    position: relative;
+    width: min(76vw, 540px);
+    aspect-ratio: 932.29 / 229.54;
+  }
+  #intro-overlay .io-mark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: auto;
+    aspect-ratio: 198.78 / 229.54;
+  }
+  #intro-overlay .io-fly {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+  #intro-overlay .io-fly img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  #intro-overlay .io-fly-dark {
+    opacity: 0;
+  }
+
+  /* Scroll-lock zolang de overlay bestaat; heft zichzelf op zodra de
+     overlay uit de DOM is (skip of natuurlijk einde). */
+  html[data-intro2='play'] body:has(#intro-overlay) {
+    overflow: hidden;
+  }
+
+  /* Voortgangs-hairline. */
+  #intro-overlay .io-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    transform-origin: left;
+    transform: scaleX(0);
+    background: linear-gradient(90deg, #00b0d5, #0064d5);
+    opacity: 0.55;
+  }
+
+  /* ── Choreografie (alleen met motion-toestemming; de gate borgt dit al,
+        maar de media query is het harde vangnet) ─────────────────────── */
+  @media (prefers-reduced-motion: no-preference) {
+    html[data-intro2='play'] #intro-overlay .io-draw {
+      stroke-dasharray: 720;
+      stroke-dashoffset: 720;
+      animation: io-draw 0.85s var(--ease-out-soft) both;
+    }
+    html[data-intro2='play'] #intro-overlay .io-draw:nth-of-type(1) {
+      animation-delay: 0.15s;
+    }
+    html[data-intro2='play'] #intro-overlay .io-draw:nth-of-type(2) {
+      animation-delay: 0.3s;
+    }
+    html[data-intro2='play'] #intro-overlay .io-draw:nth-of-type(3) {
+      animation-delay: 0.45s;
+    }
+    /* Outlines vervagen zodra het echte logo verschijnt. */
+    html[data-intro2='play'] #intro-overlay .io-mark {
+      animation: io-fade-out 0.4s ease-out 1.15s both;
+    }
+    /* Gefeatherde wipe: mask schuift van links naar rechts open. */
+    html[data-intro2='play'] #intro-overlay .io-fly {
+      mask-image: linear-gradient(100deg, #000 44%, transparent 56%);
+      mask-size: 250% 100%;
+      mask-position: 120% 0;
+      mask-repeat: no-repeat;
+      animation: io-wipe 0.85s var(--ease-out-soft) 1.05s both;
+    }
+    html[data-intro2='play'] #intro-overlay .io-panel-top {
+      animation: io-split-up 0.75s var(--ease-out-soft) 1.85s both;
+    }
+    html[data-intro2='play'] #intro-overlay .io-panel-bottom {
+      animation: io-split-down 0.75s var(--ease-out-soft) 1.85s both;
+    }
+    html[data-intro2='play'] #intro-overlay .io-seam {
+      animation:
+        io-seam-in 0.35s ease-out 1.7s both,
+        io-seam-out 0.6s ease-in 2.1s both;
+    }
+    html[data-intro2='play'] #intro-overlay .io-progress {
+      animation: io-progress 2.4s linear 0.1s both;
+    }
+
+    /* Header-logo blijft verborgen tot het vliegende logo geland is. */
+    html[data-intro2='play'] #site-header a[href='/'] {
+      animation: io-header-logo-in 0.35s ease-out 2.5s both;
+    }
+
+    /* Hero-montage wacht tot het doek opent (offset bovenop eigen delays). */
+    html[data-intro='play'][data-intro2='play'] [data-anim='up'] {
+      animation-delay: calc(var(--anim-delay, 0s) + 2.05s);
+    }
+    html[data-intro='play'][data-intro2='play'] [data-anim='photo'] {
+      animation-delay: calc(var(--anim-delay, 0s) + 2.05s);
+    }
+    html[data-intro='play'][data-intro2='play'] [data-anim='glow'] {
+      animation-delay: 2.05s;
+    }
+    html[data-intro='play'][data-intro2='play'] [data-anim='draw'] polygon {
+      animation-delay: 2.15s;
+    }
+  }
+
+  @keyframes io-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes io-fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes io-wipe {
+    from {
+      opacity: 1;
+      mask-position: 120% 0;
+    }
+    to {
+      opacity: 1;
+      mask-position: 0% 0;
+    }
+  }
+  @keyframes io-split-up {
+    to {
+      transform: translateY(-101%);
+    }
+  }
+  @keyframes io-split-down {
+    to {
+      transform: translateY(101%);
+    }
+  }
+  @keyframes io-seam-in {
+    to {
+      opacity: 1;
+      transform: translateY(-50%) scaleX(1);
+    }
+  }
+  @keyframes io-seam-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-50%) scaleX(1);
+    }
+  }
+  @keyframes io-progress {
+    to {
+      transform: scaleX(1);
+    }
+  }
+  @keyframes io-header-logo-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  function runIntro() {
+    const root = document.documentElement;
+    const overlay = document.getElementById('intro-overlay');
+    if (!overlay) return;
+
+    // Niet aan het spelen → overlay is al display:none; niets te doen.
+    if (root.getAttribute('data-intro2') !== 'play') return;
+
+    const fly = overlay.querySelector<HTMLElement>('.io-fly');
+    const flyLight = overlay.querySelector<HTMLImageElement>('.io-fly-light');
+    const flyDark = overlay.querySelector<HTMLImageElement>('.io-fly-dark');
+    const headerLogo = document.querySelector<HTMLAnchorElement>('#site-header a[href="/"]');
+
+    let finished = false;
+    const timers: number[] = [];
+    const events = ['pointerdown', 'keydown', 'wheel', 'touchmove'] as const;
+
+    /** Skip: spring direct naar de eindtoestand van de hele pagina. */
+    const skip = () => {
+      if (finished) return;
+      finished = true;
+      timers.forEach((t) => clearTimeout(t));
+      events.forEach((e) => window.removeEventListener(e, skip));
+      // Attributen weg → alle intro/montage-CSS vervalt → eindtoestand.
+      root.removeAttribute('data-intro2');
+      root.removeAttribute('data-intro');
+      overlay.remove();
+    };
+    events.forEach((e) => window.addEventListener(e, skip, { passive: true }));
+
+    // FLIP-morph: het grote logo vliegt naar de header-positie.
+    timers.push(
+      window.setTimeout(() => {
+        if (finished || !fly || !headerLogo) return;
+        const from = fly.getBoundingClientRect();
+        const to = headerLogo.getBoundingClientRect();
+        if (from.height === 0 || to.height === 0) return;
+        const scale = to.height / from.height;
+        const ease = 'cubic-bezier(0.22, 1, 0.36, 1)';
+        fly.style.transformOrigin = '0 0';
+        fly.animate(
+          [
+            { transform: 'none', opacity: 1 },
+            {
+              transform: `translate(${to.left - from.left}px, ${to.top - from.top}px) scale(${scale})`,
+              opacity: 1,
+              offset: 0.72,
+            },
+            {
+              transform: `translate(${to.left - from.left}px, ${to.top - from.top}px) scale(${scale})`,
+              opacity: 0,
+            },
+          ],
+          { duration: 1000, easing: ease, fill: 'forwards' },
+        );
+
+        // In light mode wordt de pagina achter het doek licht: crossfade
+        // tijdens de vlucht naar de donkere-tekst-variant zodat het
+        // woordmerk leesbaar blijft én naadloos op het header-logo landt.
+        const isDark = root.classList.contains('dark');
+        if (!isDark && flyLight && flyDark) {
+          const fade = { duration: 1000, easing: ease, fill: 'forwards' as const };
+          flyLight.animate(
+            [
+              { opacity: 1 },
+              { opacity: 1, offset: 0.25 },
+              { opacity: 0, offset: 0.55 },
+              { opacity: 0 },
+            ],
+            fade,
+          );
+          flyDark.animate(
+            [
+              { opacity: 0 },
+              { opacity: 0, offset: 0.25 },
+              { opacity: 1, offset: 0.55 },
+              { opacity: 1 },
+            ],
+            fade,
+          );
+        }
+      }, 1850),
+    );
+
+    // Natuurlijk einde: alleen de overlay opruimen; de attributen blijven
+    // staan zodat de lopende hero-montage netjes uitspeelt.
+    timers.push(
+      window.setTimeout(() => {
+        if (finished) return;
+        finished = true;
+        events.forEach((e) => window.removeEventListener(e, skip));
+        overlay.remove();
+      }, 2950),
+    );
+  }
+
+  // Alleen relevant bij een volledige paginalading; na client-side navigatie
+  // is data-intro2 al verwijderd (zie BaseLayout) en doet dit niets.
+  runIntro();
+</script>

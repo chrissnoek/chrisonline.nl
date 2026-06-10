@@ -1,0 +1,101 @@
+---
+/**
+ * Tellende statistiek-strip. De cijfers tellen op zodra ze in beeld komen.
+ * Reduced-motion / geen-JS: het eindgetal staat er meteen (data-to als tekst-fallback).
+ */
+interface Stat {
+  to: number;
+  suffix?: string;
+  label: string;
+  sub: string;
+}
+
+const stats: Stat[] = [
+  { to: 10, suffix: '+', label: 'jaar', sub: 'ervaring' },
+  { to: 25, suffix: '+', label: 'projecten', sub: 'opgeleverd' },
+  { to: 100, suffix: '', label: 'Lighthouse', sub: 'als doel' },
+];
+---
+
+<dl class="mt-12 grid max-w-md grid-cols-3 gap-4 sm:gap-6" data-stats>
+  {
+    stats.map((s) => (
+      <div>
+        <dt class="sr-only">{`${s.label} ${s.sub}`}</dt>
+        <dd class="text-2xl font-bold tracking-tight sm:text-3xl">
+          <span class="stat-num tabular-nums" data-to={s.to} data-suffix={s.suffix}>
+            {`${s.to}${s.suffix}`}
+          </span>
+        </dd>
+        <dd class="mt-0.5 text-xs leading-tight text-[var(--fg-muted)] sm:text-sm">
+          {s.label}
+          <br class="hidden sm:block" />
+          <span class="sm:hidden"> </span>
+          {s.sub}
+        </dd>
+      </div>
+    ))
+  }
+</dl>
+
+<script>
+  function animateStats() {
+    const root = document.querySelector('[data-stats]');
+    if (!root || (root as HTMLElement).dataset.done) return;
+
+    // Tijdens de brand-opening is de pagina nog bedekt; wacht tot de overlay
+    // is opgeruimd (gebeurt zowel bij skip als bij natuurlijk einde) zodat de
+    // count-up zichtbaar gebeurt.
+    if (
+      document.documentElement.getAttribute('data-intro2') === 'play' &&
+      document.getElementById('intro-overlay')
+    ) {
+      setTimeout(animateStats, 400);
+      return;
+    }
+
+    const nums = Array.from(root.querySelectorAll<HTMLElement>('.stat-num'));
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Geen animatie gewenst → laat de eindgetallen gewoon staan.
+    if (reduce) {
+      (root as HTMLElement).dataset.done = 'true';
+      return;
+    }
+
+    const run = () => {
+      (root as HTMLElement).dataset.done = 'true';
+      for (const el of nums) {
+        const to = Number(el.dataset.to || '0');
+        const suffix = el.dataset.suffix || '';
+        const duration = 1100;
+        const start = performance.now();
+        const tick = (now: number) => {
+          const p = Math.min((now - start) / duration, 1);
+          // easeOutCubic
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(eased * to) + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        // start vanaf 0
+        el.textContent = '0' + suffix;
+        requestAnimationFrame(tick);
+      }
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            run();
+            io.disconnect();
+          }
+        }
+      },
+      { threshold: 0.4 },
+    );
+    io.observe(root);
+  }
+
+  document.addEventListener('astro:page-load', animateStats);
+</script>

@@ -5,6 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
 import BrowserFrame from '../../components/BrowserFrame.astro';
 import { SITE } from '../../config/site';
+import { withUtm } from '../../utils/utm';
 
 export async function getStaticPaths() {
   const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
@@ -49,18 +50,47 @@ const creativeWorkLd = {
     <!-- Terug-link -->
     <a
       href="/#werk"
-      class="group inline-flex items-center gap-2 text-sm font-medium text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
+      class="group enter-up inline-flex items-center gap-2 text-sm font-medium text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
     >
-      <Icon name="arrowRight" size={16} class="rotate-180" />
+      <Icon
+        name="arrowRight"
+        size={16}
+        class="rotate-180 transition-transform group-hover:-translate-x-1"
+      />
       Terug naar werk
     </a>
 
-    <!-- Kop -->
+    <!-- Kop: gestaffelde entree, in lijn met de hero-montage op de homepage. -->
     <header class="mt-6 max-w-3xl">
-      <div class="flex flex-wrap items-center gap-3 text-sm text-[var(--fg-muted)]">
+      <div
+        class="enter-up flex flex-wrap items-center gap-3 text-sm text-[var(--fg-muted)]"
+        style="--enter-delay: 0.05s"
+      >
         <span class="font-medium text-[var(--accent-text)]">{data.role}</span>
         <span aria-hidden="true">·</span>
         <time datetime={data.pubDate.toISOString()}>{dateLabel}</time>
+        {
+          data.opdrachtgever && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>
+                In opdracht van{' '}
+                {data.opdrachtgever.url ? (
+                  <a
+                    href={withUtm(data.opdrachtgever.url)}
+                    target="_blank"
+                    rel="noopener"
+                    class="font-medium text-[var(--fg)] underline decoration-[var(--border)] underline-offset-2 transition-colors hover:text-[var(--accent-text)] hover:decoration-current"
+                  >
+                    {data.opdrachtgever.name}
+                  </a>
+                ) : (
+                  <span class="font-medium text-[var(--fg)]">{data.opdrachtgever.name}</span>
+                )}
+              </span>
+            </>
+          )
+        }
         {
           data.placeholder && (
             <span class="rounded-pill bg-amber-500/15 px-2.5 py-0.5 text-xs font-medium text-amber-700 dark:text-amber-400">
@@ -69,10 +99,17 @@ const creativeWorkLd = {
           )
         }
       </div>
-      <h1 class="text-h1 mt-4 font-bold text-balance">{data.title}</h1>
-      <p class="text-lead mt-5 text-pretty text-[var(--fg-muted)]">{data.summary}</p>
+      <h1 class="text-h1 enter-up mt-4 font-bold text-balance" style="--enter-delay: 0.12s">
+        {data.title}
+      </h1>
+      <p
+        class="text-lead enter-up mt-5 text-pretty text-[var(--fg-muted)]"
+        style="--enter-delay: 0.2s"
+      >
+        {data.summary}
+      </p>
 
-      <div class="mt-6 flex flex-wrap gap-2">
+      <div class="enter-up mt-6 flex flex-wrap gap-2" style="--enter-delay: 0.28s">
         {
           data.skills.map((skill) => (
             <span class="rounded-pill border border-[var(--border)] px-3 py-1 text-sm font-medium text-[var(--fg-muted)]">
@@ -85,13 +122,18 @@ const creativeWorkLd = {
       {
         data.url && (
           <a
-            href={data.url}
+            href={withUtm(data.url)}
             target="_blank"
             rel="noopener"
-            class="mt-6 inline-flex items-center gap-2 font-semibold text-[var(--accent-text)] hover:underline"
+            class="group enter-up mt-6 inline-flex items-center gap-2 font-semibold text-[var(--accent-text)] hover:underline"
+            style="--enter-delay: 0.34s"
           >
             Bekijk live
-            <Icon name="arrowUpRight" size={18} />
+            <Icon
+              name="arrowUpRight"
+              size={18}
+              class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            />
           </a>
         )
       }
@@ -126,20 +168,24 @@ const creativeWorkLd = {
     <!-- Externe links (bijv. live campagne-previews) -->
     {
       data.externalLinks.length > 0 && (
-        <div class="mx-auto mt-10 max-w-3xl">
+        <div class="reveal-up mx-auto mt-10 max-w-3xl">
           <h2 class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
             Bekijk live
           </h2>
           <div class="mt-4 flex flex-wrap gap-3">
             {data.externalLinks.map((link) => (
               <a
-                href={link.url}
+                href={withUtm(link.url)}
                 target="_blank"
                 rel="noopener"
-                class="hover:border-accent-500/50 rounded-pill inline-flex items-center gap-2 border border-[var(--border)] bg-[var(--bg-alt)] px-4 py-2.5 text-sm font-medium text-[var(--fg)] transition-colors hover:text-[var(--accent-text)]"
+                class="group hover:border-accent-500/50 rounded-pill inline-flex items-center gap-2 border border-[var(--border)] bg-[var(--bg-alt)] px-4 py-2.5 text-sm font-medium text-[var(--fg)] transition-all hover:-translate-y-0.5 hover:text-[var(--accent-text)]"
               >
                 {link.label}
-                <Icon name="arrowUpRight" size={16} />
+                <Icon
+                  name="arrowUpRight"
+                  size={16}
+                  class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
               </a>
             ))}
           </div>
@@ -151,7 +197,7 @@ const creativeWorkLd = {
     {
       data.gallery.length > 0 && (
         <section class="mt-16" aria-labelledby="gallery-heading">
-          <h2 id="gallery-heading" class="text-h2 font-bold text-balance">
+          <h2 id="gallery-heading" class="lift-in text-h2 font-bold text-balance">
             Uit het ontwerp
           </h2>
           <ul
@@ -164,6 +210,7 @@ const creativeWorkLd = {
             {data.gallery.map((shot, i) => (
               <li
                 class:list={[
+                  'reveal-up',
                   // Bij een oneven laatste item: niet full-width oprekken, maar
                   // gecentreerd op halve breedte houden.
                   data.gallery.length % 2 === 1 &&
@@ -183,13 +230,13 @@ const creativeWorkLd = {
     {
       (prev || next) && (
         <nav
-          class="mt-16 grid gap-4 border-t border-[var(--border)] pt-8 sm:grid-cols-2"
+          class="reveal-up mt-16 grid gap-4 border-t border-[var(--border)] pt-8 sm:grid-cols-2"
           aria-label="Meer projecten"
         >
           {prev ? (
             <a
               href={`/werk/${prev.id}`}
-              class="group rounded-card hover:border-accent-500/40 border border-[var(--border)] p-5 transition-colors"
+              class="group rounded-card hover:border-accent-500/40 hover:shadow-card border border-[var(--border)] p-5 transition-all hover:-translate-y-0.5"
             >
               <span class="text-xs font-medium tracking-wide text-[var(--fg-muted)] uppercase">
                 Vorige
@@ -204,7 +251,7 @@ const creativeWorkLd = {
           {next && (
             <a
               href={`/werk/${next.id}`}
-              class="group rounded-card hover:border-accent-500/40 border border-[var(--border)] p-5 text-right transition-colors sm:col-start-2"
+              class="group rounded-card hover:border-accent-500/40 hover:shadow-card border border-[var(--border)] p-5 text-right transition-all hover:-translate-y-0.5 sm:col-start-2"
             >
               <span class="text-xs font-medium tracking-wide text-[var(--fg-muted)] uppercase">
                 Volgende
@@ -222,7 +269,7 @@ const creativeWorkLd = {
   <!-- CTA -->
   <section class="container-page pb-section">
     <div
-      class="rounded-card border border-[var(--border)] bg-[var(--bg-alt)] p-8 text-center sm:p-12"
+      class="reveal-up rounded-card border border-[var(--border)] bg-[var(--bg-alt)] p-8 text-center sm:p-12"
     >
       <h2 class="text-h2 font-bold text-balance">Zoiets voor jouw merk?</h2>
       <p class="mx-auto mt-3 max-w-md text-pretty text-[var(--fg-muted)]">
@@ -230,10 +277,10 @@ const creativeWorkLd = {
       </p>
       <a
         href="/contact"
-        class="rounded-pill bg-accent-500 hover:bg-accent-600 mt-6 inline-flex items-center gap-2 px-7 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5"
+        class="group rounded-pill bg-accent-500 hover:bg-accent-600 mt-6 inline-flex items-center gap-2 px-7 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5"
       >
         Neem contact op
-        <Icon name="arrowRight" size={18} />
+        <Icon name="arrowRight" size={18} class="transition-transform group-hover:translate-x-1" />
       </a>
     </div>
   </section>

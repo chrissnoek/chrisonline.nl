@@ -75,7 +75,7 @@ async function onSubmit() {
   >
     <p class="text-lg font-semibold text-[var(--fg)]">Bedankt voor je bericht!</p>
     <p class="mt-2 text-[var(--fg-muted)]">
-      Ik neem zo snel mogelijk contact met je op — meestal binnen één werkdag.
+      Ik neem zo snel mogelijk contact met je op, meestal binnen één werkdag.
     </p>
     <button
       type="button"

@@ -1,0 +1,114 @@
+/* ──────────────────────────────────────────────────────────────────────────
+ *  Intro-montage + storytelling-scroll
+ *  - Hero monteert zichzelf bij eerste load (eenmalig per sessie).
+ *  - Scroll-driven "rode draad" + oplichtende koppen.
+ *  Alles uitsluitend op opacity/transform (compositor) en volledig
+ *  prefers-reduced-motion-proof: de EINDtoestand is altijd de standaard,
+ *  de animatie wordt alleen toegevoegd als motion is toegestaan.
+ * ────────────────────────────────────────────────────────────────────────── */
+
+/* ── Hero-montage ─────────────────────────────────────────────────────────
+ * De intro draait alleen wanneer <html data-intro="play"> staat én motion mag.
+ * Standaard (geen data-intro of reduced-motion) zijn alle elementen gewoon
+ * zichtbaar in hun eindtoestand — geen flikkering, geen lege hero.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-intro='play'] [data-anim] {
+    opacity: 0;
+    will-change: opacity, transform;
+  }
+
+  /* Tekstelementen: rustig omhoog invallen. */
+  html[data-intro='play'] [data-anim='up'] {
+    animation: intro-up 0.7s var(--ease-out-soft) both;
+    animation-delay: var(--anim-delay, 0s);
+  }
+
+  /* Foto: mask-reveal van onder + lichte schaal. */
+  html[data-intro='play'] [data-anim='photo'] {
+    animation: intro-photo 0.9s var(--ease-out-soft) both;
+    animation-delay: var(--anim-delay, 0s);
+  }
+
+  /* Accent-gloed: één keer opzwellen. */
+  html[data-intro='play'] [data-anim='glow'] {
+    animation: intro-glow 1.6s var(--ease-out-soft) both;
+  }
+
+  /* Logo-hexagon in de hero-achtergrond tekent zich met een stroke-draw. */
+  html[data-intro='play'] [data-anim='draw'] path,
+  html[data-intro='play'] [data-anim='draw'] polygon,
+  html[data-intro='play'] [data-anim='draw'] polyline {
+    stroke-dasharray: var(--draw-len, 1200);
+    stroke-dashoffset: var(--draw-len, 1200);
+    animation: intro-draw 1.4s var(--ease-out-soft) 0.1s both;
+  }
+}
+
+@keyframes intro-up {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes intro-photo {
+  from {
+    opacity: 0;
+    transform: translateY(34px) scale(0.97);
+    clip-path: inset(0 0 100% 0 round 1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    clip-path: inset(0 0 0 0 round 1.25rem);
+  }
+}
+
+@keyframes intro-glow {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes intro-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ── Storytelling: oplichtende sectie-koppen ─────────────────────────────
+ * De kop is standaard gewoon leesbaar (eindtoestand). Met motion + support
+ * komt hij scroll-linked van licht-gedimd naar vol contrast.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .lift-in {
+      opacity: 0.001;
+      transform: translateY(18px);
+      animation: lift-in linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 26%;
+    }
+  }
+}
+
+@keyframes lift-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

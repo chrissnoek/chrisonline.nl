@@ -5,7 +5,7 @@ const pillars = [
   {
     icon: 'spark',
     title: 'Technisch sterk',
-    text: 'Schone, schaalbare code-architectuur. Geen ballast, geen trage plugins — alleen wat de site beter maakt.',
+    text: 'Schone, schaalbare code-architectuur. Geen ballast en geen trage plugins, alleen wat de site beter maakt.',
   },
   {
     icon: 'arrowUpRight',
@@ -27,7 +27,7 @@ const pillars = [
         <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
           Over mij
         </p>
-        <h2 id="about-heading" class="text-h2 mt-3 font-bold text-balance">
+        <h2 id="about-heading" class="lift-in text-h2 mt-3 font-bold text-balance">
           Ik bouw geen websites. Ik bouw digitale producten die je bedrijf laten groeien.
         </h2>
         <div class="text-lead mt-6 space-y-4 text-pretty text-[var(--fg-muted)]">
@@ -37,24 +37,28 @@ const pillars = [
             tot een pixel-perfecte, technisch nette livegang.
           </p>
           <p>
-            Of je nu alleen een ontwerp nodig hebt, een complete website of webshop, of het hele
-            traject inclusief branding en analytics — ik denk mee over het grotere geheel. Mijn doel
-            is niet om je een website op te leveren, maar om iets te bouwen dat je groei
+            Ik denk mee over het grotere geheel, of je nu alleen een ontwerp nodig hebt, een
+            complete website of webshop, of het hele traject inclusief branding en analytics. Mijn
+            doel is niet om je een website op te leveren, maar om iets te bouwen dat je groei
             ondersteunt.
           </p>
         </div>
       </div>
 
-      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 lg:gap-5">
+      <!-- Pijlers als verticale "spine": gradient-lijn met hexagon-knopen
+           (de vorm van het logo-mark). -->
+      <ul class="pillar-spine relative flex flex-col gap-12 self-center lg:gap-14">
         {
           pillars.map((p) => (
-            <li class="reveal rounded-card flex gap-4 border border-[var(--border)] bg-[var(--bg-alt)] p-6">
-              <span class="bg-accent-500/12 grid h-11 w-11 shrink-0 place-items-center rounded-xl text-[var(--accent-text)]">
-                <Icon name={p.icon} size={22} />
+            <li class="reveal group relative flex items-start gap-6">
+              <span class="pillar-node grid shrink-0 place-items-center text-white">
+                <Icon name={p.icon} size={24} />
               </span>
-              <div>
-                <h3 class="font-semibold">{p.title}</h3>
-                <p class="mt-1 text-sm leading-relaxed text-[var(--fg-muted)]">{p.text}</p>
+              <div class="pt-1">
+                <h3 class="text-xl font-bold tracking-tight transition-colors group-hover:text-[var(--accent-text)]">
+                  {p.title}
+                </h3>
+                <p class="mt-2 max-w-md leading-relaxed text-[var(--fg-muted)]">{p.text}</p>
               </div>
             </li>
           ))
@@ -63,3 +67,49 @@ const pillars = [
     </div>
   </div>
 </section>
+
+<style>
+  /* Verbindingslijn door de knoop-centra; loopt onderaan uit in transparant. */
+  .pillar-spine::before {
+    content: '';
+    position: absolute;
+    top: 1.75rem;
+    bottom: 2.5rem;
+    left: 1.75rem;
+    width: 2px;
+    transform: translateX(-50%);
+    background: linear-gradient(
+      180deg,
+      var(--color-accent-500) 0%,
+      color-mix(in srgb, var(--color-accent-500) 35%, transparent) 70%,
+      transparent 100%
+    );
+  }
+
+  /* Hexagon-knoop in de vorm van het logo-mark, gevuld met het merk-gradient.
+     De clip-path zit op een ::before zodat de drop-shadow op het element zelf
+     de geclipte vorm volgt (clip op hetzelfde element zou de gloed wegknippen). */
+  .pillar-node {
+    position: relative;
+    z-index: 1;
+    width: 3.5rem;
+    height: 3.5rem;
+    filter: drop-shadow(0 4px 10px rgba(0, 176, 213, 0.25));
+  }
+  .pillar-node::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background: linear-gradient(135deg, #00b0d5 0%, #0064d5 100%);
+  }
+  li:hover .pillar-node {
+    filter: drop-shadow(0 6px 16px rgba(0, 176, 213, 0.55));
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .pillar-node {
+      transition: filter 0.3s var(--ease-out-soft);
+    }
+  }
+</style>

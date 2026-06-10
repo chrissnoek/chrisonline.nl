@@ -60,8 +60,8 @@ const year = new Date().getFullYear();
               <li>
                 <a
                   href={social.url}
-                  class="rounded-pill hover:border-accent-500 grid h-10 w-10 place-items-center border border-[var(--border)] text-[var(--fg-muted)] transition-colors hover:text-[var(--accent-text)]"
-                  aria-label={`${social.name}${social.handle ? ` — ${social.handle}` : ''}`}
+                  class="rounded-pill hover:border-accent-500 grid h-10 w-10 place-items-center border border-[var(--border)] text-[var(--fg-muted)] transition-all hover:-translate-y-0.5 hover:text-[var(--accent-text)]"
+                  aria-label={`${social.name}${social.handle ? `, ${social.handle}` : ''}`}
                   rel={social.url.startsWith('http') ? 'me noopener' : undefined}
                   target={social.url.startsWith('http') ? '_blank' : undefined}
                 >
@@ -77,7 +77,7 @@ const year = new Date().getFullYear();
     <div
       class="mt-12 flex flex-col items-start justify-between gap-3 border-t border-[var(--border)] pt-6 text-sm text-[var(--fg-muted)] sm:flex-row sm:items-center"
     >
-      <p>&copy; {year} {SITE.author} — {SITE.brand}. Alle rechten voorbehouden.</p>
+      <p>&copy; {year} {SITE.author}, {SITE.brand}. Alle rechten voorbehouden.</p>
       <p>Gebouwd met Astro. Razendsnel & toegankelijk.</p>
     </div>
   </div>

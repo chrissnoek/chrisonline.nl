@@ -7,21 +7,27 @@ import Icon from '../components/Icon.astro';
   <section class="container-page py-section flex min-h-[60vh] items-center justify-center">
     <div class="max-w-lg text-center">
       <span
-        class="rounded-pill bg-accent-500/12 mx-auto grid h-16 w-16 place-items-center text-[var(--accent-text)]"
+        class="enter-pop rounded-pill bg-accent-500/12 mx-auto grid h-16 w-16 place-items-center text-[var(--accent-text)]"
       >
         <Icon name="check" size={32} />
       </span>
-      <h1 class="text-h1 mt-6 font-bold text-balance">Bedankt voor je bericht!</h1>
-      <p class="text-lead mt-4 text-pretty text-[var(--fg-muted)]">
-        Je bericht is verstuurd. Ik neem zo snel mogelijk contact met je op — meestal binnen één
+      <h1 class="text-h1 enter-up mt-6 font-bold text-balance" style="--enter-delay: 0.15s">
+        Bedankt voor je bericht!
+      </h1>
+      <p
+        class="text-lead enter-up mt-4 text-pretty text-[var(--fg-muted)]"
+        style="--enter-delay: 0.25s"
+      >
+        Je bericht is verstuurd. Ik neem zo snel mogelijk contact met je op, meestal binnen één
         werkdag.
       </p>
       <a
         href="/"
-        class="rounded-pill bg-accent-500 hover:bg-accent-600 mt-8 inline-flex items-center gap-2 px-7 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5"
+        class="group enter-up rounded-pill bg-accent-500 hover:bg-accent-600 mt-8 inline-flex items-center gap-2 px-7 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5"
+        style="--enter-delay: 0.35s"
       >
         Terug naar home
-        <Icon name="arrowRight" size={18} />
+        <Icon name="arrowRight" size={18} class="transition-transform group-hover:translate-x-1" />
       </a>
     </div>
   </section>
