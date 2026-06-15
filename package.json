@@ -24,6 +24,7 @@
     "@tailwindcss/vite": "^4.3.0",
     "ai": "^6.0.205",
     "astro": "^6.4.5",
+    "resend": "^6.12.4",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.3.0",
     "vue": "^3.5.35",

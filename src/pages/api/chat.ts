@@ -1,8 +1,8 @@
 /**
  * AI-chat endpoint — de enige on-demand route op een verder statische site.
  *
- * Fase 1: streamend antwoord, gegrond in de projectcatalogus, met harde
- * kostenplafonds. Tools (showProjects / contact / offerte) komen in fase 2.
+ * Streamend antwoord, gegrond in de projectcatalogus, met tools (fase 2) en
+ * harde kostenplafonds.
  *
  * Draait als één Netlify Function (via @astrojs/netlify). Let op de harde
  * 10s-wandkloklimiet van Netlify Functions — daarom Groq (zeer snelle stream)
@@ -12,13 +12,18 @@ import type { APIRoute } from 'astro';
 import { convertToModelMessages, streamText, stepCountIs, type UIMessage } from 'ai';
 import { createGroq } from '@ai-sdk/groq';
 import { buildSystemPrompt } from '../../lib/ai/system-prompt';
+import { chatTools } from '../../lib/ai/tools';
 
 // Deze route mag NIET geprerenderd worden — hij draait per request op de server.
 export const prerender = false;
 
 // --- harde limieten (kostenplafond — gratis, en het echte vangnet) ---
-const MODEL = 'openai/gpt-oss-120b'; // Groq: snel + goedkoop, ondersteunt tool calling (fase 2)
+const MODEL = 'openai/gpt-oss-120b'; // Groq: snel + goedkoop, ondersteunt tool calling
+// LET OP: maxOutputTokens is PER STEP, niet per request. Met stopWhen=stepCountIs(MAX_STEPS)
+// is het worst-case per-request output-plafond MAX_STEPS × MAX_OUTPUT_TOKENS = 3 × 500 = 1500 tokens.
 const MAX_OUTPUT_TOKENS = 500;
+// Minimaal nodig is 2 (server-tool-step + narratie-step); 3 = bewuste marge.
+// NIET verhogen — de Netlify-function heeft een harde 10s-limiet.
 const MAX_STEPS = 3;
 const MAX_MESSAGES = 20;
 const MAX_CHARS = 8000; // ruwe input-truncatie-guard
@@ -73,9 +78,15 @@ export const POST: APIRoute = async ({ request }) => {
     messages: await convertToModelMessages(messages),
     maxOutputTokens: MAX_OUTPUT_TOKENS,
     stopWhen: stepCountIs(MAX_STEPS),
-    // Bewuste cap; geen onbeperkte tool-loop (relevant zodra tools in fase 2 binnenkomen).
+    tools: chatTools,
+    // gpt-oss-120b is een reasoning-model: condenseer de reasoning zodat het
+    // het krappe per-step-budget niet opslokt.
+    providerOptions: {
+      groq: { reasoningFormat: 'hidden', reasoningEffort: 'low' },
+    },
   });
 
-  // UI-message-stream past bij `useChat` op de client (incl. tool-parts in fase 2).
-  return result.toUIMessageStreamResponse();
+  // UI-message-stream past bij `useChat` op de client (incl. tool-parts).
+  // sendReasoning:false → de client krijgt/rendeert nooit de reasoning-stream.
+  return result.toUIMessageStreamResponse({ sendReasoning: false });
 };
