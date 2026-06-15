@@ -1,5 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import Icon from '../Icon.astro';
+import chris from '../../assets/me/chris-snoek.jpg';
+import { SITE, CONTACT } from '../../config/site';
 
 const pillars = [
   {
@@ -30,7 +33,39 @@ const pillars = [
         <h2 id="about-heading" class="lift-in text-h2 mt-3 font-bold text-balance">
           Ik bouw geen websites. Ik bouw digitale producten die je bedrijf laten groeien.
         </h2>
-        <div class="text-lead mt-6 space-y-4 text-pretty text-[var(--fg-muted)]">
+
+        <!-- Portretfoto met visitekaartje-overlay (verhuisd vanuit de oude hero). -->
+        <div class="relative mx-auto mt-8 w-full max-w-sm">
+          <div
+            class="from-accent-500/20 absolute -inset-3 -z-10 rounded-[1.75rem] bg-gradient-to-tr to-transparent blur-2xl"
+            aria-hidden="true"
+          >
+          </div>
+          <Image
+            src={chris}
+            alt={`Portretfoto van ${SITE.author}`}
+            widths={[320, 480, 640, 800]}
+            sizes="(max-width: 1024px) 22rem, 24rem"
+            format="avif"
+            quality="high"
+            class="rounded-card shadow-card aspect-[3/4] w-full object-cover"
+          />
+          <!-- Visitekaartje-overlay -->
+          <div
+            class="bg-ink-900/80 absolute bottom-4 left-1/2 w-[90%] -translate-x-1/2 rounded-2xl border border-white/10 px-5 py-4 text-white backdrop-blur-md"
+          >
+            <p class="font-semibold">{SITE.author}</p>
+            <p class="text-sm text-slate-300">{SITE.jobTitle}</p>
+            <a
+              href={`mailto:${CONTACT.email}`}
+              class="text-accent-300 mt-1 inline-block text-sm hover:underline"
+            >
+              {CONTACT.email}
+            </a>
+          </div>
+        </div>
+
+        <div class="text-lead mt-8 space-y-4 text-pretty text-[var(--fg-muted)]">
           <p>
             Als webdeveloper en designer help ik merken aan een website die niet alleen mooi is,
             maar ook werkt: snel, vindbaar en gericht op resultaat. Van het eerste ontwerp in Figma
