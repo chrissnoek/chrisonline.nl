@@ -1,7 +1,20 @@
 /* Chat-hero styling — gebruikt de merk-tokens uit global.css (@theme).
-   Klassen geprefixt met cw- (chat widget) om botsingen te vermijden. */
+   Klassen geprefixt met cw- (chat widget) om botsingen te vermijden.
+
+   Theme-aware: standaard light, overschreven onder :root.dark. Zo blijft de
+   tekst en het glas leesbaar in BEIDE modi (eerder waren waarden hard-coded donker). */
 
 .cw-root {
+  /* Chat-lokale, thema-bewuste variabelen */
+  --cw-fg: var(--color-text); /* primaire tekst */
+  --cw-muted: var(--color-muted); /* subtiele tekst */
+  --cw-panel: rgba(255, 255, 255, 0.7); /* glas-vulling (light) */
+  --cw-panel-solid: var(--color-surface); /* niet-transparant paneel (kaarten) */
+  --cw-border: rgba(15, 16, 28, 0.12); /* glas-rand (light) */
+  --cw-shadow: rgba(15, 16, 28, 0.18); /* paneel-schaduw (light) */
+  --cw-user-bg: var(--color-accent-600); /* gebruikersbubbel */
+  --cw-user-fg: #ffffff;
+
   position: relative;
   width: 100%;
   max-width: 44rem;
@@ -13,6 +26,18 @@
   justify-content: center;
   padding: 4rem 1.25rem 2rem;
   text-align: center;
+  color: var(--cw-fg);
+}
+
+:root.dark .cw-root {
+  --cw-fg: var(--color-text-invert);
+  --cw-muted: var(--color-muted-invert);
+  --cw-panel: rgba(20, 22, 38, 0.55);
+  --cw-panel-solid: var(--color-ink-900);
+  --cw-border: rgba(255, 255, 255, 0.1);
+  --cw-shadow: rgba(0, 0, 0, 0.6);
+  --cw-user-bg: var(--color-accent-700);
+  --cw-user-fg: #ffffff;
 }
 .cw-root--active {
   justify-content: flex-start;
@@ -86,7 +111,7 @@
   margin-bottom: 1.75rem;
 }
 .cw-greet-sub {
-  color: var(--color-muted-invert);
+  color: var(--cw-muted);
   font-weight: 600;
   margin: 0 0 0.25rem;
 }
@@ -95,7 +120,7 @@
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.04;
-  color: var(--color-text-invert);
+  color: var(--cw-fg);
   font-size: clamp(2.25rem, 1.1rem + 5.6vw, 4.5rem);
 }
 
@@ -119,36 +144,40 @@
   padding: 0.85rem 0.85rem 0.85rem 1.25rem;
   border-radius: var(--radius-card);
   background-image:
-    linear-gradient(rgba(20, 22, 38, 0.62), rgba(20, 22, 38, 0.62)),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(0, 176, 213, 0.4));
+    linear-gradient(var(--cw-panel), var(--cw-panel)),
+    linear-gradient(135deg, rgba(0, 176, 213, 0.45), rgba(0, 176, 213, 0.2));
   background-origin: border-box;
   background-clip: padding-box, border-box;
   border: 1px solid transparent;
   -webkit-backdrop-filter: blur(16px) saturate(160%);
   backdrop-filter: blur(16px) saturate(160%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 12px 40px -12px rgba(0, 0, 0, 0.6);
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 12px 40px -12px var(--cw-shadow);
   transition: box-shadow 0.25s var(--ease-out-soft);
+}
+:root.dark .cw-prompt {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 12px 40px -12px var(--cw-shadow);
 }
 .cw-prompt:focus-within {
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.16),
     0 0 0 2px rgba(0, 176, 213, 0.55),
     0 0 28px rgba(0, 176, 213, 0.3),
-    0 12px 40px -12px rgba(0, 0, 0, 0.6);
+    0 12px 40px -12px var(--cw-shadow);
 }
 .cw-prompt input {
   flex: 1;
   background: transparent;
   border: 0;
   outline: none;
-  color: var(--color-text-invert);
+  color: var(--cw-fg);
   font: inherit;
   font-size: 1.05rem;
 }
 .cw-prompt input::placeholder {
-  color: var(--color-muted-invert);
+  color: var(--cw-muted);
 }
 .cw-send {
   flex: none;
@@ -174,8 +203,8 @@
   cursor: default;
 }
 .cw-send--stop {
-  background: var(--color-line-invert);
-  color: var(--color-text-invert);
+  background: var(--border);
+  color: var(--cw-fg);
 }
 
 /* ---- capability chips ---- */
@@ -194,9 +223,11 @@
   padding: 0.55rem 0.95rem;
   border-radius: var(--radius-pill);
   cursor: pointer;
-  color: var(--color-text-invert);
-  background: rgba(20, 22, 38, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--cw-fg);
+  background: var(--cw-panel);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--cw-border);
   font: inherit;
   font-size: 0.92rem;
   transition:
@@ -249,14 +280,16 @@
 }
 .cw-msg--user {
   align-self: flex-end;
-  background: var(--color-accent-700);
-  color: #fff;
+  background: var(--cw-user-bg);
+  color: var(--cw-user-fg);
 }
 .cw-msg--assistant {
   align-self: flex-start;
-  background: rgba(20, 22, 38, 0.7);
-  border: 1px solid var(--color-line-invert);
-  color: var(--color-text-invert);
+  background: var(--cw-panel);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--cw-border);
+  color: var(--cw-fg);
   max-width: 100%;
 }
 .cw-text {
@@ -303,10 +336,10 @@
   gap: 0.25rem;
   padding: 0.9rem 1rem 1rem;
   border-radius: var(--radius-card);
-  background: var(--color-ink-900, #0e0f1c);
-  border: 1px solid var(--color-line-invert);
+  background: var(--cw-panel-solid);
+  border: 1px solid var(--cw-border);
   text-decoration: none;
-  color: var(--color-text-invert);
+  color: var(--cw-fg);
   overflow: hidden;
   transition:
     transform 0.25s var(--ease-out-soft),
@@ -328,17 +361,17 @@
   font-size: 0.98rem;
 }
 .cw-card-meta {
-  color: var(--color-muted-invert);
+  color: var(--cw-muted);
   font-size: 0.82rem;
 }
 .cw-card-skills {
-  color: var(--color-accent-300);
+  color: var(--accent-text);
   font-size: 0.78rem;
 }
 .cw-card-cta {
   margin-top: 0.4rem;
   font-size: 0.82rem;
-  color: var(--color-accent-300);
+  color: var(--accent-text);
 }
 
 /* ---- inline CTA (contact / boeken) ---- */
@@ -351,7 +384,7 @@
   border-radius: var(--radius-pill);
   background: rgba(0, 176, 213, 0.14);
   border: 1px solid rgba(0, 176, 213, 0.4);
-  color: var(--color-accent-200);
+  color: var(--accent-text);
   text-decoration: none;
   font-size: 0.92rem;
 }
@@ -364,8 +397,9 @@
   margin: 0.75rem 0;
   padding: 1rem 1.1rem;
   border-radius: var(--radius-card);
-  background: var(--color-ink-900, #0e0f1c);
+  background: var(--cw-panel-solid);
   border: 1px solid rgba(0, 176, 213, 0.35);
+  color: var(--cw-fg);
 }
 .cw-quote-title {
   display: block;
@@ -381,7 +415,7 @@
   flex-direction: column;
   gap: 0.2rem;
   font-size: 0.8rem;
-  color: var(--color-muted-invert);
+  color: var(--cw-muted);
 }
 .cw-quote-full {
   grid-column: 1 / -1;
@@ -392,10 +426,10 @@
 .cw-quote input,
 .cw-quote select,
 .cw-quote textarea {
-  background: var(--color-ink-800, #16182b);
-  border: 1px solid var(--color-line-invert);
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
   border-radius: 0.6rem;
-  color: var(--color-text-invert);
+  color: var(--cw-fg);
   padding: 0.45rem 0.6rem;
   font: inherit;
   font-size: 0.9rem;
