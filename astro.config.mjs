@@ -3,6 +3,7 @@ import { defineConfig, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
 import vue from '@astrojs/vue';
+import react from '@astrojs/react';
 import netlify from '@astrojs/netlify';
 import tailwindcss from '@tailwindcss/vite';
 
@@ -19,6 +20,9 @@ export default defineConfig({
   integrations: [
     mdx(),
     vue(),
+    // React draait naast Vue: het chat-eiland gebruikt @ai-sdk/react (useChat).
+    // Elk eiland levert alleen zijn eigen runtime, en alleen op pagina's waar het staat.
+    react(),
     sitemap({
       // A clean, modern lastmod helps crawlers; one entry per page.
       changefreq: 'monthly',

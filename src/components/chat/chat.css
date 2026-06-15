@@ -1,0 +1,449 @@
+/* Chat-hero styling — gebruikt de merk-tokens uit global.css (@theme).
+   Klassen geprefixt met cw- (chat widget) om botsingen te vermijden. */
+
+.cw-root {
+  position: relative;
+  width: 100%;
+  max-width: 44rem;
+  margin: 0 auto;
+  min-height: min(82vh, 720px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1.25rem 2rem;
+  text-align: center;
+}
+.cw-root--active {
+  justify-content: flex-start;
+  min-height: min(88vh, 820px);
+}
+
+/* ---- orb halo achter de tekst (sketch 001B + lab 004) ---- */
+.orb-halo {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  width: 29vw;
+  height: 29vw;
+  max-width: 460px;
+  max-height: 460px;
+  min-width: 220px;
+  min-height: 220px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  opacity: 0.65;
+  filter: blur(24px);
+  pointer-events: none;
+  z-index: 0;
+}
+.cw-root--active .orb-halo {
+  top: 0;
+  width: 18vw;
+  height: 18vw;
+  min-width: 140px;
+  min-height: 140px;
+  opacity: 0.4;
+  transition:
+    top 0.6s var(--ease-out-soft),
+    width 0.6s var(--ease-out-soft),
+    height 0.6s var(--ease-out-soft),
+    opacity 0.6s var(--ease-out-soft);
+}
+.orb-gl,
+.orb-css {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+.orb-gl {
+  overflow: hidden;
+}
+.orb-gl canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+/* CSS-fallback-orb (reduced-motion / geen WebGL) */
+.orb-css {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(60% 55% at 35% 30%, rgba(255, 255, 255, 0.5), transparent 55%),
+    conic-gradient(from 0deg at 50% 50%, #00b0d5, #6b5bff, #c84bff, #00d5b0, #0064d5, #00b0d5);
+  animation: cw-orb-spin 18s linear infinite;
+}
+@keyframes cw-orb-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+/* ---- greeting ---- */
+.cw-greet {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 1.75rem;
+}
+.cw-greet-sub {
+  color: var(--color-muted-invert);
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+}
+.cw-greet-main {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.04;
+  color: var(--color-text-invert);
+  font-size: clamp(2.25rem, 1.1rem + 5.6vw, 4.5rem);
+}
+
+/* ---- prompt field (glassmorphism) ---- */
+.cw-prompt-wrap {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 40rem;
+  margin: 0 auto;
+}
+.cw-root--active .cw-prompt-wrap {
+  position: sticky;
+  bottom: 1rem;
+  margin-top: 1rem;
+}
+.cw-prompt {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 0.85rem 0.85rem 1.25rem;
+  border-radius: var(--radius-card);
+  background-image:
+    linear-gradient(rgba(20, 22, 38, 0.62), rgba(20, 22, 38, 0.62)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(0, 176, 213, 0.4));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  border: 1px solid transparent;
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 12px 40px -12px rgba(0, 0, 0, 0.6);
+  transition: box-shadow 0.25s var(--ease-out-soft);
+}
+.cw-prompt:focus-within {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 0 0 2px rgba(0, 176, 213, 0.55),
+    0 0 28px rgba(0, 176, 213, 0.3),
+    0 12px 40px -12px rgba(0, 0, 0, 0.6);
+}
+.cw-prompt input {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--color-text-invert);
+  font: inherit;
+  font-size: 1.05rem;
+}
+.cw-prompt input::placeholder {
+  color: var(--color-muted-invert);
+}
+.cw-send {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-accent-500);
+  color: #001016;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition:
+    transform 0.2s var(--ease-out-soft),
+    box-shadow 0.25s,
+    opacity 0.2s;
+}
+.cw-send:hover:not(:disabled) {
+  transform: translateY(-1px) scale(1.04);
+  box-shadow: 0 0 24px rgba(0, 176, 213, 0.6);
+}
+.cw-send:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.cw-send--stop {
+  background: var(--color-line-invert);
+  color: var(--color-text-invert);
+}
+
+/* ---- capability chips ---- */
+.cw-chips {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+.cw-chip {
+  position: relative;
+  overflow: hidden;
+  padding: 0.55rem 0.95rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  color: var(--color-text-invert);
+  background: rgba(20, 22, 38, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font: inherit;
+  font-size: 0.92rem;
+  transition:
+    transform 0.2s var(--ease-out-soft),
+    box-shadow 0.25s,
+    border-color 0.25s;
+}
+.cw-chip:hover {
+  border-color: rgba(0, 176, 213, 0.5);
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 1px rgba(0, 176, 213, 0.35),
+    0 6px 24px -6px rgba(0, 176, 213, 0.45);
+}
+.cw-chip::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.18) 50%, transparent 70%);
+  transform: translateX(-120%);
+}
+.cw-chip:hover::after {
+  animation: cw-shimmer 0.9s var(--ease-out-soft);
+}
+@keyframes cw-shimmer {
+  to {
+    transform: translateX(120%);
+  }
+}
+
+/* ---- thread + messages ---- */
+.cw-thread {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 40rem;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+  text-align: left;
+}
+.cw-msg {
+  max-width: 85%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-card);
+  line-height: 1.55;
+}
+.cw-msg--user {
+  align-self: flex-end;
+  background: var(--color-accent-700);
+  color: #fff;
+}
+.cw-msg--assistant {
+  align-self: flex-start;
+  background: rgba(20, 22, 38, 0.7);
+  border: 1px solid var(--color-line-invert);
+  color: var(--color-text-invert);
+  max-width: 100%;
+}
+.cw-text {
+  margin: 0;
+  white-space: pre-wrap;
+  animation: cw-fade 0.35s var(--ease-out-soft);
+}
+@keyframes cw-fade {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+  }
+}
+.cw-skeleton {
+  height: 1em;
+  margin: 0.4em 0;
+  border-radius: 0.5rem;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.04) 30%,
+    rgba(0, 176, 213, 0.16) 50%,
+    rgba(255, 255, 255, 0.04) 70%
+  );
+  background-size: 200% 100%;
+  animation: cw-skel 1.4s ease-in-out infinite;
+}
+@keyframes cw-skel {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ---- project gallery cards ---- */
+.cw-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.75rem;
+  margin: 0.75rem 0;
+}
+.cw-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.9rem 1rem 1rem;
+  border-radius: var(--radius-card);
+  background: var(--color-ink-900, #0e0f1c);
+  border: 1px solid var(--color-line-invert);
+  text-decoration: none;
+  color: var(--color-text-invert);
+  overflow: hidden;
+  transition:
+    transform 0.25s var(--ease-out-soft),
+    box-shadow 0.25s,
+    border-color 0.25s;
+}
+.cw-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(0, 176, 213, 0.4);
+  box-shadow: 0 18px 40px -16px rgba(0, 176, 213, 0.3);
+}
+.cw-card-accent {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+}
+.cw-card-title {
+  margin-top: 0.25rem;
+  font-size: 0.98rem;
+}
+.cw-card-meta {
+  color: var(--color-muted-invert);
+  font-size: 0.82rem;
+}
+.cw-card-skills {
+  color: var(--color-accent-300);
+  font-size: 0.78rem;
+}
+.cw-card-cta {
+  margin-top: 0.4rem;
+  font-size: 0.82rem;
+  color: var(--color-accent-300);
+}
+
+/* ---- inline CTA (contact / boeken) ---- */
+.cw-inline-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 176, 213, 0.14);
+  border: 1px solid rgba(0, 176, 213, 0.4);
+  color: var(--color-accent-200);
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+.cw-inline-cta:hover {
+  background: rgba(0, 176, 213, 0.22);
+}
+
+/* ---- quote confirm card ---- */
+.cw-quote {
+  margin: 0.75rem 0;
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius-card);
+  background: var(--color-ink-900, #0e0f1c);
+  border: 1px solid rgba(0, 176, 213, 0.35);
+}
+.cw-quote-title {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+.cw-quote-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+.cw-quote-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.8rem;
+  color: var(--color-muted-invert);
+}
+.cw-quote-full {
+  grid-column: 1 / -1;
+}
+.cw-opt {
+  opacity: 0.6;
+}
+.cw-quote input,
+.cw-quote select,
+.cw-quote textarea {
+  background: var(--color-ink-800, #16182b);
+  border: 1px solid var(--color-line-invert);
+  border-radius: 0.6rem;
+  color: var(--color-text-invert);
+  padding: 0.45rem 0.6rem;
+  font: inherit;
+  font-size: 0.9rem;
+}
+.cw-quote input:focus,
+.cw-quote select:focus,
+.cw-quote textarea:focus {
+  outline: 2px solid rgba(0, 176, 213, 0.5);
+  outline-offset: 1px;
+}
+.cw-quote-send {
+  margin-top: 0.85rem;
+  width: 100%;
+  padding: 0.65rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent-500);
+  color: #001016;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.cw-quote-send:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.cw-quote-error {
+  color: #fca5a5;
+  font-size: 0.85rem;
+  margin: 0.5rem 0 0;
+}
+.cw-quote--sent {
+  text-align: center;
+}
+
+@media (max-width: 560px) {
+  .cw-quote-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb-css,
+  .cw-chip::after,
+  .cw-text,
+  .cw-skeleton,
+  .cw-root--active .orb-halo {
+    animation: none !important;
+    transition: none !important;
+  }
+}
