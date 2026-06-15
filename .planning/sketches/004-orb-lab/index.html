@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sketch 004 — Orb tuning lab</title>
+<link rel="preconnect" href="https://rsms.me/" />
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+<link rel="stylesheet" href="../themes/default.css" />
+<style>
+  /* the hero-halo composition we're actually tuning for */
+  .stage { position: relative; min-height: 100vh; display: grid; place-items: center;
+    padding: 5rem 1.5rem 3rem; overflow: hidden; z-index: 2; }
+  .hero-inner { position: relative; z-index: 2; width: 100%; max-width: 44rem; text-align: center; }
+  .greet-sub { color: var(--muted-invert); font-weight: 600; margin: 0 0 .25rem; }
+  .greet-main { margin: 0 0 1.75rem; }
+  .hero-inner .prompt { max-width: 40rem; margin: 0 auto 1.25rem; }
+
+  /* the halo orb sits BEHIND the text (001B) */
+  .halo { position: absolute; top: 46%; left: 50%; transform: translate(-50%,-50%);
+    z-index: 1; pointer-events: none; border-radius: 50%; }
+  .halo .orb-gl, .halo .orb-css { width: 100%; height: 100%; border-radius: 50%; }
+  .halo .orb-gl { overflow: hidden; }
+  .halo .orb-gl canvas { width:100%!important; height:100%!important; display:block; }
+
+  /* hexagon morph ghost (shows where 002B lands) */
+  .hex-ghost { position: absolute; top: 46%; left: 50%; z-index: 3; pointer-events: none;
+    width: 120px; transform: translate(-50%,-50%); opacity: 0; transition: opacity .3s; }
+  .hex-ghost.show { opacity: .9; }
+  .hex-ghost polygon { fill: none; stroke: url(#hg); stroke-width: 3; }
+
+  /* control panel */
+  .panel { position: fixed; right: 0; top: 44px; bottom: 0; width: 310px; z-index: 80;
+    background: rgba(14,15,28,.94); border-left: 1px solid var(--line-invert);
+    backdrop-filter: blur(12px); padding: 1rem 1.1rem; overflow-y: auto; font-size: .85rem; }
+  .panel.hidden { transform: translateX(100%); }
+  .panel h3 { margin: .25rem 0 .75rem; font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent-300); }
+  .ctl { margin-bottom: .85rem; }
+  .ctl label { display:flex; justify-content:space-between; color: var(--muted-invert); margin-bottom: .25rem; }
+  .ctl label b { color: var(--text-invert); font-variant-numeric: tabular-nums; }
+  .ctl input[type=range] { width: 100%; accent-color: var(--accent-500); }
+  .ctl input[type=color] { width: 100%; height: 28px; border: 1px solid var(--line-invert); border-radius: 6px; background: none; }
+  .colors-row { display:grid; grid-template-columns: repeat(5,1fr); gap: .35rem; }
+  .row { display:flex; gap:.5rem; }
+  .row button, .seg button { flex:1; padding:.4rem; border-radius:8px; border:1px solid var(--line-invert);
+    background:var(--ink-800); color:var(--text-invert); cursor:pointer; font:inherit; font-size:.8rem; }
+  .row button:hover, .seg button:hover { border-color: var(--accent-500); }
+  .seg { display:flex; gap:.25rem; }
+  .seg button.active { background: rgba(0,176,213,.18); border-color: rgba(0,176,213,.5); }
+  .preset-row { display:grid; grid-template-columns:1fr 1fr; gap:.4rem; margin-bottom:.75rem; }
+  .out { font-family: ui-monospace, monospace; font-size: .72rem; background: var(--ink-950);
+    border: 1px solid var(--line-invert); border-radius: 8px; padding: .6rem; white-space: pre-wrap; word-break: break-all; color: var(--accent-200); }
+  .copybtn { margin-top:.4rem; width:100%; }
+  .tip { color: var(--muted-invert); font-size:.78rem; line-height:1.4; margin:.25rem 0 .75rem; }
+  .panel-toggle { position: fixed; right: 1rem; top: 52px; z-index: 81; background: var(--accent-500);
+    color:#001016; border:0; border-radius: var(--radius-pill); padding:.4rem .8rem; cursor:pointer; font:inherit; font-weight:600; }
+  #fallback-note { position: fixed; left: 1rem; bottom: 1rem; z-index: 90; color: var(--muted-invert);
+    font-size:.8rem; background: rgba(14,15,28,.9); padding:.4rem .7rem; border-radius:8px; display:none; }
+</style>
+</head>
+<body>
+<div class="tabs">
+  <strong style="color:var(--text-invert);align-self:center;margin-right:.5rem">004 · Orb lab</strong>
+  <span class="note">Engine:</span>
+  <span class="seg" id="engine">
+    <button data-eng="gl" class="active">Paper mesh</button>
+    <button data-eng="css">CSS-orb</button>
+  </span>
+  <span class="spacer"></span>
+  <span class="note">Composiet: hero-halo (001B) · morph-eindpunt (002B)</span>
+</div>
+
+<button class="panel-toggle" id="ptoggle">controls ⇄</button>
+
+<div class="aurora"><div class="blob b-cyan"></div><div class="blob b-violet"></div><div class="blob b-teal"></div></div>
+
+<svg width="0" height="0"><defs><linearGradient id="hg" y1="0" y2="1">
+  <stop offset="0" stop-color="#00b0d5"/><stop offset="1" stop-color="#0064d5"/></linearGradient></defs></svg>
+
+<div class="stage">
+  <div class="halo" id="halo"></div>
+  <svg class="hex-ghost" id="hexghost" viewBox="0 0 198.78 229.54">
+    <polygon points="99.39 0 0 57.38 0 172.15 99.39 229.53 198.78 172.15 198.78 57.38 99.39 0"/>
+    <polygon points="99.39 37.83 32.76 76.3 32.76 153.24 99.39 191.7 166.02 153.24 166.02 76.3 99.39 37.83"/>
+  </svg>
+  <div class="hero-inner">
+    <p class="greet-sub">Hoi, ik ben Chris's AI</p>
+    <h1 class="t-display greet-main">Waarmee kan ik je helpen?</h1>
+    <label class="prompt"><input placeholder="Vraag me iets…" />
+      <button class="send" aria-label="Verstuur">↑</button></label>
+    <div class="chips">
+      <span class="chip">🛠️ Wat kun je voor mij bouwen?</span>
+      <span class="chip">📄 Vraag een offerte aan</span>
+      <span class="chip">💼 Bekijk mijn werk</span>
+    </div>
+  </div>
+</div>
+
+<div class="panel" id="panel">
+  <div class="preset-row">
+    <button class="" data-preset="kalm">Preset: Kalm</button>
+    <button data-preset="levendig">Preset: Levendig</button>
+    <button data-preset="merk">Preset: Strak merk</button>
+    <button data-preset="droom">Preset: Dromerig</button>
+  </div>
+
+  <h3>Kleuren (5 spots)</h3>
+  <div class="colors-row" id="colors"></div>
+
+  <h3>Vorm & beweging</h3>
+  <div class="ctl"><label>Distortion <b id="v-distortion">0.85</b></label><input type="range" id="distortion" min="0" max="1" step="0.01" value="0.85"></div>
+  <div class="ctl"><label>Swirl <b id="v-swirl">0.6</b></label><input type="range" id="swirl" min="0" max="1" step="0.01" value="0.6"></div>
+  <div class="ctl"><label>Speed <b id="v-speed">0.4</b></label><input type="range" id="speed" min="0" max="1.5" step="0.05" value="0.4"></div>
+  <div class="ctl"><label>Scale <b id="v-scale">1</b></label><input type="range" id="scale" min="0.4" max="2" step="0.05" value="1"></div>
+  <div class="ctl"><label>Grain mixer <b id="v-grainMixer">0</b></label><input type="range" id="grainMixer" min="0" max="1" step="0.05" value="0"></div>
+  <div class="ctl"><label>Grain overlay <b id="v-grainOverlay">0</b></label><input type="range" id="grainOverlay" min="0" max="0.5" step="0.02" value="0"></div>
+
+  <h3>Halo-presentatie</h3>
+  <div class="ctl"><label>Orb-grootte (vw) <b id="v-size">46</b></label><input type="range" id="size" min="20" max="80" step="1" value="46"></div>
+  <div class="ctl"><label>Opacity (achter tekst) <b id="v-opacity">0.8</b></label><input type="range" id="opacity" min="0.15" max="1" step="0.05" value="0.8"></div>
+  <div class="ctl"><label>Blur (px) <b id="v-blur">2</b></label><input type="range" id="blur" min="0" max="40" step="1" value="2"></div>
+  <p class="tip">Tip: zet opacity laag (~0.4-0.6) + wat blur om te checken of de tekst leesbaar blijft mét de orb erachter.</p>
+
+  <h3>Morph-check (002B)</h3>
+  <div class="row"><button id="playmorph">▶ Hexagon → orb</button><button id="toggleghost">Toon hexagon-eindpunt</button></div>
+  <p class="tip">"Hexagon → orb" speelt de morph af die op deze halo-positie/grootte moet landen.</p>
+
+  <h3>Export</h3>
+  <div class="out" id="out"></div>
+  <button class="row copybtn" id="copy" style="margin-top:.5rem"><span>📋 Kopieer config</span></button>
+</div>
+
+<div id="fallback-note">⚠ Paper Shaders CDN niet geladen — CSS-orb fallback actief.</div>
+
+<script type="module">
+  const $ = s => document.querySelector(s);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- load Paper Shaders ----
+  let ShaderMount=null, meshFrag=null, colorFromString=null, glReady=false;
+  try {
+    const m = await import('https://esm.sh/@paper-design/shaders@0.0.76');
+    ShaderMount=m.ShaderMount; meshFrag=m.meshGradientFragmentShader; colorFromString=m.getShaderColorFromString;
+    glReady=!!(ShaderMount && meshFrag);
+  } catch(e){ glReady=false; }
+  if(!glReady){ $('#fallback-note').style.display='block'; document.querySelector('#engine [data-eng="css"]').click?.(); }
+
+  // ---- state ----
+  const PRESETS = {
+    kalm:     { colors:['#00b0d5','#0064d5','#0e4a58','#00d5b0','#16182b'], distortion:0.55, swirl:0.35, speed:0.25, scale:1.1, grainMixer:0, grainOverlay:0 },
+    levendig: { colors:['#00b0d5','#6b5bff','#c84bff','#00d5b0','#0064d5'], distortion:0.9, swirl:0.7, speed:0.55, scale:1, grainMixer:0, grainOverlay:0 },
+    merk:     { colors:['#00b0d5','#0064d5','#008cab','#4fcde6','#0a5f73'], distortion:0.6, swirl:0.45, speed:0.3, scale:1, grainMixer:0, grainOverlay:0 },
+    droom:    { colors:['#00d5b0','#00b0d5','#6b5bff','#c84bff','#0064d5'], distortion:0.95, swirl:0.85, speed:0.4, scale:1.2, grainMixer:0.15, grainOverlay:0.12 },
+  };
+  let engine = glReady ? 'gl' : 'css';
+  const state = { colors:[...PRESETS.levendig.colors], distortion:0.85, swirl:0.6, speed:0.4, scale:1,
+    grainMixer:0, grainOverlay:0, size:46, opacity:0.8, blur:2 };
+
+  // ---- color swatches ----
+  const colorsEl = $('#colors');
+  function renderColorInputs(){
+    colorsEl.innerHTML='';
+    state.colors.forEach((c,i)=>{ const inp=document.createElement('input'); inp.type='color'; inp.value=c;
+      inp.addEventListener('input',()=>{ state.colors[i]=inp.value; paint(); }); colorsEl.appendChild(inp); });
+  }
+
+  // ---- orb mount ----
+  const halo = $('#halo');
+  let mount=null;
+  function sizePx(){ return Math.round(window.innerWidth * state.size/100); }
+  function applyHaloBox(){ const s=sizePx(); halo.style.width=s+'px'; halo.style.height=s+'px';
+    halo.style.opacity=state.opacity; halo.style.filter=`blur(${state.blur}px)`; }
+
+  function paint(){
+    applyHaloBox();
+    if(mount){ try{mount.dispose?.();}catch(_){} mount=null; }
+    halo.innerHTML='';
+    if(engine==='gl' && glReady){
+      const host=document.createElement('div'); host.className='orb-gl'; halo.appendChild(host);
+      const u_colors = state.colors.map(c => colorFromString ? colorFromString(c) : c);
+      mount = new ShaderMount(host, meshFrag, {
+        u_colors, u_colorsCount: state.colors.length,
+        u_distortion: state.distortion, u_swirl: state.swirl,
+        u_grainMixer: state.grainMixer, u_grainOverlay: state.grainOverlay,
+        u_fit: 1, u_rotation: 0, u_scale: state.scale, u_offsetX: 0, u_offsetY: 0,
+        u_originX: 0.5, u_originY: 0.5, u_worldWidth: 0, u_worldHeight: 0,
+      }, undefined, reduce ? 0 : state.speed);
+    } else {
+      const d=document.createElement('div'); d.className='orb-css'; halo.appendChild(d);
+      // map colors onto the CSS conic orb
+      d.style.setProperty('--orb-1', state.colors[0]); d.style.setProperty('--orb-2', state.colors[3]);
+      d.style.setProperty('--orb-3', state.colors[1]); d.style.setProperty('--orb-4', state.colors[2]);
+      d.style.setProperty('--orb-5', state.colors[4]);
+    }
+    writeOut();
+  }
+
+  // ---- bind sliders ----
+  ['distortion','swirl','speed','scale','grainMixer','grainOverlay','size','opacity','blur'].forEach(k=>{
+    const el=$('#'+k), out=$('#v-'+k);
+    el.addEventListener('input',()=>{ state[k]=parseFloat(el.value); out.textContent=el.value;
+      if(['size','opacity','blur'].includes(k)) applyHaloBox(); else paint();
+      if(k==='size'||k==='opacity'||k==='blur') writeOut();
+    });
+  });
+
+  function syncUI(){
+    ['distortion','swirl','speed','scale','grainMixer','grainOverlay','size','opacity','blur'].forEach(k=>{
+      $('#'+k).value=state[k]; $('#v-'+k).textContent=state[k];
+    });
+    renderColorInputs();
+  }
+
+  // ---- presets ----
+  document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>{
+    Object.assign(state, JSON.parse(JSON.stringify(PRESETS[b.dataset.preset])));
+    syncUI(); paint();
+  }));
+
+  // ---- engine switch ----
+  document.querySelectorAll('#engine button').forEach(b=>b.addEventListener('click',()=>{
+    if(b.dataset.eng==='gl' && !glReady) return;
+    document.querySelectorAll('#engine button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); engine=b.dataset.eng; paint();
+  }));
+
+  // ---- export ----
+  function writeOut(){
+    const cfg = { engine, colors: state.colors, distortion:state.distortion, swirl:state.swirl,
+      speed:state.speed, scale:state.scale, grainMixer:state.grainMixer, grainOverlay:state.grainOverlay,
+      halo: { sizeVw: state.size, opacity: state.opacity, blurPx: state.blur } };
+    $('#out').textContent = JSON.stringify(cfg, null, 2);
+  }
+  $('#copy').addEventListener('click',()=>{ navigator.clipboard?.writeText($('#out').textContent);
+    $('#copy').querySelector('span').textContent='✓ Gekopieerd'; setTimeout(()=>$('#copy').querySelector('span').textContent='📋 Kopieer config',1200); });
+
+  // ---- panel toggle ----
+  $('#ptoggle').addEventListener('click',()=>$('#panel').classList.toggle('hidden'));
+
+  // ---- morph check (hexagon scales/blurs into the halo orb) ----
+  const ghost=$('#hexghost');
+  $('#toggleghost').addEventListener('click',()=>ghost.classList.toggle('show'));
+  $('#playmorph').addEventListener('click',()=>{
+    if(reduce) return;
+    ghost.classList.add('show');
+    ghost.style.transition='none'; ghost.style.transform='translate(-50%,-50%) scale(1)'; ghost.style.opacity='.9';
+    halo.style.transition='none'; halo.style.transform='translate(-50%,-50%) scale(.18)'; halo.style.opacity='0';
+    void ghost.offsetWidth;
+    // hexagon grows + fades, orb blooms to its tuned size — same center
+    ghost.style.transition='transform 1s var(--ease-out-soft), opacity .8s';
+    ghost.style.transform=`translate(-50%,-50%) scale(${state.size/12})`; ghost.style.opacity='0';
+    halo.style.transition='transform 1s var(--ease-out-soft), opacity .9s .15s';
+    halo.style.transform='translate(-50%,-50%) scale(1)'; halo.style.opacity=state.opacity;
+    setTimeout(()=>{ ghost.classList.remove('show'); ghost.style.transform='translate(-50%,-50%) scale(1)'; },1300);
+  });
+
+  window.addEventListener('resize',()=>{ applyHaloBox(); });
+
+  // init
+  if(!glReady){ document.querySelectorAll('#engine button').forEach(x=>x.classList.remove('active'));
+    document.querySelector('#engine [data-eng="css"]').classList.add('active'); }
+  syncUI(); paint();
+</script>
+</body>
+</html>
