@@ -3,14 +3,18 @@ import { defineConfig, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
 import vue from '@astrojs/vue';
+import netlify from '@astrojs/netlify';
 import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
   // Required for absolute canonical URLs, Open Graph images and the sitemap.
   site: 'https://chrisonline.nl',
-  // Static output is the default in Astro v6; stated here for clarity.
+  // De site blijft statisch: elke pagina wordt geprerenderd, behalve de enkele
+  // on-demand route(s) die expliciet `export const prerender = false` zetten
+  // (de AI-chat-endpoint). De Netlify-adapter draait die als één Function.
   output: 'static',
+  adapter: netlify(),
 
   integrations: [
     mdx(),
