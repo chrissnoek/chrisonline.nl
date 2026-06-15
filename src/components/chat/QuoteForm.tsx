@@ -60,14 +60,14 @@ export default function QuoteForm({ initial }: { initial: QuoteFields }) {
     return (
       <div className="cw-quote cw-quote--sent" role="status">
         <strong>✓ Verstuurd!</strong>
-        <p>Bedankt {f.naam?.split(' ')[0] || ''}, je aanvraag staat bij Chris. Je hoort snel iets.</p>
+        <p>Bedankt {f.naam?.split(' ')[0] || ''}, je aanvraag staat bij me. Je hoort snel van me.</p>
       </div>
     );
   }
 
   return (
     <div className="cw-quote">
-      <strong className="cw-quote-title">Klopt dit? Dan stuur ik het naar Chris.</strong>
+      <strong className="cw-quote-title">Klopt dit? Dan komt het direct bij me binnen.</strong>
       <div className="cw-quote-grid">
         <label>
           Naam
@@ -132,7 +132,7 @@ export default function QuoteForm({ initial }: { initial: QuoteFields }) {
       </div>
       {status === 'error' ? <p className="cw-quote-error">{errorMsg}</p> : null}
       <button className="cw-quote-send" onClick={submit} disabled={status === 'sending'}>
-        {status === 'sending' ? 'Versturen…' : 'Verstuur naar Chris'}
+        {status === 'sending' ? 'Versturen…' : 'Verstuur'}
       </button>
     </div>
   );

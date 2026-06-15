@@ -16,9 +16,9 @@ import ProjectGallery from './ProjectGallery';
 import QuoteForm from './QuoteForm';
 
 const CHIPS = [
-  { label: '🛠️ Wat kun je voor mij bouwen?', text: 'Wat kun je allemaal voor mij bouwen?' },
-  { label: '📄 Vraag een offerte aan', text: 'Ik wil graag een offerte aanvragen.' },
-  { label: '💼 Bekijk mijn werk', text: 'Laat eens wat van Chris zijn werk zien.' },
+  { label: '👀 Laat recent werk zien', text: 'Laat eens wat van je recente werk zien — het liefst een webshop en een maatwerk-site.' },
+  { label: '💶 Wat kost mijn project?', text: 'Ik plan een nieuwe website. Kun je me helpen aan een prijsindicatie en een offerte?' },
+  { label: '📅 Plan een gesprek', text: 'Ik wil mijn project even bespreken. Kunnen we een kort gesprek inplannen?' },
 ];
 
 const BOOKING_URL =
@@ -69,8 +69,12 @@ export default function ChatWidget() {
 
       {!started ? (
         <div className="cw-greet">
-          <p className="cw-greet-sub">Hoi, ik ben Chris&apos;s AI</p>
-          <h1 className="cw-greet-main">Waarmee kan ik je helpen?</h1>
+          <p className="cw-greet-sub">Hoi, ik ben Chris Snoek — freelance webdeveloper &amp; UI/UX-designer</p>
+          <h1 className="cw-greet-main">Wat wil je laten bouwen?</h1>
+          <p className="cw-greet-subline">
+            Stel je vraag, dan laat ik je meteen passend werk en een prijsindicatie zien — geen
+            contactformulier, gewoon typen.
+          </p>
         </div>
       ) : (
         <div className="cw-thread" ref={scrollRef} aria-live="polite">
@@ -87,7 +91,7 @@ export default function ChatWidget() {
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Vraag me iets…"
+            placeholder="Bijv. 'nieuwe webshop in Shopify' of 'wat kost een snelle maatwerk-site?'…"
             aria-label="Stel een vraag"
             disabled={false}
           />
