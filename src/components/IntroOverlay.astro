@@ -84,6 +84,12 @@
         />
       </div>
     </div>
+
+    <!-- Iriserende bloom: het hexagon-mark "wordt" de orb. Verschijnt op de
+         mark-positie en groeit/verschuift naar de hero-orb-plek terwijl het
+         doek opent (sketch 002B, bloom-hand-off). Puur CSS-gradient, los van
+         het React-orb-eiland dat er onder al gemount staat. -->
+    <div class="io-bloom" aria-hidden="true"></div>
   </div>
 
   <!-- Voortgangs-hairline onderin -->
@@ -157,6 +163,27 @@
   }
   #intro-overlay .io-fly-dark {
     opacity: 0;
+  }
+
+  /* Iriserende bloom (hexagon → orb). Zelfde palet als de hero-orb (Levendig).
+     Positie/grootte worden via JS gezet (WAAPI), hier alleen het uiterlijk. */
+  #intro-overlay .io-bloom {
+    position: fixed;
+    left: 0;
+    top: 0;
+    /* Vaste basisdiameter (100px); JS schaalt hier vanaf zodat de blur
+       proportioneel meeschaalt i.p.v. te verdwijnen op een 1px-element. */
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    transform-origin: 0 0;
+    will-change: transform, opacity;
+    background:
+      radial-gradient(60% 55% at 35% 30%, rgba(255, 255, 255, 0.55), transparent 55%),
+      conic-gradient(from 0deg at 50% 50%, #00b0d5, #6b5bff, #c84bff, #00d5b0, #0064d5, #00b0d5);
+    filter: blur(10px) saturate(135%);
   }
 
   /* Scroll-lock zolang de overlay bestaat; heft zichzelf op zodra de
@@ -295,6 +322,8 @@
     const flyLight = overlay.querySelector<HTMLImageElement>('.io-fly-light');
     const flyDark = overlay.querySelector<HTMLImageElement>('.io-fly-dark');
     const headerLogo = document.querySelector<HTMLAnchorElement>('#site-header a[href="/"]');
+    const mark = overlay.querySelector<SVGElement>('.io-mark');
+    const bloom = overlay.querySelector<HTMLElement>('.io-bloom');
 
     let finished = false;
     const timers: number[] = [];
@@ -323,6 +352,40 @@
         // Het doek splijt nu (CSS) → signaal voor het deeltjesveld om naar
         // de rustige achtergrondrol te zakken.
         window.dispatchEvent(new Event('intro:reveal'));
+
+        // Bloom-hand-off: het hexagon-mark "wordt" de orb. De bloom verschijnt
+        // op de mark-plek en groeit/verschuift naar de hero-orb-rustpositie
+        // (gecentreerd, ~42% hoogte, ~29vw) terwijl hij in- en weer uitfade't.
+        // De echte React-orb staat er onder al, dus de overgang leest continu.
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (bloom && mark && !reduce) {
+          const m = mark.getBoundingClientRect();
+          if (m.width > 0) {
+            const startD = Math.max(m.width, m.height);
+            const startCx = m.left + m.width / 2;
+            const startCy = m.top + m.height / 2;
+            // Hero-orb-doel: horizontaal gecentreerd, 42% van de viewporthoogte,
+            // diameter 29vw (geklemd zoals de orb-halo CSS: 220–460px).
+            const endD = Math.min(460, Math.max(220, window.innerWidth * 0.29));
+            const endCx = window.innerWidth / 2;
+            const endCy = window.innerHeight * 0.42;
+            const ease = 'cubic-bezier(0.22, 1, 0.36, 1)';
+            // Basisbox is 100px (transform-origin 0 0); scale = diameter/100,
+            // translate naar het linksboven-punt zodat het midden klopt.
+            const at = (cx: number, cy: number, d: number) =>
+              `translate(${cx - d / 2}px, ${cy - d / 2}px) scale(${d / 100})`;
+            bloom.animate(
+              [
+                { transform: at(startCx, startCy, startD), opacity: 0 },
+                { transform: at(startCx, startCy, startD), opacity: 0.9, offset: 0.2 },
+                { transform: at(endCx, endCy, endD), opacity: 0.85, offset: 0.7 },
+                { transform: at(endCx, endCy, endD), opacity: 0 },
+              ],
+              { duration: 1400, easing: ease, fill: 'forwards' },
+            );
+          }
+        }
+
         if (!fly || !headerLogo) return;
         const from = fly.getBoundingClientRect();
         const to = headerLogo.getBoundingClientRect();
