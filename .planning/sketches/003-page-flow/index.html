@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sketch 003 — Pagina-flow & 'over mij'</title>
+<link rel="preconnect" href="https://rsms.me/" />
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+<link rel="stylesheet" href="../themes/default.css" />
+<style>
+  .wrap { position: relative; z-index: 2; }
+  .container { max-width: 76rem; margin: 0 auto; padding: 0 1.5rem; }
+  section.block { padding: 6rem 0; border-top: 1px solid var(--line-invert); }
+
+  /* mini hero stand-in */
+  .mini-hero { min-height: 88vh; display: grid; place-items: center; text-align: center; }
+  .mini-hero .orb-css { width: clamp(140px,20vw,220px); aspect-ratio:1; margin: 0 auto 1.5rem; }
+  .mini-hero .prompt { max-width: 36rem; margin: 1.5rem auto 1rem; }
+  .scroll-hint { color: var(--muted-invert); font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; margin-top:2.5rem; }
+
+  .eyebrow { color: var(--accent-300); font-weight:600; font-size:.85rem; letter-spacing:.1em; text-transform:uppercase; margin:0 0 .5rem; }
+
+  /* about + cover */
+  .about-grid { display:grid; gap:clamp(2rem,5vw,4rem); align-items:center; grid-template-columns: 1fr 1fr; }
+  @media (max-width:780px){ .about-grid{ grid-template-columns:1fr; } }
+  .cover { aspect-ratio: 4/5; border-radius: var(--radius-card); position: relative; overflow: hidden;
+    background: linear-gradient(160deg, var(--ink-700), var(--ink-900));
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,.7); display:grid; place-items:center; }
+  .cover::after{ content:"📷 chris-snoek.jpg"; color:var(--muted-invert); font-size:.85rem; }
+  .cover .badge{ position:absolute; left:1rem; bottom:1rem; background:rgba(0,176,213,.15);
+    border:1px solid rgba(0,176,213,.4); color:var(--accent-300); padding:.3rem .8rem; border-radius:var(--radius-pill); font-size:.8rem; }
+  .pillars{ display:grid; gap:1rem; margin-top:1.5rem; }
+  .pillar{ display:flex; gap:.75rem; align-items:flex-start; }
+  .pillar .dot{ flex:none; width:34px;height:34px;border-radius:10px; display:grid;place-items:center;
+    background:rgba(0,176,213,.12); border:1px solid rgba(0,176,213,.3); }
+
+  /* cards */
+  .cards{ display:grid; gap:1.25rem; grid-template-columns:repeat(3,1fr); }
+  @media (max-width:780px){ .cards{ grid-template-columns:1fr; } }
+  .card{ background:var(--ink-900); border:1px solid var(--line-invert); border-radius:var(--radius-card);
+    padding:1.5rem; transition:transform .25s var(--ease-out-soft), box-shadow .25s, border-color .25s; }
+  .card:hover{ transform:translateY(-3px); border-color:rgba(0,176,213,.4); box-shadow:0 18px 40px -16px rgba(0,176,213,.3); }
+  .card .pic{ aspect-ratio:16/10; border-radius:.75rem; margin-bottom:1rem;
+    background:linear-gradient(135deg, var(--accent-700), var(--ink-800)); }
+  .card.svc .pic{ display:none; }
+
+  /* the persistent mini chat dock (variant C) */
+  .dock{ position:fixed; right:1.25rem; bottom:1.25rem; z-index:50; width:min(22rem,90vw);
+    background:rgba(14,15,28,.9); border:1px solid var(--line-invert); border-radius:var(--radius-card);
+    backdrop-filter:blur(14px); box-shadow:0 24px 60px -20px rgba(0,0,0,.7); padding:1rem; display:none; }
+  .dock.show{ display:block; }
+  .dock .prompt{ margin-top:.75rem; }
+  .dock-head{ display:flex; align-items:center; gap:.5rem; font-size:.9rem; }
+  .dock-head .mini-orb{ width:26px;height:26px;border-radius:50%;
+    background:conic-gradient(from 0deg,var(--orb-1),var(--orb-3),var(--orb-4),var(--orb-2),var(--orb-1)); }
+
+  .variant{ display:none; } .variant.active{ display:block; }
+  h2.t-h2{ margin:0 0 .75rem; }
+  .muted{ color:var(--muted-invert); }
+</style>
+</head>
+<body>
+<div class="tabs">
+  <strong style="color:var(--text-invert);align-self:center;margin-right:.5rem">003 · Pagina-flow</strong>
+  <button data-v="a" class="active">A · Over mij ná hero</button>
+  <button data-v="b">B · Werk eerst, over mij mid</button>
+  <button data-v="c">C · Chat dockt, scrollpagina</button>
+</div>
+
+<div class="aurora" style="opacity:.4"><div class="blob b-cyan"></div><div class="blob b-violet"></div></div>
+
+<!-- shared mini-hero on top of every variant -->
+<template id="hero-tpl">
+  <section class="mini-hero block" style="border-top:0">
+    <div class="container">
+      <div class="orb-css"></div>
+      <p class="muted" style="font-weight:600;margin:0">Hoi, ik ben Chris's AI</p>
+      <h1 class="t-display" style="margin:.25rem 0 0">Waarmee kan ik je helpen?</h1>
+      <label class="prompt"><input placeholder="Vraag me iets…"/><button class="send">↑</button></label>
+      <div class="chips"><span class="chip">🛠️ Wat kun je voor mij bouwen?</span><span class="chip">📄 Vraag een offerte aan</span><span class="chip">💼 Bekijk mijn werk</span></div>
+      <p class="scroll-hint">scroll voor meer over Chris ↓</p>
+    </div>
+  </section>
+</template>
+
+<template id="about-tpl">
+  <section class="block" id="over">
+    <div class="container about-grid">
+      <div class="cover"><span class="badge">Beschikbaar voor nieuwe projecten</span></div>
+      <div>
+        <p class="eyebrow">Over mij</p>
+        <h2 class="t-h2">Razendsnelle, technisch sterke maatwerk-websites</h2>
+        <p class="t-lead">Ik ben Chris Snoek — webdeveloper &amp; UI/UX-designer. Ik bouw conversiegerichte sites en webshops, van ontwerp tot pixel-perfecte frontend.</p>
+        <div class="pillars">
+          <div class="pillar"><span class="dot">⚡</span><div><strong>Razendsnel</strong><br><span class="muted">Performance &amp; Core Web Vitals als uitgangspunt.</span></div></div>
+          <div class="pillar"><span class="dot">🛠️</span><div><strong>Technisch sterk</strong><br><span class="muted">Maatwerk frontend &amp; CMS, schaalbaar opgezet.</span></div></div>
+          <div class="pillar"><span class="dot">🎯</span><div><strong>Conversiegericht</strong><br><span class="muted">Ontwerp dat bezoekers omzet in klanten.</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<template id="work-tpl">
+  <section class="block" id="werk">
+    <div class="container">
+      <p class="eyebrow">Werk</p>
+      <h2 class="t-h2">Een greep uit mijn projecten</h2>
+      <div class="cards" style="margin-top:2rem">
+        <div class="card"><div class="pic"></div><strong>VI Travel</strong><br><span class="muted">Reisplatform · Webdesign</span></div>
+        <div class="card"><div class="pic"></div><strong>GP Travel</strong><br><span class="muted">F1 ticket- &amp; reisplatform</span></div>
+        <div class="card"><div class="pic"></div><strong>Centrum Fysiotherapie</strong><br><span class="muted">Website &amp; CMS</span></div>
+      </div>
+      <p class="muted" style="margin-top:1.5rem">↳ In de chat: <em>"Bekijk mijn werk"</em> filtert deze inline als kaarten.</p>
+    </div>
+  </section>
+</template>
+
+<template id="svc-tpl">
+  <section class="block" id="diensten">
+    <div class="container">
+      <p class="eyebrow">Diensten</p>
+      <h2 class="t-h2">Wat ik voor je kan bouwen</h2>
+      <div class="cards" style="margin-top:2rem">
+        <div class="card svc"><strong>Maatwerk website-development</strong><br><span class="muted">Schaalbare frontend &amp; CMS.</span></div>
+        <div class="card svc"><strong>Shopify webshop-development</strong><br><span class="muted">Conversiegerichte webshops.</span></div>
+        <div class="card svc"><strong>High-impact display advertising</strong><br><span class="muted">Rich media &amp; HPTO.</span></div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<div class="wrap" id="page"></div>
+<div class="dock" id="dock">
+  <div class="dock-head"><span class="mini-orb"></span><strong>Chris's AI</strong><span class="muted" style="margin-left:auto">online</span></div>
+  <label class="prompt"><input placeholder="Vraag me iets…"/><button class="send">↑</button></label>
+</div>
+
+<script>
+  const T = id => document.getElementById(id).content.cloneNode(true);
+  const page = document.getElementById('page');
+  const dock = document.getElementById('dock');
+
+  function render(v){
+    page.innerHTML=''; dock.classList.remove('show');
+    if(v==='a'){ page.append(T('hero-tpl'), T('about-tpl'), T('work-tpl'), T('svc-tpl')); }
+    if(v==='b'){ page.append(T('hero-tpl'), T('work-tpl'), T('about-tpl'), T('svc-tpl')); }
+    if(v==='c'){ page.append(T('hero-tpl'), T('about-tpl'), T('work-tpl'), T('svc-tpl'));
+      // chat docks to corner after scrolling past hero
+      const hero = page.querySelector('.mini-hero');
+      const io = new IntersectionObserver(([e])=>dock.classList.toggle('show', !e.isIntersecting), {threshold:.2});
+      io.observe(hero);
+    }
+  }
+  document.querySelectorAll('.tabs button[data-v]').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.tabs button[data-v]').forEach(t=>t.classList.remove('active'));
+    b.classList.add('active'); render(b.dataset.v); window.scrollTo(0,0);
+  }));
+  render('a');
+</script>
+</body>
+</html>
