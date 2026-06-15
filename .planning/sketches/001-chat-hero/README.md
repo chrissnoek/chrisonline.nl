@@ -2,7 +2,7 @@
 sketch: 001
 name: chat-hero
 question: "Does the AI-chat hero layout feel right, and which orb style wins (CSS vs Paper Shaders mesh)?"
-winner: null
+winner: "B"
 tags: [hero, layout, orb, chat]
 ---
 

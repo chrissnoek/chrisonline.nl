@@ -2,7 +2,7 @@
 sketch: 003
 name: page-flow
 question: "How does the page flow below the chat hero, and where do 'over mij' + the cover photo live?"
-winner: null
+winner: "B"
 tags: [layout, scroll, about, sections]
 ---
 

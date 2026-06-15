@@ -260,6 +260,32 @@ streaming. `backdrop-filter` = grootste mobiele kost → niet stacken, evt. flat
 
 ---
 
+## 8. Vastgelegde design-keuzes (uit sketches, juni 2026)
+
+Sketches in `.planning/sketches/` — winnaars gekozen door Chris:
+
+- **Hero (001B — orb als halo):** geen orb-altaar bovenaan; de iriserende orb zit als grote,
+  zachte **halo áchter** de groet + prompt-veld. Tekst zweeft eroverheen. Layout: groet
+  ("Hoi, ik ben Chris's AI" / "Waarmee kan ik je helpen?") → glass prompt-veld
+  ("Vraag me iets…") + send → 3 generieke chips ("Wat kun je voor mij bouwen?",
+  "Vraag een offerte aan", "Bekijk mijn werk").
+- **Intro-morph (002B — hexagon wórdt orb):** de bestaande hexagon-mark tekent zich, het doek
+  splijt (`intro:reveal`), en de **mark schaalt/blurt en wórdt de orb** (continue transform) —
+  daarna fade de chat-hero omhoog. Eén doorlopende beweging, geen twee losse momenten.
+  Risico: de "wordt"-morph moet vloeiend zijn, niet als glitch lezen — extra aandacht in build.
+- **Pagina-flow (003B — werk eerst, over mij mid):** hero → **Werk** (proof first; projecten
+  renderen inline als kaarten bij `showProjects`) → **Over mij + coverfoto** (mid-page, met
+  "Beschikbaar"-badge — blijft prominent) → **Diensten** (incl. Shopify als dienst).
+- **Orb-engine:** Paper Shaders `MeshGradient` is de leidende keuze (in-sketch via CDN
+  gevalideerd); CSS-orb blijft de lichtgewicht fallback. Definitieve keuze in build (perf op
+  mobiel meten naast de bestaande particle-canvas WebGL/2D-context).
+
+**Aandachtspunt voor build:** halo-orb (001B) + hexagon-wordt-orb (002B) betekent dat de orb
+**achter** de content moet kunnen renderen (z-index laag, `pointer-events:none`) én het
+eindpunt is van de intro-morph — de morph moet dus landen op exact de halo-positie/grootte.
+
+---
+
 ## Geverifieerde stack-samenvatting
 
 | Concern | Keuze |

@@ -2,7 +2,7 @@
 sketch: 002
 name: intro-morph
 question: "Does the cinematic intro → chat-hero morph feel seamless rather than like two separate moments?"
-winner: null
+winner: "B"
 tags: [intro, motion, orb, transition]
 ---
 
