@@ -2,7 +2,7 @@
 sketch: 004
 name: orb-lab
 question: "What orb params (colors, distortion, swirl, speed, size, opacity, blur) make the halo orb feel premium AND keep text readable — and does the hexagon→orb morph land cleanly?"
-winner: null
+winner: "Levendig + halo 29vw/0.65/blur24 (mesh GL)"
 tags: [orb, tuning, motion, paper-shaders]
 ---
 

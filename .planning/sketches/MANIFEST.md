@@ -24,4 +24,4 @@ fallback). The CDN-loaded Paper Shaders mesh orb was validated in-sketch.
 | 001 | chat-hero | AI-chat hero layout + which orb style | **B · Orb als halo** | hero, layout, orb, chat |
 | 002 | intro-morph | Intro → chat morph seamlessness | **B · Hexagon wórdt orb** | intro, motion, orb, transition |
 | 003 | page-flow | Page flow below hero + 'over mij' placement | **B · Werk eerst, over mij mid** | layout, scroll, about, sections |
-| 004 | orb-lab | Tune halo-orb params + verify hexagon→orb morph | _in progress_ | orb, tuning, motion, paper-shaders |
+| 004 | orb-lab | Tune halo-orb params + verify hexagon→orb morph | **Levendig · halo 29vw/.65/blur24 · mesh GL** | orb, tuning, motion, paper-shaders |

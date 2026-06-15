@@ -276,9 +276,31 @@ Sketches in `.planning/sketches/` — winnaars gekozen door Chris:
 - **Pagina-flow (003B — werk eerst, over mij mid):** hero → **Werk** (proof first; projecten
   renderen inline als kaarten bij `showProjects`) → **Over mij + coverfoto** (mid-page, met
   "Beschikbaar"-badge — blijft prominent) → **Diensten** (incl. Shopify als dienst).
-- **Orb-engine:** Paper Shaders `MeshGradient` is de leidende keuze (in-sketch via CDN
-  gevalideerd); CSS-orb blijft de lichtgewicht fallback. Definitieve keuze in build (perf op
-  mobiel meten naast de bestaande particle-canvas WebGL/2D-context).
+- **Orb-engine:** **Paper Shaders `MeshGradient`** (vastgelegd in lab 004). CSS-orb blijft de
+  reduced-motion / no-WebGL / save-data fallback.
+
+**Vastgelegde orb-spec (uit lab 004 — exacte build-props):**
+
+```json
+{
+  "engine": "gl",
+  "shader": "meshGradient",
+  "colors": ["#00b0d5", "#6b5bff", "#c84bff", "#00d5b0", "#0064d5"],
+  "u_distortion": 0.9,
+  "u_swirl": 0.7,
+  "speed": 0.55,
+  "u_scale": 1,
+  "u_grainMixer": 0,
+  "u_grainOverlay": 0,
+  "halo": { "sizeVw": 29, "opacity": 0.65, "blurPx": 24 }
+}
+```
+
+Presentatie = **halo achter de tekst** (001B): orb-laag `z-index` laag, `pointer-events:none`,
+breedte `29vw`, `opacity .65`, CSS `filter: blur(24px)`. Kleuren via
+`getShaderColorFromString('#hex')` → `u_colors`. `speed:0` onder `prefers-reduced-motion`
+(toon dan `staticMeshGradient` of de CSS-orb). De **hexagon→orb morph (002B)** moet landen op
+exact deze positie (center) en eindgrootte (`29vw` halo).
 
 **Aandachtspunt voor build:** halo-orb (001B) + hexagon-wordt-orb (002B) betekent dat de orb
 **achter** de content moet kunnen renderen (z-index laag, `pointer-events:none`) én het
