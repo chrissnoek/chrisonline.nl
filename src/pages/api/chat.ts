@@ -13,6 +13,12 @@ import { convertToModelMessages, streamText, stepCountIs, type UIMessage } from 
 import { createGroq } from '@ai-sdk/groq';
 import { buildSystemPrompt } from '../../lib/ai/system-prompt';
 import { chatTools } from '../../lib/ai/tools';
+import {
+  getClientIp,
+  checkRateLimit,
+  checkDailyCeiling,
+  recordTokenUsage,
+} from '../../lib/ai/ratelimit';
 
 // Deze route mag NIET geprerenderd worden — hij draait per request op de server.
 export const prerender = false;
@@ -31,7 +37,7 @@ const MAX_CHARS = 8000; // ruwe input-truncatie-guard
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, clientAddress }) => {
   const apiKey = import.meta.env.GROQ_API_KEY;
   if (!apiKey) {
     // Stub-modus: nog geen sleutel. Geef een duidelijke, nette fout terug
@@ -42,6 +48,29 @@ export const POST: APIRoute = async ({ request }) => {
         message:
           'De chat is nog niet geconfigureerd (GROQ_API_KEY ontbreekt). Voeg de sleutel toe in je omgeving.',
       },
+      503,
+    );
+  }
+
+  // Per-IP rate limit + globaal dag-tokenplafond (fail-open bij Redis-storing).
+  const ip = getClientIp(request, clientAddress ? () => clientAddress : undefined);
+  const rate = await checkRateLimit(ip);
+  if (!rate.ok) {
+    return new Response(
+      JSON.stringify({ error: 'rate_limited', message: 'Even rustig aan — probeer het zo nog eens.' }),
+      {
+        status: 429,
+        headers: {
+          'content-type': 'application/json',
+          ...(rate.retryAfter ? { 'retry-after': String(rate.retryAfter) } : {}),
+        },
+      },
+    );
+  }
+  const ceiling = await checkDailyCeiling();
+  if (!ceiling.ok) {
+    return json(
+      { error: 'capacity', message: 'De chat is even offline (dagcapaciteit bereikt). Probeer het morgen weer.' },
       503,
     );
   }
@@ -83,6 +112,11 @@ export const POST: APIRoute = async ({ request }) => {
     // het krappe per-step-budget niet opslokt.
     providerOptions: {
       groq: { reasoningFormat: 'hidden', reasoningEffort: 'low' },
+    },
+    // Tel verbruikte output-tokens op bij de dag-teller. streamText.onFinish
+    // vuurt na voltooiing (ook na een client-abort), dus billing klopt.
+    onFinish: ({ totalUsage }) => {
+      void recordTokenUsage(totalUsage?.outputTokens ?? 0);
     },
   });
 
