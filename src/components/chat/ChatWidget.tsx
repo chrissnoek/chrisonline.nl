@@ -78,7 +78,7 @@ export default function ChatWidget() {
   }
 
   return (
-    <div className={`cw-root${started ? 'cw-root--active' : ''}`}>
+    <div className={`cw-root ${started ? 'cw-root--active' : ''}`}>
       <Orb />
 
       {!started ? (
