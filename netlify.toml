@@ -1,14 +1,24 @@
 # ──────────────────────────────────────────────────────────────
-#  Netlify-configuratie voor de statische Astro-build.
-#  Geen adapter nodig — dit is een volledig statische site.
+#  Netlify-configuratie voor de Astro-build.
+#  Output is statisch (alle pagina's geprerenderd), maar de
+#  @astrojs/netlify-adapter draait de enkele on-demand route(s)
+#  — de AI-chat-endpoint — als Netlify Function. De adapter beheert
+#  zelf de publish-map en de functions; daarom géén hardcoded
+#  `publish` hier (dat zou de SSR-routes breken).
 # ──────────────────────────────────────────────────────────────
 
 [build]
   command = "npm run build"
-  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "22"
+
+  # info@chrisonline.nl (QUOTE_TO_EMAIL) is het publieke contactadres en
+  # staat bewust in de build (src/config/site.ts, package.json). QUOTE_FROM_EMAIL
+  # is een afzenderadres op het eigen domein. Geen van beide is een geheim,
+  # dus laat de secrets-scanner deze twee sleutels met rust. De echte secrets
+  # (GROQ/RESEND/UPSTASH) blijven gewoon gescand.
+  SECRETS_SCAN_OMIT_KEYS = "QUOTE_TO_EMAIL,QUOTE_FROM_EMAIL"
 
 # Veiligheids- en performance-headers.
 [[headers]]
