@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sketch 002 — Intro → chat morph</title>
+<link rel="preconnect" href="https://rsms.me/" />
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+<link rel="stylesheet" href="../themes/default.css" />
+<style>
+  .stage { position: fixed; inset: 0; overflow: hidden; z-index: 1; }
+
+  /* intro curtain (two panels) */
+  .io-panel { position: absolute; left: 0; right: 0; height: 50%; background: var(--ink-950); z-index: 30;
+    transition: transform 1.1s var(--ease-out-soft); }
+  .io-top { top: 0; } .io-bot { bottom: 0; }
+  .playing .io-top.split { transform: translateY(-100%); }
+  .playing .io-bot.split { transform: translateY(100%); }
+  .io-seam { position: absolute; left: 0; right: 0; top: 50%; height: 2px; z-index: 31;
+    background: linear-gradient(90deg, transparent, var(--accent-500), var(--accent-2), transparent);
+    box-shadow: 0 0 24px 4px rgba(0,176,213,.7); opacity: 0; transition: opacity .4s; }
+  .io-seam.flash { opacity: 1; }
+
+  /* the hexagon mark that draws itself */
+  .io-mark { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: clamp(120px, 18vw, 200px); z-index: 32; }
+  .io-draw { stroke-dasharray: 700; stroke-dashoffset: 700;
+    transition: stroke-dashoffset 1s var(--ease-out-soft), opacity .6s; }
+  .playing .io-draw.drawn { stroke-dashoffset: 0; }
+  .io-mark.fade { opacity: 0; transition: opacity .6s; }
+
+  /* the orb target that materializes */
+  .orb-target { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(.2);
+    width: clamp(150px, 22vw, 240px); aspect-ratio: 1; border-radius: 50%; z-index: 20;
+    opacity: 0; transition: opacity .8s var(--ease-out-soft), transform 1s var(--ease-out-soft); }
+  .orb-target.bloom { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+  .orb-target .orb-css { width: 100%; height: 100%; }
+  .orb-target .orb-gl { width: 100%; height: 100%; border-radius: 50%; overflow: hidden;
+    box-shadow: 0 0 80px -10px rgba(0,176,213,.55), inset 0 0 50px 6px rgba(10,11,21,.45); }
+  .orb-target .orb-gl canvas { width:100%!important;height:100%!important;display:block; }
+
+  /* chat content that fades up under the orb */
+  .chat-reveal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, 8%); z-index: 19;
+    width: min(40rem, 90vw); text-align: center; opacity: 0; transition: opacity .7s .25s, transform .7s .25s var(--ease-out-soft);
+    margin-top: clamp(150px,22vw,240px); padding-top: 2rem; }
+  .chat-reveal.show { opacity: 1; transform: translate(-50%, 0); }
+  .chat-reveal .greet-sub { color: var(--muted-invert); font-weight:600; margin:0 0 .25rem; }
+  .chat-reveal h1 { margin: 0 0 1.5rem; }
+
+  /* fake header logo target (top-left) for variant C */
+  .hdr { position: absolute; top: 1rem; left: 1.5rem; z-index: 33; color: var(--text-invert);
+    font-weight: 800; letter-spacing: -.02em; opacity: 0; transition: opacity .5s; }
+  .hdr.show { opacity: 1; }
+
+  .variant { display: none; } .variant.active { display: block; }
+
+  .replay { position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%); z-index: 60;
+    background: var(--accent-500); color: #001016; border: 0; padding: .6rem 1.2rem;
+    border-radius: var(--radius-pill); font: inherit; font-weight: 600; cursor: pointer;
+    box-shadow: 0 8px 30px -8px rgba(0,176,213,.6); }
+</style>
+</head>
+<body>
+<div class="tabs">
+  <strong style="color:var(--text-invert);align-self:center;margin-right:.5rem">002 · Intro morph</strong>
+  <button data-v="a" class="active">A · Orb materialiseert</button>
+  <button data-v="b">★ B · Hexagon wórdt orb</button>
+  <button data-v="c">C · Logo vliegt + orb bloeit</button>
+  <span class="spacer"></span>
+  <span class="note">Orb:</span>
+  <button id="orb-toggle">🎨 mesh</button>
+</div>
+
+<div class="aurora" style="opacity:.6"><div class="blob b-cyan"></div><div class="blob b-violet"></div></div>
+
+<!-- single stage, behaviour differs per variant via JS -->
+<div class="stage">
+  <div class="hdr">chris<span style="color:var(--accent-500)">online</span></div>
+
+  <svg class="io-mark" viewBox="0 0 198.78 229.54" fill="none" stroke="url(#g)" stroke-width="3" aria-hidden="true">
+    <defs><linearGradient id="g" y1="114.77" x2="198.78" y2="114.77" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00b0d5"/><stop offset="1" stop-color="#0064d5"/></linearGradient></defs>
+    <polygon class="io-draw" points="99.39 0 0 57.38 0 172.15 99.39 229.53 198.78 172.15 198.78 57.38 99.39 0"/>
+    <polygon class="io-draw" points="99.39 37.83 32.76 76.3 32.76 153.24 99.39 191.7 166.02 153.24 166.02 76.3 99.39 37.83"/>
+    <polygon class="io-draw" points="99.39 75.66 65.53 95.21 65.53 134.32 99.39 153.88 133.25 134.32 133.25 95.21 99.39 75.66"/>
+  </svg>
+
+  <div class="orb-target"></div>
+
+  <div class="chat-reveal">
+    <p class="greet-sub">Hoi, ik ben Chris's AI</p>
+    <h1 class="t-display">Waarmee kan ik je helpen?</h1>
+    <label class="prompt"><input placeholder="Vraag me iets…" />
+      <button class="send" aria-label="Verstuur">↑</button></label>
+    <div class="chips" style="margin-top:1.25rem">
+      <span class="chip">🛠️ Wat kun je voor mij bouwen?</span>
+      <span class="chip">📄 Vraag een offerte aan</span>
+      <span class="chip">💼 Bekijk mijn werk</span>
+    </div>
+  </div>
+
+  <div class="io-panel io-top"></div>
+  <div class="io-panel io-bot"></div>
+  <div class="io-seam"></div>
+</div>
+
+<button class="replay" id="replay">▶ Replay intro</button>
+
+<script type="module">
+  let variant = 'a', useGL = true;
+  let ShaderMount=null, meshFrag=null, glReady=false, mount=null;
+  const rgba = (h,a=1)=>{const n=parseInt(h.slice(1),16);return[((n>>16)&255)/255,((n>>8)&255)/255,(n&255)/255,a];};
+  const COLORS = ['#00b0d5','#0064d5','#6b5bff','#c84bff','#00d5b0'].map(c=>rgba(c));
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  try { const m = await import('https://esm.sh/@paper-design/shaders@0.0.76');
+    ShaderMount=m.ShaderMount; meshFrag=m.meshGradientFragmentShader; glReady=!!(ShaderMount&&meshFrag);
+  } catch(e){ glReady=false; }
+
+  const $ = s => document.querySelector(s);
+  const orbTarget = $('.orb-target');
+  function paintOrb(){
+    if (mount){ try{mount.dispose?.();}catch(_){} mount=null; }
+    orbTarget.innerHTML='';
+    if (useGL && glReady){ const h=document.createElement('div'); h.className='orb-gl'; orbTarget.appendChild(h);
+      mount=new ShaderMount(h, meshFrag, {u_colors:COLORS,u_colorsCount:COLORS.length,u_distortion:.85,u_swirl:.6}, undefined, reduce?0:.4);
+    } else { const d=document.createElement('div'); d.className='orb-css'; orbTarget.appendChild(d); }
+  }
+
+  const mark=$('.io-mark'), draws=document.querySelectorAll('.io-draw');
+  const seam=$('.io-seam'), top=$('.io-top'), bot=$('.io-bot'), reveal=$('.chat-reveal'), hdr=$('.hdr');
+  const stage=$('.stage');
+  let timers=[];
+  const after=(ms,fn)=>timers.push(setTimeout(fn,ms));
+
+  function reset(){
+    timers.forEach(clearTimeout); timers=[];
+    stage.classList.remove('playing');
+    draws.forEach(d=>d.classList.remove('drawn'));
+    mark.classList.remove('fade'); mark.style.transform='translate(-50%,-50%)'; mark.style.opacity='1';
+    seam.classList.remove('flash'); top.classList.remove('split'); bot.classList.remove('split');
+    reveal.classList.remove('show'); hdr.classList.remove('show');
+    orbTarget.classList.remove('bloom');
+    orbTarget.style.transform='translate(-50%,-50%) scale(.2)';
+    if(reduce){ /* show end-state instantly */ paintOrb(); orbTarget.classList.add('bloom'); reveal.classList.add('show');
+      top.classList.add('split'); bot.classList.add('split'); mark.classList.add('fade'); return; }
+    void stage.offsetWidth; // reflow
+  }
+
+  function play(){
+    reset(); if(reduce) return;
+    paintOrb();
+    stage.classList.add('playing');
+    after(150,()=>draws.forEach(d=>d.classList.add('drawn')));   // hexagon draws
+    after(1300,()=>{ seam.classList.add('flash'); });            // seam ignites
+    after(1500,()=>{ top.classList.add('split'); bot.classList.add('split'); }); // curtain splits
+
+    if(variant==='a'){            // mark fades, orb blooms in its place
+      after(1500,()=>mark.classList.add('fade'));
+      after(1700,()=>orbTarget.classList.add('bloom'));
+    } else if(variant==='b'){     // the mark scales/blurs INTO the orb
+      after(1500,()=>{ mark.style.transition='transform 1s var(--ease-out-soft), opacity .8s';
+        mark.style.transform='translate(-50%,-50%) scale(1.25)'; mark.classList.add('fade'); });
+      after(1750,()=>orbTarget.classList.add('bloom'));
+    } else {                      // logo flies to header AND orb blooms in parallel
+      after(1500,()=>{ mark.style.transition='transform 1s var(--ease-out-soft), opacity .9s';
+        mark.style.transform='translate(calc(-50vw + 5.5rem), calc(-50vh + 1.5rem)) scale(.28)'; });
+      after(2200,()=>{ mark.classList.add('fade'); hdr.classList.add('show'); });
+      after(1700,()=>orbTarget.classList.add('bloom'));
+    }
+    after(2300,()=>reveal.classList.add('show')); // chat fades up
+  }
+
+  document.querySelectorAll('.tabs button[data-v]').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.tabs button[data-v]').forEach(t=>t.classList.remove('active'));
+    b.classList.add('active'); variant=b.dataset.v; play();
+  }));
+  const toggle=$('#orb-toggle');
+  if(!glReady){ useGL=false; toggle.textContent='✨ css'; toggle.title='CDN niet geladen — CSS-fallback'; }
+  toggle.addEventListener('click',()=>{ useGL=!useGL; toggle.textContent=useGL?'🎨 mesh':'✨ css'; paintOrb(); });
+  $('#replay').addEventListener('click',play);
+
+  play();
+</script>
+</body>
+</html>

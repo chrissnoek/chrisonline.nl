@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sketch 001 — Chat hero + orb</title>
+<link rel="preconnect" href="https://rsms.me/" />
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+<link rel="stylesheet" href="../themes/default.css" />
+<style>
+  /* layout-specific */
+  .hero { min-height: 100vh; display: grid; place-items: center; padding: 5rem 1.5rem 3rem;
+    position: relative; z-index: 2; }
+  .hero-inner { width: 100%; max-width: 56rem; text-align: center; }
+
+  .orb-wrap { display: inline-grid; place-items: center; margin: 0 auto 2rem;
+    width: clamp(150px, 24vw, 260px); aspect-ratio: 1; }
+  .orb-wrap .orb-css, .orb-wrap .orb-gl { width: 100%; height: 100%; border-radius: 50%; }
+  .orb-gl { position: relative; overflow: hidden; box-shadow: 0 0 80px -10px rgba(0,176,213,.55),
+    inset 0 0 50px 6px rgba(10,11,21,.45); }
+  .orb-gl canvas { width: 100% !important; height: 100% !important; display: block; }
+
+  .greet-sub { color: var(--muted-invert); font-weight: 600; font-size: 1.1rem; margin: 0 0 .25rem; }
+  .greet-main { margin: 0 0 1rem; }
+  .hero .t-lead { max-width: 34rem; margin: 0 auto 2rem; }
+
+  .prompt-area { max-width: 40rem; margin: 0 auto 1.25rem; }
+  .pro-pill { display: inline-flex; align-items: center; gap: .4rem; font-size: .8rem;
+    color: var(--accent-300); background: rgba(0,176,213,.08); border: 1px solid rgba(0,176,213,.25);
+    padding: .25rem .7rem; border-radius: var(--radius-pill); margin-bottom: -.6rem; position: relative; z-index: 3; }
+
+  /* Variant B: orb as a halo behind the prompt */
+  .v-b .orb-wrap { position: absolute; top: 46%; left: 50%; transform: translate(-50%,-50%);
+    width: clamp(320px, 46vw, 560px); opacity: .8; filter: blur(2px); z-index: 1; pointer-events: none; }
+  .v-b .hero-inner { position: relative; z-index: 2; }
+  .v-b .greet-main { margin-top: 1rem; }
+
+  /* Variant C: asymmetric split */
+  .v-c .hero-inner { max-width: 64rem; text-align: left;
+    display: grid; grid-template-columns: minmax(220px, 38%) 1fr; gap: clamp(1.5rem,4vw,3.5rem); align-items: center; }
+  .v-c .orb-wrap { margin: 0; width: 100%; max-width: 300px; }
+  .v-c .chips { justify-content: flex-start; }
+  .v-c .prompt-area { margin-left: 0; }
+  @media (max-width: 720px) {
+    .v-c .hero-inner { grid-template-columns: 1fr; text-align: center; }
+    .v-c .orb-wrap { margin: 0 auto; } .v-c .chips { justify-content: center; }
+  }
+
+  .variant { display: none; }
+  .variant.active { display: block; }
+
+  .scroll-hint { position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+    color: var(--muted-invert); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase;
+    animation: bob 2.4s var(--ease-out-soft) infinite; }
+  @keyframes bob { 50% { transform: translateX(-50%) translateY(6px); } }
+</style>
+</head>
+<body>
+<div class="tabs">
+  <strong style="color:var(--text-invert);align-self:center;margin-right:.5rem">001 · Chat hero</strong>
+  <button data-v="a" class="active">A · Orb centraal</button>
+  <button data-v="b">★ B · Orb als halo</button>
+  <button data-v="c">C · Asymmetrisch</button>
+  <span class="spacer"></span>
+  <span class="note">Orb:</span>
+  <button id="orb-toggle">🎨 Paper Shaders (mesh)</button>
+</div>
+
+<div class="aurora"><div class="blob b-cyan"></div><div class="blob b-violet"></div><div class="blob b-teal"></div></div>
+
+<!-- VARIANT A -->
+<section class="variant active v-a" data-variant="a">
+  <div class="hero"><div class="hero-inner">
+    <div class="orb-wrap"></div>
+    <p class="greet-sub">Hoi, ik ben Chris's AI</p>
+    <h1 class="t-display greet-main">Waarmee kan ik je helpen?</h1>
+    <p class="t-lead">Ik ken Chris z'n werk, diensten en aanpak — vraag me alles of laat me je meteen op weg helpen.</p>
+    <div class="prompt-area">
+      <span class="pro-pill">⚡ Antwoorden in seconden</span>
+      <label class="prompt"><input placeholder="Vraag me iets…" />
+        <button class="send" aria-label="Verstuur">↑</button></label>
+    </div>
+    <div class="chips">
+      <span class="chip">🛠️ Wat kun je voor mij bouwen?</span>
+      <span class="chip">📄 Vraag een offerte aan</span>
+      <span class="chip">💼 Bekijk mijn werk</span>
+    </div>
+  </div>
+  <div class="scroll-hint">scroll ↓</div></div>
+</section>
+
+<!-- VARIANT B -->
+<section class="variant v-b" data-variant="b">
+  <div class="hero">
+    <div class="orb-wrap"></div>
+    <div class="hero-inner">
+      <p class="greet-sub">Hoi, ik ben Chris's AI</p>
+      <h1 class="t-display greet-main">Waarmee kan ik je helpen?</h1>
+      <div class="prompt-area" style="margin-top:1.5rem">
+        <label class="prompt"><input placeholder="Vraag me iets…" />
+          <button class="send" aria-label="Verstuur">↑</button></label>
+      </div>
+      <div class="chips">
+        <span class="chip">🛠️ Wat kun je voor mij bouwen?</span>
+        <span class="chip">📄 Vraag een offerte aan</span>
+        <span class="chip">💼 Bekijk mijn werk</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VARIANT C -->
+<section class="variant v-c" data-variant="c">
+  <div class="hero"><div class="hero-inner">
+    <div class="orb-wrap"></div>
+    <div>
+      <p class="greet-sub">Hoi, ik ben Chris's AI</p>
+      <h1 class="t-h2 greet-main" style="font-size:clamp(2rem,1.3rem+3vw,3.5rem)">Waarmee kan ik je helpen?</h1>
+      <div class="prompt-area">
+        <label class="prompt"><input placeholder="Vraag me iets…" />
+          <button class="send" aria-label="Verstuur">↑</button></label>
+      </div>
+      <div class="chips">
+        <span class="chip">🛠️ Wat kun je voor mij bouwen?</span>
+        <span class="chip">📄 Vraag een offerte aan</span>
+        <span class="chip">💼 Bekijk mijn werk</span>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<script type="module">
+  // ----- variant switching -----
+  const tabs = document.querySelectorAll('.tabs button[data-v]');
+  const variants = document.querySelectorAll('.variant');
+  tabs.forEach(b => b.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active')); b.classList.add('active');
+    variants.forEach(v => v.classList.toggle('active', v.dataset.variant === b.dataset.v));
+    mountOrbs(); // re-mount orb into the now-visible variant
+  }));
+
+  // ----- orb style: CSS vs Paper Shaders mesh-gradient -----
+  let useGL = true;
+  const toggle = document.getElementById('orb-toggle');
+  let ShaderMount = null, meshFrag = null, glReady = false;
+
+  // hex (#rrggbb) -> [r,g,b,a] 0..1
+  const rgba = (hex, a=1) => {
+    const n = parseInt(hex.slice(1), 16);
+    return [((n>>16)&255)/255, ((n>>8)&255)/255, (n&255)/255, a];
+  };
+  const MESH_COLORS = ['#00b0d5','#0064d5','#6b5bff','#c84bff','#00d5b0'].map(c => rgba(c));
+
+  async function loadGL() {
+    try {
+      const mod = await import('https://esm.sh/@paper-design/shaders@0.0.76');
+      ShaderMount = mod.ShaderMount; meshFrag = mod.meshGradientFragmentShader;
+      glReady = !!(ShaderMount && meshFrag);
+    } catch (e) { glReady = false; console.warn('Paper Shaders CDN failed, using CSS orb', e); }
+  }
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let mounted = [];
+  function clearMounts() { mounted.forEach(m => { try { m.dispose?.(); } catch(_){} }); mounted = []; }
+
+  function mountOrbs() {
+    clearMounts();
+    const active = document.querySelector('.variant.active');
+    const wrap = active?.querySelector('.orb-wrap');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    if (useGL && glReady) {
+      const host = document.createElement('div'); host.className = 'orb-gl'; wrap.appendChild(host);
+      const m = new ShaderMount(host, meshFrag, {
+        u_colors: MESH_COLORS, u_colorsCount: MESH_COLORS.length,
+        u_distortion: 0.85, u_swirl: 0.6,
+      }, undefined, reduce ? 0 : 0.4);
+      mounted.push(m);
+    } else {
+      const d = document.createElement('div'); d.className = 'orb-css'; wrap.appendChild(d);
+    }
+  }
+
+  toggle.addEventListener('click', () => {
+    useGL = !useGL;
+    toggle.textContent = useGL ? '🎨 Paper Shaders (mesh)' : '✨ CSS-gradient orb';
+    mountOrbs();
+  });
+
+  await loadGL();
+  if (!glReady) { useGL = false; toggle.textContent = '✨ CSS-gradient orb'; toggle.title = 'Paper Shaders CDN niet geladen — CSS-fallback'; }
+  mountOrbs();
+</script>
+</body>
+</html>

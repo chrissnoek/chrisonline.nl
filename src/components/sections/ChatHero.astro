@@ -1,0 +1,21 @@
+---
+/**
+ * Chat-hero — de nieuwe, input-first hero. Mount het React-chat-eiland.
+ * `client:load` omdat dit de hero is en meteen interactief moet zijn.
+ */
+import ChatWidget from '../chat/ChatWidget';
+import '../chat/chat.css';
+---
+
+<section class="chat-hero" aria-label="AI-assistent">
+  <ChatWidget client:load />
+</section>
+
+<style>
+  .chat-hero {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+  }
+</style>

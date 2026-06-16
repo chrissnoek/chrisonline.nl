@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import IntroOverlay from '../components/IntroOverlay.astro';
 import ParticleField from '../components/ParticleField.astro';
-import Hero from '../components/sections/Hero.astro';
+import ChatHero from '../components/sections/ChatHero.astro';
 import About from '../components/sections/About.astro';
 import Services from '../components/sections/Services.astro';
 import Projects from '../components/sections/Projects.astro';
@@ -12,11 +12,14 @@ import ContactCta from '../components/sections/ContactCta.astro';
 <BaseLayout>
   <IntroOverlay />
   <ParticleField />
-  <Hero />
 
+  {/* Nieuwe input-first hero: praat met de AI-assistent. */}
+  <ChatHero />
+
+  {/* Sketch 003B: Werk eerst (proof) → Over mij + coverfoto → Diensten. */}
+  <Projects />
   <About />
   <Services />
-  <Projects />
 
   <ContactCta />
 </BaseLayout>

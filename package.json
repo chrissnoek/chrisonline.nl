@@ -16,14 +16,26 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@ai-sdk/groq": "^3.0.41",
+    "@ai-sdk/react": "^3.0.207",
     "@astrojs/mdx": "^6.0.3",
+    "@astrojs/netlify": "^7.0.13",
+    "@astrojs/react": "^5.0.7",
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/vue": "^6.0.1",
+    "@paper-design/shaders": "^0.0.76",
     "@tailwindcss/vite": "^4.3.0",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.0",
+    "ai": "^6.0.205",
     "astro": "^6.4.5",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "resend": "^6.12.4",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.3.0",
-    "vue": "^3.5.35"
+    "vue": "^3.5.35",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",

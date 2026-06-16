@@ -3,18 +3,26 @@ import { defineConfig, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
 import vue from '@astrojs/vue';
+import react from '@astrojs/react';
+import netlify from '@astrojs/netlify';
 import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
   // Required for absolute canonical URLs, Open Graph images and the sitemap.
   site: 'https://chrisonline.nl',
-  // Static output is the default in Astro v6; stated here for clarity.
+  // De site blijft statisch: elke pagina wordt geprerenderd, behalve de enkele
+  // on-demand route(s) die expliciet `export const prerender = false` zetten
+  // (de AI-chat-endpoint). De Netlify-adapter draait die als één Function.
   output: 'static',
+  adapter: netlify(),
 
   integrations: [
     mdx(),
     vue(),
+    // React draait naast Vue: het chat-eiland gebruikt @ai-sdk/react (useChat).
+    // Elk eiland levert alleen zijn eigen runtime, en alleen op pagina's waar het staat.
+    react(),
     sitemap({
       // A clean, modern lastmod helps crawlers; one entry per page.
       changefreq: 'monthly',
