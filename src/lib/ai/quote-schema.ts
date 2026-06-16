@@ -28,6 +28,19 @@ const singleLine = (max: number) =>
     .max(max)
     .refine((s) => !hasControlChar(s), 'Mag geen regeleinden of speciale tekens bevatten.');
 
+/**
+ * Omschrijving — mag meerdere regels (newline/tab OK), maar komt ALLEEN in de body,
+ * nooit in de subject. Andere control-chars worden geweigerd. De validatie is
+ * identiek voor tool én endpoint; alleen de model-facing `.describe()` verschilt
+ * (zie quoteToolSchema), zodat het model hier álle scope-details in giet.
+ */
+const omschrijving = z
+  .string()
+  .trim()
+  .min(10)
+  .max(2000)
+  .refine((s) => !hasDisallowedControlChar(s), 'Bevat ongeldige tekens.');
+
 // Velden die identiek zijn voor tool én endpoint.
 const sharedShape = {
   /** Naam — komt in de subject-regel, dus strikt één regel. */
@@ -37,16 +50,7 @@ const sharedShape = {
   projecttype: z.enum(['website', 'webshop', 'advertising', 'onderhoud', 'anders']),
   budget: z.enum(['<2k', '2k-5k', '5k-10k', '10k+', 'onbekend']),
   timeline: z.enum(['asap', '1-3-maanden', '3-6-maanden', 'flexibel']),
-  /**
-   * Omschrijving — mag meerdere regels (newline/tab OK), maar komt ALLEEN in de body,
-   * nooit in de subject. Andere control-chars worden geweigerd.
-   */
-  omschrijving: z
-    .string()
-    .trim()
-    .min(10)
-    .max(2000)
-    .refine((s) => !hasDisallowedControlChar(s), 'Bevat ongeldige tekens.'),
+  omschrijving,
 };
 
 /**
@@ -66,6 +70,15 @@ export const quoteSchema = z.object({
  */
 export const quoteToolSchema = z.object({
   ...sharedShape,
+  // Override met een sturende, model-facing beschrijving (validatie identiek).
+  omschrijving: omschrijving.describe(
+    'Een volledige samenvatting van het project in lopende tekst, met ALLE scope-details die ' +
+      'je hebt uitgevraagd: aantal en soorten pagina\'s, gewenste functionaliteiten ' +
+      '(bv. contactformulier, projectoverzicht/detailpagina\'s, boekingsmodule, login), ' +
+      'design (maatwerk of thema), stijl/sfeer en mate van animatie, koppelingen/integraties, ' +
+      'meertaligheid, wie de content levert, en eventueel aantal producten bij een webshop. ' +
+      'Vat samen wat de bezoeker zei; verzin geen details die niet besproken zijn.',
+  ),
   email: z
     .string()
     .trim()

@@ -96,12 +96,51 @@
   background:
     radial-gradient(60% 55% at 35% 30%, rgba(255, 255, 255, 0.5), transparent 55%),
     conic-gradient(from 0deg at 50% 50%, #00b0d5, #6b5bff, #c84bff, #00d5b0, #0064d5, #00b0d5);
-  animation: cw-orb-spin 18s linear infinite;
+  /* Merkbaar zichtbare rust-rotatie (was 18s). */
+  animation: cw-orb-spin 9s linear infinite;
 }
 @keyframes cw-orb-spin {
   to {
     transform: rotate(1turn);
   }
+}
+
+/* ---- orb "denkt na": glow-pulse + versnelling ---- */
+/* De halo ademt een zachte merk-glow terwijl de assistent genereert. Werkt
+   voor zowel de WebGL- als de CSS-orb (effect ligt op de halo-container). */
+.orb-halo--busy {
+  animation: cw-orb-pulse 1.5s var(--ease-out-soft, ease-in-out) infinite;
+}
+@keyframes cw-orb-pulse {
+  0%,
+  100% {
+    filter: blur(24px);
+    opacity: 0.65;
+  }
+  50% {
+    filter: blur(30px) brightness(1.18) saturate(1.25);
+    opacity: 0.92;
+  }
+}
+/* In de actieve (thread-)staat is de halo kleiner en zwakker; behoud die
+   verhoudingen tijdens het pulseren. */
+.cw-root--active .orb-halo--busy {
+  animation: cw-orb-pulse-sm 1.5s var(--ease-out-soft, ease-in-out) infinite;
+}
+@keyframes cw-orb-pulse-sm {
+  0%,
+  100% {
+    filter: blur(24px);
+    opacity: 0.4;
+  }
+  50% {
+    filter: blur(30px) brightness(1.18) saturate(1.25);
+    opacity: 0.7;
+  }
+}
+/* CSS-fallback-orb draait sneller terwijl hij "nadenkt". */
+.orb-halo--busy .orb-css {
+  animation-duration: 3.5s;
 }
 
 /* ---- greeting ---- */
@@ -330,6 +369,49 @@
   }
 }
 
+/* ---- typing-indicator ("Chris denkt na" + stuiterende dots) ---- */
+.cw-typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  animation: cw-fade 0.35s var(--ease-out-soft);
+}
+.cw-typing-label {
+  color: var(--cw-muted);
+  font-size: 0.95rem;
+}
+.cw-typing-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+}
+.cw-typing-dots span {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-accent-500);
+  /* Stuitert in volgorde op en neer met een korte fase-verschuiving. */
+  animation: cw-typing-bounce 1.2s var(--ease-out-soft, ease-in-out) infinite;
+}
+.cw-typing-dots span:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.cw-typing-dots span:nth-child(3) {
+  animation-delay: 0.36s;
+}
+@keyframes cw-typing-bounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+  30% {
+    transform: translateY(-0.4rem);
+    opacity: 1;
+  }
+}
+
 /* ---- project gallery cards ---- */
 .cw-gallery {
   display: grid;
@@ -481,11 +563,18 @@
 
 @media (prefers-reduced-motion: reduce) {
   .orb-css,
+  .orb-halo--busy,
+  .cw-root--active .orb-halo--busy,
   .cw-chip::after,
   .cw-text,
   .cw-skeleton,
+  .cw-typing-dots span,
   .cw-root--active .orb-halo {
     animation: none !important;
     transition: none !important;
+  }
+  /* Statisch alternatief voor de typing-dots: vol zichtbaar, geen beweging. */
+  .cw-typing-dots span {
+    opacity: 1;
   }
 }
