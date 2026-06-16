@@ -25,7 +25,8 @@ const pillars = [
 
 <section id="over" class="scroll-mt-24" aria-labelledby="about-heading">
   <div class="container-page py-section">
-    <div class="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+    <!-- Bovenste blok: tekst links, portretfoto rechts. -->
+    <div class="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
       <div class="reveal-up">
         <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
           Over mij
@@ -33,37 +34,6 @@ const pillars = [
         <h2 id="about-heading" class="lift-in text-h2 mt-3 font-bold text-balance">
           Ik bouw geen websites. Ik bouw digitale producten die je bedrijf laten groeien.
         </h2>
-
-        <!-- Portretfoto met visitekaartje-overlay (verhuisd vanuit de oude hero). -->
-        <div class="relative mx-auto mt-8 w-full max-w-sm">
-          <div
-            class="from-accent-500/20 absolute -inset-3 -z-10 rounded-[1.75rem] bg-gradient-to-tr to-transparent blur-2xl"
-            aria-hidden="true"
-          >
-          </div>
-          <Image
-            src={chris}
-            alt={`Portretfoto van ${SITE.author}`}
-            widths={[320, 480, 640, 800]}
-            sizes="(max-width: 1024px) 22rem, 24rem"
-            format="avif"
-            quality="high"
-            class="rounded-card shadow-card aspect-[3/4] w-full object-cover"
-          />
-          <!-- Visitekaartje-overlay -->
-          <div
-            class="bg-ink-900/80 absolute bottom-4 left-1/2 w-[90%] -translate-x-1/2 rounded-2xl border border-white/10 px-5 py-4 text-white backdrop-blur-md"
-          >
-            <p class="font-semibold">{SITE.author}</p>
-            <p class="text-sm text-slate-300">{SITE.jobTitle}</p>
-            <a
-              href={`mailto:${CONTACT.email}`}
-              class="text-accent-300 mt-1 inline-block text-sm hover:underline"
-            >
-              {CONTACT.email}
-            </a>
-          </div>
-        </div>
 
         <div class="text-lead mt-8 space-y-4 text-pretty text-[var(--fg-muted)]">
           <p>
@@ -80,47 +50,59 @@ const pillars = [
         </div>
       </div>
 
-      <!-- Pijlers als verticale "spine": gradient-lijn met hexagon-knopen
-           (de vorm van het logo-mark). -->
-      <ul class="pillar-spine relative flex flex-col gap-12 self-center lg:gap-14">
-        {
-          pillars.map((p) => (
-            <li class="reveal group relative flex items-start gap-6">
-              <span class="pillar-node grid shrink-0 place-items-center text-white">
-                <Icon name={p.icon} size={24} />
-              </span>
-              <div class="pt-1">
-                <h3 class="text-xl font-bold tracking-tight transition-colors group-hover:text-[var(--accent-text)]">
-                  {p.title}
-                </h3>
-                <p class="mt-2 max-w-md leading-relaxed text-[var(--fg-muted)]">{p.text}</p>
-              </div>
-            </li>
-          ))
-        }
-      </ul>
+      <!-- Portretfoto met visitekaartje-overlay (verhuisd vanuit de oude hero). -->
+      <div class="reveal-up relative mx-auto w-full max-w-sm">
+        <div
+          class="from-accent-500/20 absolute -inset-3 -z-10 rounded-[1.75rem] bg-gradient-to-tr to-transparent blur-2xl"
+          aria-hidden="true"
+        >
+        </div>
+        <Image
+          src={chris}
+          alt={`Portretfoto van ${SITE.author}`}
+          widths={[320, 480, 640, 800]}
+          sizes="(max-width: 1024px) 22rem, 24rem"
+          format="avif"
+          quality="high"
+          class="rounded-card shadow-card aspect-[3/4] w-full object-cover"
+        />
+        <!-- Visitekaartje-overlay -->
+        <div
+          class="bg-ink-900/80 absolute bottom-4 left-1/2 w-[90%] -translate-x-1/2 rounded-2xl border border-white/10 px-5 py-4 text-white backdrop-blur-md"
+        >
+          <p class="font-semibold">{SITE.author}</p>
+          <p class="text-sm text-slate-300">{SITE.jobTitle}</p>
+          <a
+            href={`mailto:${CONTACT.email}`}
+            class="text-accent-300 mt-1 inline-block text-sm hover:underline"
+          >
+            {CONTACT.email}
+          </a>
+        </div>
+      </div>
     </div>
+
+    <!-- Pijlers als horizontale rij over de volle breedte; hexagon-knoop
+         (de vorm van het logo-mark) boven titel + tekst. -->
+    <ul class="mt-16 grid gap-10 sm:grid-cols-3 lg:mt-20 lg:gap-12">
+      {
+        pillars.map((p) => (
+          <li class="reveal group">
+            <span class="pillar-node grid place-items-center text-white">
+              <Icon name={p.icon} size={24} />
+            </span>
+            <h3 class="mt-5 text-xl font-bold tracking-tight transition-colors group-hover:text-[var(--accent-text)]">
+              {p.title}
+            </h3>
+            <p class="mt-2 leading-relaxed text-[var(--fg-muted)]">{p.text}</p>
+          </li>
+        ))
+      }
+    </ul>
   </div>
 </section>
 
 <style>
-  /* Verbindingslijn door de knoop-centra; loopt onderaan uit in transparant. */
-  .pillar-spine::before {
-    content: '';
-    position: absolute;
-    top: 1.75rem;
-    bottom: 2.5rem;
-    left: 1.75rem;
-    width: 2px;
-    transform: translateX(-50%);
-    background: linear-gradient(
-      180deg,
-      var(--color-accent-500) 0%,
-      color-mix(in srgb, var(--color-accent-500) 35%, transparent) 70%,
-      transparent 100%
-    );
-  }
-
   /* Hexagon-knoop in de vorm van het logo-mark, gevuld met het merk-gradient.
      De clip-path zit op een ::before zodat de drop-shadow op het element zelf
      de geclipte vorm volgt (clip op hetzelfde element zou de gloed wegknippen). */
