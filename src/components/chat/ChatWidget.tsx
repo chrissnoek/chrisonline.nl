@@ -79,7 +79,7 @@ export default function ChatWidget() {
 
   return (
     <div className={`cw-root ${started ? 'cw-root--active' : ''}`}>
-      <Orb />
+      <Orb busy={busy} />
 
       {!started ? (
         <div className="cw-greet">
@@ -97,7 +97,7 @@ export default function ChatWidget() {
           {messages.map((m) => (
             <Message key={m.id} message={m} bookingUrl={BOOKING_URL} />
           ))}
-          {status === 'submitted' ? <Skeleton /> : null}
+          {status === 'submitted' ? <TypingBubble /> : null}
         </div>
       )}
 
@@ -151,6 +151,22 @@ function Skeleton() {
     <div className="cw-msg cw-msg--assistant">
       <div className="cw-skeleton" />
       <div className="cw-skeleton" style={{ width: '70%' }} />
+    </div>
+  );
+}
+
+/* Typing-indicator: assistant-bubbel met label + drie stuiterende dots.
+   Toont tijdens 'submitted' (na versturen, vóór de eerste tokens). De orb
+   gloeit en versnelt ondertussen via de `busy`-prop. */
+function TypingBubble() {
+  return (
+    <div className="cw-msg cw-msg--assistant cw-typing" aria-label="Chris denkt na">
+      <span className="cw-typing-label">Chris denkt na</span>
+      <span className="cw-typing-dots" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+      </span>
     </div>
   );
 }

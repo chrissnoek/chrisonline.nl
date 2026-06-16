@@ -132,10 +132,10 @@ export default function QuoteForm({ initial }: { initial: QuoteFields }) {
         <label className="cw-quote-full">
           Omschrijving
           <textarea
-            rows={3}
+            rows={5}
             value={f.omschrijving ?? ''}
             onChange={set('omschrijving')}
-            placeholder="Wat wil je laten maken?"
+            placeholder="Wat wil je laten maken? Bijv. aantal/soorten pagina's, functies (formulier, projectoverzicht, boekingsmodule…), maatwerk of thema, stijl & animatie, koppelingen."
           />
         </label>
       </div>
