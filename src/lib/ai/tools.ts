@@ -61,7 +61,7 @@ export const showProjects = tool({
 export const openContactForm = tool({
   description:
     'Open het contactformulier in de chat. Gebruik dit als de bezoeker contact wil, een vraag voor ' +
-    'Chris heeft of wil overleggen — maar (nog) geen concrete offerte aanvraagt.',
+    'Chris heeft of wil overleggen, maar (nog) geen concrete offerte aanvraagt.',
   inputSchema: z.object({
     reason: z
       .string()
@@ -80,7 +80,7 @@ export const openContactForm = tool({
 export const submitQuoteRequest = tool({
   description:
     'Vul een offerte-aanvraag in en toon een BEVESTIGINGSKAART aan de bezoeker. ' +
-    'Dit verstuurt NIETS — de bezoeker moet zelf op "Verstuur" klikken. ' +
+    'Dit verstuurt NIETS; de bezoeker moet zelf op "Verstuur" klikken. ' +
     'Roep dit pas aan als alle velden via het gesprek zijn verzameld.',
   inputSchema: quoteToolSchema,
   // GEEN execute → puur client-side; het model kan hiermee NOOIT een e-mail sturen.

@@ -47,7 +47,9 @@ export default function QuoteForm({ initial }: { initial: QuoteFields }) {
       const data = await res.json().catch(() => ({}));
       setErrorMsg(
         data?.message ??
-          (res.status === 422 ? 'Controleer de velden — er klopt iets niet.' : 'Versturen lukte niet.'),
+          (res.status === 422
+            ? 'Controleer de velden, er klopt iets niet.'
+            : 'Versturen lukte niet.'),
       );
       setStatus('error');
     } catch {
@@ -60,7 +62,9 @@ export default function QuoteForm({ initial }: { initial: QuoteFields }) {
     return (
       <div className="cw-quote cw-quote--sent" role="status">
         <strong>✓ Verstuurd!</strong>
-        <p>Bedankt {f.naam?.split(' ')[0] || ''}, je aanvraag staat bij me. Je hoort snel van me.</p>
+        <p>
+          Bedankt {f.naam?.split(' ')[0] || ''}, je aanvraag staat bij me. Je hoort snel van me.
+        </p>
       </div>
     );
   }
@@ -79,7 +83,12 @@ export default function QuoteForm({ initial }: { initial: QuoteFields }) {
         </label>
         <label>
           E-mail
-          <input type="email" value={f.email ?? ''} onChange={set('email')} placeholder="jij@bedrijf.nl" />
+          <input
+            type="email"
+            value={f.email ?? ''}
+            onChange={set('email')}
+            placeholder="jij@bedrijf.nl"
+          />
         </label>
         <label>
           Type

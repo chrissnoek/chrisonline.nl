@@ -57,7 +57,10 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const rate = await checkRateLimit(ip);
   if (!rate.ok) {
     return new Response(
-      JSON.stringify({ error: 'rate_limited', message: 'Even rustig aan — probeer het zo nog eens.' }),
+      JSON.stringify({
+        error: 'rate_limited',
+        message: 'Even rustig aan, probeer het zo nog eens.',
+      }),
       {
         status: 429,
         headers: {
@@ -70,7 +73,10 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const ceiling = await checkDailyCeiling();
   if (!ceiling.ok) {
     return json(
-      { error: 'capacity', message: 'De chat is even offline (dagcapaciteit bereikt). Probeer het morgen weer.' },
+      {
+        error: 'capacity',
+        message: 'De chat is even offline (dagcapaciteit bereikt). Probeer het morgen weer.',
+      },
       503,
     );
   }

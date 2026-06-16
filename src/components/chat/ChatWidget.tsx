@@ -16,13 +16,23 @@ import ProjectGallery from './ProjectGallery';
 import QuoteForm from './QuoteForm';
 
 const CHIPS = [
-  { label: '👀 Laat recent werk zien', text: 'Laat eens wat van je recente werk zien — het liefst een webshop en een maatwerk-site.' },
-  { label: '💶 Wat kost mijn project?', text: 'Ik plan een nieuwe website. Kun je me helpen aan een prijsindicatie en een offerte?' },
-  { label: '📅 Plan een gesprek', text: 'Ik wil mijn project even bespreken. Kunnen we een kort gesprek inplannen?' },
+  {
+    label: '👀 Laat recent werk zien',
+    text: 'Laat eens wat van je recente werk zien, het liefst een webshop en een maatwerk-site.',
+  },
+  {
+    label: '💶 Wat kost mijn project?',
+    text: 'Ik plan een nieuwe website. Kun je me helpen aan een prijsindicatie en een offerte?',
+  },
+  {
+    label: '📅 Plan een gesprek',
+    text: 'Ik wil mijn project even bespreken. Kunnen we een kort gesprek inplannen?',
+  },
 ];
 
 const BOOKING_URL =
-  (typeof import.meta !== 'undefined' && (import.meta as { env?: Record<string, string> }).env?.PUBLIC_BOOKING_URL) ||
+  (typeof import.meta !== 'undefined' &&
+    (import.meta as { env?: Record<string, string> }).env?.PUBLIC_BOOKING_URL) ||
   'https://cal.com/chrissnoek';
 
 export default function ChatWidget() {
@@ -37,7 +47,11 @@ export default function ChatWidget() {
       if (toolCall.dynamic) return;
       // Pure UI-signaal-tools meteen oplossen (zonder await → geen deadlock).
       if (toolCall.toolName === 'openContactForm' || toolCall.toolName === 'bookCall') {
-        addToolOutput({ tool: toolCall.toolName, toolCallId: toolCall.toolCallId, output: { shown: true } });
+        addToolOutput({
+          tool: toolCall.toolName,
+          toolCallId: toolCall.toolCallId,
+          output: { shown: true },
+        });
       }
       // showProjects: server-executed (geen actie nodig).
       // submitQuoteRequest: door de gebruiker bevestigd via de kaart (geen auto-output).
@@ -64,15 +78,17 @@ export default function ChatWidget() {
   }
 
   return (
-    <div className={`cw-root${started ? ' cw-root--active' : ''}`}>
+    <div className={`cw-root${started ? 'cw-root--active' : ''}`}>
       <Orb />
 
       {!started ? (
         <div className="cw-greet">
-          <p className="cw-greet-sub">Hoi, ik ben Chris Snoek — freelance webdeveloper &amp; UI/UX-designer</p>
+          <p className="cw-greet-sub">
+            Hoi, ik ben Chris Snoek, freelance webdeveloper &amp; UI/UX-designer
+          </p>
           <h1 className="cw-greet-main">Wat wil je laten bouwen?</h1>
           <p className="cw-greet-subline">
-            Stel je vraag, dan laat ik je meteen passend werk en een prijsindicatie zien — geen
+            Stel je vraag, dan laat ik je meteen passend werk en een prijsindicatie zien. Geen
             contactformulier, gewoon typen.
           </p>
         </div>
@@ -96,11 +112,21 @@ export default function ChatWidget() {
             disabled={false}
           />
           {busy ? (
-            <button type="button" className="cw-send cw-send--stop" onClick={() => stop()} aria-label="Stop">
+            <button
+              type="button"
+              className="cw-send cw-send--stop"
+              onClick={() => stop()}
+              aria-label="Stop"
+            >
               ◼
             </button>
           ) : (
-            <button type="submit" className="cw-send" aria-label="Verstuur" disabled={!input.trim()}>
+            <button
+              type="submit"
+              className="cw-send"
+              aria-label="Verstuur"
+              disabled={!input.trim()}
+            >
               ↑
             </button>
           )}
@@ -171,7 +197,13 @@ function Message({ message, bookingUrl }: { message: any; bookingUrl: string }) 
         // bookCall → boekingslink.
         if (part.type === 'tool-bookCall') {
           return (
-            <a key={i} className="cw-inline-cta" href={bookingUrl} target="_blank" rel="noopener noreferrer">
+            <a
+              key={i}
+              className="cw-inline-cta"
+              href={bookingUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               📅 Plan een gesprek
             </a>
           );
