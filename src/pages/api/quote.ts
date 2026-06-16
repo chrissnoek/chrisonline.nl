@@ -21,7 +21,10 @@ export const POST: APIRoute = async ({ request }) => {
   const apiKey = import.meta.env.RESEND_API_KEY;
   if (!apiKey) {
     return json(
-      { error: 'quote_unconfigured', message: 'E-mail is nog niet geconfigureerd (RESEND_API_KEY ontbreekt).' },
+      {
+        error: 'quote_unconfigured',
+        message: 'E-mail is nog niet geconfigureerd (RESEND_API_KEY ontbreekt).',
+      },
       503,
     );
   }
@@ -46,10 +49,10 @@ export const POST: APIRoute = async ({ request }) => {
   const FROM = import.meta.env.QUOTE_FROM_EMAIL ?? 'onboarding@resend.dev';
 
   // Subject uit gevalideerde, één-regel-waarden (naam is CRLF-vrij gegarandeerd door het schema).
-  const subject = `Nieuwe offerteaanvraag: ${q.projecttype} — ${q.naam}`;
+  const subject = `Nieuwe offerteaanvraag: ${q.projecttype} van ${q.naam}`;
   const body =
     `Naam: ${q.naam}\n` +
-    `Bedrijf: ${q.bedrijf ?? '—'}\n` +
+    `Bedrijf: ${q.bedrijf ?? 'niet opgegeven'}\n` +
     `E-mail: ${q.email}\n` +
     `Type: ${q.projecttype}\n` +
     `Budget: ${q.budget}\n` +
@@ -75,8 +78,8 @@ export const POST: APIRoute = async ({ request }) => {
     await resend.emails.send({
       from: FROM,
       to: q.email,
-      subject: 'Bedankt voor je aanvraag — Chris Online',
-      text: `Hoi ${q.naam},\n\nBedankt voor je aanvraag. Chris neemt snel contact met je op.\n\n— Chris Online`,
+      subject: 'Bedankt voor je aanvraag bij Chris Online',
+      text: `Hoi ${q.naam},\n\nBedankt voor je aanvraag. Chris neemt snel contact met je op.\n\nGroet,\nChris Online`,
     });
   }
 

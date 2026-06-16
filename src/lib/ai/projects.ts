@@ -40,10 +40,10 @@ export const PROJECTS: CatalogProject[] = entries
     url: e.data.url ?? e.data.opdrachtgever?.url ?? e.data.externalLinks?.[0]?.url,
   }));
 
-/** Eén regel per project — compact genoeg om volledig in de systeemprompt te passen. */
+/** Eén regel per project, compact genoeg om volledig in de systeemprompt te passen. */
 export const PROJECT_CATALOG: string = PROJECTS.map(
   (p) =>
-    `- ${p.title} (${p.client}) — ${p.role}; skills: ${p.skills.join(', ') || '—'}. ${p.summary}`,
+    `- ${p.title} (${p.client}); rol: ${p.role}; skills: ${p.skills.join(', ') || 'onbekend'}. ${p.summary}`,
 ).join('\n');
 
 /**
