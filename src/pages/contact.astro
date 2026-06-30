@@ -104,4 +104,19 @@ const description =
     <textarea name="message"></textarea>
     <input name="bot-field" />
   </form>
+
+  <!-- Verborgen blueprint voor de offerte-aanvragen uit de chat. De
+       bevestigingskaart in de chat POST't naar /api/quote, die de aanvraag
+       server-side doorzet naar dit Netlify-form ("offerte"). Dit form bestaat
+       puur zodat Netlify het bij de build detecteert. -->
+  <form name="offerte" method="POST" data-netlify="true" action="/bedankt/" hidden>
+    <input type="hidden" name="form-name" value="offerte" />
+    <input type="text" name="naam" />
+    <input type="text" name="bedrijf" />
+    <input type="email" name="email" />
+    <input type="text" name="projecttype" />
+    <input type="text" name="budget" />
+    <input type="text" name="timeline" />
+    <textarea name="omschrijving"></textarea>
+  </form>
 </BaseLayout>

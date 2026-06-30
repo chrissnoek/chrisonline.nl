@@ -5,10 +5,10 @@
  * ALS de server-endpoint (`/api/quote.ts`, voor onafhankelijke her-validatie),
  * zodat de twee nooit uit elkaar kunnen lopen.
  *
- * Beveiliging: vrije-tekstvelden die in de e-mail (m.n. de subject-regel) terechtkomen
- * mogen GEEN control-/newline-tekens bevatten — anders is header-injection in theorie
- * mogelijk als de transport ooit wisselt (nu draait het via Resend's HTTPS-JSON-API).
- * Daarom een expliciete guard i.p.v. te leunen op de transport.
+ * Beveiliging: vrije-tekstvelden die in de aanvraag terechtkomen mogen GEEN
+ * control-/newline-tekens bevatten — anders is header-/veld-injectie in theorie
+ * mogelijk als de transport ooit wisselt (nu loopt het via Netlify Forms als
+ * URL-encoded POST). Daarom een expliciete guard i.p.v. te leunen op de transport.
  */
 import { z } from 'zod';
 
