@@ -33,7 +33,7 @@ const CHIPS = [
 const BOOKING_URL =
   (typeof import.meta !== 'undefined' &&
     (import.meta as { env?: Record<string, string> }).env?.PUBLIC_BOOKING_URL) ||
-  'https://cal.com/chrissnoek';
+  'https://cal.eu/chrissnoek/30min';
 
 export default function ChatWidget() {
   const [input, setInput] = useState('');
