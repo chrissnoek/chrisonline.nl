@@ -170,16 +170,19 @@ export const SERVICES: Service[] = [
  */
 export const COLLAB_OPTIONS = [
   {
+    icon: 'pen',
     title: 'Alleen ontwerp',
     description:
       'Perfect als je al developers of een marketingteam hebt. Ik lever een ontwikkelklaar ontwerp aan.',
   },
   {
+    icon: 'palette',
     title: 'Branding + website',
     description:
       'Een complete visuele identiteit gecombineerd met de development van je website of webshop.',
   },
   {
+    icon: 'chart',
     title: 'Full digital package',
     description:
       'Branding, website of webshop én analytics: het hele traject van strategie tot livegang en onderhoud.',

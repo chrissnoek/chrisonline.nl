@@ -1,0 +1,204 @@
+---
+/**
+ * Toegankelijk contactformulier met live validatie en AJAX-submit naar
+ * Netlify Forms. Vroeger een Vue-eiland; nu server-gerenderde markup met een
+ * klein vanilla-script — zelfde UX, zonder framework-runtime (−31 KB op /contact).
+ * Netlify detecteert het formulier bij de build via het blueprint-form in
+ * contact.astro (zelfde form-naam "contact").
+ */
+---
+
+<div id="contact-form-root">
+  <!-- Succes-status (verborgen tot een geslaagde submit) -->
+  <div
+    id="cf-success"
+    class="rounded-card border-accent-500/40 bg-accent-500/10 hidden border p-8 text-center"
+    role="status"
+    aria-live="polite"
+  >
+    <p class="text-lg font-semibold text-[var(--fg)]">Bedankt voor je bericht!</p>
+    <p class="mt-2 text-[var(--fg-muted)]">
+      Ik neem zo snel mogelijk contact met je op, meestal binnen één werkdag.
+    </p>
+    <button
+      type="button"
+      id="cf-again"
+      class="rounded-pill mt-5 border border-[var(--border)] px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-[var(--bg-alt)]"
+    >
+      Nog een bericht sturen
+    </button>
+  </div>
+
+  <form
+    id="cf-form"
+    name="contact"
+    method="POST"
+    data-netlify="true"
+    netlify-honeypot="bot-field"
+    class="grid gap-5"
+    novalidate
+  >
+    <input type="hidden" name="form-name" value="contact" />
+
+    <!-- Honeypot: verborgen voor mensen -->
+    <p class="hidden" aria-hidden="true">
+      <label>Niet invullen: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+    </p>
+
+    <div>
+      <label for="cf-name" class="mb-1.5 block text-sm font-medium text-[var(--fg)]"> Naam </label>
+      <input
+        id="cf-name"
+        name="name"
+        type="text"
+        autocomplete="name"
+        required
+        class="focus:border-accent-500 w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-[var(--fg)] transition-colors placeholder:text-[var(--fg-muted)]"
+        placeholder="Je naam"
+      />
+      <p id="cf-name-error" class="mt-1.5 hidden text-sm text-red-600 dark:text-red-400"></p>
+    </div>
+
+    <div>
+      <label for="cf-email" class="mb-1.5 block text-sm font-medium text-[var(--fg)]">
+        E-mailadres
+      </label>
+      <input
+        id="cf-email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        required
+        class="focus:border-accent-500 w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-[var(--fg)] transition-colors placeholder:text-[var(--fg-muted)]"
+        placeholder="naam@voorbeeld.nl"
+      />
+      <p id="cf-email-error" class="mt-1.5 hidden text-sm text-red-600 dark:text-red-400"></p>
+    </div>
+
+    <div>
+      <label for="cf-message" class="mb-1.5 block text-sm font-medium text-[var(--fg)]">
+        Bericht
+      </label>
+      <textarea
+        id="cf-message"
+        name="message"
+        rows="5"
+        required
+        class="focus:border-accent-500 w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-[var(--fg)] transition-colors placeholder:text-[var(--fg-muted)]"
+        placeholder="Vertel kort over je project of vraag…"></textarea>
+      <p id="cf-message-error" class="mt-1.5 hidden text-sm text-red-600 dark:text-red-400"></p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-4">
+      <button
+        type="submit"
+        id="cf-submit"
+        class="rounded-pill bg-accent-500 hover:bg-accent-600 inline-flex items-center justify-center px-7 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        Verstuur bericht
+      </button>
+      <p id="cf-fail" class="hidden text-sm text-red-600 dark:text-red-400" role="alert">
+        Er ging iets mis. Probeer het later opnieuw of mail direct.
+      </p>
+    </div>
+  </form>
+</div>
+
+<script>
+  function initContactForm() {
+    const form = document.getElementById('cf-form') as HTMLFormElement | null;
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = 'true';
+
+    const success = document.getElementById('cf-success')!;
+    const again = document.getElementById('cf-again')!;
+    const submitBtn = document.getElementById('cf-submit') as HTMLButtonElement;
+    const fail = document.getElementById('cf-fail')!;
+
+    type Field = 'name' | 'email' | 'message';
+    const fields: Field[] = ['name', 'email', 'message'];
+    const input = (f: Field) =>
+      document.getElementById(`cf-${f}`) as HTMLInputElement | HTMLTextAreaElement;
+    const errorEl = (f: Field) => document.getElementById(`cf-${f}-error`)!;
+    const touched = new Set<Field>();
+
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    function validate(f: Field): string {
+      const v = input(f).value;
+      if (f === 'name') return v.trim().length < 2 ? 'Vul je naam in.' : '';
+      if (f === 'email')
+        return !v
+          ? 'Vul je e-mailadres in.'
+          : !EMAIL_RE.test(v)
+            ? 'Vul een geldig e-mailadres in.'
+            : '';
+      return v.trim().length < 10 ? 'Schrijf een bericht van minimaal 10 tekens.' : '';
+    }
+
+    function render(f: Field) {
+      const msg = touched.has(f) ? validate(f) : '';
+      errorEl(f).textContent = msg;
+      errorEl(f).classList.toggle('hidden', !msg);
+      input(f).setAttribute('aria-invalid', String(!!msg));
+      if (msg) input(f).setAttribute('aria-describedby', `cf-${f}-error`);
+      else input(f).removeAttribute('aria-describedby');
+    }
+
+    for (const f of fields) {
+      input(f).addEventListener('blur', () => {
+        touched.add(f);
+        render(f);
+      });
+      // Live bijwerken zodra een veld al fout gemarkeerd is (zelfde gedrag als eerst).
+      input(f).addEventListener('input', () => render(f));
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      fields.forEach((f) => touched.add(f));
+      fields.forEach(render);
+      const honeypot = form.querySelector<HTMLInputElement>('[name="bot-field"]');
+      if (fields.some((f) => validate(f)) || honeypot?.value) {
+        // Focus naar het eerste foute veld voor toetsenbord/screenreader.
+        const first = fields.find((f) => validate(f));
+        if (first) input(first).focus();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Versturen…';
+      fail.classList.add('hidden');
+
+      const data = new URLSearchParams();
+      data.append('form-name', 'contact');
+      fields.forEach((f) => data.append(f, input(f).value));
+
+      try {
+        const res = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: data.toString(),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset();
+        touched.clear();
+        fields.forEach(render);
+        form.classList.add('hidden');
+        success.classList.remove('hidden');
+      } catch {
+        fail.classList.remove('hidden');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Verstuur bericht';
+      }
+    });
+
+    again.addEventListener('click', () => {
+      success.classList.add('hidden');
+      form.classList.remove('hidden');
+      input('name').focus();
+    });
+  }
+
+  document.addEventListener('astro:page-load', initContactForm);
+</script>

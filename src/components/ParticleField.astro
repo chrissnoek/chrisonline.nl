@@ -195,7 +195,7 @@
       const nieuwVh = Math.max(window.innerHeight, lvhProbe.offsetHeight || 0);
       const nieuwDpr = Math.min(window.devicePixelRatio || 1, 2);
       const sy = window.scrollY;
-      const hero = document.querySelector('section[aria-labelledby="hero-heading"]');
+      const hero = document.querySelector('.chat-hero');
       const about = document.getElementById('over');
       const nieuwFadeStart = hero ? hero.getBoundingClientRect().bottom + sy : nieuwVh;
       let nieuwVeldH = about ? about.getBoundingClientRect().bottom + sy : nieuwVh * 1.8;

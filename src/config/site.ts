@@ -49,6 +49,8 @@ export const CONTACT = {
   email: 'info@chrisonline.nl',
   /** Wordt gebruikt voor het mailto-fallback onderwerp. */
   emailSubject: 'Aanvraag via chrisonline.nl',
+  /** Boekingslink voor een (video)gesprek — zelfde bron als de chat (PUBLIC_BOOKING_URL). */
+  bookingUrl: import.meta.env.PUBLIC_BOOKING_URL || 'https://cal.eu/chrissnoek/30min',
 } as const;
 
 /**

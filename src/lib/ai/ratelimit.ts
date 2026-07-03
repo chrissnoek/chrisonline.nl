@@ -87,7 +87,9 @@ export function getClientIp(request: Request, clientAddress?: () => string): str
   return 'unknown';
 }
 
-export type LimitResult = { ok: true } | { ok: false; reason: 'rate' | 'ceiling'; retryAfter?: number };
+export type LimitResult =
+  | { ok: true }
+  | { ok: false; reason: 'rate' | 'ceiling'; retryAfter?: number };
 
 /** Per-IP sliding window (10/min + 50/dag). Fail-open bij Redis-storing. */
 export async function checkRateLimit(ip: string): Promise<LimitResult> {
@@ -97,7 +99,11 @@ export async function checkRateLimit(ip: string): Promise<LimitResult> {
     const [min, day] = await Promise.all([lim.min.limit(ip), lim.day.limit(ip)]);
     if (!min.success || !day.success) {
       const reset = !min.success ? min.reset : day.reset;
-      return { ok: false, reason: 'rate', retryAfter: Math.max(1, Math.ceil((reset - Date.now()) / 1000)) };
+      return {
+        ok: false,
+        reason: 'rate',
+        retryAfter: Math.max(1, Math.ceil((reset - Date.now()) / 1000)),
+      };
     }
     return { ok: true };
   } catch (err) {

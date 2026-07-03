@@ -19,6 +19,14 @@ import Icon from './Icon.astro';
     if (!btn) return;
     const isDark = document.documentElement.classList.contains('dark');
     btn.setAttribute('aria-pressed', String(isDark));
+
+    // Browser-UI (adresbalk) meekleuren met het ACTIEVE thema. De meta's hebben
+    // media-attributen voor de OS-voorkeur; na een handmatige toggle kloppen die
+    // niet meer — dan zetten we beide op de actieve kleur.
+    const color = isDark ? '#0E0F1C' : '#FFFFFF';
+    document
+      .querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')
+      .forEach((m) => (m.content = color));
   }
 
   function bindToggle() {

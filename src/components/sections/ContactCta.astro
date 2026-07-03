@@ -37,6 +37,15 @@ import Icon from '../Icon.astro';
             />
           </a>
           <a
+            href={CONTACT.bookingUrl}
+            target="_blank"
+            rel="noopener"
+            class="rounded-pill inline-flex items-center gap-2 border border-white/20 px-7 py-3.5 font-semibold text-white transition-colors hover:bg-white/10"
+          >
+            <Icon name="calendar" size={18} />
+            Plan een gesprek
+          </a>
+          <a
             href={`mailto:${CONTACT.email}`}
             class="rounded-pill inline-flex items-center gap-2 border border-white/20 px-7 py-3.5 font-semibold text-white transition-colors hover:bg-white/10"
           >

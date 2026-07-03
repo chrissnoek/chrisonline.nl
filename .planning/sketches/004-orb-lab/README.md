@@ -1,19 +1,21 @@
 ---
 sketch: 004
 name: orb-lab
-question: "What orb params (colors, distortion, swirl, speed, size, opacity, blur) make the halo orb feel premium AND keep text readable — and does the hexagon→orb morph land cleanly?"
-winner: "Levendig + halo 29vw/0.65/blur24 (mesh GL)"
+question: 'What orb params (colors, distortion, swirl, speed, size, opacity, blur) make the halo orb feel premium AND keep text readable — and does the hexagon→orb morph land cleanly?'
+winner: 'Levendig + halo 29vw/0.65/blur24 (mesh GL)'
 tags: [orb, tuning, motion, paper-shaders]
 ---
 
 # Sketch 004: Orb tuning lab
 
 ## Design Question
-Dial in the **halo orb** (001B) against the real hero composition — orb *behind* the greeting +
+
+Dial in the **halo orb** (001B) against the real hero composition — orb _behind_ the greeting +
 prompt + chips — and confirm the **hexagon→orb morph** (002B) lands on the tuned halo
 position/size. Output a copy-pasteable config for the real build.
 
 ## How to View
+
 open .planning/sketches/004-orb-lab/index.html
 
 - **Engine** (top): Paper mesh-gradient vs CSS-orb. Falls back to CSS if the CDN is blocked.
@@ -25,11 +27,13 @@ open .planning/sketches/004-orb-lab/index.html
 - **Export:** copy the JSON config — this becomes the orb component's props in the real build.
 
 ## What to Look For
+
 - Does the mesh orb read premium at large size + low opacity behind text? Is the text still readable?
 - Which preset is closest? Then fine-tune.
-- Morph: does the hexagon convincingly *become* the orb at your chosen size/center?
+- Morph: does the hexagon convincingly _become_ the orb at your chosen size/center?
 - Compare mesh vs CSS at the SAME settings — is the mesh worth the WebGL context, or is CSS close enough?
 
 ## Output
+
 The copied JSON config (colors + distortion/swirl/speed/scale/grain + halo size/opacity/blur)
 is the spec handed to the real orb component in Phase 3 of the build.

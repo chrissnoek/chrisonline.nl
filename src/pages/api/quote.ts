@@ -66,7 +66,10 @@ export const POST: APIRoute = async ({ request }) => {
       body: payload.toString(),
     });
     if (!res.ok) {
-      return json({ error: 'send_failed', message: `Netlify Forms gaf status ${res.status}.` }, 502);
+      return json(
+        { error: 'send_failed', message: `Netlify Forms gaf status ${res.status}.` },
+        502,
+      );
     }
   } catch (err) {
     return json(

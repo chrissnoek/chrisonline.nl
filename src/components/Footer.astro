@@ -54,6 +54,14 @@ const year = new Date().getFullYear();
         >
           {CONTACT.email}
         </a>
+        <a
+          href={CONTACT.bookingUrl}
+          target="_blank"
+          rel="noopener"
+          class="mt-1.5 block text-sm text-[var(--fg-muted)] transition-colors hover:text-[var(--accent-text)]"
+        >
+          Plan een (video)gesprek
+        </a>
         <ul class="mt-5 flex gap-2.5">
           {
             SOCIALS.map((social) => (

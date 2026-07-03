@@ -1,0 +1,88 @@
+---
+/**
+ * Muis-gevolgde spotlight op kaarten — het "mouse-reactive light"-motief dat
+ * het deeltjesveld (afstoting rond de cursor) doortrekt naar de kaarten.
+ *
+ * Gebruik: geef een kaart de class `spotlight-card`; dit component één keer op
+ * de pagina opnemen. Eén document-brede pointermove-listener zet --mx/--my op
+ * de kaart onder de cursor; CSS tekent er een cyaan lichtring + zachte wash.
+ *
+ * Guards: alleen bij échte hover-apparaten én zonder reduced-motion; de
+ * pseudo-elementen zijn pointer-events:none en puur decoratief.
+ */
+---
+
+<style is:global>
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .spotlight-card {
+      position: relative;
+    }
+    /* Lichtring: gradient-border via mask (alleen de rand licht op). */
+    .spotlight-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      border-radius: inherit;
+      border: 1px solid transparent;
+      background: radial-gradient(
+          200px circle at var(--mx, 50%) var(--my, 50%),
+          rgba(0, 176, 213, 0.65),
+          transparent 70%
+        )
+        border-box;
+      mask:
+        linear-gradient(#000 0 0) padding-box,
+        linear-gradient(#000 0 0) border-box;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.3s var(--ease-out-soft);
+      pointer-events: none;
+    }
+    /* Zachte wash over het vlak, zelfde brandpunt. */
+    .spotlight-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      border-radius: inherit;
+      background: radial-gradient(
+        260px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(0, 176, 213, 0.07),
+        transparent 65%
+      );
+      opacity: 0;
+      transition: opacity 0.3s var(--ease-out-soft);
+      pointer-events: none;
+    }
+    .spotlight-card:hover::before,
+    .spotlight-card:hover::after {
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  function initSpotlight() {
+    if (window.matchMedia('(hover: none)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // Eén listener voor de hele sessie (document overleeft View Transitions).
+    if (document.documentElement.dataset.spotlightBound) return;
+    document.documentElement.dataset.spotlightBound = 'true';
+
+    document.addEventListener(
+      'pointermove',
+      (e) => {
+        const target = e.target instanceof Element ? e.target : null;
+        const card = target?.closest<HTMLElement>('.spotlight-card');
+        if (!card) return;
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        card.style.setProperty('--my', `${e.clientY - r.top}px`);
+      },
+      { passive: true },
+    );
+  }
+
+  initSpotlight();
+</script>
