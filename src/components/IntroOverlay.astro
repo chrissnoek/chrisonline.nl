@@ -25,6 +25,11 @@
   <div class="io-panel io-panel-top"></div>
   <div class="io-panel io-panel-bottom"></div>
 
+  <!-- Gloeiende naadlijn: ontsteekt vlak vóór het doek opent en smeert uit
+       tot lichtlek terwijl de panelen splijten. (Het deeltjesveld-canvas wordt
+       hiervóór ingevoegd, dus de naad gloeit boven de deeltjes, onder het logo.) -->
+  <div class="io-seam"></div>
+
   <!-- Het podium: gecentreerde lockup -->
   <div class="io-stage">
     <div class="io-lockup">
@@ -91,6 +96,9 @@
          het React-orb-eiland dat er onder al gemount staat. -->
     <div class="io-bloom" aria-hidden="true"></div>
   </div>
+
+  <!-- Overslaan-hint: de intro was altijd al skipbaar, nu zégt hij het ook. -->
+  <div class="io-hint">klik of tik om over te slaan</div>
 
   <!-- Voortgangs-hairline onderin -->
   <div class="io-progress"></div>
@@ -186,6 +194,44 @@
     filter: blur(10px) saturate(135%);
   }
 
+  /* ── Naadlijn (lichtlek op de splitsing) ───────────────────────────── */
+  #intro-overlay .io-seam {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    transform: translateY(-50%) scaleX(0);
+    transform-origin: center;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(0, 176, 213, 0.9) 18%,
+      #ffffff 50%,
+      rgba(0, 176, 213, 0.9) 82%,
+      transparent
+    );
+    box-shadow:
+      0 0 24px 4px rgba(0, 176, 213, 0.55),
+      0 0 80px 18px rgba(0, 176, 213, 0.25);
+    opacity: 0;
+  }
+
+  /* ── Overslaan-hint ────────────────────────────────────────────────── */
+  #intro-overlay .io-hint {
+    position: absolute;
+    bottom: 1.4rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: rgba(236, 251, 255, 0.5);
+    opacity: 0;
+    pointer-events: none;
+  }
+
   /* Scroll-lock zolang de overlay bestaat; heft zichzelf op zodra de
      overlay uit de DOM is (skip of natuurlijk einde). */
   html[data-intro2='play'] body:has(#intro-overlay) {
@@ -240,8 +286,40 @@
     html[data-intro2='play'] #intro-overlay .io-panel-bottom {
       animation: io-split-down 0.75s var(--ease-out-soft) 1.85s both;
     }
+    /* Naad ontsteekt vóór de splitsing en smeert uit als lichtlek erná.
+       NB: de tweede (vertraagde) animatie moet `forwards` zijn — met `both`
+       zou de backwards-fill vóór de delay de basiswaarde afdwingen en de
+       eerste animatie overschrijven. */
+    html[data-intro2='play'] #intro-overlay .io-seam {
+      animation:
+        io-seam-in 0.5s var(--ease-out-soft) 1.35s both,
+        io-seam-out 0.6s ease-out 1.85s forwards;
+    }
+    /* Hint verschijnt rustig en verdwijnt zodra het doek opent. */
+    html[data-intro2='play'] #intro-overlay .io-hint {
+      animation:
+        io-hint-in 0.6s ease-out 1.1s both,
+        io-fade-out 0.3s ease-out 1.85s forwards;
+    }
     html[data-intro2='play'] #intro-overlay .io-progress {
-      animation: io-progress 2.4s linear 0.1s both;
+      animation:
+        io-progress 2.4s linear 0.1s both,
+        io-fade-out 0.3s ease-out 2.5s forwards;
+    }
+
+    /* ── Versnelde uitgang bij skip: het doek opent snel i.p.v. een harde
+          knip. De rest van de overlay fade't weg. ─────────────────────── */
+    html[data-intro2='play'] #intro-overlay.io-skipping .io-panel-top {
+      animation: io-split-up 0.3s cubic-bezier(0.4, 0, 1, 1) both;
+    }
+    html[data-intro2='play'] #intro-overlay.io-skipping .io-panel-bottom {
+      animation: io-split-down 0.3s cubic-bezier(0.4, 0, 1, 1) both;
+    }
+    html[data-intro2='play'] #intro-overlay.io-skipping .io-stage,
+    html[data-intro2='play'] #intro-overlay.io-skipping .io-seam,
+    html[data-intro2='play'] #intro-overlay.io-skipping .io-hint,
+    html[data-intro2='play'] #intro-overlay.io-skipping .io-progress {
+      animation: io-fade-out 0.18s ease-out both;
     }
 
     /* Header-logo blijft verborgen tot het vliegende logo geland is. */
@@ -299,6 +377,32 @@
       transform: scaleX(1);
     }
   }
+  @keyframes io-seam-in {
+    from {
+      opacity: 0;
+      transform: translateY(-50%) scaleX(0);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(-50%) scaleX(1);
+    }
+  }
+  /* Lichtlek: de naad rekt verticaal uit en dooft terwijl de panelen wijken. */
+  @keyframes io-seam-out {
+    from {
+      opacity: 1;
+      transform: translateY(-50%) scaleX(1) scaleY(1);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-50%) scaleX(1.04) scaleY(9);
+    }
+  }
+  @keyframes io-hint-in {
+    to {
+      opacity: 1;
+    }
+  }
   @keyframes io-header-logo-in {
     from {
       opacity: 0;
@@ -328,13 +432,20 @@
     let finished = false;
     const timers: number[] = [];
     const events = ['pointerdown', 'keydown', 'wheel', 'touchmove'] as const;
+    const gestart = performance.now();
+    const SPLIT_MS = 1850; // moment waarop het doek in de choreografie opent
 
-    /** Skip: spring direct naar de eindtoestand van de hele pagina. */
-    const skip = () => {
-      if (finished) return;
-      finished = true;
-      timers.forEach((t) => clearTimeout(t));
-      events.forEach((e) => window.removeEventListener(e, skip));
+    /** "Gewoon typen": na de landing meteen de chat-prompt focussen — alleen
+     *  op apparaten met muis/trackpad (geen toetsenbord-popup op touch). */
+    const focusPrompt = () => {
+      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+      overlay.ownerDocument
+        .querySelector<HTMLTextAreaElement>('.cw-prompt textarea')
+        ?.focus({ preventScroll: true });
+    };
+
+    /** Eindafhandeling van een skip: opruimen en de pagina in eindtoestand. */
+    const finalize = () => {
       // Vóór overlay.remove(), zodat luisteraars (deeltjesveld) hun canvas
       // nog uit de overlay kunnen halen.
       window.dispatchEvent(new Event('intro:end'));
@@ -342,6 +453,26 @@
       root.removeAttribute('data-intro2');
       root.removeAttribute('data-intro');
       overlay.remove();
+      focusPrompt();
+    };
+
+    /** Skip: vóór de splitsing opent het doek versneld (geen harde knip);
+     *  erna is de pagina al zichtbaar en volstaat direct opruimen. */
+    const skip = () => {
+      if (finished) return;
+      finished = true;
+      timers.forEach((t) => clearTimeout(t));
+      events.forEach((e) => window.removeEventListener(e, skip));
+      if (performance.now() - gestart < SPLIT_MS) {
+        // Canvas-handoff nu al (het doek gaat immers open) en de hero achter
+        // het doek meteen in eindtoestand — de montage-delays slaan we over.
+        window.dispatchEvent(new Event('intro:reveal'));
+        root.removeAttribute('data-intro');
+        overlay.classList.add('io-skipping');
+        window.setTimeout(finalize, 300);
+      } else {
+        finalize();
+      }
     };
     events.forEach((e) => window.addEventListener(e, skip, { passive: true }));
 
@@ -446,6 +577,7 @@
         events.forEach((e) => window.removeEventListener(e, skip));
         window.dispatchEvent(new Event('intro:end'));
         overlay.remove();
+        focusPrompt();
       }, 2950),
     );
 
