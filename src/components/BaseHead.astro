@@ -90,8 +90,10 @@ const allJsonLd = [personLd, websiteLd, ...jsonLd];
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="manifest" href="/site.webmanifest" />
 
-<!-- Fonts: Astro Fonts API injecteert preload + fallback-metrics (zero CLS). -->
+<!-- Fonts: Astro Fonts API injecteert preload + fallback-metrics (zero CLS).
+     Beide preloaden: Inter (body) én Space Grotesk (koppen boven de vouw). -->
 <Font cssVariable="--font-sans" preload />
+<Font cssVariable="--font-display" preload />
 
 <!-- Structured data -->
 {

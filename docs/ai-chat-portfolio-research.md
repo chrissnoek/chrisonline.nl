@@ -31,21 +31,21 @@ De rest van de site (projectdetailpagina's, `/contact`) blijft gewoon bestaan.
   cyaan ronde send-knop) → **3 voorbeeld-prompt-kaarten** (emoji + titel + 1 regel uitleg).
 
 Belangrijk: de referentie-accentkleur (cyaan) is vrijwel identiek aan jouw merk-cyaan
-`#00B0D5` — de futuristische look voelt dus als *jouw merk*, niet als een kostuum.
+`#00B0D5` — de futuristische look voelt dus als _jouw merk_, niet als een kostuum.
 
 ---
 
 ## 2. Huidige codebase (inventaris)
 
-| | |
-|---|---|
-| Framework | Astro **6.4.5**, `output: 'static'`, **geen adapter** |
-| Islands | Vue 3 (`@astrojs/vue`) — enige Vue-component is `ContactForm.vue` |
-| Styling | Tailwind CSS 4 (CSS-first `@theme` in `src/styles/global.css`) |
-| Font | Inter Variable (self-hosted) |
-| Deploy | **Netlify** (`netlify.toml`, Node 22), contactform via **Netlify Forms** |
-| API routes | geen |
-| Projecten | content collection `projects` (MDX), `src/content.config.ts` |
+|            |                                                                          |
+| ---------- | ------------------------------------------------------------------------ |
+| Framework  | Astro **6.4.5**, `output: 'static'`, **geen adapter**                    |
+| Islands    | Vue 3 (`@astrojs/vue`) — enige Vue-component is `ContactForm.vue`        |
+| Styling    | Tailwind CSS 4 (CSS-first `@theme` in `src/styles/global.css`)           |
+| Font       | Inter Variable (self-hosted)                                             |
+| Deploy     | **Netlify** (`netlify.toml`, Node 22), contactform via **Netlify Forms** |
+| API routes | geen                                                                     |
+| Projecten  | content collection `projects` (MDX), `src/content.config.ts`             |
 
 **Merk-tokens (exact, uit `global.css`):**
 
@@ -60,7 +60,7 @@ Belangrijk: de referentie-accentkleur (cyaan) is vrijwel identiek aan jouw merk-
 - `src/components/ParticleField.astro` — muis-reactief **Canvas-2D** veld (spring-physics,
   pre-rendered glow-sprites via `maakSprite()` ~regel 81, 60fps cap, pause-offscreen via
   IntersectionObserver, `document.hidden`-gating, reduced-motion guard). **Dit is onze ambient
-  achtergrond — gratis.** De orb kan op *dezelfde* `frame()`-loop meeliften (0 KB, 0 extra loop).
+  achtergrond — gratis.** De orb kan op _dezelfde_ `frame()`-loop meeliften (0 KB, 0 extra loop).
 - `IntroOverlay.astro` — cinematische merk-opening (kan blijven als pre-roll).
 - Projecten (5, groeibaar): frontmatter `title, client, summary, role, skills[], accent, url, gallery[]`.
 
@@ -72,13 +72,13 @@ matchen met je échte werk (bv. "Bekijk reisplatform-projecten", "Advertising / 
 
 ## 3. Goedkope LLM — keuze & actuele prijzen (mid-2026)
 
-| Provider | Model | Prijs /1M (in/out) | Gratis tier (geen card) | Tool calling | Edge |
-|---|---|---|---|---|---|
-| **Groq** ✅ | `gpt-oss-120b` | $0.15 / $0.60 | ~30 RPM, ~1.000 RPD/model | ✅ | ✅ |
-| Groq | `llama-3.1-8b` | $0.05 / $0.08 | idem | ✅ | ✅ |
-| Google | Gemini 2.5 **Flash-Lite** | $0.10 / $0.40 | ~15 RPM / 1.000 RPD | ✅ | ✅ |
-| OpenAI | `gpt-4.1-nano` | $0.10 / $0.40 | **geen** gratis tier meer | ✅ | ✅ |
-| Anthropic | Claude Haiku 4.5 | $1.00 / $5.00 | nee | ✅ | ✅ |
+| Provider    | Model                     | Prijs /1M (in/out) | Gratis tier (geen card)   | Tool calling | Edge |
+| ----------- | ------------------------- | ------------------ | ------------------------- | ------------ | ---- |
+| **Groq** ✅ | `gpt-oss-120b`            | $0.15 / $0.60      | ~30 RPM, ~1.000 RPD/model | ✅           | ✅   |
+| Groq        | `llama-3.1-8b`            | $0.05 / $0.08      | idem                      | ✅           | ✅   |
+| Google      | Gemini 2.5 **Flash-Lite** | $0.10 / $0.40      | ~15 RPM / 1.000 RPD       | ✅           | ✅   |
+| OpenAI      | `gpt-4.1-nano`            | $0.10 / $0.40      | **geen** gratis tier meer | ✅           | ✅   |
+| Anthropic   | Claude Haiku 4.5          | $1.00 / $5.00      | nee                       | ✅           | ✅   |
 
 **Aanbeveling: Groq `gpt-oss-120b`.** Reden naast prijs: Groq streamt extreem snel, wat
 cruciaal is omdat Netlify Functions een **harde 10s-limiet** hebben (zie §5). Gemini
@@ -89,7 +89,7 @@ Flash-Lite is de iets goedkopere fallback.
 1. **Gemini gratis tier traint op je data** — Google gebruikt free-tier prompts/outputs om
    modellen te verbeteren. Prima voor een publieke demo, maar bezoekerstekst gaat mee in training.
    (Betaalde tier / Vertex / EU-regio = geen training.)
-2. **Gemini billing-val:** billing aanzetten *verwijdert* de gratis allowance op dat project
+2. **Gemini billing-val:** billing aanzetten _verwijdert_ de gratis allowance op dat project
    (alles wordt billable). Workaround = apart GCP-project.
 3. **Gemini free-limieten zijn instabiel** (50-80% verlaagd dec 2025); Gemini Pro is sinds
    1 apr 2026 **alleen betaald**.
@@ -144,12 +144,12 @@ build-time grounding, één toolchain, type-safe.
 
 **Tools:**
 
-| Tool | execute? | Waar | Side effect |
-|---|---|---|---|
-| `showProjects(query?, skills?, limit)` | ja (filtert build-time lijst) | server filtert, client rendert kaarten | geen |
-| `openContactForm(reason?)` | **nee** | client UI-signaal | geen |
-| `submitQuoteRequest({naam,bedrijf,email,projecttype,budget,timeline,omschrijving})` | ja (ná client-bevestiging) | server | **e-mail + record** |
-| `bookCall(context?)` | **nee** | client rendert Cal.com/Calendly embed | geen |
+| Tool                                                                                | execute?                      | Waar                                   | Side effect         |
+| ----------------------------------------------------------------------------------- | ----------------------------- | -------------------------------------- | ------------------- |
+| `showProjects(query?, skills?, limit)`                                              | ja (filtert build-time lijst) | server filtert, client rendert kaarten | geen                |
+| `openContactForm(reason?)`                                                          | **nee**                       | client UI-signaal                      | geen                |
+| `submitQuoteRequest({naam,bedrijf,email,projecttype,budget,timeline,omschrijving})` | ja (ná client-bevestiging)    | server                                 | **e-mail + record** |
+| `bookCall(context?)`                                                                | **nee**                       | client rendert Cal.com/Calendly embed  | geen                |
 
 Veiligheid: `submitQuoteRequest` pas vuren ná expliciete bevestiging (systeemprompt-regel +
 client-confirmation kaart "Verstuur deze aanvraag?"). Server-side Zod-validatie is de echte guard.
@@ -191,10 +191,10 @@ Alles geverifieerd; libraries gecheckt op npm/GitHub (mid-2026).
 
 **Iriserende orb — twee opties:**
 
-- *Echte referentie-look:* vanilla **`@paper-design/shaders`** `MeshGradient` op eigen kleine
+- _Echte referentie-look:_ vanilla **`@paper-design/shaders`** `MeshGradient` op eigen kleine
   `<canvas>` (~8-15 KB gz tree-shaken, **0 deps**, v0.0.76 / mei 2026, GPU-goedkoop). Opent wel
   een 2e WebGL-context naast je 2D particle-canvas (prima voor één orb).
-- *Absoluut lichtst:* orb als **pre-rendered iriserende sprites in je bestaande ParticleField
+- _Absoluut lichtst:_ orb als **pre-rendered iriserende sprites in je bestaande ParticleField
   `frame()`-loop** (Route a → canvas): 0 KB, 0 extra loop/context, erft alle pause/reduced-motion
   gating. Minder "vloeibaar" dan de shader, maar onverslaanbaar qua integratie.
 - **Vermijd** geanimeerde `feTurbulence` (CPU-duur, valt buiten je reduced-motion net).
@@ -310,15 +310,15 @@ eindpunt is van de intro-morph — de morph moet dus landen op exact de halo-pos
 
 ## Geverifieerde stack-samenvatting
 
-| Concern | Keuze |
-|---|---|
-| Endpoint | `@astrojs/netlify`, `output:'static'`, één `prerender=false` route |
-| Streaming | native Netlify Functions (`ReadableStream`), let op **10s** limiet |
-| LLM | **Groq `gpt-oss-120b`** ($0.15/$0.60); Gemini 2.5 Flash-Lite fallback |
-| SDK | Vercel **AI SDK v6** (`ai` + `@ai-sdk/groq`) |
-| Chat UI | **React island** (`@ai-sdk/react`) naast bestaande Vue |
-| Grounding | alle projecten in systeemprompt, geen RAG |
-| Rate-limit | Upstash sliding window + harde caps + dag-plafond; Turnstile reserve |
-| Submissions | **Resend** (mail + auto-reply) + **Netlify Forms** (record) |
-| Orb | Paper Shaders `MeshGradient` (mooist) óf canvas-sprite op ParticleField-loop (lichtst) |
-| Overig UI | glass-veld, aurora, chips, streaming — pure CSS + minimale JS |
+| Concern     | Keuze                                                                                  |
+| ----------- | -------------------------------------------------------------------------------------- |
+| Endpoint    | `@astrojs/netlify`, `output:'static'`, één `prerender=false` route                     |
+| Streaming   | native Netlify Functions (`ReadableStream`), let op **10s** limiet                     |
+| LLM         | **Groq `gpt-oss-120b`** ($0.15/$0.60); Gemini 2.5 Flash-Lite fallback                  |
+| SDK         | Vercel **AI SDK v6** (`ai` + `@ai-sdk/groq`)                                           |
+| Chat UI     | **React island** (`@ai-sdk/react`) naast bestaande Vue                                 |
+| Grounding   | alle projecten in systeemprompt, geen RAG                                              |
+| Rate-limit  | Upstash sliding window + harde caps + dag-plafond; Turnstile reserve                   |
+| Submissions | **Resend** (mail + auto-reply) + **Netlify Forms** (record)                            |
+| Orb         | Paper Shaders `MeshGradient` (mooist) óf canvas-sprite op ParticleField-loop (lichtst) |
+| Overig UI   | glass-veld, aurora, chips, streaming — pure CSS + minimale JS                          |

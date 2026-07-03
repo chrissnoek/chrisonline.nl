@@ -7,28 +7,35 @@ interface Props {
   project: CollectionEntry<'projects'>;
   /** Eerste kaart laadt eager voor een snelle LCP; rest lazy. */
   eager?: boolean;
+  /** Uitgelicht: spant twee kolommen met een breder, filmischer beeld. */
+  featured?: boolean;
 }
 
-const { project, eager = false } = Astro.props;
+const { project, eager = false, featured = false } = Astro.props;
 const { data, id } = project;
 ---
 
 <article
-  class="reveal group rounded-card hover:shadow-card-hover relative flex flex-col overflow-hidden border border-[var(--border)] bg-[var(--bg-alt)] transition-all duration-300 hover:-translate-y-1"
+  class:list={[
+    'reveal group spotlight-card rounded-card hover:shadow-card-hover relative flex flex-col overflow-hidden border border-[var(--border)] bg-[var(--bg-alt)] transition-all duration-300 hover:-translate-y-1',
+    featured && 'sm:col-span-2',
+  ]}
 >
   <a href={`/werk/${id}`} class="absolute inset-0 z-10" aria-label={`Bekijk project: ${data.title}`}
   ></a>
 
   <!-- Mockup met merkkleurige achtergrond-gradient -->
   <div
-    class="relative aspect-[4/3] overflow-hidden"
+    class:list={['relative overflow-hidden', featured ? 'aspect-[16/9]' : 'aspect-[4/3]']}
     style={`background: radial-gradient(120% 120% at 80% 0%, ${data.accent}26, transparent 60%), var(--bg-alt);`}
   >
     <Image
       src={data.cover}
       alt={data.coverAlt}
-      widths={[400, 640, 800]}
-      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+      widths={featured ? [640, 960, 1280] : [400, 640, 800]}
+      sizes={featured
+        ? '(max-width: 1024px) 100vw, 800px'
+        : '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
       format="avif"
       quality="mid"
       loading={eager ? 'eager' : 'lazy'}
@@ -49,7 +56,9 @@ const { data, id } = project;
       }
     </div>
 
-    <h3 class="mt-2 text-xl font-bold tracking-tight">{data.title}</h3>
+    <h3 class:list={['mt-2 font-bold tracking-tight', featured ? 'text-2xl' : 'text-xl']}>
+      {data.title}
+    </h3>
     <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--fg-muted)]">{data.summary}</p>
 
     <div class="mt-5 flex flex-wrap items-center gap-2">

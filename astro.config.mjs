@@ -2,7 +2,6 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
-import vue from '@astrojs/vue';
 import react from '@astrojs/react';
 import netlify from '@astrojs/netlify';
 import tailwindcss from '@tailwindcss/vite';
@@ -19,9 +18,8 @@ export default defineConfig({
 
   integrations: [
     mdx(),
-    vue(),
-    // React draait naast Vue: het chat-eiland gebruikt @ai-sdk/react (useChat).
-    // Elk eiland levert alleen zijn eigen runtime, en alleen op pagina's waar het staat.
+    // React: het chat-eiland gebruikt @ai-sdk/react (useChat). Het eiland levert
+    // zijn runtime alleen op pagina's waar het staat (de homepage).
     react(),
     sitemap({
       // A clean, modern lastmod helps crawlers; one entry per page.
@@ -30,14 +28,25 @@ export default defineConfig({
     }),
   ],
 
-  // Native Astro v6 Fonts API (stable): self-hosts + subsets Inter,
-  // generates fallback metrics (zero CLS) and injects the preload link.
+  // Native Astro v6 Fonts API (stable): self-hosts + subsets de fonts,
+  // generates fallback metrics (zero CLS) and injects the preload links.
   fonts: [
     {
       provider: fontProviders.fontsource(),
       name: 'Inter',
       cssVariable: '--font-sans',
       weights: ['100 900'],
+      styles: ['normal'],
+      subsets: ['latin'],
+      fallbacks: ['system-ui', 'sans-serif'],
+    },
+    // Display-face voor grote koppen (h1/h2/hero-groet): karaktervolle,
+    // licht hoekige grotesk die het hexagon-merk echoot. Body blijft Inter.
+    {
+      provider: fontProviders.fontsource(),
+      name: 'Space Grotesk',
+      cssVariable: '--font-display',
+      weights: ['500 700'],
       styles: ['normal'],
       subsets: ['latin'],
       fallbacks: ['system-ui', 'sans-serif'],

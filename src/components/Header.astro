@@ -87,17 +87,59 @@ import Logo from './Logo.astro';
 </header>
 
 <script>
+  // Listeners per paginaweergave: bij elke View Transition wordt de header-DOM
+  // vervangen; een AbortController ruimt de oude listeners op i.p.v. ze te
+  // laten opstapelen op verweesde elementen.
+  let headerAbort: AbortController | undefined;
+  let spyObserver: IntersectionObserver | undefined;
+
   function initHeader() {
+    headerAbort?.abort();
+    headerAbort = new AbortController();
+    const { signal } = headerAbort;
+    spyObserver?.disconnect();
+    spyObserver = undefined;
+
     // Achtergrond verschijnt zodra je scrollt (subtiel, performant via class-toggle).
     const header = document.getElementById('site-header');
-    if (header && !header.dataset.scrollBound) {
-      header.dataset.scrollBound = 'true';
+    if (header) {
       const onScroll = () => {
-        const scrolled = window.scrollY > 8;
-        header.classList.toggle('is-scrolled', scrolled);
+        header.classList.toggle('is-scrolled', window.scrollY > 8);
       };
       onScroll();
-      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('scroll', onScroll, { passive: true, signal });
+    }
+
+    // Scrollspy: markeer de sectielink die nu in beeld is (alleen op pagina's
+    // met die secties, dus effectief de homepage).
+    const spyLinks = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>('#site-header nav a[href^="/#"]'),
+    );
+    const pairs = spyLinks
+      .map((link) => {
+        const id = link.getAttribute('href')!.split('#')[1];
+        const section = id ? document.getElementById(id) : null;
+        return section ? ([link, section] as const) : null;
+      })
+      .filter((p): p is readonly [HTMLAnchorElement, HTMLElement] => p !== null);
+    if (pairs.length) {
+      spyObserver = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            const link = pairs.find(([, sec]) => sec === entry.target)?.[0];
+            if (!link) continue;
+            if (entry.isIntersecting) {
+              spyLinks.forEach((l) => l.removeAttribute('aria-current'));
+              link.setAttribute('aria-current', 'true');
+            } else if (link.getAttribute('aria-current')) {
+              link.removeAttribute('aria-current');
+            }
+          }
+        },
+        // Smalle band rond het midden van de viewport → één actieve sectie.
+        { rootMargin: '-40% 0px -55% 0px' },
+      );
+      pairs.forEach(([, sec]) => spyObserver!.observe(sec));
     }
 
     // Mobiel menu.
@@ -105,8 +147,7 @@ import Logo from './Logo.astro';
     const menu = document.getElementById('mobile-menu');
     const iconOpen = document.getElementById('menu-icon-open');
     const iconClose = document.getElementById('menu-icon-close');
-    if (toggle && menu && !toggle.dataset.bound) {
-      toggle.dataset.bound = 'true';
+    if (toggle && menu) {
       const setOpen = (open: boolean) => {
         menu.hidden = !open;
         menu.classList.toggle('hidden', !open);
@@ -115,17 +156,31 @@ import Logo from './Logo.astro';
         iconOpen?.classList.toggle('hidden', open);
         iconClose?.classList.toggle('hidden', !open);
       };
-      toggle.addEventListener('click', () => setOpen(menu.hidden));
+      toggle.addEventListener('click', () => setOpen(menu.hidden), { signal });
       menu.querySelectorAll('[data-mobile-link]').forEach((link) => {
-        link.addEventListener('click', () => setOpen(false));
+        link.addEventListener('click', () => setOpen(false), { signal });
       });
       // Sluit op Escape.
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !menu.hidden) {
-          setOpen(false);
-          toggle.focus();
-        }
-      });
+      document.addEventListener(
+        'keydown',
+        (e) => {
+          if (e.key === 'Escape' && !menu.hidden) {
+            setOpen(false);
+            toggle.focus();
+          }
+        },
+        { signal },
+      );
+      // Sluit bij een klik/tik buiten het menu en de knop.
+      document.addEventListener(
+        'click',
+        (e) => {
+          if (menu.hidden) return;
+          const t = e.target instanceof Node ? e.target : null;
+          if (t && !menu.contains(t) && !toggle.contains(t)) setOpen(false);
+        },
+        { signal },
+      );
     }
   }
 
@@ -137,5 +192,10 @@ import Logo from './Logo.astro';
     background-color: color-mix(in srgb, var(--bg) 80%, transparent);
     border-bottom-color: var(--border);
     backdrop-filter: saturate(180%) blur(12px);
+  }
+  /* Scrollspy: de sectie die in beeld is, licht op in de navigatie. */
+  #site-header nav a[aria-current='true'] {
+    color: var(--fg);
+    background-color: var(--bg-alt);
   }
 </style>

@@ -29,6 +29,7 @@
     X-Frame-Options = "SAMEORIGIN"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
 
 # Langlevende cache voor gehashte assets (fonts, afbeeldingen, JS/CSS).
 [[headers]]

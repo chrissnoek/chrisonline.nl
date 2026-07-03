@@ -4,6 +4,11 @@
  * Engine: @paper-design/shaders MeshGradient (vastgelegde spec uit lab 004).
  * Fallback naar een pure-CSS conic-orb bij reduced-motion, geen WebGL, of save-data.
  * De orb is puur decoratief (aria-hidden) en pauzeert offscreen / als de tab verborgen is.
+ *
+ * Laadstrategie: de shader-chunk is ~59 KB gz en wordt pas geïmporteerd zodra de
+ * main thread idle is (requestIdleCallback, met timeout-vangnet). Tot die tijd —
+ * én tijdens het compileren van de shader — draait de CSS-orb; de WebGL-laag
+ * fade't eroverheen zodra hij klaar is, dus er is nooit een leeg gat.
  */
 import { useEffect, useRef, useState } from 'react';
 
@@ -20,7 +25,9 @@ const ORB = {
 const BUSY_SPEED = 2.4;
 
 function prefersReducedMotion() {
-  return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  return (
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
 }
 function saveData() {
   // @ts-expect-error - Network Information API is niet overal getypeerd
@@ -40,6 +47,8 @@ export default function Orb({ busy = false }: { busy?: boolean }) {
   const hostRef = useRef<HTMLDivElement | null>(null);
   // 'css' = lichtgewicht fallback; 'gl' = Paper Shaders mesh.
   const [engine, setEngine] = useState<'gl' | 'css'>('css');
+  // De GL-laag is gemount en zichtbaar; tot dan blijft de CSS-orb staan.
+  const [glReady, setGlReady] = useState(false);
   // Verwijzing naar de live ShaderMount zodat we de snelheid kunnen wisselen
   // zonder de shader opnieuw op te bouwen.
   const mountRef = useRef<{ setSpeed?: (s?: number) => void } | null>(null);
@@ -65,11 +74,10 @@ export default function Orb({ busy = false }: { busy?: boolean }) {
     let mount: { dispose?: () => void; setSpeed?: (s?: number) => void } | undefined;
     let cancelled = false;
 
-    (async () => {
+    const start = async () => {
       try {
-        const { ShaderMount, meshGradientFragmentShader, getShaderColorFromString } = await import(
-          '@paper-design/shaders'
-        );
+        const { ShaderMount, meshGradientFragmentShader, getShaderColorFromString } =
+          await import('@paper-design/shaders');
         if (cancelled) return;
         const u_colors = ORB.colors.map((c) => getShaderColorFromString(c));
         const instance = new ShaderMount(
@@ -97,24 +105,39 @@ export default function Orb({ busy = false }: { busy?: boolean }) {
         );
         mount = instance as { dispose?: () => void; setSpeed?: (s?: number) => void };
         mountRef.current = mount;
+        setGlReady(true);
       } catch {
         if (!cancelled) setEngine('css');
       }
-    })();
+    };
+
+    // Idle-gate voor de zware chunk; timeout-vangnet zodat hij op drukke
+    // pagina's tóch binnen ~3s komt.
+    let idleId: number | undefined;
+    let timeoutId: number | undefined;
+    if (typeof window.requestIdleCallback === 'function') {
+      idleId = window.requestIdleCallback(() => void start(), { timeout: 3000 });
+    } else {
+      timeoutId = window.setTimeout(() => void start(), 1200);
+    }
 
     return () => {
       cancelled = true;
+      if (idleId !== undefined) cancelIdleCallback(idleId);
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
       mount?.dispose?.();
       mountRef.current = null;
     };
     // `busy` bewust niet als dep: de aparte effect-hook hierboven past de
     // snelheid live aan zonder de shader opnieuw op te bouwen.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [engine]);
 
   return (
     <div className={`orb-halo ${busy ? 'orb-halo--busy' : ''}`} aria-hidden="true">
-      {engine === 'gl' ? <div ref={hostRef} className="orb-gl" /> : <div className="orb-css" />}
+      {engine === 'gl' ? (
+        <div ref={hostRef} className={`orb-gl ${glReady ? 'orb-gl--ready' : ''}`} />
+      ) : null}
+      {engine === 'css' || !glReady ? <div className="orb-css" /> : null}
     </div>
   );
 }

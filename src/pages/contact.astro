@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ContactForm from '../components/ContactForm.vue';
+import ContactForm from '../components/ContactForm.astro';
 import Icon from '../components/Icon.astro';
 import { SITE, CONTACT, SOCIALS } from '../config/site';
 
@@ -78,12 +78,12 @@ const description =
         </div>
       </div>
 
-      <!-- Formulier (Vue-island, alleen gehydrateerd wanneer zichtbaar) -->
+      <!-- Formulier (server-gerenderd, klein vanilla-script voor validatie/AJAX) -->
       <div
         class="enter-up rounded-card border border-[var(--border)] bg-[var(--bg-alt)] p-6 sm:p-8"
         style="--enter-delay: 0.2s"
       >
-        <ContactForm client:visible />
+        <ContactForm />
       </div>
     </div>
   </section>

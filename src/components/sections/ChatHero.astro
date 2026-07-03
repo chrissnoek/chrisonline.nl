@@ -1,14 +1,16 @@
 ---
 /**
  * Chat-hero — de nieuwe, input-first hero. Mount het React-chat-eiland.
- * `client:load` omdat dit de hero is en meteen interactief moet zijn.
+ * `client:idle`: de markup is al server-gerenderd (tekst en input staan er
+ * meteen), dus hydratie mag ná het load-event — dat haalt ~100 KB JS van het
+ * kritieke pad zonder zichtbaar verschil.
  */
 import ChatWidget from '../chat/ChatWidget';
 import '../chat/chat.css';
 ---
 
 <section class="chat-hero" aria-label="AI-assistent">
-  <ChatWidget client:load />
+  <ChatWidget client:idle />
 </section>
 
 <style>

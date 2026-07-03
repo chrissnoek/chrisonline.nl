@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Icon from '../Icon.astro';
+import Stats from '../Stats.astro';
 import chris from '../../assets/me/chris-snoek.jpg';
 import { SITE, CONTACT } from '../../config/site';
 
@@ -48,6 +49,9 @@ const pillars = [
             ondersteunt.
           </p>
         </div>
+
+        <!-- Bewijs in cijfers: tellen op zodra ze in beeld komen. -->
+        <Stats />
       </div>
 
       <!-- Portretfoto met visitekaartje-overlay (verhuisd vanuit de oude hero). -->
@@ -101,32 +105,3 @@ const pillars = [
     </ul>
   </div>
 </section>
-
-<style>
-  /* Hexagon-knoop in de vorm van het logo-mark, gevuld met het merk-gradient.
-     De clip-path zit op een ::before zodat de drop-shadow op het element zelf
-     de geclipte vorm volgt (clip op hetzelfde element zou de gloed wegknippen). */
-  .pillar-node {
-    position: relative;
-    z-index: 1;
-    width: 3.5rem;
-    height: 3.5rem;
-    filter: drop-shadow(0 4px 10px rgba(0, 176, 213, 0.25));
-  }
-  .pillar-node::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    background: linear-gradient(135deg, #00b0d5 0%, #0064d5 100%);
-  }
-  li:hover .pillar-node {
-    filter: drop-shadow(0 6px 16px rgba(0, 176, 213, 0.55));
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .pillar-node {
-      transition: filter 0.3s var(--ease-out-soft);
-    }
-  }
-</style>

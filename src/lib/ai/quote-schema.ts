@@ -73,8 +73,8 @@ export const quoteToolSchema = z.object({
   // Override met een sturende, model-facing beschrijving (validatie identiek).
   omschrijving: omschrijving.describe(
     'Een volledige samenvatting van het project in lopende tekst, met ALLE scope-details die ' +
-      'je hebt uitgevraagd: aantal en soorten pagina\'s, gewenste functionaliteiten ' +
-      '(bv. contactformulier, projectoverzicht/detailpagina\'s, boekingsmodule, login), ' +
+      "je hebt uitgevraagd: aantal en soorten pagina's, gewenste functionaliteiten " +
+      "(bv. contactformulier, projectoverzicht/detailpagina's, boekingsmodule, login), " +
       'design (maatwerk of thema), stijl/sfeer en mate van animatie, koppelingen/integraties, ' +
       'meertaligheid, wie de content levert, en eventueel aantal producten bij een webshop. ' +
       'Vat samen wat de bezoeker zei; verzin geen details die niet besproken zijn.',
