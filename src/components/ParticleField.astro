@@ -127,6 +127,24 @@
     let master = 0; // globale fade-in zodat het veld nooit "popt"
     let mx = -9999;
     let my = -9999; // muis in client-coördinaten; -9999 = geen muis
+    let fmx = -9999;
+    let fmy = -9999; // muispositie van het vórige frame (voor snelheid)
+    let mvx = 0;
+    let mvy = 0; // gladgestreken muissnelheid in px/frame — snelle bewegingen "gooien" deeltjes mee
+
+    // Klik/tik-pulsen: uitdijende drukgolf die deeltjes zacht wegduwt en op de
+    // golfrand laat oplichten. Geeft touch-bezoekers (geen hover) hetzelfde
+    // speelse gevoel als de muis-afstoting. Max 3 tegelijk, dood na ~0.9s.
+    const PULS_MS = 900;
+    const pulsen: { x: number; y: number; t: number }[] = [];
+    const onPuls = (e: PointerEvent) => {
+      if (pulsen.length >= 3) pulsen.shift();
+      pulsen.push({
+        x: e.clientX,
+        y: e.clientY + (modus === 'page' ? cachedSy : 0),
+        t: performance.now(),
+      });
+    };
 
     let vw = 0;
     let vh = 0;
@@ -312,7 +330,28 @@
       const alphaMul = 0.45 * master;
       const R = 190; // afstotingsstraal rond de muis
       const R2 = R * R;
+      const RL = 300; // lantaarnstraal: hierbinnen lichten deeltjes op rond de cursor
+      const RL2 = RL * RL;
       const kracht = 4.2 * dt;
+
+      // Gladgestreken muissnelheid: een snelle haal door het veld gooit
+      // deeltjes even mee in de bewegingsrichting (gecapt, dooft vanzelf).
+      if (mx > -9998 && fmx > -9998) {
+        const glad = 1 - Math.pow(0.75, dt);
+        mvx += ((mx - fmx) / dt - mvx) * glad;
+        mvy += ((my - fmy) / dt - mvy) * glad;
+      } else {
+        mvx = 0;
+        mvy = 0;
+      }
+      fmx = mx;
+      fmy = my;
+      const vaart = Math.min(Math.hypot(mvx, mvy), 30);
+
+      // Verlopen pulsen opruimen (achterstevoren i.v.m. splice).
+      for (let p = pulsen.length - 1; p >= 0; p--) {
+        if (nu - pulsen[p].t > PULS_MS) pulsen.splice(p, 1);
+      }
       const verval = Math.pow(0.9, dt);
       const sprThema = root.classList.contains('dark') ? sprHelder : sprInk;
       const zelfde = sprThema === sprHelder;
@@ -347,16 +386,46 @@
         // Impuls: veer richting het anker + muisafstoting, met demping.
         let ivx = P[o + 4] * verval + (hx - x) * VEER * dt;
         let ivy = P[o + 5] * verval + (hy - y) * VEER * dt;
+        // Lantaarn (0..1): dicht bij de cursor lichten deeltjes op — de muis
+        // duwt niet alleen (leeg gat), hij belicht ook de rand eromheen.
+        let licht = 0;
         const dx = x - lmx;
         const dy = y - lmy;
         const d2 = dx * dx + dy * dy;
-        if (d2 < R2 && d2 > 0.01) {
+        if (d2 < RL2 && d2 > 0.01) {
           const d = Math.sqrt(d2);
-          const f = 1 - d / R;
-          const imp = f * f * kracht;
-          ivx += (dx / d) * imp;
-          ivy += (dy / d) * imp;
+          licht = 1 - d / RL;
+          if (d < R) {
+            const f = 1 - d / R;
+            const imp = f * f * kracht;
+            ivx += (dx / d) * imp;
+            ivy += (dy / d) * imp;
+          }
+          // Meegooien met een snelle muishaal (subtiel, kwadratisch met nabijheid).
+          if (vaart > 6) {
+            const f = licht * licht * (vaart - 6) * 0.008 * dt;
+            ivx += mvx * f;
+            ivy += mvy * f;
+          }
         }
+
+        // Drukgolf van klik/tik-pulsen: zachte duw + gloed op de golfrand.
+        for (let p = 0; p < pulsen.length; p++) {
+          const pu = pulsen[p];
+          const leeftijd = (nu - pu.t) / PULS_MS; // 0..1
+          const straal = 40 + 320 * (1 - Math.pow(1 - leeftijd, 3)); // easeOutCubic
+          const pdx = x - pu.x;
+          const pdy = y - pu.y;
+          const pd = Math.hypot(pdx, pdy);
+          const band = Math.abs(pd - straal);
+          if (band < 80 && pd > 0.01) {
+            const f = (1 - band / 80) * (1 - leeftijd);
+            ivx += (pdx / pd) * f * 1.6 * dt;
+            ivy += (pdy / pd) * f * 1.6 * dt;
+            if (f * 0.9 > licht) licht = f * 0.9;
+          }
+        }
+
         x += ivx * dt;
         y += ivy * dt;
 
@@ -374,10 +443,12 @@
         const fd = dichtheid(y);
         if (fd <= 0.01) continue;
         const twinkel = 0.78 + 0.22 * Math.sin(ph * 1.7);
-        const a = P[o + 9] * twinkel * fd * alphaMul;
+        let a = P[o + 9] * twinkel * fd * alphaMul;
+        // Lantaarn/pulsgloed: helderder en een tikje groter nabij licht.
+        if (licht > 0) a = Math.min(1, a * (1 + licht * 2.2) + licht * 0.18);
         if (a < 0.01) continue;
 
-        const s = P[o + 8];
+        const s = P[o + 8] * (1 + licht * 0.35);
         const wx = x + Math.sin(ph) * 3.6;
         const wy = y + Math.cos(ph * 0.83) * 3.6;
         if (zelfde) {
@@ -428,6 +499,8 @@
     const onIntroKlaar = () => handoff();
 
     window.addEventListener('pointermove', onMove, { passive: true });
+    // Puls op klik/tik — ook het enige interactiemoment voor touch.
+    window.addEventListener('pointerdown', onPuls, { passive: true });
     // Vinger los of gesture geannuleerd → geen blijvend "spookgat" op touch.
     window.addEventListener('pointerup', onWeg, { passive: true });
     window.addEventListener('pointercancel', onWeg, { passive: true });
@@ -471,6 +544,7 @@
         lvhProbe.remove();
         window.removeEventListener('scroll', onScroll);
         window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerdown', onPuls);
         window.removeEventListener('pointerup', onWeg);
         window.removeEventListener('pointercancel', onWeg);
         window.removeEventListener('blur', onWeg);
@@ -497,9 +571,15 @@
       return;
     }
     if (huidig?.canvas === canvas) return; // zelfde DOM → draait al
-    if (reduceMotion.matches) return;
+    if (reduceMotion.matches || saveData()) return;
     huidig?.destroy();
     huidig = startVeld(container, canvas);
+  }
+
+  /** Save-Data aan → geen decoratief deeltjesveld (zelfde afweging als de orb). */
+  function saveData(): boolean {
+    // @ts-expect-error - Network Information API is niet overal getypeerd
+    return typeof navigator !== 'undefined' && navigator.connection?.saveData === true;
   }
 
   // Live reageren op het (de)activeren van reduced motion — het canvas is
