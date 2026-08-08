@@ -32,6 +32,10 @@ const CHIPS = [
     label: '📅 Plan een gesprek',
     text: 'Ik wil mijn project even bespreken. Kunnen we een kort gesprek inplannen?',
   },
+  {
+    label: '⚡ Wat kan ik automatiseren?',
+    text: 'Ik doe iedere week terugkerend administratief werk. Kun je helpen bepalen wat daarvan verstandig te automatiseren is?',
+  },
 ];
 
 const BOOKING_URL =
@@ -45,6 +49,7 @@ const PLACEHOLDERS = [
   "Bijv. 'wat kost een snelle maatwerk-site?'…",
   "Bijv. 'laat werk zien uit de reisbranche'…",
   "Bijv. 'ik wil mijn website laten redesignen'…",
+  "Bijv. 'welk regelwerk kan ik automatiseren?'…",
 ];
 
 const STORAGE_KEY = 'cw-thread-v1';
@@ -291,13 +296,13 @@ export default function ChatWidget() {
           {/* Eén h1 met naam + rol (SEO/a11y) én de hook; visueel twee regels. */}
           <h1 className="cw-greet-main">
             <span className="cw-greet-sub">
-              Hoi, ik ben Chris Snoek, freelance webdeveloper &amp; UI/UX-designer
+              Hoi, ik ben Chris Snoek, webdeveloper, designer &amp; automatiseringsspecialist
             </span>
             Wat wil je laten bouwen?
           </h1>
           <p className="cw-greet-subline">
-            Stel je vraag, dan laat ik je meteen passend werk en een prijsindicatie zien. Geen
-            contactformulier, gewoon typen.
+            Stel je vraag over een website, webshop of terugkerend werk. Ik denk direct met je mee.
+            Geen contactformulier, gewoon typen.
           </p>
         </div>
       ) : (

@@ -1,0 +1,903 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import SpotlightCards from '../components/SpotlightCards.astro';
+import { CONTACT, SITE } from '../config/site';
+
+const contactHref = '/contact?dienst=automatisering#contactformulier';
+
+const automations = [
+  {
+    title: 'Offertes automatisch opvolgen',
+    description:
+      'Herinneringen op afgesproken momenten en een overzicht van offertes die jouw aandacht nodig hebben.',
+    price: '€ 1.500–2.500',
+    time: '± 3 uur p/w terug*',
+  },
+  {
+    title: 'Van werkbon naar conceptfactuur',
+    description:
+      'Gegevens uit een afgeronde werkbon controleren en klaarzetten voor je boekhouding.',
+    price: '€ 2.000–3.500',
+    time: '± 4 uur p/w terug*',
+  },
+  {
+    title: 'Mailbox voorsorteren',
+    description:
+      'Berichten labelen, prioriteren en waar passend een conceptantwoord voorbereiden. Jij houdt de controle.',
+    price: '€ 1.250–2.000',
+    time: '± 3 uur p/w terug*',
+  },
+  {
+    title: 'Urenregistratie doorzetten',
+    description:
+      'Ingevoerde uren controleren en zonder dubbel overtypen klaarzetten voor administratie of salarisverwerking.',
+    price: '€ 1.500–2.500',
+    time: '± 3 uur p/w terug*',
+  },
+  {
+    title: 'Webshop en boekhouding koppelen',
+    description: 'Bestellingen, betalingen en btw-gegevens volgens afgesproken regels doorzetten.',
+    price: '€ 1.750–3.000',
+    time: '± 2 uur p/w terug*',
+  },
+  {
+    title: 'Afspraken bevestigen en herinneren',
+    description: 'Klanten automatisch een bevestiging en tijdige herinnering sturen.',
+    price: '€ 1.000–1.750',
+    time: '± 2 uur p/w terug*',
+  },
+  {
+    title: 'Voorraadwaarschuwingen voorbereiden',
+    description: 'Ondergrenzen signaleren en een bestelling klaarzetten die je zelf controleert.',
+    price: '€ 2.000–3.500',
+    time: '± 2 uur p/w terug*',
+  },
+  {
+    title: 'Na een klus om een review vragen',
+    description: 'Na afronding automatisch een vriendelijke uitnodiging versturen.',
+    price: '€ 750–1.250',
+    time: '± 1 uur p/w terug*',
+  },
+  {
+    title: 'Gemiste oproepen naar een takenlijst',
+    description: 'Voicemail laten uitschrijven en als terugbeltaak klaarzetten.',
+    price: '€ 1.250–2.000',
+    time: '± 2 uur p/w terug*',
+  },
+];
+
+const steps = [
+  {
+    title: 'Jij wijst de tijdvreter aan',
+    text: 'Vertel welke taak terugkomt, hoeveel tijd die kost en welke programma’s erbij horen. Je hoeft zelf geen technische oplossing te bedenken.',
+  },
+  {
+    title: 'Je krijgt een haalbaar voorstel',
+    text: 'Ik breng het proces, de uitzonderingen en benodigde toegang in kaart. Je ziet wat verstandig is, wat het ongeveer kost en waar controle nodig blijft.',
+  },
+  {
+    title: 'We bouwen en testen samen',
+    text: 'Na akkoord bouw ik de afgesproken route. Eerst met testdata en duidelijke acceptatiepunten, daarna pas in je dagelijkse proces.',
+  },
+];
+
+const agreements = [
+  {
+    title: 'Scope en acceptatie',
+    text: 'Vooraf staat vast welke stappen worden gebouwd, welke uitzonderingen buiten scope vallen en hoe we controleren dat het werkt.',
+  },
+  {
+    title: 'Eerst testen, dan live',
+    text: 'Financiële boekingen en klantcommunicatie krijgen waar nodig een menselijke controle voordat iets definitief wordt verstuurd.',
+  },
+  {
+    title: 'Zo min mogelijk toegang',
+    text: 'Ik vraag alleen toegang tot systemen en gegevens die voor de afgesproken workflow nodig zijn.',
+  },
+  {
+    title: 'Overdracht en lopende kosten',
+    text: 'Je ziet vooraf welke accounts, softwarekosten en onderhoudstaken blijven bestaan en wie waarvoor verantwoordelijk is.',
+  },
+];
+
+const faqs = [
+  {
+    question: 'Kan ieder administratief klusje worden geautomatiseerd?',
+    answer:
+      'Nee. Taken met veel uitzonderingen, wisselende invoer of belangrijk menselijk oordeel zijn niet altijd geschikt. Soms is een eenvoudiger proces of betere werkinstructie verstandiger dan software. Dat zeg ik dan ook.',
+  },
+  {
+    question: 'Moet ik overstappen naar andere programma’s?',
+    answer:
+      'Niet per se. Eerst kijk ik wat met je huidige programma’s mogelijk is. Als een extra hulpmiddel of abonnement nodig is, staat dat apart in het voorstel.',
+  },
+  {
+    question: 'Waar gebruik je AI voor?',
+    answer:
+      'Alleen waar het nuttig en controleerbaar is, bijvoorbeeld om e-mail of documenten te classificeren, informatie samen te vatten of een concept voor te bereiden. Kritieke beslissingen en definitieve verzendingen blijven waar nodig bij een mens.',
+  },
+  {
+    question: 'Blijf ik zelf controleren wat er gebeurt?',
+    answer:
+      'Ja. Samen bepalen we welke stappen automatisch mogen en waar eerst jouw akkoord nodig blijft, bijvoorbeeld bij facturen, betalingen of berichten aan klanten.',
+  },
+  {
+    question: 'Wat gebeurt er nadat ik contact opneem?',
+    answer:
+      'Je ontvangt meestal binnen één werkdag een reactie. Eerst bepalen we of de taak geschikt lijkt. Daarna krijg je de vragen en aannames die nodig zijn voor een concreet voorstel. Je zit nergens aan vast.',
+  },
+];
+
+const title = 'Bedrijfsprocessen automatiseren';
+const description =
+  'Laat terugkerende administratie en handmatig regelwerk slim automatiseren. Chris Snoek koppelt je bestaande systemen en bouwt controleerbare workflows voor het mkb.';
+
+const serviceLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Bedrijfsprocessen automatiseren',
+  description,
+  provider: { '@id': `${SITE.url}/#person` },
+  areaServed: 'Nederland',
+  url: `${SITE.url}/automatisering`,
+};
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+  })),
+};
+---
+
+<BaseLayout title={title} description={description} jsonLd={[serviceLd, faqLd]}>
+  <SpotlightCards />
+
+  <section class="automation-hero" aria-labelledby="automation-title">
+    <div class="automation-glow" aria-hidden="true"></div>
+    <div
+      class="container-page grid items-center gap-12 py-20 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 lg:py-28"
+    >
+      <div class="relative z-10">
+        <a
+          href="/#diensten"
+          class="enter-up mb-6 inline-flex items-center gap-2 text-sm font-semibold text-[var(--accent-text)] hover:underline"
+        >
+          <span aria-hidden="true">←</span> Alle diensten
+        </a>
+        <p
+          class="enter-up text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase"
+          style="--enter-delay: 0.06s"
+        >
+          Procesautomatisering & AI voor het mkb
+        </p>
+        <h1
+          id="automation-title"
+          class="text-h1 enter-up mt-4 max-w-3xl font-bold text-balance"
+          style="--enter-delay: 0.12s"
+        >
+          Terugkerend regelwerk? Laat je systemen het voorwerk doen.
+        </h1>
+        <p
+          class="text-lead enter-up mt-6 max-w-2xl text-pretty text-[var(--fg-muted)]"
+          style="--enter-delay: 0.2s"
+        >
+          Offertes opvolgen, werkbonnen overtypen, facturen klaarzetten of een mailbox sorteren. Jij
+          laat zien waar tijd weglekt; ik bouw een betrouwbare workflow rond de programma’s die je
+          al gebruikt.
+        </p>
+        <div class="enter-up mt-8 flex flex-wrap gap-3" style="--enter-delay: 0.28s">
+          <a
+            href={contactHref}
+            class="group rounded-pill bg-accent-500 hover:bg-accent-600 inline-flex items-center gap-2 px-6 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5"
+          >
+            Vraag mijn gratis procescheck aan
+            <Icon
+              name="arrowRight"
+              size={18}
+              class="transition-transform group-hover:translate-x-1"
+            />
+          </a>
+          <a
+            href="#werkwijze"
+            class="rounded-pill inline-flex items-center px-6 py-3.5 font-semibold text-[var(--fg)] ring-1 ring-[var(--border)] transition-colors hover:bg-[var(--bg-alt)]"
+          >
+            Bekijk hoe het werkt
+          </a>
+        </div>
+        <p class="enter-up mt-4 text-sm text-[var(--fg-muted)]" style="--enter-delay: 0.34s">
+          Gratis eerste procescheck · meestal reactie binnen één werkdag · geen verplichting
+        </p>
+      </div>
+
+      <div
+        class="enter-up workflow-window"
+        style="--enter-delay: 0.2s"
+        aria-label="Voorbeeld van een geautomatiseerde avondlijst"
+      >
+        <div class="workflow-window__head">
+          <span class="flex items-center gap-2 font-semibold"
+            ><span class="status-dot"></span> Avondlijst</span
+          >
+          <span>dinsdag · 18:10</span>
+        </div>
+        <ol class="workflow-list">
+          <li style="--flow-delay: 0.15s">
+            <span>18:10</span><strong>Werkbon controleren</strong><em>klaar</em>
+          </li>
+          <li style="--flow-delay: 0.3s">
+            <span>18:12</span><strong>Conceptfactuur maken</strong><em>klaar</em>
+          </li>
+          <li style="--flow-delay: 0.45s">
+            <span>18:13</span><strong>Open offertes signaleren</strong><em>klaar</em>
+          </li>
+          <li style="--flow-delay: 0.6s">
+            <span>18:14</span><strong>Uren doorzetten</strong><em>klaar</em>
+          </li>
+        </ol>
+        <div class="workflow-result">
+          <span>Jij controleert alleen de uitzonderingen.</span>
+          <strong>avond terug</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="border-y border-[var(--border)] bg-[var(--bg-alt)]"
+    aria-label="Wanneer automatisering past"
+  >
+    <div class="container-page grid gap-px py-8 md:grid-cols-2 md:py-0">
+      <div class="reveal-up py-5 md:py-10 md:pr-12">
+        <h2 class="flex items-center gap-3 text-lg font-bold">
+          <span class="fit-icon fit-icon--yes"><Icon name="check" size={19} /></span>
+          Vaak geschikt
+        </h2>
+        <p class="mt-3 text-[var(--fg-muted)]">
+          Een taak komt wekelijks terug, volgt meestal dezelfde stappen en gebruikt informatie die
+          al digitaal beschikbaar is.
+        </p>
+      </div>
+      <div
+        class="reveal-up border-t border-[var(--border)] py-5 md:border-t-0 md:border-l md:py-10 md:pl-12"
+      >
+        <h2 class="flex items-center gap-3 text-lg font-bold">
+          <span class="fit-icon fit-icon--no" aria-hidden="true">×</span>
+          Niet altijd verstandig
+        </h2>
+        <p class="mt-3 text-[var(--fg-muted)]">
+          Een taak gebeurt zelden, verandert telkens of vraagt bij iedere stap menselijk oordeel.
+          Dan adviseer ik iets anders.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="werkwijze" class="scroll-mt-24" aria-labelledby="process-title">
+    <div class="container-page py-section">
+      <div class="reveal-up max-w-3xl">
+        <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
+          Zo werkt het
+        </p>
+        <h2 id="process-title" class="lift-in text-h2 mt-3 font-bold text-balance">
+          Eerst het proces begrijpen. Dan pas automatiseren.
+        </h2>
+        <p class="text-lead mt-5 text-pretty text-[var(--fg-muted)]">
+          Een goede automatisering begint niet bij een tool, maar bij de manier waarop het werk nu
+          echt loopt.
+        </p>
+      </div>
+
+      <ol class="process-grid mt-14 grid gap-5 lg:grid-cols-3">
+        {
+          steps.map((step, index) => (
+            <li class="reveal spotlight-card rounded-card relative border border-[var(--border)] bg-[var(--bg)] p-7">
+              <span class="process-number" aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <h3 class="mt-8 text-xl font-bold tracking-tight">{step.title}</h3>
+              <p class="mt-3 leading-relaxed text-[var(--fg-muted)]">{step.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div
+        class="reveal-up rounded-card mt-6 flex flex-col gap-4 border border-[var(--border)] bg-[var(--bg-alt)] p-6 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <p class="max-w-3xl text-sm leading-relaxed text-[var(--fg-muted)]">
+          <strong class="text-[var(--fg)]">Wat krijg je bij de eerste procescheck?</strong>
+          Een korte beoordeling van de tijdvreter, de belangrijkste vragen en een eerlijk beeld van wat
+          wel of niet logisch te automatiseren is.
+        </p>
+        <a
+          href={contactHref}
+          class="shrink-0 font-semibold text-[var(--accent-text)] hover:underline"
+          >Vraag de gratis procescheck aan →</a
+        >
+      </div>
+    </div>
+  </section>
+
+  <section
+    id="mogelijkheden"
+    class="scroll-mt-24 border-y border-[var(--border)] bg-[var(--bg-alt)]"
+    aria-labelledby="menu-title"
+  >
+    <div class="container-page py-section">
+      <div class="reveal-up mx-auto max-w-3xl text-center">
+        <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
+          Veelgevraagde automatiseringen
+        </p>
+        <h2 id="menu-title" class="lift-in text-h2 mt-3 font-bold text-balance">
+          Kies geen softwarepakket. Begin bij het werk dat je terug wilt.
+        </h2>
+        <p class="text-lead mt-5 text-pretty text-[var(--fg-muted)]">
+          Dit zijn indicatieve, eenmalige projecten exclusief btw. Je definitieve voorstel vermeldt
+          de scope, vaste projectprijs en eventuele softwarekosten afzonderlijk.
+        </p>
+      </div>
+
+      <ul class="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3" aria-describedby="time-disclaimer">
+        {
+          automations.map((item) => (
+            <li class="reveal group spotlight-card rounded-card hover:shadow-card flex flex-col border border-[var(--border)] bg-[var(--bg)] p-6 transition-all duration-300 hover:-translate-y-1">
+              <span class="automation-icon">
+                <Icon name="automation" size={21} />
+              </span>
+              <h3 class="mt-5 text-lg font-bold tracking-tight">{item.title}</h3>
+              <p class="mt-3 flex-1 text-sm leading-relaxed text-[var(--fg-muted)]">
+                {item.description}
+              </p>
+              <div class="mt-6 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border)] pt-5">
+                <span class="text-sm font-semibold">{item.price}</span>
+                <span class="time-badge">{item.time}</span>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p
+        id="time-disclaimer"
+        class="mx-auto mt-7 max-w-4xl text-center text-xs leading-relaxed text-[var(--fg-muted)]"
+      >
+        * De tijdwinstlabels zijn een eerste inschatting op basis van de genoemde taak, geen
+        garantie. De uiteindelijke uitkomst hangt af van je proces, systemen, uitzonderingen,
+        datatoegang en gewenste controles.
+      </p>
+
+      <div
+        class="reveal-up rounded-card bg-ink-900 relative mt-12 overflow-hidden p-7 text-white sm:flex sm:items-center sm:justify-between sm:gap-10 sm:p-9"
+      >
+        <div
+          class="pointer-events-none absolute -top-24 -left-24 h-64 w-64 rounded-full bg-cyan-400/15 blur-3xl"
+          aria-hidden="true"
+        >
+        </div>
+        <div class="relative">
+          <h3 class="text-xl font-bold">Staat jouw tijdvreter er niet tussen?</h3>
+          <p class="mt-2 max-w-2xl text-slate-300">
+            Beschrijf de terugkerende taak. Ik laat je weten of automatiseren logisch lijkt.
+          </p>
+        </div>
+        <a
+          href={contactHref}
+          class="rounded-pill bg-accent-500 hover:bg-accent-400 relative mt-5 inline-flex shrink-0 items-center px-6 py-3 font-semibold text-white transition-colors sm:mt-0"
+          >Vraag mijn gratis procescheck aan</a
+        >
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="calculation-title">
+    <div
+      class="container-page py-section grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-16"
+    >
+      <div class="reveal-up">
+        <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
+          Controleerbare rekensom
+        </p>
+        <h2 id="calculation-title" class="lift-in text-h2 mt-3 font-bold text-balance">
+          Reken met aannames die je kunt aanpassen.
+        </h2>
+        <p class="text-lead mt-5 text-pretty text-[var(--fg-muted)]">
+          Dit fictieve voorbeeld laat alleen de eenvoudige waarde van handmatige uren zien. Het is
+          geen belofte over jouw werkelijke besparing.
+        </p>
+        <p class="mt-5 text-sm font-medium text-[var(--fg-muted)]">
+          Uitgangspunt: 7 uur per week, 46 werkweken per jaar en een interne uurwaarde van €45.
+        </p>
+      </div>
+
+      <div
+        class="reveal-up calculation-card rounded-card shadow-card overflow-hidden border border-[var(--border)] bg-[var(--bg)]"
+      >
+        <div
+          class="border-b border-[var(--border)] bg-[var(--bg-alt)] px-6 py-4 text-sm font-semibold"
+        >
+          Voorbeeld · 7 uur terugkerend werk per week
+        </div>
+        <dl class="divide-y divide-[var(--border)]">
+          <div><dt>Handmatige tijd per jaar</dt><dd>7 × 46 = 322 uur</dd></div>
+          <div><dt>Waarde bij €45 per uur</dt><dd>€ 14.490 per jaar</dd></div>
+          <div><dt>Twee indicatieve projecten</dt><dd>€ 3.500–6.000</dd></div>
+          <div class="calculation-total">
+            <dt>Eenvoudige terugverdientijd</dt><dd><strong>ongeveer 3–5 maanden</strong></dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="border-y border-[var(--border)] bg-[var(--bg-alt)]"
+    aria-labelledby="agreements-title"
+  >
+    <div class="container-page py-section">
+      <div class="reveal-up max-w-3xl">
+        <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
+          Vooraf duidelijk
+        </p>
+        <h2 id="agreements-title" class="lift-in text-h2 mt-3 font-bold text-balance">
+          Geen grote beloftes. Wel concrete afspraken.
+        </h2>
+        <p class="text-lead mt-5 text-pretty text-[var(--fg-muted)]">
+          Automatisering raakt je dagelijkse werk. Daarom horen grenzen, controles en eigenaarschap
+          bij het voorstel, niet pas bij de oplevering.
+        </p>
+      </div>
+
+      <ul class="mt-14 grid gap-5 md:grid-cols-2">
+        {
+          agreements.map((item, index) => (
+            <li class="reveal spotlight-card rounded-card flex gap-5 border border-[var(--border)] bg-[var(--bg)] p-6">
+              <span class="pillar-node pillar-node--sm grid shrink-0 place-items-center text-sm font-bold text-white">
+                {index + 1}
+              </span>
+              <div>
+                <h3 class="text-lg font-bold">{item.title}</h3>
+                <p class="mt-2 leading-relaxed text-[var(--fg-muted)]">{item.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="faq-title">
+    <div class="container-page py-section grid gap-10 lg:grid-cols-[0.65fr_1.35fr] lg:gap-16">
+      <div class="reveal-up">
+        <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
+          Veelgestelde vragen
+        </p>
+        <h2 id="faq-title" class="lift-in text-h2 mt-3 font-bold text-balance">
+          Wat je vooraf wilt weten.
+        </h2>
+        <p class="mt-5 text-[var(--fg-muted)]">
+          Staat je vraag er niet tussen? <a
+            href={contactHref}
+            class="font-semibold text-[var(--accent-text)] hover:underline"
+            >Leg je situatie aan me voor.</a
+          >
+        </p>
+      </div>
+      <div class="reveal-up divide-y divide-[var(--border)] border-y border-[var(--border)]">
+        {
+          faqs.map((faq) => (
+            <details class="faq-item group py-5">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-5 font-semibold">
+                {faq.question}
+                <span class="faq-plus" aria-hidden="true">
+                  +
+                </span>
+              </summary>
+              <p class="mt-4 max-w-3xl pr-10 leading-relaxed text-[var(--fg-muted)]">
+                {faq.answer}
+              </p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="automation-cta-title">
+    <div class="container-page pb-section">
+      <div
+        class="reveal-up rounded-card bg-ink-900 relative overflow-hidden px-6 py-14 text-center text-white sm:px-12 sm:py-20"
+      >
+        <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+          <div
+            class="bg-accent-500/20 absolute top-[-70%] left-1/2 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full blur-3xl"
+          >
+          </div>
+        </div>
+        <div class="relative mx-auto max-w-2xl">
+          <p class="text-accent-300 text-sm font-semibold tracking-wide uppercase">
+            Gratis eerste procescheck
+          </p>
+          <h2 id="automation-cta-title" class="text-h2 mt-3 font-bold text-balance">
+            Welke terugkerende taak wil jij niet nóg een jaar handmatig doen?
+          </h2>
+          <p class="text-lead mt-5 text-pretty text-slate-300">
+            Vertel kort wat er nu gebeurt, hoeveel tijd het kost en welke programma’s je gebruikt.
+            Ik reageer meestal binnen één werkdag met de eerste vragen en een eerlijke inschatting.
+          </p>
+          <div class="mt-9 flex flex-wrap justify-center gap-3">
+            <a
+              href={contactHref}
+              class="group rounded-pill bg-accent-500 hover:bg-accent-400 inline-flex items-center gap-2 px-7 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5"
+            >
+              Vraag mijn gratis procescheck aan
+              <Icon
+                name="arrowRight"
+                size={18}
+                class="transition-transform group-hover:translate-x-1"
+              />
+            </a>
+            <a
+              href={`mailto:${CONTACT.email}?subject=Vraag over automatisering`}
+              class="rounded-pill inline-flex items-center gap-2 border border-white/20 px-7 py-3.5 font-semibold text-white transition-colors hover:bg-white/10"
+            >
+              <Icon name="mail" size={18} />
+              Mail direct
+            </a>
+          </div>
+          <p class="mt-5 text-sm text-slate-400">
+            Geen verplichting. Geen automatische offerte. Eerst bepalen of automatiseren zinvol is.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .automation-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .automation-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--border) 45%, transparent) 1px, transparent 1px),
+      linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--border) 45%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 44px 44px;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent 90%);
+  }
+
+  .automation-glow {
+    position: absolute;
+    top: -16rem;
+    right: -12rem;
+    z-index: -1;
+    width: 38rem;
+    height: 38rem;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--color-accent-500) 18%, transparent);
+    filter: blur(80px);
+  }
+
+  .workflow-window {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--border) 80%, var(--color-accent-500));
+    border-radius: 1.25rem;
+    background: color-mix(in srgb, var(--bg) 90%, transparent);
+    box-shadow: var(--shadow-card-hover);
+    backdrop-filter: blur(16px);
+  }
+
+  .workflow-window::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(120deg, transparent 25%, rgba(0, 176, 213, 0.09), transparent 65%);
+    transform: translateX(-100%);
+  }
+
+  .workflow-window__head,
+  .workflow-result {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    font-size: 0.75rem;
+    color: var(--fg-muted);
+  }
+
+  .workflow-window__head {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-alt);
+  }
+
+  .status-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--color-accent-500);
+    box-shadow: 0 0 0 5px rgba(0, 176, 213, 0.12);
+  }
+
+  .workflow-list {
+    position: relative;
+    margin: 0;
+    padding: 0.75rem 1.25rem;
+    list-style: none;
+  }
+
+  .workflow-list::before {
+    content: '';
+    position: absolute;
+    top: 2rem;
+    bottom: 2rem;
+    left: 4.42rem;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .workflow-list li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    padding-block: 0.85rem;
+  }
+
+  .workflow-list li::before {
+    content: '';
+    position: absolute;
+    left: 3.16rem;
+    width: 0.55rem;
+    height: 0.55rem;
+    border: 2px solid var(--color-accent-500);
+    border-radius: 50%;
+    background: var(--bg);
+  }
+
+  .workflow-list span,
+  .workflow-list em {
+    font-size: 0.7rem;
+    font-style: normal;
+    color: var(--fg-muted);
+  }
+
+  .workflow-list strong {
+    overflow: hidden;
+    font-size: 0.85rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .workflow-list em {
+    border-radius: 9999px;
+    padding: 0.2rem 0.5rem;
+    background: color-mix(in srgb, var(--color-accent-500) 12%, transparent);
+    color: var(--accent-text);
+    font-weight: 700;
+  }
+
+  .workflow-result {
+    border-top: 1px solid var(--border);
+    background: var(--color-ink-900);
+    color: #cbd5e1;
+  }
+
+  .workflow-result strong {
+    transform: rotate(-2deg);
+    border: 1px solid rgba(79, 205, 230, 0.65);
+    border-radius: 0.35rem;
+    padding: 0.35rem 0.6rem;
+    color: var(--color-accent-300);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .fit-icon,
+  .automation-icon {
+    display: grid;
+    flex: 0 0 auto;
+    width: 2.5rem;
+    height: 2.5rem;
+    place-items: center;
+    border-radius: 0.75rem;
+  }
+
+  .fit-icon--yes,
+  .automation-icon {
+    background: color-mix(in srgb, var(--color-accent-500) 12%, transparent);
+    color: var(--accent-text);
+  }
+
+  .fit-icon--no {
+    background: color-mix(in srgb, var(--fg-muted) 12%, transparent);
+    color: var(--fg-muted);
+    font-size: 1.5rem;
+  }
+
+  .process-grid {
+    counter-reset: process;
+  }
+
+  .process-number {
+    color: var(--accent-text);
+    font-family: var(--font-display, var(--font-sans));
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  .process-number::after {
+    content: '';
+    position: absolute;
+    top: 3rem;
+    right: 1.75rem;
+    left: 4.3rem;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .time-badge {
+    border: 1px solid color-mix(in srgb, var(--color-accent-500) 35%, transparent);
+    border-radius: 9999px;
+    padding: 0.35rem 0.65rem;
+    background: color-mix(in srgb, var(--color-accent-500) 10%, transparent);
+    color: var(--accent-text);
+    font-size: 0.7rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .calculation-card dl > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.5rem;
+    padding: 1.1rem 1.5rem;
+  }
+
+  .calculation-card dt {
+    color: var(--fg-muted);
+  }
+
+  .calculation-card dd {
+    text-align: right;
+    font-weight: 600;
+  }
+
+  .calculation-total {
+    align-items: center;
+    background: color-mix(in srgb, var(--color-accent-500) 8%, var(--bg));
+  }
+
+  .calculation-total strong {
+    display: inline-block;
+    transform: rotate(-1deg);
+    border: 1px solid color-mix(in srgb, var(--color-accent-500) 45%, transparent);
+    border-radius: 0.5rem;
+    padding: 0.45rem 0.7rem;
+    background: color-mix(in srgb, var(--color-accent-500) 12%, transparent);
+    color: var(--accent-text);
+    box-shadow: 0 6px 18px -12px rgba(0, 176, 213, 0.75);
+    white-space: nowrap;
+  }
+
+  .faq-plus {
+    display: grid;
+    flex: 0 0 auto;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--accent-text);
+    transition: transform 0.25s var(--ease-out-soft);
+  }
+
+  .faq-item[open] .faq-plus {
+    transform: rotate(45deg);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .workflow-window::after {
+      animation: workflow-scan 4.5s ease-in-out 1s infinite;
+    }
+
+    .workflow-list li {
+      animation: workflow-row 0.55s var(--ease-out-soft) both;
+      animation-delay: var(--flow-delay);
+    }
+
+    .status-dot {
+      animation: status-pulse 2.5s ease-in-out infinite;
+    }
+  }
+
+  @keyframes workflow-row {
+    from {
+      opacity: 0;
+      transform: translateX(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes workflow-scan {
+    0%,
+    70% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes status-pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 5px rgba(0, 176, 213, 0.12);
+    }
+    50% {
+      box-shadow: 0 0 0 9px rgba(0, 176, 213, 0.03);
+    }
+  }
+
+  @media (max-width: 479px) {
+    .workflow-window__head,
+    .workflow-result {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .workflow-list li {
+      grid-template-columns: 2.75rem minmax(0, 1fr);
+      gap: 0.75rem;
+    }
+
+    .workflow-list::before {
+      left: 3.55rem;
+    }
+
+    .workflow-list li::before {
+      left: 2.49rem;
+    }
+
+    .workflow-list em {
+      grid-column: 2;
+      width: fit-content;
+    }
+
+    .calculation-card dl > div {
+      grid-template-columns: 1fr;
+      gap: 0.4rem;
+    }
+
+    .calculation-card dd {
+      text-align: left;
+    }
+
+    .calculation-total strong {
+      white-space: normal;
+    }
+  }
+</style>

@@ -47,7 +47,14 @@ const sharedShape = {
   naam: singleLine(100),
   /** Bedrijf — optioneel, ook één regel. */
   bedrijf: singleLine(120).optional(),
-  projecttype: z.enum(['website', 'webshop', 'advertising', 'onderhoud', 'anders']),
+  projecttype: z.enum([
+    'website',
+    'webshop',
+    'automatisering',
+    'advertising',
+    'onderhoud',
+    'anders',
+  ]),
   budget: z.enum(['<2k', '2k-5k', '5k-10k', '10k+', 'onbekend']),
   timeline: z.enum(['asap', '1-3-maanden', '3-6-maanden', 'flexibel']),
   omschrijving,
@@ -77,6 +84,8 @@ export const quoteToolSchema = z.object({
       "(bv. contactformulier, projectoverzicht/detailpagina's, boekingsmodule, login), " +
       'design (maatwerk of thema), stijl/sfeer en mate van animatie, koppelingen/integraties, ' +
       'meertaligheid, wie de content levert, en eventueel aantal producten bij een webshop. ' +
+      'Bij automatisering: de huidige stappen, frequentie en tijdverlies, gebruikte systemen en data, ' +
+      'uitzonderingen, gewenste controles en wie toegang mag hebben. ' +
       'Vat samen wat de bezoeker zei; verzin geen details die niet besproken zijn.',
   ),
   email: z

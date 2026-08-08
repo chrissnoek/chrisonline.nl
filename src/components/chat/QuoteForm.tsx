@@ -23,7 +23,7 @@ type QuoteFields = {
   omschrijving?: string;
 };
 
-const PROJECTTYPES = ['website', 'webshop', 'advertising', 'onderhoud', 'anders'];
+const PROJECTTYPES = ['website', 'webshop', 'automatisering', 'advertising', 'onderhoud', 'anders'];
 const BUDGETS = ['<2k', '2k-5k', '5k-10k', '10k+', 'onbekend'];
 const TIMELINES = ['asap', '1-3-maanden', '3-6-maanden', 'flexibel'];
 
@@ -205,7 +205,7 @@ export default function QuoteForm({
             rows={5}
             value={f.omschrijving ?? ''}
             onChange={set('omschrijving')}
-            placeholder="Wat wil je laten maken? Bijv. aantal/soorten pagina's, functies (formulier, projectoverzicht, boekingsmodule…), maatwerk of thema, stijl & animatie, koppelingen."
+            placeholder="Wat wil je laten maken of automatiseren? Beschrijf de huidige situatie, gewenste uitkomst, functies, systemen en belangrijke uitzonderingen."
             required
             aria-invalid={!!fieldErrors.omschrijving}
           />
