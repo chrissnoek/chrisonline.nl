@@ -14,9 +14,40 @@ export interface Service {
   points: { lead: string; text: string }[];
   /** Optioneel label, bijv. om een samenwerkingsvorm te markeren. */
   badge?: string;
+  /** Optionele detailpagina voor deze dienst. */
+  href?: string;
+  /** Laat een dienst als brede uitgelichte kaart zien. */
+  featured?: boolean;
 }
 
 export const SERVICES: Service[] = [
+  {
+    icon: 'automation',
+    title: 'Procesautomatisering & AI',
+    badge: 'nieuwe dienst',
+    href: '/automatisering',
+    featured: true,
+    intro:
+      'Terugkerend regelwerk hoeft niet iedere week opnieuw. Ik verbind je bestaande systemen en bouw betrouwbare workflows die het voorwerk doen, met menselijke controle waar die nodig blijft.',
+    points: [
+      {
+        lead: 'Administratie automatiseren',
+        text: 'van offerte-opvolging en werkbonnen tot facturen en urenregistratie',
+      },
+      {
+        lead: 'Systemen koppelen',
+        text: 'informatie veilig doorzetten zonder kopiëren, plakken of dubbel invoeren',
+      },
+      {
+        lead: 'AI als assistent',
+        text: 'e-mail en documenten laten voorsorteren of voorbereiden, niet ongecontroleerd versturen',
+      },
+      {
+        lead: 'Klein beginnen',
+        text: 'eerst één duidelijke tijdvreter analyseren, bouwen en samen testen',
+      },
+    ],
+  },
   {
     icon: 'pen',
     title: 'Website-ontwerp & UI/UX',
@@ -185,6 +216,6 @@ export const COLLAB_OPTIONS = [
     icon: 'chart',
     title: 'Full digital package',
     description:
-      'Branding, website of webshop én analytics: het hele traject van strategie tot livegang en onderhoud.',
+      'Branding, website of webshop, automatisering én analytics: het hele traject van strategie tot livegang en onderhoud.',
   },
 ] as const;

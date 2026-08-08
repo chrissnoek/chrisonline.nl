@@ -122,6 +122,13 @@
     const errorEl = (f: Field) => document.getElementById(`cf-${f}-error`)!;
     const touched = new Set<Field>();
 
+    // Een CTA vanaf een dienstpagina mag het gesprek alvast context geven.
+    const service = new URLSearchParams(window.location.search).get('dienst');
+    if (service === 'automatisering' && !input('message').value) {
+      input('message').value =
+        'Ik wil graag bespreken welke terugkerende taken in mijn bedrijf geautomatiseerd kunnen worden.\n\nDe taak die nu veel tijd kost is: ';
+    }
+
     const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     function validate(f: Field): string {
       const v = input(f).value;

@@ -3,6 +3,8 @@ import { SITE, NAV } from '../config/site';
 import ThemeToggle from './ThemeToggle.astro';
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
+
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
 
 <header
@@ -21,12 +23,17 @@ import Logo from './Logo.astro';
     </a>
 
     <!-- Desktop-navigatie -->
-    <nav class="hidden items-center gap-1 md:flex" aria-label="Hoofdnavigatie">
+    <nav class="hidden items-center gap-1 lg:flex" aria-label="Hoofdnavigatie">
       {
         NAV.map((item) => (
           <a
             href={item.href}
             class="rounded-pill px-3.5 py-2 text-sm font-medium text-[var(--fg-muted)] transition-colors hover:bg-[var(--bg-alt)] hover:text-[var(--fg)]"
+            aria-current={
+              !item.href.includes('#') && currentPath === item.href.replace(/\/$/, '')
+                ? 'page'
+                : undefined
+            }
           >
             {item.label}
           </a>
@@ -38,7 +45,7 @@ import Logo from './Logo.astro';
       <ThemeToggle />
       <a
         href="/contact"
-        class="rounded-pill hidden bg-[var(--fg)] px-4 py-2 text-sm font-semibold text-[var(--bg)] transition-transform hover:-translate-y-0.5 sm:inline-flex"
+        class="rounded-pill hidden bg-[var(--fg)] px-4 py-2 text-sm font-semibold text-[var(--bg)] transition-transform hover:-translate-y-0.5 xl:inline-flex"
       >
         Start een project
       </a>
@@ -46,7 +53,7 @@ import Logo from './Logo.astro';
       <button
         type="button"
         id="menu-toggle"
-        class="rounded-pill inline-flex h-10 w-10 items-center justify-center border border-[var(--border)] text-[var(--fg)] md:hidden"
+        class="rounded-pill inline-flex h-10 w-10 items-center justify-center border border-[var(--border)] text-[var(--fg)] lg:hidden"
         aria-label="Open menu"
         aria-expanded="false"
         aria-controls="mobile-menu"
@@ -60,7 +67,7 @@ import Logo from './Logo.astro';
   <!-- Mobiel uitklapmenu -->
   <div
     id="mobile-menu"
-    class="hidden border-t border-[var(--border)] bg-[var(--bg)] md:hidden"
+    class="hidden border-t border-[var(--border)] bg-[var(--bg)] lg:hidden"
     hidden
   >
     <nav class="container-page flex flex-col gap-1 py-4" aria-label="Mobiele navigatie">
@@ -195,6 +202,10 @@ import Logo from './Logo.astro';
   }
   /* Scrollspy: de sectie die in beeld is, licht op in de navigatie. */
   #site-header nav a[aria-current='true'] {
+    color: var(--fg);
+    background-color: var(--bg-alt);
+  }
+  #site-header nav a[aria-current='page'] {
     color: var(--fg);
     background-color: var(--bg-alt);
   }

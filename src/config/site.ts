@@ -17,10 +17,10 @@ export const SITE = {
   author: 'Chris Snoek',
 
   /** Beroep / functietitel. */
-  jobTitle: 'Webdeveloper & UI/UX-designer',
+  jobTitle: 'Webdeveloper, UI/UX-designer & automatiseringsspecialist',
 
   /** Korte tagline onder de merknaam. */
-  tagline: 'Razendsnelle maatwerk-websites die converteren.',
+  tagline: 'Maatwerk-websites, webshops en automatiseringen die werk uit handen nemen.',
 
   /** Taal van de site (gebruikt in <html lang>). */
   lang: 'nl',
@@ -33,11 +33,11 @@ export const SITE = {
  * SEO-standaarden. Worden per pagina overschreven waar nodig.
  */
 export const SEO = {
-  defaultTitle: 'Chris Snoek, webdeveloper & maatwerk-websites | Chris Online',
+  defaultTitle: 'Chris Snoek, webdevelopment & automatisering | Chris Online',
   titleTemplate: '%s | Chris Online',
   defaultDescription:
-    'Chris Snoek bouwt technisch sterke, razendsnelle maatwerk-websites en webshops. ' +
-    'Van conversiegericht ontwerp tot pixel-perfecte frontend-development.',
+    'Chris Snoek bouwt technisch sterke maatwerk-websites, webshops en bedrijfsautomatiseringen. ' +
+    'Van conversiegericht ontwerp tot processen die terugkerend handwerk uit handen nemen.',
   /** Standaard Open Graph-afbeelding (in /public, absoluut gemaakt op basis van SITE.url). */
   defaultOgImage: '/og/og-default.png',
 } as const;
@@ -79,6 +79,7 @@ export const SOCIALS = [
 export const NAV = [
   { label: 'Over mij', href: '/#over' },
   { label: 'Diensten', href: '/#diensten' },
+  { label: 'Automatisering', href: '/automatisering' },
   { label: 'Werk', href: '/#werk' },
   { label: 'Contact', href: '/contact' },
 ] as const;
