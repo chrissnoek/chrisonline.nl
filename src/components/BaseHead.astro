@@ -64,8 +64,7 @@ const allJsonLd = [personLd, websiteLd, ...jsonLd];
 <link rel="canonical" href={canonicalURL} />
 {noindex && <meta name="robots" content="noindex, nofollow" />}
 <meta name="author" content={SITE.author} />
-<meta name="theme-color" content="#0E0F1C" media="(prefers-color-scheme: dark)" />
-<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#F5FF00" />
 
 <!-- Open Graph -->
 <meta property="og:type" content={type} />
@@ -90,8 +89,7 @@ const allJsonLd = [personLd, websiteLd, ...jsonLd];
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="manifest" href="/site.webmanifest" />
 
-<!-- Fonts: Astro Fonts API injecteert preload + fallback-metrics (zero CLS).
-     Beide preloaden: Inter (body) én Space Grotesk (koppen boven de vouw). -->
+<!-- Fonts: Astro Fonts API injecteert preload + fallback-metrics (zero CLS). -->
 <Font cssVariable="--font-sans" preload />
 <Font cssVariable="--font-display" preload />
 

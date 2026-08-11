@@ -1,113 +1,256 @@
 ---
-import { SERVICES, COLLAB_OPTIONS } from '../../config/services';
+import { SERVICES } from '../../config/services';
 import Icon from '../Icon.astro';
+
+const secondaryServices = SERVICES.filter(
+  (service) => service.title !== 'Shopify webshop-development',
+);
 ---
 
-<section
-  id="diensten"
-  class="scroll-mt-24 border-y border-[var(--border)] bg-[var(--bg-alt)]"
-  aria-labelledby="services-heading"
->
-  <div class="container-page py-section">
-    <div class="reveal-up mx-auto max-w-2xl text-center">
-      <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
-        Diensten
-      </p>
-      <h2 id="services-heading" class="lift-in text-h2 mt-3 font-bold text-balance">
-        Alles voor een digitaal product dat presteert
-      </h2>
-      <p class="text-lead mt-4 text-pretty text-[var(--fg-muted)]">
-        Van automatisering en development tot design, branding en analytics, los of als compleet
-        traject.
-      </p>
+<section id="diensten" class="chapter-shell services-section" aria-labelledby="services-heading">
+  <aside class="chapter-rail" aria-hidden="true">
+    <div class="chapter-rail__index">
+      <span>05</span>
+      <i class="chapter-rail__line"></i>
     </div>
+  </aside>
 
-    <ul class="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+  <div class="services-main">
+    <header>
+      <p class="technical-label">Aanvullende diensten</p>
+      <h2 id="services-heading">Alles eromheen, wanneer het nodig is.</h2>
+      <p>
+        Shopify staat centraal. Deze disciplines kunnen het traject versterken, zonder de focus te
+        vertroebelen.
+      </p>
+    </header>
+
+    <div class="service-register">
       {
-        SERVICES.map((service) => (
-          <li
-            class:list={[
-              'reveal group spotlight-card rounded-card hover:border-accent-500/40 hover:shadow-card flex flex-col border border-[var(--border)] bg-[var(--bg)] p-7 transition-all duration-300 hover:-translate-y-1',
-              service.featured &&
-                'md:col-span-2 lg:col-span-3 lg:grid lg:grid-cols-[0.8fr_1.2fr] lg:gap-12',
-            ]}
-          >
-            <div>
-              <span class="bg-accent-500/12 group-hover:bg-accent-500 grid h-12 w-12 place-items-center rounded-xl text-[var(--accent-text)] transition-all duration-300 group-hover:scale-110 group-hover:text-white">
-                <Icon name={service.icon} size={24} />
-              </span>
-              <div class="mt-5 flex items-center gap-2">
-                <h3 class="text-lg font-bold tracking-tight">{service.title}</h3>
-              </div>
-              {service.badge && (
-                <span class="rounded-pill mt-1.5 inline-block w-fit bg-[var(--bg-alt)] px-2.5 py-0.5 text-xs font-medium text-[var(--fg-muted)]">
-                  {service.badge}
-                </span>
-              )}
-              <p class="mt-3 text-sm leading-relaxed text-[var(--fg-muted)]">{service.intro}</p>
+        secondaryServices.map((service, index) => (
+          <details>
+            <summary>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <strong>{service.title}</strong>
+              <small>{service.badge}</small>
+              <i aria-hidden="true" />
+            </summary>
+            <div class="service-detail">
+              <p>{service.intro}</p>
+              <ul>
+                {service.points.map((point) => (
+                  <li>
+                    <b>{point.lead}</b> — {point.text}
+                  </li>
+                ))}
+              </ul>
               {service.href && (
-                <a
-                  href={service.href}
-                  class="group/link mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--accent-text)] hover:underline"
-                >
-                  Bekijk automatiseringsmogelijkheden
-                  <Icon
-                    name="arrowRight"
-                    size={16}
-                    class="transition-transform group-hover/link:translate-x-1"
-                  />
+                <a href={service.href}>
+                  Bekijk deze dienst
+                  <Icon name="arrowRight" size={17} />
                 </a>
               )}
             </div>
-            <ul
-              class:list={[
-                'mt-5 space-y-2.5 border-t border-[var(--border)] pt-5',
-                service.featured && 'lg:mt-0 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-10',
-              ]}
-            >
-              {service.points.map((point) => (
-                <li class="flex gap-2.5 text-sm">
-                  <Icon name="check" size={18} class="mt-0.5 shrink-0 text-[var(--accent-text)]" />
-                  <span class="text-[var(--fg-muted)]">
-                    <strong class="font-semibold text-[var(--fg)]">{point.lead}</strong>:{' '}
-                    {point.text}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </li>
+          </details>
         ))
       }
-    </ul>
-
-    <!-- Samenwerkingsvormen -->
-    <div class="reveal-up mt-16">
-      <h3 class="text-center text-xl font-bold tracking-tight">Flexibele samenwerkingsvormen</h3>
-      <div class="mt-7 grid gap-5 md:grid-cols-3">
-        {
-          COLLAB_OPTIONS.map((opt) => (
-            <div class="group spotlight-card rounded-card relative border border-[var(--border)] bg-[var(--bg)] p-6">
-              <span class="pillar-node pillar-node--sm grid place-items-center text-white">
-                <Icon name={opt.icon} size={20} />
-              </span>
-              <h4 class="mt-4 font-semibold">{opt.title}</h4>
-              <p class="mt-2 text-sm leading-relaxed text-[var(--fg-muted)]">{opt.description}</p>
-            </div>
-          ))
-        }
-      </div>
     </div>
-
-    <!-- Sectie-afsluiter: lichte CTA voor wie hier al overtuigd is. -->
-    <p class="reveal-up mt-12 text-center text-[var(--fg-muted)]">
-      Niet zeker wat je nodig hebt?
-      <a
-        href="/contact"
-        class="group ml-1 inline-flex items-center gap-1.5 font-semibold text-[var(--accent-text)] hover:underline"
-      >
-        Laten we het bespreken
-        <Icon name="arrowRight" size={16} class="transition-transform group-hover:translate-x-1" />
-      </a>
-    </p>
   </div>
 </section>
+
+<style>
+  .services-section {
+    border-bottom: 1px solid var(--ink);
+    background: var(--paper);
+  }
+
+  .services-main {
+    display: grid;
+    grid-template-columns: minmax(20rem, 0.62fr) minmax(32rem, 1.38fr);
+    gap: clamp(4rem, 8vw, 10rem);
+    padding: clamp(6rem, 10vw, 10rem) var(--page-gutter);
+  }
+
+  .services-main header {
+    align-self: start;
+  }
+
+  .services-main h2 {
+    max-width: 8ch;
+    margin: 1.3rem 0 0;
+    font-size: clamp(3.8rem, 5.6vw, 6.8rem);
+    line-height: 0.88;
+  }
+
+  .services-main header > p:last-child {
+    max-width: 30rem;
+    margin: 2rem 0 0;
+    color: var(--fg-muted);
+    font-size: 1.02rem;
+  }
+
+  .service-register {
+    border-top: 1px solid var(--ink);
+  }
+
+  details {
+    border-bottom: 1px solid var(--border);
+  }
+
+  summary {
+    display: grid;
+    min-height: 5.5rem;
+    grid-template-columns: 3rem minmax(0, 1fr) auto 2rem;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary > span {
+    font-size: 0.66rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  summary strong {
+    font-family: var(--font-display, Georgia, serif);
+    font-size: clamp(1.5rem, 2.4vw, 2.6rem);
+    font-weight: 400;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  summary small {
+    color: var(--fg-muted);
+    font-size: 0.62rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  summary > i {
+    position: relative;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  summary > i::before,
+  summary > i::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: var(--ink);
+    transform: translate(-50%, -50%);
+    transition: transform 180ms ease;
+  }
+
+  summary > i::before {
+    width: 1.2rem;
+    height: 1px;
+  }
+
+  summary > i::after {
+    width: 1px;
+    height: 1.2rem;
+  }
+
+  details[open] {
+    border-bottom-color: var(--ink);
+    background: var(--signal);
+  }
+
+  details[open] summary {
+    padding-inline: 1.25rem;
+  }
+
+  details[open] summary > i::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .service-detail {
+    display: grid;
+    grid-template-columns: minmax(16rem, 0.7fr) minmax(20rem, 1.3fr);
+    gap: 2rem;
+    padding: 0 1.25rem 2rem 5.25rem;
+  }
+
+  .service-detail > p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  .service-detail ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .service-detail li {
+    padding: 0.45rem 0;
+    border-bottom: 1px solid rgb(9 9 9 / 0.18);
+    font-size: 0.78rem;
+  }
+
+  .service-detail a {
+    display: inline-flex;
+    width: max-content;
+    min-height: 44px;
+    grid-column: 2;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--ink);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.3rem;
+  }
+
+  @media (max-width: 73.99rem) {
+    .services-main {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 3.5rem;
+      padding: 5rem var(--mobile-gutter);
+    }
+
+    .services-main h2 {
+      max-width: 10ch;
+    }
+  }
+
+  @media (max-width: 39.99rem) {
+    .services-main {
+      padding-block: 4rem;
+    }
+
+    .services-main h2 {
+      font-size: clamp(3.35rem, 14vw, 4.6rem);
+    }
+
+    summary {
+      min-height: 5rem;
+      grid-template-columns: 2rem minmax(0, 1fr) 2rem;
+    }
+
+    summary small {
+      display: none;
+    }
+
+    summary strong {
+      font-size: 1.55rem;
+    }
+
+    .service-detail {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 0 1rem 1.5rem 3rem;
+    }
+
+    .service-detail a {
+      grid-column: 1;
+    }
+  }
+</style>

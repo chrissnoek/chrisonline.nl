@@ -1,0 +1,157 @@
+---
+import Icon from './Icon.astro';
+---
+
+<div class="storefront-diagram" aria-hidden="true">
+  <svg viewBox="0 0 820 650" role="presentation">
+    <g fill="none" stroke="currentColor" stroke-linecap="square" stroke-linejoin="miter">
+      <path class="construction" d="M64 530 355 622 758 418 468 330Z"></path>
+      <path class="construction" d="M355 622V558M468 330v-72M758 418v-72"></path>
+      <path class="construction" d="m64 530 403-205 291 93M355 558l403-204"></path>
+
+      <g class="browser" data-draw>
+        <path d="M100 174 540 58l96 50v372L196 596l-96-50Z"></path>
+        <path d="M100 174 196 224v372M196 224l440-116"></path>
+        <path d="M100 215 196 265l440-116"></path>
+        <circle cx="124" cy="196" r="4"></circle>
+        <circle cx="144" cy="207" r="4"></circle>
+        <circle cx="164" cy="217" r="4"></circle>
+        <path d="M226 252 600 153M226 278l140-37"></path>
+        <path d="M226 315 421 264l44 23v202l-195 51-44-23Z"></path>
+        <path d="M484 248 592 219v66l-108 29ZM484 334l108-29v66l-108 29ZM484 420l108-29v49l-108 29Z"
+        ></path>
+        <path d="M299 330c30-17 65-21 92-7l16 145-112 29Z"></path>
+        <path d="M320 335c11 18 43 9 49-13M308 377l91-24"></path>
+        <path d="M246 555h70M331 532h65"></path>
+      </g>
+
+      <g class="module module--one" data-draw>
+        <path d="m620 220 83-22 43 23v90l-83 22-43-23Z"></path>
+        <path d="m620 220 43 23 83-22M663 243v90"></path>
+        <path d="M683 265c11-7 26-7 36 0l-2 38-33 9Z"></path>
+      </g>
+
+      <g class="module module--two" data-draw>
+        <path d="m558 496 94-25 47 24v78l-94 25-47-24Z"></path>
+        <path d="m558 496 47 24 94-25M605 520v78"></path>
+        <path d="m624 538 49-13M624 552l36-10M624 566l43-12"></path>
+      </g>
+
+      <g class="module module--three" data-draw>
+        <path d="m432 543 66-17 34 17v56l-67 18-33-18Z"></path>
+        <path d="m432 543 33 18 67-18M465 561v56"></path>
+        <path d="m484 573 27-7v20l-27 7Z"></path>
+      </g>
+
+      <g class="connectors">
+        <path d="M636 258h-55v31h-61"></path>
+        <path d="M605 520v-37h-38"></path>
+        <path d="M465 561h-53v-33h-68"></path>
+        <path d="M699 265h54"></path>
+        <path d="M698 534h55"></path>
+      </g>
+    </g>
+
+    <g class="nodes" fill="currentColor">
+      <rect x="571" y="279" width="12" height="12"></rect>
+      <rect x="556" y="477" width="12" height="12"></rect>
+      <rect x="406" y="522" width="12" height="12"></rect>
+      <rect x="747" y="259" width="12" height="12"></rect>
+      <rect x="747" y="528" width="12" height="12"></rect>
+    </g>
+
+    <g class="diagram-copy" fill="currentColor" stroke="none">
+      <text x="690" y="178">MODULE 01</text>
+      <text x="688" y="612">SYSTEM IN MOTION</text>
+      <text x="90" y="615">STOREFRONT / 01</text>
+    </g>
+  </svg>
+
+  <span class="diagram-action"><Icon name="arrowUpRight" size={20} /></span>
+</div>
+
+<style>
+  .storefront-diagram {
+    position: relative;
+    width: min(100%, 56rem);
+    margin-inline: auto;
+    color: var(--ink);
+  }
+
+  svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .construction,
+  .connectors {
+    opacity: 0.38;
+    stroke-dasharray: 4 7;
+    stroke-width: 1;
+  }
+
+  .browser,
+  .module {
+    stroke-width: 1.25;
+  }
+
+  .diagram-copy {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+  }
+
+  .diagram-action {
+    position: absolute;
+    right: 7%;
+    bottom: 7%;
+    display: grid;
+    width: 3rem;
+    height: 3rem;
+    place-items: center;
+    background: var(--signal);
+    color: var(--ink);
+    font-size: 1.3rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    [data-draw] {
+      stroke-dasharray: 1800;
+      stroke-dashoffset: 1800;
+      animation: draw-diagram 1.8s var(--ease-out-soft) forwards;
+    }
+
+    .module--one {
+      animation-delay: 0.35s;
+    }
+
+    .module--two {
+      animation-delay: 0.48s;
+    }
+
+    .module--three {
+      animation-delay: 0.62s;
+    }
+
+    .nodes,
+    .diagram-copy,
+    .diagram-action {
+      opacity: 0;
+      animation: diagram-fade 0.5s ease 1.15s forwards;
+    }
+  }
+
+  @keyframes draw-diagram {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes diagram-fade {
+    to {
+      opacity: 1;
+    }
+  }
+</style>

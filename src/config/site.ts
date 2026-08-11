@@ -17,10 +17,10 @@ export const SITE = {
   author: 'Chris Snoek',
 
   /** Beroep / functietitel. */
-  jobTitle: 'Webdeveloper, UI/UX-designer & automatiseringsspecialist',
+  jobTitle: 'Shopify designer & developer',
 
   /** Korte tagline onder de merknaam. */
-  tagline: 'Maatwerk-websites, webshops en automatiseringen die werk uit handen nemen.',
+  tagline: 'Premium Shopify-websites waarin merk, verhaal en techniek samen bewegen.',
 
   /** Taal van de site (gebruikt in <html lang>). */
   lang: 'nl',
@@ -33,11 +33,10 @@ export const SITE = {
  * SEO-standaarden. Worden per pagina overschreven waar nodig.
  */
 export const SEO = {
-  defaultTitle: 'Chris Snoek, webdevelopment & automatisering | Chris Online',
+  defaultTitle: 'Premium Shopify-websites | Chris Online',
   titleTemplate: '%s | Chris Online',
   defaultDescription:
-    'Chris Snoek bouwt technisch sterke maatwerk-websites, webshops en bedrijfsautomatiseringen. ' +
-    'Van conversiegericht ontwerp tot processen die terugkerend handwerk uit handen nemen.',
+    'Chris Snoek ontwerpt, bouwt en onderhoudt premium Shopify-websites met een sterk merkverhaal, toegankelijke UX en levende frontends.',
   /** Standaard Open Graph-afbeelding (in /public, absoluut gemaakt op basis van SITE.url). */
   defaultOgImage: '/og/og-default.png',
 } as const;
@@ -77,10 +76,11 @@ export const SOCIALS = [
  * op de homepage naar de betreffende sectie.
  */
 export const NAV = [
+  { label: 'Werk', href: '/#werk' },
+  { label: 'Werkwijze', href: '/#werkwijze' },
   { label: 'Over mij', href: '/#over' },
   { label: 'Diensten', href: '/#diensten' },
   { label: 'Automatisering', href: '/automatisering' },
-  { label: 'Werk', href: '/#werk' },
   { label: 'Contact', href: '/contact' },
 ] as const;
 

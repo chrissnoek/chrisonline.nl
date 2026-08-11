@@ -1,91 +1,163 @@
 ---
-import { SITE, SOCIALS, NAV, CONTACT } from '../config/site';
+import { CONTACT, NAV, SITE, SOCIALS } from '../config/site';
 import Icon from './Icon.astro';
-import Logo from './Logo.astro';
 
 const year = new Date().getFullYear();
 ---
 
-<footer
-  aria-label="Sitevoettekst"
-  class="mt-section border-t border-[var(--border)] bg-[var(--bg-alt)]"
->
-  <div class="container-page py-14">
-    <div class="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
-      <!-- Merk + pitch -->
-      <div>
-        <a
-          href="/"
-          class="inline-flex items-center transition-opacity hover:opacity-80"
-          aria-label={SITE.brand}
-        >
-          <Logo height={52} />
-        </a>
-        <p class="mt-4 max-w-xs text-sm leading-relaxed text-[var(--fg-muted)]">
-          {SITE.tagline} Technisch sterk gebouwd, met aandacht voor snelheid, controle en conversie.
-        </p>
-      </div>
-
-      <!-- Navigatie -->
-      <nav aria-label="Footernavigatie">
-        <h2 class="text-sm font-semibold tracking-wide text-[var(--fg)] uppercase">Navigatie</h2>
-        <ul class="mt-4 space-y-2.5">
-          {
-            NAV.map((item) => (
-              <li>
-                <a
-                  href={item.href}
-                  class="text-sm text-[var(--fg-muted)] transition-colors hover:text-[var(--accent-text)]"
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-
-      <!-- Contact + socials -->
-      <div>
-        <h2 class="text-sm font-semibold tracking-wide text-[var(--fg)] uppercase">Contact</h2>
-        <a
-          href={`mailto:${CONTACT.email}`}
-          class="mt-4 inline-block text-sm font-medium text-[var(--accent-text)] hover:underline"
-        >
-          {CONTACT.email}
-        </a>
-        <a
-          href={CONTACT.bookingUrl}
-          target="_blank"
-          rel="noopener"
-          class="mt-1.5 block text-sm text-[var(--fg-muted)] transition-colors hover:text-[var(--accent-text)]"
-        >
-          Plan een (video)gesprek
-        </a>
-        <ul class="mt-5 flex gap-2.5">
-          {
-            SOCIALS.map((social) => (
-              <li>
-                <a
-                  href={social.url}
-                  class="rounded-pill hover:border-accent-500 grid h-10 w-10 place-items-center border border-[var(--border)] text-[var(--fg-muted)] transition-all hover:-translate-y-0.5 hover:text-[var(--accent-text)]"
-                  aria-label={`${social.name}${social.handle ? `, ${social.handle}` : ''}`}
-                  rel={social.url.startsWith('http') ? 'me noopener' : undefined}
-                  target={social.url.startsWith('http') ? '_blank' : undefined}
-                >
-                  <Icon name={social.icon} size={20} />
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
+<footer class="chapter-shell site-footer" aria-label="Sitevoettekst">
+  <div class="footer-rail" aria-hidden="true"></div>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <a class="footer-wordmark" href="/" aria-label={`${SITE.brand}, naar de homepage`}>
+        CHRIS—ONLINE
+      </a>
+      <p>{SITE.tagline}</p>
+      <small>© {year} {SITE.author}</small>
     </div>
 
-    <div
-      class="mt-12 flex flex-col items-start justify-between gap-3 border-t border-[var(--border)] pt-6 text-sm text-[var(--fg-muted)] sm:flex-row sm:items-center"
-    >
-      <p>&copy; {year} {SITE.author}, {SITE.brand}. Alle rechten voorbehouden.</p>
+    <nav class="footer-nav" aria-label="Footernavigatie">
+      {
+        NAV.map((item) => (
+          <a href={item.href}>
+            {item.label}
+            <Icon name="arrowRight" size={16} />
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="footer-contact">
+      <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+      <a href={CONTACT.bookingUrl} target="_blank" rel="noopener">Plan een gesprek</a>
+      {
+        SOCIALS.filter((social) => social.url.startsWith('http')).map((social) => (
+          <a href={social.url} target="_blank" rel="me noopener">
+            {social.name}
+            <Icon name="arrowUpRight" size={16} />
+          </a>
+        ))
+      }
     </div>
+
+    <svg class="footer-drawing" viewBox="0 0 480 210" aria-hidden="true">
+      <g fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M15 180h450M42 180V81l55-33h278l55 33v99M97 48v132M375 48v132"></path>
+        <path d="M117 75h238v105H117zM132 92h95v88h-95zM243 92h96v88h-96z"></path>
+        <path d="M255 180v-47h42v47M149 180v-37h40v37"></path>
+        <path class="dash" d="M22 195h436M42 64h388M97 33v-22M375 33v-22"></path>
+      </g>
+    </svg>
   </div>
 </footer>
+
+<style>
+  .site-footer {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .footer-rail {
+    border-right: 1px solid var(--graphite-dark);
+  }
+
+  .footer-main {
+    position: relative;
+    display: grid;
+    min-height: 24rem;
+    grid-template-columns: minmax(17rem, 0.9fr) minmax(18rem, 0.75fr) minmax(15rem, 0.7fr) minmax(
+        20rem,
+        1fr
+      );
+    gap: 2rem;
+    padding: 4.5rem var(--page-gutter);
+    overflow: hidden;
+  }
+
+  .footer-brand,
+  .footer-nav,
+  .footer-contact {
+    position: relative;
+    z-index: 2;
+  }
+
+  .footer-wordmark {
+    color: var(--paper);
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.055em;
+    text-decoration: none;
+  }
+
+  .footer-brand p {
+    max-width: 20rem;
+    margin: 1.25rem 0 0;
+    color: var(--graphite-light);
+    font-size: 0.8rem;
+  }
+
+  .footer-brand small {
+    display: block;
+    margin-top: 2.5rem;
+    color: var(--graphite-light);
+    font-size: 0.66rem;
+  }
+
+  .footer-nav,
+  .footer-contact {
+    display: grid;
+    align-content: start;
+  }
+
+  .footer-nav a,
+  .footer-contact a {
+    display: flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid var(--graphite-dark);
+    color: var(--paper);
+    font-size: 0.75rem;
+    text-decoration: none;
+  }
+
+  .footer-nav a:hover,
+  .footer-nav a:focus-visible,
+  .footer-contact a:hover,
+  .footer-contact a:focus-visible {
+    color: var(--signal);
+  }
+
+  .footer-drawing {
+    width: 100%;
+    align-self: end;
+    color: var(--graphite-light);
+    opacity: 0.35;
+  }
+
+  .footer-drawing .dash {
+    stroke-dasharray: 5 7;
+  }
+
+  @media (max-width: 73.99rem) {
+    .footer-main {
+      grid-template-columns: 1fr 1fr;
+      padding: 4rem var(--mobile-gutter);
+    }
+
+    .footer-drawing {
+      grid-column: 2;
+    }
+  }
+
+  @media (max-width: 39.99rem) {
+    .footer-main {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .footer-drawing {
+      grid-column: 1;
+    }
+  }
+</style>

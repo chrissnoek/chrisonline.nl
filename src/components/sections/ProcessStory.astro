@@ -1,0 +1,716 @@
+---
+const phases = [
+  {
+    number: '01',
+    name: 'Design',
+    title: 'Eerst maken we het verhaal voelbaar.',
+    body: 'Merk, collectie en klantreis worden één duidelijke winkelwereld. Van eerste richting tot een prototype dat op elk scherm klopt.',
+    points: [
+      'Positionering & art direction',
+      'UX, wireframes & interactie',
+      'Responsive designsysteem',
+    ],
+    kind: 'design',
+  },
+  {
+    number: '02',
+    name: 'Develop',
+    title: 'Dan brengen we de winkel tot leven.',
+    body: 'Het ontwerp wordt een maatwerk Shopify-theme: snel, toegankelijk en precies genoeg om als jouw merk te voelen — nooit als een template.',
+    points: ['Shopify Online Store 2.0', 'Motion & micro-interacties', 'Performance & WCAG AA'],
+    kind: 'develop',
+  },
+  {
+    number: '03',
+    name: 'Maintain',
+    title: 'En we blijven vooruitkijken.',
+    body: 'Na livegang stopt het verhaal niet. Ik onderhoud, optimaliseer en bouw door terwijl je collectie, campagnes en ambities groeien.',
+    points: [
+      'Monitoring & theme-updates',
+      'Conversie- en UX-optimalisatie',
+      'Nieuwe secties & campagnes',
+    ],
+    kind: 'maintain',
+  },
+] as const;
+---
+
+<section id="werkwijze" class="chapter-shell process-section" aria-labelledby="process-heading">
+  <aside class="process-rail chapter-rail" aria-hidden="true">
+    <div class="chapter-rail__index">
+      <span>03</span>
+      <i class="chapter-rail__line"></i>
+    </div>
+  </aside>
+
+  <div class="process-main">
+    <header class="process-intro">
+      <div>
+        <p class="technical-label">De werkwijze</p>
+        <h2 id="process-heading">Van richting naar een webshop die blijft bewegen.</h2>
+      </div>
+      <p>Een bewezen proces in drie fases. Design. Develop. Maintain.</p>
+    </header>
+
+    <div class="process-scroll" data-process-story>
+      <div class="process-sticky surface-grid">
+        <div class="process-progress" aria-hidden="true">
+          <span>Fase 01</span>
+          <i><b></b></i>
+          <span>Fase 03</span>
+        </div>
+
+        <div class="process-panels">
+          {
+            phases.map((phase, index) => (
+              <article
+                class:list={[
+                  'process-panel',
+                  `process-panel--${phase.kind}`,
+                  index === 0 && 'is-active',
+                ]}
+                data-process-panel
+              >
+                <div class="phase-copy">
+                  <p class="phase-label">
+                    <span>{phase.number}</span>
+                    Fase {phase.number} — {phase.name}
+                  </p>
+                  <h3>{phase.title}</h3>
+                  <p class="phase-body">{phase.body}</p>
+                  <ul>
+                    {phase.points.map((point) => (
+                      <li>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div
+                  class:list={['phase-visual', `phase-visual--${phase.kind}`]}
+                  aria-hidden="true"
+                >
+                  <div class="visual-toolbar">
+                    <>
+                      <i />
+                      <i />
+                      <i />
+                      <span>CHRIS—ONLINE / {phase.name}</span>
+                    </>
+                  </div>
+
+                  {phase.kind === 'design' && (
+                    <svg viewBox="0 0 720 430" role="presentation">
+                      <g fill="none" stroke="currentColor" stroke-width="1.2">
+                        <rect x="45" y="35" width="405" height="330" />
+                        <path d="M45 78h405M76 112h132M76 144h230M76 177h176" />
+                        <rect x="76" y="217" width="152" height="105" />
+                        <rect x="249" y="217" width="166" height="42" />
+                        <rect x="249" y="280" width="166" height="42" />
+                        <path d="m469 105 86-45 113 59-86 45ZM469 105v94l113 59 86-45v-94M582 164v94" />
+                        <path d="m488 224 72-38 92 48-72 38ZM488 224v61l92 48 72-38v-61M580 272v61" />
+                        <path class="dash" d="M450 176h68M415 238h73M415 301h73" />
+                      </g>
+                      <g fill="currentColor">
+                        <rect x="510" y="169" width="11" height="11" />
+                        <rect x="477" y="232" width="11" height="11" />
+                        <rect x="477" y="295" width="11" height="11" />
+                      </g>
+                    </svg>
+                  )}
+
+                  {phase.kind === 'develop' && (
+                    <div class="store-build">
+                      <div class="store-build__nav">
+                        <b>MERK</b>
+                        <span>Collectie</span>
+                        <span>Verhaal</span>
+                        <i />
+                      </div>
+                      <div class="store-build__content">
+                        <div>
+                          <small>Nieuwe collectie</small>
+                          <strong>
+                            Ruimte
+                            <br />
+                            voor licht.
+                          </strong>
+                          <span>Bekijk collectie →</span>
+                        </div>
+                        <div class="product-object">
+                          <i />
+                          <i />
+                          <i />
+                          <i />
+                          <i />
+                          <i />
+                          <i />
+                          <b />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {phase.kind === 'maintain' && (
+                    <svg viewBox="0 0 720 430" role="presentation">
+                      <g fill="none" stroke="currentColor" stroke-width="1.2">
+                        <rect x="45" y="42" width="438" height="294" />
+                        <path d="M76 291h368M76 260l39-34 39 14 42-75 52 38 48-57 47 29 49-68 52 53" />
+                        <path
+                          class="dash"
+                          d="M76 100h368M76 148h368M76 196h368M154 72v219M248 72v219M343 72v219"
+                        />
+                        <rect x="517" y="64" width="158" height="70" />
+                        <rect x="517" y="156" width="158" height="70" />
+                        <rect x="517" y="248" width="158" height="70" />
+                        <path d="M553 100h84M553 192h84M553 284h84" />
+                      </g>
+                      <g fill="currentColor">
+                        <circle cx="115" cy="226" r="6" />
+                        <circle cx="196" cy="165" r="6" />
+                        <circle cx="296" cy="146" r="6" />
+                        <circle cx="404" cy="107" r="6" />
+                        <rect x="533" y="84" width="12" height="12" />
+                        <rect x="533" y="176" width="12" height="12" />
+                        <rect x="533" y="268" width="12" height="12" />
+                      </g>
+                    </svg>
+                  )}
+
+                  <span class="visual-node" />
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  let processAbort: AbortController | undefined;
+
+  function initProcessStories() {
+    processAbort?.abort();
+    processAbort = new AbortController();
+    const { signal } = processAbort;
+
+    document.querySelectorAll<HTMLElement>('[data-process-story]').forEach((story) => {
+      const panels = Array.from(story.querySelectorAll<HTMLElement>('[data-process-panel]'));
+      if (!panels.length) return;
+
+      let ticking = false;
+      const update = () => {
+        ticking = false;
+        const mobile = window.matchMedia('(max-width: 73.99rem)').matches;
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (mobile || reduced) {
+          story.style.setProperty('--process-progress', '1');
+          panels.forEach((panel) => panel.classList.add('is-active'));
+          return;
+        }
+
+        const top = story.getBoundingClientRect().top + window.scrollY;
+        const range = Math.max(1, story.offsetHeight - window.innerHeight);
+        const progress = Math.min(1, Math.max(0, (window.scrollY - top) / range));
+        const active = Math.min(panels.length - 1, Math.floor(progress * panels.length));
+        story.style.setProperty('--process-progress', String(progress));
+        panels.forEach((panel, index) => panel.classList.toggle('is-active', index === active));
+      };
+
+      const requestUpdate = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(update);
+      };
+
+      update();
+      window.addEventListener('scroll', requestUpdate, { passive: true, signal });
+      window.addEventListener('resize', requestUpdate, { passive: true, signal });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initProcessStories);
+</script>
+
+<style>
+  .process-section {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .process-rail {
+    border-color: var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .process-main {
+    min-width: 0;
+  }
+
+  .process-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
+    align-items: end;
+    gap: 3rem;
+    padding: clamp(6rem, 9vw, 9rem) var(--page-gutter) clamp(4rem, 7vw, 7rem);
+  }
+
+  .process-intro h2 {
+    max-width: 11ch;
+    margin: 1.25rem 0 0;
+    font-size: clamp(4rem, 6.3vw, 7.6rem);
+    line-height: 0.86;
+  }
+
+  .process-intro > p {
+    max-width: 26rem;
+    margin: 0 0 0.75rem;
+    color: var(--graphite-light);
+    font-size: 1.05rem;
+  }
+
+  .process-scroll {
+    --process-progress: 0;
+    height: 330vh;
+  }
+
+  .process-sticky {
+    position: sticky;
+    top: 4.5rem;
+    height: calc(100svh - 4.5rem);
+    min-height: 46rem;
+    overflow: hidden;
+    border-top: 1px solid var(--graphite-dark);
+  }
+
+  .process-progress {
+    position: absolute;
+    top: 2rem;
+    right: var(--page-gutter);
+    left: var(--page-gutter);
+    z-index: 5;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.62rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .process-progress > i {
+    height: 1px;
+    background: var(--graphite-dark);
+  }
+
+  .process-progress b {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: var(--signal);
+    transform: scaleX(var(--process-progress));
+    transform-origin: left;
+  }
+
+  .process-panels,
+  .process-panel {
+    position: absolute;
+    inset: 0;
+  }
+
+  .process-panel {
+    display: grid;
+    grid-template-columns: minmax(22rem, 0.72fr) minmax(34rem, 1.28fr);
+    align-items: center;
+    gap: clamp(3rem, 6vw, 7rem);
+    padding: 6.5rem var(--page-gutter) 2.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(2rem);
+    transition:
+      opacity 360ms ease,
+      transform 520ms var(--ease-out-soft);
+  }
+
+  .process-panel.is-active {
+    z-index: 2;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .phase-label {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin: 0;
+    color: var(--signal);
+    font-size: 0.67rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .phase-label span {
+    display: grid;
+    width: 2.5rem;
+    height: 2.5rem;
+    place-items: center;
+    background: var(--signal);
+    color: var(--ink);
+  }
+
+  .phase-copy h3 {
+    max-width: 12ch;
+    margin: 1.6rem 0 0;
+    font-family: var(--font-display, Georgia, serif);
+    font-size: clamp(3.5rem, 4.6vw, 5.4rem);
+    font-weight: 380;
+    hyphens: none;
+    letter-spacing: -0.05em;
+    line-height: 0.88;
+    overflow-wrap: normal;
+  }
+
+  .phase-body {
+    max-width: 35rem;
+    margin: 1.75rem 0 0;
+    color: var(--graphite-light);
+    font-size: clamp(0.98rem, 1.25vw, 1.18rem);
+  }
+
+  .phase-copy ul {
+    display: grid;
+    max-width: 34rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--graphite-dark);
+  }
+
+  .phase-copy li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--graphite-dark);
+    font-size: 0.78rem;
+  }
+
+  .phase-visual {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--graphite);
+    background: rgb(242 242 237 / 0.02);
+    color: var(--paper);
+  }
+
+  .visual-toolbar {
+    display: flex;
+    height: 2.4rem;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0 0.8rem;
+    border-bottom: 1px solid var(--graphite-dark);
+  }
+
+  .visual-toolbar i {
+    width: 0.42rem;
+    height: 0.42rem;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+  }
+
+  .visual-toolbar span {
+    margin-left: auto;
+    font-size: 0.52rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .phase-visual svg {
+    width: 100%;
+    height: auto;
+    padding: 1.5rem;
+  }
+
+  .phase-visual .dash {
+    opacity: 0.45;
+    stroke-dasharray: 5 7;
+  }
+
+  .visual-node {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 2.75rem;
+    height: 2.75rem;
+    background: var(--signal);
+  }
+
+  .visual-node::before,
+  .visual-node::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: var(--ink);
+    transform: translate(-50%, -50%);
+  }
+
+  .visual-node::before {
+    width: 1rem;
+    height: 1px;
+  }
+
+  .visual-node::after {
+    width: 1px;
+    height: 1rem;
+  }
+
+  .store-build {
+    min-height: 25rem;
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .store-build__nav {
+    display: flex;
+    height: 4rem;
+    align-items: center;
+    gap: 2rem;
+    padding: 0 1.4rem;
+    border-bottom: 1px solid var(--graphite);
+    font-size: 0.65rem;
+  }
+
+  .store-build__nav i {
+    width: 0.8rem;
+    height: 0.8rem;
+    margin-left: auto;
+    border: 1px solid currentColor;
+  }
+
+  .store-build__content {
+    display: grid;
+    min-height: 21rem;
+    grid-template-columns: 0.75fr 1.25fr;
+    align-items: center;
+    padding: 2rem;
+    background: linear-gradient(105deg, var(--paper) 0 48%, #d8d8d0 48% 100%);
+  }
+
+  .store-build__content small {
+    font-size: 0.58rem;
+    font-weight: 650;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .store-build__content strong {
+    display: block;
+    margin-top: 0.65rem;
+    font-family: var(--font-display, Georgia, serif);
+    font-size: clamp(2.8rem, 4.5vw, 5.5rem);
+    font-weight: 380;
+    letter-spacing: -0.05em;
+    line-height: 0.83;
+  }
+
+  .store-build__content > div > span {
+    display: inline-block;
+    margin-top: 1.4rem;
+    padding: 0.65rem 0.9rem;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 0.6rem;
+  }
+
+  .product-object {
+    position: relative;
+    width: min(100%, 23rem);
+    height: 18rem;
+    margin-inline: auto;
+  }
+
+  .product-object > i {
+    position: absolute;
+    bottom: 5.5rem;
+    left: 50%;
+    width: 44%;
+    height: 7rem;
+    border: 1px solid var(--ink);
+    border-radius: 50% 50% 8% 8%;
+    transform: translateX(-50%) rotate(calc((var(--i, 0) - 3) * 5deg));
+    transform-origin: 50% 100%;
+  }
+
+  .product-object > i:nth-child(1) {
+    --i: 0;
+  }
+  .product-object > i:nth-child(2) {
+    --i: 1;
+  }
+  .product-object > i:nth-child(3) {
+    --i: 2;
+  }
+  .product-object > i:nth-child(4) {
+    --i: 3;
+  }
+  .product-object > i:nth-child(5) {
+    --i: 4;
+  }
+  .product-object > i:nth-child(6) {
+    --i: 5;
+  }
+  .product-object > i:nth-child(7) {
+    --i: 6;
+  }
+
+  .product-object b {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 27%;
+    height: 7rem;
+    border: 1px solid var(--ink);
+    background: #77776f;
+    transform: translateX(-50%);
+  }
+
+  @media (max-width: 73.99rem) {
+    .process-intro {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 5rem var(--mobile-gutter) 3rem;
+    }
+
+    .process-intro h2 {
+      font-size: clamp(3.6rem, 12vw, 6rem);
+    }
+
+    .process-scroll {
+      height: auto;
+    }
+
+    .process-sticky,
+    .process-panels,
+    .process-panel {
+      position: relative;
+      inset: auto;
+      height: auto;
+      min-height: 0;
+    }
+
+    .process-sticky {
+      overflow: visible;
+    }
+
+    .process-progress {
+      display: none;
+    }
+
+    .process-panels {
+      display: grid;
+    }
+
+    .process-panel {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2.5rem;
+      padding: 5rem var(--mobile-gutter);
+      border-bottom: 1px solid var(--graphite-dark);
+      opacity: 1;
+      pointer-events: auto;
+      transform: none;
+    }
+
+    .phase-copy h3 {
+      max-width: 10ch;
+      hyphens: auto;
+    }
+
+    .phase-visual {
+      width: min(100%, 48rem);
+    }
+  }
+
+  @media (max-width: 39.99rem) {
+    .process-intro h2,
+    .phase-copy h3 {
+      font-size: clamp(3.25rem, 14vw, 4.7rem);
+    }
+
+    .process-panel {
+      padding-block: 4rem;
+    }
+
+    .phase-copy ul {
+      margin-top: 1.5rem;
+    }
+
+    .phase-visual svg {
+      padding: 0.75rem;
+    }
+
+    .store-build,
+    .store-build__content {
+      min-height: 17rem;
+    }
+
+    .store-build__nav span {
+      display: none;
+    }
+
+    .store-build__content {
+      grid-template-columns: 0.9fr 1.1fr;
+      padding: 1rem;
+    }
+
+    .store-build__content strong {
+      font-size: 2.4rem;
+    }
+
+    .product-object {
+      height: 12rem;
+    }
+
+    .product-object > i {
+      bottom: 3.8rem;
+      height: 4.5rem;
+    }
+
+    .product-object b {
+      height: 4.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .process-scroll {
+      height: auto;
+    }
+
+    .process-sticky,
+    .process-panels,
+    .process-panel {
+      position: relative;
+      inset: auto;
+      height: auto;
+      min-height: 0;
+    }
+
+    .process-progress {
+      display: none;
+    }
+
+    .process-panels {
+      display: grid;
+    }
+
+    .process-panel {
+      opacity: 1;
+      pointer-events: auto;
+      transform: none;
+    }
+  }
+</style>

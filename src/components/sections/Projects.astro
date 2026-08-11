@@ -1,44 +1,458 @@
 ---
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
-import ProjectCard from '../ProjectCard.astro';
 import Icon from '../Icon.astro';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 ---
 
-<section id="werk" class="scroll-mt-24" aria-labelledby="work-heading">
-  <div class="container-page py-section">
-    <div class="reveal-up flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
-          Geselecteerd werk
-        </p>
-        <h2 id="work-heading" class="lift-in text-h2 mt-3 font-bold text-balance">
-          Projecten waar ontwerp en techniek samenkomen
-        </h2>
-      </div>
-      <p class="max-w-sm text-[var(--fg-muted)]">
-        Een greep uit recente projecten. Klik door voor de aanpak en het resultaat.
+<section id="werk" class="chapter-shell projects-section" aria-labelledby="work-heading">
+  <aside class="chapter-rail" aria-hidden="true">
+    <div class="chapter-rail__index">
+      <span>02</span>
+      <i class="chapter-rail__line"></i>
+    </div>
+  </aside>
+
+  <div class="projects-main" data-project-carousel aria-roledescription="carousel">
+    <div class="projects-copy">
+      <p class="technical-label">Geselecteerd werk</p>
+      <h2 id="work-heading">Werk waarin alles samenkomt.</h2>
+      <p>
+        Digitale platforms en merkervaringen waarin complexe keuzes helder, voelbaar en boekbaar
+        worden.
       </p>
+
+      <div class="carousel-controls">
+        <button type="button" data-carousel-prev aria-label="Vorig project">
+          <Icon name="arrowLeft" size={20} />
+        </button>
+        <button type="button" data-carousel-next aria-label="Volgend project">
+          <Icon name="arrowRight" size={20} />
+        </button>
+        <span aria-live="polite">
+          <b data-carousel-current>01</b> / {String(projects.length).padStart(2, '0')}
+        </span>
+      </div>
+
+      <div class="project-tabs" role="tablist" aria-label="Kies een project">
+        {
+          projects.map((project, index) => (
+            <button
+              type="button"
+              role="tab"
+              id={`project-tab-${index}`}
+              aria-controls={`project-panel-${index}`}
+              aria-selected={index === 0 ? 'true' : 'false'}
+              tabindex={index === 0 ? 0 : -1}
+              data-project-tab
+              data-index={index}
+            >
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <strong>{project.data.client}</strong>
+            </button>
+          ))
+        }
+      </div>
     </div>
 
-    <!-- Uitgelicht eerst: het sterkste project groot, de rest in het raster. -->
-    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="project-stage">
       {
-        projects.map((project, i) => (
-          <ProjectCard project={project} eager={i === 0} featured={i === 0} />
+        projects.map((project, index) => (
+          <article
+            id={`project-panel-${index}`}
+            class:list={['project-panel', index === 0 && 'is-active']}
+            role="tabpanel"
+            aria-labelledby={`project-tab-${index}`}
+            hidden={index !== 0}
+            data-project-panel
+          >
+            <a
+              class="project-media"
+              href={`/werk/${project.id}`}
+              aria-label={`Bekijk ${project.data.title}`}
+            >
+              <Image
+                src={project.data.cover}
+                alt={project.data.coverAlt}
+                widths={[640, 960, 1280, 1600]}
+                sizes="(max-width: 1184px) 100vw, 58vw"
+                format="avif"
+                quality="high"
+                loading={index === 0 ? 'eager' : 'lazy'}
+              />
+              <span class="project-open" aria-hidden="true">
+                <Icon name="arrowUpRight" size={19} />
+              </span>
+            </a>
+
+            <div class="project-meta">
+              <div>
+                <p class="technical-label">{project.data.role}</p>
+                <h3>{project.data.title}</h3>
+              </div>
+              <p>{project.data.summary}</p>
+              <a href={`/werk/${project.id}`}>
+                Bekijk de case
+                <Icon name="arrowRight" size={17} />
+              </a>
+            </div>
+          </article>
         ))
       }
     </div>
-
-    <div class="reveal mt-10">
-      <a
-        href="/contact"
-        class="group inline-flex items-center gap-2 font-semibold text-[var(--accent-text)]"
-      >
-        Ook zo'n project? Laten we praten
-        <Icon name="arrowRight" size={18} class="transition-transform group-hover:translate-x-1" />
-      </a>
-    </div>
   </div>
 </section>
+
+<script>
+  function initProjectCarousels() {
+    document.querySelectorAll<HTMLElement>('[data-project-carousel]').forEach((carousel) => {
+      if (carousel.dataset.ready) return;
+      carousel.dataset.ready = 'true';
+
+      const tabs = Array.from(carousel.querySelectorAll<HTMLButtonElement>('[data-project-tab]'));
+      const panels = Array.from(carousel.querySelectorAll<HTMLElement>('[data-project-panel]'));
+      const current = carousel.querySelector<HTMLElement>('[data-carousel-current]');
+      const previous = carousel.querySelector<HTMLButtonElement>('[data-carousel-prev]');
+      const next = carousel.querySelector<HTMLButtonElement>('[data-carousel-next]');
+      let active = 0;
+
+      const show = (nextIndex: number, focusTab = false) => {
+        active = (nextIndex + panels.length) % panels.length;
+        tabs.forEach((tab, index) => {
+          const selected = index === active;
+          tab.setAttribute('aria-selected', String(selected));
+          tab.tabIndex = selected ? 0 : -1;
+          if (selected && focusTab) tab.focus();
+        });
+        panels.forEach((panel, index) => {
+          const selected = index === active;
+          panel.hidden = !selected;
+          panel.classList.toggle('is-active', selected);
+        });
+        if (current) current.textContent = String(active + 1).padStart(2, '0');
+      };
+
+      previous?.addEventListener('click', () => show(active - 1));
+      next?.addEventListener('click', () => show(active + 1));
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => show(index));
+        tab.addEventListener('keydown', (event) => {
+          if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            show(active + 1, true);
+          }
+          if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            show(active - 1, true);
+          }
+          if (event.key === 'Home') {
+            event.preventDefault();
+            show(0, true);
+          }
+          if (event.key === 'End') {
+            event.preventDefault();
+            show(panels.length - 1, true);
+          }
+        });
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initProjectCarousels);
+</script>
+
+<style>
+  .projects-section {
+    min-height: 100svh;
+    border-bottom: 1px solid var(--ink);
+    background: var(--paper);
+  }
+
+  .projects-main {
+    display: grid;
+    min-width: 0;
+    grid-template-columns: minmax(24rem, 0.85fr) minmax(34rem, 1.15fr);
+    gap: clamp(3rem, 5.5vw, 7rem);
+    padding: clamp(6rem, 10vw, 10rem) var(--page-gutter);
+  }
+
+  .projects-copy {
+    align-self: center;
+  }
+
+  .projects-copy > .technical-label {
+    margin-bottom: 2.5rem;
+  }
+
+  h2 {
+    max-width: 9.5ch;
+    margin: 0;
+    font-size: clamp(4rem, 5.1vw, 6.3rem);
+    hyphens: auto;
+    line-height: 0.88;
+    overflow-wrap: normal;
+  }
+
+  .projects-copy > p:not(.technical-label) {
+    max-width: 31rem;
+    margin: 2rem 0 0;
+    color: var(--fg-muted);
+    font-size: clamp(1rem, 1.3vw, 1.25rem);
+  }
+
+  .carousel-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 3rem;
+  }
+
+  .carousel-controls button {
+    display: grid;
+    width: 3.5rem;
+    height: 3.5rem;
+    place-items: center;
+    border: 1px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    transition:
+      background 150ms ease,
+      color 150ms ease;
+  }
+
+  .carousel-controls button:hover,
+  .carousel-controls button:focus-visible {
+    background: var(--signal);
+    color: var(--ink);
+  }
+
+  .carousel-controls > span {
+    margin-left: auto;
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .project-tabs {
+    display: grid;
+    margin-top: 3.5rem;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .project-tabs button {
+    position: relative;
+    display: grid;
+    min-width: 0;
+    min-height: 6.2rem;
+    align-content: center;
+    gap: 0.45rem;
+    padding: 0.8rem;
+    border: 0;
+    border-right: 1px solid var(--border);
+    background: transparent;
+    color: var(--ink);
+    text-align: left;
+  }
+
+  .project-tabs button:last-child {
+    border-right: 0;
+  }
+
+  .project-tabs button::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 3px;
+    background: var(--signal);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 180ms ease;
+  }
+
+  .project-tabs button[aria-selected='true']::after {
+    transform: scaleX(1);
+  }
+
+  .project-tabs span {
+    font-size: 0.64rem;
+  }
+
+  .project-tabs strong {
+    overflow: hidden;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .project-stage {
+    min-width: 0;
+    align-self: center;
+  }
+
+  .project-panel[hidden] {
+    display: none;
+  }
+
+  .project-panel.is-active {
+    animation: project-enter 0.5s var(--ease-out-soft) both;
+  }
+
+  .project-media {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+  }
+
+  .project-media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.9) contrast(1.06);
+    transition:
+      filter 300ms ease,
+      transform 500ms var(--ease-out-soft);
+  }
+
+  .project-media:hover :global(img),
+  .project-media:focus-visible :global(img) {
+    filter: grayscale(0.15) contrast(1.02);
+    transform: scale(1.015);
+  }
+
+  .project-open {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    display: grid;
+    width: 3rem;
+    height: 3rem;
+    place-items: center;
+    background: var(--signal);
+    color: var(--ink);
+  }
+
+  .project-meta {
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.75fr) minmax(15rem, 1.25fr) auto;
+    align-items: start;
+    gap: 2rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .project-meta h3 {
+    margin: 0.35rem 0 0;
+    font-family: var(--font-display, Georgia, serif);
+    font-size: clamp(1.6rem, 2.3vw, 2.5rem);
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .project-meta > p {
+    margin: 0;
+    color: var(--fg-muted);
+    font-size: 0.86rem;
+  }
+
+  .project-meta > a {
+    display: flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--ink);
+    font-size: 0.78rem;
+    font-weight: 650;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  @keyframes project-enter {
+    from {
+      opacity: 0;
+      transform: translateX(1.25rem);
+    }
+  }
+
+  @media (max-width: 73.99rem) {
+    .projects-main {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 3rem;
+      padding: 5rem var(--mobile-gutter);
+    }
+
+    h2 {
+      max-width: 10ch;
+    }
+
+    .projects-copy > p:not(.technical-label) {
+      max-width: 40rem;
+    }
+
+    .project-tabs {
+      overflow-x: auto;
+      grid-template-columns: repeat(5, minmax(8rem, 1fr));
+      overscroll-behavior-inline: contain;
+      scrollbar-width: thin;
+    }
+  }
+
+  @media (max-width: 39.99rem) {
+    .projects-main {
+      gap: 2rem;
+      padding-block: 4rem;
+    }
+
+    h2 {
+      font-size: clamp(3.4rem, 15vw, 4.8rem);
+    }
+
+    .carousel-controls {
+      margin-top: 2rem;
+    }
+
+    .project-tabs {
+      margin-top: 2rem;
+      grid-template-columns: repeat(5, 7.2rem);
+    }
+
+    .project-tabs button {
+      min-height: 5.2rem;
+    }
+
+    .project-stage {
+      display: grid;
+    }
+
+    .project-media {
+      aspect-ratio: 4 / 4.6;
+    }
+
+    .project-meta {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1rem;
+    }
+
+    .project-meta > a {
+      width: max-content;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-panel.is-active {
+      animation: none;
+    }
+
+    .project-media :global(img) {
+      transition: none;
+    }
+  }
+</style>

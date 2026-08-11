@@ -40,16 +40,16 @@ export default defineConfig({
       subsets: ['latin'],
       fallbacks: ['system-ui', 'sans-serif'],
     },
-    // Display-face voor grote koppen (h1/h2/hero-groet): karaktervolle,
-    // licht hoekige grotesk die het hexagon-merk echoot. Body blijft Inter.
+    // Editorial display-face voor de nieuwe industrial storytelling-richting.
+    // Body en utility-copy blijven Inter voor rust en technische precisie.
     {
       provider: fontProviders.fontsource(),
-      name: 'Space Grotesk',
+      name: 'Newsreader',
       cssVariable: '--font-display',
-      weights: ['500 700'],
+      weights: ['300 800'],
       styles: ['normal'],
       subsets: ['latin'],
-      fallbacks: ['system-ui', 'sans-serif'],
+      fallbacks: ['Georgia', 'serif'],
     },
   ],
 

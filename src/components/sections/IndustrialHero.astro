@@ -1,0 +1,349 @@
+---
+import { CONTACT } from '../../config/site';
+import Icon from '../Icon.astro';
+import StorefrontDiagram from '../StorefrontDiagram.astro';
+---
+
+<section class="chapter-shell industrial-hero" aria-labelledby="hero-title">
+  <aside class="hero-rail chapter-rail" aria-hidden="true">
+    <p>CHRIS—ONLINE</p>
+    <div class="chapter-rail__index">
+      <span>01</span>
+      <i class="chapter-rail__line"></i>
+      <small>&lt;30s<br />oriëntatie</small>
+    </div>
+  </aside>
+
+  <div class="hero-main">
+    <div class="hero-stage">
+      <div class="hero-copy">
+        <h1 id="hero-title">
+          <span><i>Webshops,</i></span>
+          <span><i>nauwkeurig</i></span>
+          <span><i>gechoreografeerd.</i></span>
+        </h1>
+
+        <p>Premium Shopify-websites waarin merk, verhaal en techniek als één systeem bewegen.</p>
+
+        <div class="hero-actions">
+          <a class="industrial-button industrial-button--dark" href="#werk">
+            Bekijk het werk
+            <Icon name="arrowRight" size={18} />
+          </a>
+          <a class="industrial-button" href={CONTACT.bookingUrl} target="_blank" rel="noopener">
+            Bespreek je Shopify-project
+            <Icon name="arrowUpRight" size={18} />
+          </a>
+        </div>
+
+        <p class="hero-system-line">
+          <span aria-hidden="true"></span>
+          Design · Develop · Maintain
+        </p>
+      </div>
+
+      <div class="hero-diagram">
+        <StorefrontDiagram />
+        <div class="diagram-marker diagram-marker--one">
+          <span class="crosshair"></span>
+          GRID 12
+        </div>
+        <div class="diagram-marker diagram-marker--two">
+          <span class="crosshair"></span>
+          SYSTEM<br />IN MOTION
+        </div>
+      </div>
+    </div>
+
+    <a class="hero-next" href="#werk">
+      <span>02</span>
+      <strong>Werk waarin alles samenkomt.</strong>
+      <Icon name="arrowRight" size={24} />
+    </a>
+  </div>
+</section>
+
+<style>
+  .industrial-hero {
+    min-height: calc(100svh - 5.5rem);
+    border-bottom: 1px solid var(--ink);
+    background: var(--paper);
+  }
+
+  .hero-rail {
+    background: var(--signal);
+  }
+
+  .hero-rail > p {
+    position: absolute;
+    top: 2rem;
+    left: 50%;
+    margin: 0;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    line-height: 1;
+    text-orientation: mixed;
+    transform: translateX(-50%) rotate(180deg);
+    writing-mode: vertical-rl;
+  }
+
+  .hero-rail small {
+    font-size: 0.52rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .hero-main {
+    min-width: 0;
+  }
+
+  .hero-stage {
+    display: grid;
+    min-height: calc(100svh - 11.5rem);
+    grid-template-columns: minmax(28rem, 0.92fr) minmax(32rem, 1.08fr);
+    align-items: center;
+    gap: clamp(2rem, 3.5vw, 5rem);
+    padding: clamp(3rem, 6vh, 5.5rem) var(--page-gutter) 2.5rem;
+  }
+
+  .hero-copy {
+    position: relative;
+    z-index: 2;
+    max-width: 45rem;
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--font-display, Georgia, serif);
+    font-size: clamp(5rem, 7.1vw, 8.8rem);
+    font-weight: 360;
+    letter-spacing: -0.065em;
+    line-height: 0.79;
+  }
+
+  h1 span {
+    display: block;
+    overflow: hidden;
+    padding: 0.08em 0.06em 0.08em 0;
+  }
+
+  h1 i {
+    display: block;
+    font-style: normal;
+  }
+
+  .hero-copy > p:not(.hero-system-line) {
+    max-width: 37rem;
+    margin: clamp(2rem, 3.5vw, 3.25rem) 0 0;
+    font-size: clamp(1.08rem, 1.45vw, 1.42rem);
+    line-height: 1.48;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .hero-system-line {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 2.75rem 0 0;
+    color: var(--fg-muted);
+    font-size: 0.77rem;
+    font-weight: 550;
+  }
+
+  .hero-system-line span {
+    width: 0.65rem;
+    height: 0.65rem;
+    background: var(--signal);
+    box-shadow: 0 0 0 1px var(--ink);
+  }
+
+  .hero-diagram {
+    position: relative;
+    min-width: 0;
+  }
+
+  .diagram-marker {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1.25;
+  }
+
+  .diagram-marker--one {
+    top: 18%;
+    right: 0;
+  }
+
+  .diagram-marker--two {
+    right: 0;
+    bottom: 8%;
+  }
+
+  .hero-next {
+    display: grid;
+    min-height: 6rem;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: clamp(1.25rem, 3vw, 3rem);
+    padding: 1rem var(--page-gutter);
+    border-top: 1px solid var(--ink);
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .hero-next > span {
+    font-size: 0.72rem;
+  }
+
+  .hero-next strong {
+    font-family: var(--font-display, Georgia, serif);
+    font-size: clamp(1.55rem, 2.4vw, 2.8rem);
+    font-weight: 380;
+    letter-spacing: -0.04em;
+  }
+
+  .hero-next svg {
+    transition: transform 160ms ease;
+  }
+
+  .hero-next:hover svg,
+  .hero-next:focus-visible svg {
+    transform: translateX(0.4rem);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    h1 i {
+      animation: hero-line 0.85s var(--ease-out-soft) both;
+    }
+
+    h1 span:nth-child(2) i {
+      animation-delay: 0.08s;
+    }
+
+    h1 span:nth-child(3) i {
+      animation-delay: 0.16s;
+    }
+
+    .hero-copy > p,
+    .hero-actions {
+      animation: hero-copy 0.7s var(--ease-out-soft) 0.45s both;
+    }
+  }
+
+  @keyframes hero-line {
+    from {
+      transform: translateY(110%);
+    }
+  }
+
+  @keyframes hero-copy {
+    from {
+      opacity: 0;
+      transform: translateY(1.5rem);
+    }
+  }
+
+  @media (max-width: 88rem) {
+    .hero-stage {
+      grid-template-columns: minmax(25rem, 0.9fr) minmax(28rem, 1.1fr);
+    }
+
+    h1 {
+      font-size: clamp(4.5rem, 7.5vw, 7.2rem);
+    }
+
+    .diagram-marker {
+      display: none;
+    }
+  }
+
+  @media (max-width: 73.99rem) {
+    .industrial-hero {
+      min-height: auto;
+    }
+
+    .hero-stage {
+      min-height: auto;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.5rem;
+      padding: 3.75rem var(--mobile-gutter) 1rem;
+    }
+
+    .hero-copy {
+      max-width: 44rem;
+    }
+
+    h1 {
+      font-size: clamp(4.2rem, 12vw, 7rem);
+    }
+
+    .hero-diagram {
+      width: min(100%, 44rem);
+      margin-inline: auto;
+    }
+
+    .hero-next {
+      padding-inline: var(--mobile-gutter);
+    }
+  }
+
+  @media (max-width: 39.99rem) {
+    .hero-stage {
+      padding-top: 2.8rem;
+    }
+
+    h1 {
+      font-size: clamp(3.7rem, 17vw, 5.25rem);
+      hyphens: auto;
+      line-height: 0.84;
+      overflow-wrap: break-word;
+    }
+
+    h1 span {
+      overflow: visible;
+    }
+
+    .hero-copy > p:not(.hero-system-line) {
+      margin-top: 1.6rem;
+      font-size: 1.02rem;
+    }
+
+    .hero-actions {
+      display: grid;
+    }
+
+    .hero-actions .industrial-button:nth-child(2) {
+      display: none;
+    }
+
+    .hero-system-line {
+      margin-top: 1.5rem;
+    }
+
+    .hero-next {
+      min-height: 5.25rem;
+      grid-template-columns: auto 1fr auto;
+      gap: 1rem;
+    }
+
+    .hero-next strong {
+      font-family: var(--font-sans);
+      font-size: 0.98rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+  }
+</style>
