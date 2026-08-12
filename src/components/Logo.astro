@@ -2,38 +2,55 @@
 import { SITE } from '../config/site';
 
 interface Props {
-  /** Hoogte in pixels; breedte schaalt mee (logo-ratio ≈ 4.06:1). */
+  /** Hoogte in pixels; het woordmerk schaalt als één geheel mee. */
   height?: number;
   class?: string;
+  inverse?: boolean;
 }
 
-const { height = 30, class: className } = Astro.props;
-const width = Math.round((height * 932.29) / 229.54);
-const alt = `${SITE.brand} logo`;
+const { height = 30, class: className, inverse = false } = Astro.props;
+const width = Math.round(height * 4.35);
 ---
 
-<span class:list={['inline-flex items-center', className]}>
-  <!-- Light mode: donkere tekst. Dark mode: witte tekst. Beide delen hetzelfde
-       gekleurde mark, zodat alleen de woordtekst van kleur wisselt. -->
-  <img
-    src="/logo/chrisonline-dark-text.svg"
-    alt={alt}
-    width={width}
-    height={height}
-    style={`height:${height}px;width:auto`}
-    class="block dark:hidden"
-    loading="eager"
-    decoding="async"
-  />
-  <img
-    src="/logo/chrisonline-light-text.svg"
-    alt=""
-    width={width}
-    height={height}
-    style={`height:${height}px;width:auto`}
-    class="hidden dark:block"
-    loading="eager"
-    decoding="async"
-    aria-hidden="true"
-  />
+<span
+  class:list={['brand-lockup', inverse && 'brand-lockup--inverse', className]}
+  style={`--logo-height:${height}px;--logo-width:${width}px`}
+>
+  <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+    <path d="M24 3v42M3 24h42M9.15 9.15l29.7 29.7M38.85 9.15l-29.7 29.7"></path>
+  </svg>
+  <span>{SITE.brand}</span>
 </span>
+
+<style>
+  .brand-lockup {
+    display: inline-flex;
+    width: var(--logo-width);
+    height: var(--logo-height);
+    align-items: center;
+    gap: calc(var(--logo-height) * 0.25);
+    color: #111111;
+    font-family: var(--font-display, var(--font-sans));
+    font-size: calc(var(--logo-height) * 0.42);
+    font-weight: 650;
+    letter-spacing: -0.045em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .brand-lockup--inverse {
+    color: #ffffff;
+  }
+
+  .brand-mark {
+    width: var(--logo-height);
+    height: var(--logo-height);
+    flex: none;
+    overflow: visible;
+    color: #ee4b24;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-width: 3;
+  }
+</style>

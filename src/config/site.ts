@@ -17,10 +17,10 @@ export const SITE = {
   author: 'Chris Snoek',
 
   /** Beroep / functietitel. */
-  jobTitle: 'Webdeveloper, UI/UX-designer & automatiseringsspecialist',
+  jobTitle: 'Digital designer & frontend developer',
 
   /** Korte tagline onder de merknaam. */
-  tagline: 'Maatwerk-websites, webshops en automatiseringen die werk uit handen nemen.',
+  tagline: 'Strategie, design en levende frontends die merken laten groeien.',
 
   /** Taal van de site (gebruikt in <html lang>). */
   lang: 'nl',
@@ -33,11 +33,11 @@ export const SITE = {
  * SEO-standaarden. Worden per pagina overschreven waar nodig.
  */
 export const SEO = {
-  defaultTitle: 'Chris Snoek, webdevelopment & automatisering | Chris Online',
+  defaultTitle: 'Chris Snoek, digital design & development | Chris Online',
   titleTemplate: '%s | Chris Online',
   defaultDescription:
-    'Chris Snoek bouwt technisch sterke maatwerk-websites, webshops en bedrijfsautomatiseringen. ' +
-    'Van conversiegericht ontwerp tot processen die terugkerend handwerk uit handen nemen.',
+    'Chris Snoek ontwerpt en bouwt onderscheidende digitale ervaringen. ' +
+    'Van een sterk verhaal en doordacht design tot een snelle frontend die blijft presteren.',
   /** Standaard Open Graph-afbeelding (in /public, absoluut gemaakt op basis van SITE.url). */
   defaultOgImage: '/og/og-default.png',
 } as const;
@@ -77,11 +77,11 @@ export const SOCIALS = [
  * op de homepage naar de betreffende sectie.
  */
 export const NAV = [
+  { label: 'Werk', href: '/#werk' },
+  { label: 'Werkwijze', href: '/#werkwijze' },
   { label: 'Over mij', href: '/#over' },
   { label: 'Diensten', href: '/#diensten' },
   { label: 'Automatisering', href: '/automatisering' },
-  { label: 'Werk', href: '/#werk' },
-  { label: 'Contact', href: '/contact' },
 ] as const;
 
 export type Social = (typeof SOCIALS)[number];

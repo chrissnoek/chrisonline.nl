@@ -1,0 +1,434 @@
+---
+import { Image } from 'astro:assets';
+import ribbon from '../../assets/brand/living-ribbon.png';
+import Icon from '../Icon.astro';
+
+const phases = [
+  {
+    id: 'design',
+    title: 'Design',
+    heading: 'Eerst het verhaal. Dan pas het scherm.',
+    text: 'Ik ontrafel wat je merk bijzonder maakt en vertaal dat naar een heldere structuur, een onderscheidend visueel systeem en interacties die betekenis hebben.',
+    details: ['Strategie en positionering', 'UX, UI en prototypes', 'Een schaalbaar designsysteem'],
+  },
+  {
+    id: 'develop',
+    title: 'Develop',
+    heading: 'Een frontend die niet stil blijft staan.',
+    text: 'Het ontwerp komt tot leven in schone, toegankelijke code. Snel op ieder scherm, soepel in beweging en praktisch te beheren.',
+    details: ['Maatwerk frontend', 'Performance en toegankelijkheid', 'CMS en slimme koppelingen'],
+  },
+  {
+    id: 'maintain',
+    title: 'Maintain',
+    heading: 'Na de livegang begint het echte leren.',
+    text: 'Ik blijf betrokken. We meten wat er gebeurt, verbeteren wat beter kan en laten de ervaring meegroeien met je merk en je organisatie.',
+    details: ['Doorontwikkeling', 'Optimalisatie en analytics', 'Persoonlijk technisch beheer'],
+  },
+];
+---
+
+<section id="werkwijze" class="process-section scroll-mt-24" aria-labelledby="process-heading">
+  <div class="process-shell">
+    <div class="process-intro reveal-up">
+      <p>Van idee tot blijvende voorsprong.</p>
+      <h2 id="process-heading">Design. Develop. Maintain.</h2>
+      <p>
+        Geen overdrachten tussen afdelingen. Je werkt rechtstreeks met mij—met één lijn van het
+        eerste gesprek tot de volgende verbetering.
+      </p>
+    </div>
+
+    <div class="process-layout">
+      <div class="process-tabs" aria-label="Fasen van mijn werkwijze">
+        {
+          phases.map((phase, index) => (
+            <button
+              type="button"
+              class:list={['process-tab', index === 0 && 'is-active']}
+              data-process-tab={phase.id}
+              aria-controls={`process-panel-${phase.id}`}
+              aria-pressed={index === 0 ? 'true' : 'false'}
+            >
+              <span>{phase.title}</span>
+              <Icon name="arrowRight" size={18} />
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="process-panels">
+        {
+          phases.map((phase, index) => (
+            <article
+              id={`process-panel-${phase.id}`}
+              class:list={['process-panel', index === 0 && 'is-active']}
+              data-process-panel={phase.id}
+              hidden={index !== 0}
+            >
+              <div>
+                <h3>{phase.heading}</h3>
+                <p>{phase.text}</p>
+                <ul>
+                  {phase.details.map((detail) => (
+                    <li>{detail}</li>
+                  ))}
+                </ul>
+              </div>
+              <div class="process-object" aria-hidden="true">
+                <Image
+                  src={ribbon}
+                  alt=""
+                  widths={[520, 760, 1040]}
+                  sizes="(max-width: 767px) 90vw, 43vw"
+                  format="webp"
+                  quality="mid"
+                />
+                <div class="object-grid" />
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  let processAbort: AbortController | undefined;
+
+  function initProcess() {
+    processAbort?.abort();
+    processAbort = new AbortController();
+    const { signal } = processAbort;
+    const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-process-tab]'));
+    const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-process-panel]'));
+    if (!tabs.length || !panels.length) return;
+
+    const activate = (id: string, focus = false) => {
+      tabs.forEach((tab) => {
+        const active = tab.dataset.processTab === id;
+        tab.classList.toggle('is-active', active);
+        tab.setAttribute('aria-pressed', String(active));
+        if (active && focus) tab.focus();
+      });
+      panels.forEach((panel) => {
+        const active = panel.dataset.processPanel === id;
+        panel.hidden = !active;
+        panel.classList.toggle('is-active', active);
+      });
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activate(tab.dataset.processTab || ''), { signal });
+      tab.addEventListener(
+        'keydown',
+        (event) => {
+          if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+          event.preventDefault();
+          const delta = event.key === 'ArrowRight' ? 1 : -1;
+          const next = tabs[(index + delta + tabs.length) % tabs.length];
+          activate(next.dataset.processTab || '', true);
+        },
+        { signal },
+      );
+    });
+
+    const section = document.getElementById('werkwijze');
+    const order = tabs.map((tab) => tab.dataset.processTab || '');
+    let current = '';
+    const onScroll = () => {
+      if (!section || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const rect = section.getBoundingClientRect();
+      const travel = Math.max(1, rect.height - innerHeight);
+      const progress = Math.min(0.999, Math.max(0, -rect.top / travel));
+      const id = order[Math.min(order.length - 1, Math.floor(progress * order.length))];
+      if (rect.top <= 0 && rect.bottom >= innerHeight * 0.75 && id && id !== current) {
+        current = id;
+        activate(id);
+      }
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true, signal });
+  }
+
+  document.addEventListener('astro:page-load', initProcess);
+</script>
+
+<style>
+  .process-section {
+    min-height: 190vh;
+    padding: 1rem;
+    background: #ffffff;
+  }
+
+  .process-shell {
+    position: sticky;
+    top: 5.25rem;
+    width: min(100%, 88rem);
+    min-height: calc(100svh - 6.25rem);
+    margin-inline: auto;
+    overflow: hidden;
+    border-radius: 2rem;
+    background: #0d0d0f;
+    color: #ffffff;
+  }
+
+  .process-intro {
+    display: grid;
+    padding: clamp(3rem, 5vw, 5rem);
+    grid-template-columns: 0.7fr 1.5fr 0.8fr;
+    align-items: end;
+    gap: 2.5rem;
+  }
+
+  .process-intro > p:first-child {
+    color: #ff7048;
+    font-weight: 600;
+  }
+
+  .process-intro h2 {
+    max-width: 12ch;
+    font-size: clamp(3rem, 6.4vw, 6.9rem);
+    font-weight: 540;
+    letter-spacing: -0.065em;
+    line-height: 0.88;
+  }
+
+  .process-intro > p:last-child {
+    color: #b8b8b4;
+    font-size: 0.96rem;
+    line-height: 1.6;
+  }
+
+  .process-layout {
+    display: grid;
+    min-height: 29rem;
+    margin: 0 clamp(1.25rem, 3.5vw, 3.5rem) clamp(1.25rem, 3.5vw, 3.5rem);
+    grid-template-columns: minmax(12rem, 0.34fr) 1fr;
+    overflow: hidden;
+    border: 1px solid #333337;
+    border-radius: 1.4rem;
+  }
+
+  .process-tabs {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #333337;
+  }
+
+  .process-tab {
+    display: flex;
+    min-height: 5.5rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #333337;
+    color: #9e9e9b;
+    font-size: 1.05rem;
+    font-weight: 590;
+    text-align: left;
+    transition:
+      color 180ms ease,
+      background-color 180ms ease;
+  }
+
+  .process-tab:hover,
+  .process-tab:focus-visible,
+  .process-tab.is-active {
+    background: #1b1b1e;
+    color: #ffffff;
+  }
+
+  .process-tab.is-active :global(svg) {
+    color: #ff633c;
+  }
+
+  .process-panels {
+    min-width: 0;
+  }
+
+  .process-panel {
+    display: grid;
+    min-height: 100%;
+    grid-template-columns: minmax(18rem, 0.8fr) 1.2fr;
+  }
+
+  .process-panel[hidden] {
+    display: none;
+  }
+
+  .process-panel > div:first-child {
+    align-self: center;
+    padding: clamp(2rem, 4vw, 4rem);
+  }
+
+  .process-panel h3 {
+    max-width: 13ch;
+    font-size: clamp(2rem, 3.3vw, 3.5rem);
+    font-weight: 560;
+    letter-spacing: -0.055em;
+    line-height: 1;
+    text-wrap: balance;
+  }
+
+  .process-panel p {
+    max-width: 34rem;
+    margin-top: 1.25rem;
+    color: #b8b8b4;
+    line-height: 1.65;
+  }
+
+  .process-panel ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 1.8rem;
+  }
+
+  .process-panel li {
+    padding: 0.5rem 0.7rem;
+    border: 1px solid #3d3d41;
+    border-radius: 0.45rem;
+    color: #dfdfdc;
+    font-size: 0.78rem;
+  }
+
+  .process-object {
+    position: relative;
+    min-height: 100%;
+    overflow: hidden;
+    background: #111114;
+    isolation: isolate;
+  }
+
+  .process-object img {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    width: 145%;
+    max-width: none;
+    transform: translate(-49%, -47%) rotate(-8deg);
+  }
+
+  .object-grid {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+    background-size: 25% 25%;
+    mix-blend-mode: screen;
+    pointer-events: none;
+  }
+
+  .process-panel.is-active .process-object img {
+    animation: object-enter 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes object-enter {
+    from {
+      opacity: 0;
+      transform: translate(-45%, -45%) rotate(-3deg) scale(0.92);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-49%, -47%) rotate(-8deg) scale(1);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .process-section {
+      min-height: auto;
+    }
+
+    .process-shell {
+      position: relative;
+      top: auto;
+      min-height: 0;
+    }
+
+    .process-intro {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .process-intro h2 {
+      max-width: 10ch;
+    }
+
+    .process-intro > p:last-child {
+      max-width: 34rem;
+    }
+
+    .process-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .process-tabs {
+      flex-direction: row;
+      border-right: 0;
+      border-bottom: 1px solid #333337;
+    }
+
+    .process-tab {
+      min-height: 4.5rem;
+      flex: 1;
+      border-right: 1px solid #333337;
+      border-bottom: 0;
+    }
+
+    .process-tab :global(svg) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .process-section {
+      padding: 0.5rem;
+    }
+
+    .process-shell {
+      border-radius: 1.35rem;
+    }
+
+    .process-intro {
+      padding: 3rem 1.25rem 2rem;
+    }
+
+    .process-layout {
+      margin: 0 0.65rem 0.65rem;
+      border-radius: 0.9rem;
+    }
+
+    .process-tabs {
+      overflow-x: auto;
+    }
+
+    .process-tab {
+      min-width: 8.5rem;
+      padding-inline: 1rem;
+    }
+
+    .process-panel {
+      grid-template-columns: 1fr;
+    }
+
+    .process-panel > div:first-child {
+      padding: 2rem 1.25rem 1.5rem;
+    }
+
+    .process-object {
+      min-height: 18rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .process-panel.is-active .process-object img {
+      animation: none;
+    }
+  }
+</style>
