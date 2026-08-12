@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import ribbon from '../../assets/brand/living-ribbon.png';
+import ribbon from '../../assets/brand/living-ribbon-wide.png';
 import { CONTACT } from '../../config/site';
 import Icon from '../Icon.astro';
 ---
@@ -10,8 +10,8 @@ import Icon from '../Icon.astro';
     <Image
       src={ribbon}
       alt=""
-      widths={[720, 1080, 1500]}
-      sizes="100vw"
+      widths={[840, 1280, 1686]}
+      sizes="(max-width: 700px) 220vw, 112vw"
       format="webp"
       quality="mid"
       class="contact-ribbon"
@@ -138,11 +138,11 @@ import Icon from '../Icon.astro';
   .contact-ribbon {
     position: absolute;
     z-index: 1;
-    right: -22%;
-    bottom: -27%;
-    width: 90%;
+    right: -9%;
+    bottom: -42%;
+    width: 112%;
     max-width: none;
-    transform: rotate(-8deg);
+    transform: rotate(-5deg);
     pointer-events: none;
   }
 
@@ -165,9 +165,9 @@ import Icon from '../Icon.astro';
     }
 
     .contact-ribbon {
-      right: -65%;
-      bottom: -4%;
-      width: 170%;
+      right: -74%;
+      bottom: -28%;
+      width: 224%;
     }
   }
 </style>

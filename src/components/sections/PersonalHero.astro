@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import chris from '../../assets/me/chris-snoek.jpg';
-import ribbon from '../../assets/brand/living-ribbon.png';
+import ribbon from '../../assets/brand/living-ribbon-wide.png';
 import Icon from '../Icon.astro';
 import { CONTACT, SITE } from '../../config/site';
 
@@ -63,8 +63,8 @@ const phases = [
       <Image
         src={ribbon}
         alt=""
-        widths={[720, 1080, 1500]}
-        sizes="(max-width: 767px) 150vw, 90vw"
+        widths={[840, 1280, 1686]}
+        sizes="(max-width: 767px) 190vw, 105vw"
         format="webp"
         quality="high"
         class="hero-ribbon"
@@ -240,15 +240,13 @@ const phases = [
   .hero-ribbon {
     position: absolute;
     z-index: 1;
-    right: 0;
-    bottom: 0;
-    width: 69%;
-    height: 100%;
+    right: -4%;
+    bottom: -42%;
+    width: 104%;
+    height: auto;
     max-width: none;
-    object-fit: contain;
-    object-position: right bottom;
     pointer-events: none;
-    transform: rotate(-1deg);
+    transform: rotate(-2deg);
     transform-origin: 72% 70%;
   }
 
@@ -345,9 +343,9 @@ const phases = [
     }
 
     .hero-ribbon {
-      right: 0;
-      bottom: 0;
-      width: 78%;
+      right: -12%;
+      bottom: -35%;
+      width: 122%;
     }
   }
 
@@ -410,11 +408,10 @@ const phases = [
     }
 
     .hero-ribbon {
-      right: auto;
-      bottom: 0;
-      left: -36%;
-      width: 172%;
-      height: auto;
+      right: -63%;
+      bottom: -24%;
+      left: auto;
+      width: 224%;
     }
 
     .phase-dock {
