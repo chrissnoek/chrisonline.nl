@@ -119,7 +119,7 @@ const phases = [
 
   .hero-intro {
     margin-bottom: 1.4rem;
-    color: #cf3717;
+    color: #b82e12;
     font-size: clamp(1.05rem, 1.6vw, 1.35rem);
     font-weight: 650;
   }
@@ -217,9 +217,15 @@ const phases = [
     align-items: baseline;
     justify-content: space-between;
     gap: 1rem;
-    margin-top: 0.9rem;
-    color: #333331;
+    width: calc(100% - 1rem);
+    margin: -0.45rem auto 0;
+    padding: 0.8rem 0.9rem;
+    border: 1px solid #d5d5d0;
+    border-radius: 0.8rem;
+    background: #ffffff;
+    color: #3f3f3b;
     font-size: 0.85rem;
+    box-shadow: 0 0.8rem 2.25rem rgba(17, 17, 17, 0.1);
   }
 
   .hero-person strong {
@@ -234,10 +240,13 @@ const phases = [
   .hero-ribbon {
     position: absolute;
     z-index: 1;
-    right: -7%;
-    bottom: -35%;
-    width: 73%;
+    right: 0;
+    bottom: 0;
+    width: 69%;
+    height: 100%;
     max-width: none;
+    object-fit: contain;
+    object-position: right bottom;
     pointer-events: none;
     transform: rotate(-1deg);
     transform-origin: 72% 70%;
@@ -334,6 +343,12 @@ const phases = [
     .hero-person > p span {
       display: none;
     }
+
+    .hero-ribbon {
+      right: 0;
+      bottom: 0;
+      width: 78%;
+    }
   }
 
   @media (max-width: 767px) {
@@ -381,7 +396,7 @@ const phases = [
 
     .hero-person {
       right: 1.25rem;
-      bottom: 1.8rem;
+      bottom: 2.25rem;
       width: min(46vw, 12rem);
     }
 
@@ -396,9 +411,10 @@ const phases = [
 
     .hero-ribbon {
       right: auto;
-      bottom: -5%;
-      left: -50%;
-      width: 196%;
+      bottom: 0;
+      left: -36%;
+      width: 172%;
+      height: auto;
     }
 
     .phase-dock {

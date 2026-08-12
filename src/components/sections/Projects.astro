@@ -12,7 +12,7 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
       <h2 id="work-heading">Geselecteerd werk</h2>
       <p>Projecten waar verhaal, gebruiksgemak en techniek elkaar versterken.</p>
     </div>
-    <div class="carousel-controls" aria-label="Bediening projectcarrousel">
+    <div class="carousel-controls" role="group" aria-label="Bediening projectcarrousel">
       <button type="button" data-project-prev aria-label="Vorige projecten">
         <Icon name="arrowLeft" size={19} />
       </button>
@@ -23,7 +23,7 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
   </div>
 
   <div class="project-viewport">
-    <div class="project-track" data-project-track tabindex="0" aria-label="Projecten">
+    <div class="project-track" data-project-track tabindex="0" role="region" aria-label="Projecten">
       {
         projects.map((project, index) => (
           <article class="project-slide reveal">
