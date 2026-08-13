@@ -121,20 +121,29 @@ const creativeWorkLd = {
 
       {
         data.url && (
-          <a
-            href={withUtm(data.url)}
-            target="_blank"
-            rel="noopener"
-            class="group enter-up mt-6 inline-flex items-center gap-2 font-semibold text-[var(--accent-text)] hover:underline"
+          <div
+            class="enter-up mt-6 flex flex-wrap items-center gap-x-4 gap-y-2"
             style="--enter-delay: 0.34s"
           >
-            Bekijk live
-            <Icon
-              name="arrowUpRight"
-              size={18}
-              class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-            />
-          </a>
+            <a
+              href={withUtm(data.url)}
+              target="_blank"
+              rel="noopener"
+              class="group inline-flex items-center gap-2 font-semibold text-[var(--accent-text)] hover:underline"
+            >
+              {data.urlLabel}
+              <Icon
+                name="arrowUpRight"
+                size={18}
+                class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
+            </a>
+            {data.demoPassword && (
+              <span class="rounded-pill border border-[var(--border)] bg-[var(--bg-alt)] px-3 py-1.5 text-sm text-[var(--fg-muted)]">
+                Wachtwoord: <code class="font-semibold text-[var(--fg)]">{data.demoPassword}</code>
+              </span>
+            )}
+          </div>
         )
       }
     </header>
