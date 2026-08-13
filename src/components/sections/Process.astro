@@ -1,0 +1,570 @@
+---
+import Icon from '../Icon.astro';
+
+const phases = [
+  {
+    id: 'design',
+    title: 'Design',
+    heading: 'Eerst het verhaal. Dan pas het scherm.',
+    text: 'Ik ontrafel wat je merk bijzonder maakt en vertaal dat naar een heldere structuur, een onderscheidend visueel systeem en interacties die betekenis hebben.',
+    details: ['Strategie en positionering', 'UX, UI en prototypes', 'Een schaalbaar designsysteem'],
+  },
+  {
+    id: 'develop',
+    title: 'Develop',
+    heading: 'Een frontend die niet stil blijft staan.',
+    text: 'Het ontwerp komt tot leven in schone, toegankelijke code. Snel op ieder scherm, soepel in beweging en praktisch te beheren.',
+    details: ['Maatwerk frontend', 'Performance en toegankelijkheid', 'CMS en slimme koppelingen'],
+  },
+  {
+    id: 'maintain',
+    title: 'Maintain',
+    heading: 'Na de livegang begint het echte leren.',
+    text: 'Ik blijf betrokken. We meten wat er gebeurt, verbeteren wat beter kan en laten de ervaring meegroeien met je merk en je organisatie.',
+    details: ['Doorontwikkeling', 'Optimalisatie en analytics', 'Persoonlijk technisch beheer'],
+  },
+];
+---
+
+<section id="werkwijze" class="process-section scroll-mt-24" aria-labelledby="process-heading">
+  <div class="process-shell">
+    <div class="process-intro reveal-up">
+      <p>Van idee tot blijvende voorsprong.</p>
+      <h2 id="process-heading">Design. Develop. Maintain.</h2>
+      <p>
+        Geen overdrachten tussen afdelingen. Je werkt rechtstreeks met mij—met één lijn van het
+        eerste gesprek tot de volgende verbetering.
+      </p>
+    </div>
+
+    <div class="process-layout">
+      <nav class="process-tabs" aria-label="Fasen van mijn werkwijze">
+        {
+          phases.map((phase, index) => (
+            <a
+              href={`#process-panel-${phase.id}`}
+              class:list={['process-tab', index === 0 && 'is-active']}
+              data-process-tab={phase.id}
+              aria-current={index === 0 ? 'step' : undefined}
+            >
+              <span>{phase.title}</span>
+              <Icon name="arrowDown" size={18} />
+            </a>
+          ))
+        }
+      </nav>
+
+      <div class="process-panels">
+        {
+          phases.map((phase, index) => (
+            <article
+              id={`process-panel-${phase.id}`}
+              class:list={['process-panel', index === 0 && 'is-active']}
+              data-process-panel={phase.id}
+            >
+              <div>
+                <h3>{phase.heading}</h3>
+                <p>{phase.text}</p>
+                <ul>
+                  {phase.details.map((detail) => (
+                    <li>{detail}</li>
+                  ))}
+                </ul>
+              </div>
+              <button
+                type="button"
+                class="process-object"
+                data-living-visual={phase.id}
+                aria-label={`Beïnvloed de levende ${phase.title}-vorm met je aanwijzer of een tik`}
+              >
+                <span class="living-surface" data-visual-host aria-hidden="true">
+                  <span class:list={['living-fallback', `living-fallback--${phase.id}`]} />
+                </span>
+                <div class="object-grid" />
+                <span class="interaction-hint" aria-hidden="true">
+                  <span />
+                  <span class="pointer-copy">Beweeg</span>
+                  <span class="touch-copy">Tik</span>
+                </span>
+              </button>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initProcessLivingVisuals } from '../../scripts/process-living-visuals';
+
+  let processAbort: AbortController | undefined;
+  let cleanupProcessVisuals: (() => void) | undefined;
+
+  function initProcess() {
+    processAbort?.abort();
+    cleanupProcessVisuals?.();
+    processAbort = new AbortController();
+    const { signal } = processAbort;
+    const tabs = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-process-tab]'));
+    const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-process-panel]'));
+    if (!tabs.length || !panels.length) return;
+
+    const activate = (id: string) => {
+      tabs.forEach((tab) => {
+        const active = tab.dataset.processTab === id;
+        tab.classList.toggle('is-active', active);
+        if (active) tab.setAttribute('aria-current', 'step');
+        else tab.removeAttribute('aria-current');
+      });
+      panels.forEach((panel) => {
+        const active = panel.dataset.processPanel === id;
+        panel.classList.toggle('is-active', active);
+      });
+    };
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => activate(tab.dataset.processTab || ''), { signal });
+    });
+
+    let scrollFrame = 0;
+    const updateActivePhase = () => {
+      scrollFrame = 0;
+      const focusLine = Math.min(window.innerHeight * 0.34, 320);
+      const closest = panels.reduce<{ panel: HTMLElement; distance: number } | undefined>(
+        (current, panel) => {
+          const bounds = panel.getBoundingClientRect();
+          if (bounds.bottom < 96 || bounds.top > window.innerHeight * 0.82) return current;
+          const distance = Math.abs(bounds.top - focusLine);
+          return !current || distance < current.distance ? { panel, distance } : current;
+        },
+        undefined,
+      );
+      const id = closest?.panel.dataset.processPanel;
+      if (id) activate(id);
+    };
+    const queueActivePhase = () => {
+      if (!scrollFrame) scrollFrame = requestAnimationFrame(updateActivePhase);
+    };
+    window.addEventListener('scroll', queueActivePhase, { signal, passive: true });
+    window.addEventListener('resize', queueActivePhase, { signal, passive: true });
+    signal.addEventListener('abort', () => cancelAnimationFrame(scrollFrame), { once: true });
+    queueActivePhase();
+
+    cleanupProcessVisuals = initProcessLivingVisuals(document);
+    signal.addEventListener('abort', () => cleanupProcessVisuals?.(), { once: true });
+  }
+
+  document.addEventListener('astro:page-load', initProcess);
+  document.addEventListener('astro:before-swap', () => processAbort?.abort());
+</script>
+
+<style>
+  .process-section {
+    padding: 1rem;
+    background: #ffffff;
+  }
+
+  .process-shell {
+    width: min(100%, 88rem);
+    margin-inline: auto;
+    overflow: clip;
+    border-radius: 2rem;
+    background: #0d0d0f;
+    color: #ffffff;
+  }
+
+  .process-intro {
+    display: grid;
+    padding: clamp(3rem, 5vw, 5rem);
+    grid-template-columns: 0.7fr 1.5fr 0.8fr;
+    align-items: end;
+    gap: 2.5rem;
+  }
+
+  .process-intro > p:first-child {
+    color: #ff7048;
+    font-weight: 600;
+  }
+
+  .process-intro h2 {
+    max-width: 12ch;
+    font-size: clamp(3rem, 6.4vw, 6.9rem);
+    font-weight: 540;
+    letter-spacing: -0.065em;
+    line-height: 0.88;
+  }
+
+  .process-intro > p:last-child {
+    color: #b8b8b4;
+    font-size: 0.96rem;
+    line-height: 1.6;
+  }
+
+  .process-layout {
+    display: grid;
+    margin: 0 clamp(1.25rem, 3.5vw, 3.5rem) clamp(1.25rem, 3.5vw, 3.5rem);
+    grid-template-columns: minmax(12rem, 0.27fr) 1fr;
+    align-items: start;
+    gap: clamp(1rem, 2.2vw, 2rem);
+  }
+
+  .process-tabs {
+    position: sticky;
+    top: 7.25rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #333337;
+    border-radius: 1rem;
+    background: #121215;
+  }
+
+  .process-tab {
+    display: flex;
+    min-height: 5.25rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    color: #9e9e9b;
+    font-size: 1.05rem;
+    font-weight: 590;
+    text-align: left;
+    transition:
+      color 180ms ease,
+      background-color 180ms ease;
+  }
+
+  .process-tab + .process-tab {
+    border-top: 1px solid #333337;
+  }
+
+  .process-tab:hover,
+  .process-tab:focus-visible,
+  .process-tab.is-active {
+    background: #1b1b1e;
+    color: #ffffff;
+  }
+
+  .process-tab.is-active :global(svg) {
+    color: #ff633c;
+    transform: translateY(3px);
+  }
+
+  .process-panels {
+    display: grid;
+    min-width: 0;
+    gap: 1rem;
+  }
+
+  .process-panel {
+    display: grid;
+    min-height: clamp(32rem, calc(100svh - 8.5rem), 44rem);
+    grid-template-columns: minmax(18rem, 0.8fr) 1.2fr;
+    overflow: hidden;
+    scroll-margin-top: 7rem;
+    border: 1px solid #333337;
+    border-radius: 1.4rem;
+    background: #111114;
+  }
+
+  .process-panel > div:first-child {
+    align-self: center;
+    padding: clamp(2rem, 4vw, 4rem);
+  }
+
+  .process-panel h3 {
+    max-width: 13ch;
+    font-size: clamp(2rem, 3.3vw, 3.5rem);
+    font-weight: 560;
+    letter-spacing: -0.055em;
+    line-height: 1;
+    text-wrap: balance;
+  }
+
+  .process-panel p {
+    max-width: 34rem;
+    margin-top: 1.25rem;
+    color: #b8b8b4;
+    line-height: 1.65;
+  }
+
+  .process-panel ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 1.8rem;
+  }
+
+  .process-panel li {
+    padding: 0.5rem 0.7rem;
+    border: 1px solid #3d3d41;
+    border-radius: 0.45rem;
+    color: #dfdfdc;
+    font-size: 0.78rem;
+  }
+
+  .process-object {
+    position: relative;
+    min-height: 100%;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    background: #111114;
+    color: inherit;
+    cursor: crosshair;
+    isolation: isolate;
+    touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .process-object:focus-visible {
+    outline: 3px solid #ff7048;
+    outline-offset: -4px;
+  }
+
+  .living-surface {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    overflow: hidden;
+    background: #111114;
+  }
+
+  .living-surface :global(canvas) {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 500ms ease;
+  }
+
+  .living-surface[data-ready='true'] :global(canvas) {
+    opacity: 1;
+  }
+
+  .process-object[data-engine='webgl'] .living-surface {
+    filter: saturate(1.08) contrast(1.04);
+  }
+
+  .living-fallback {
+    position: absolute;
+    z-index: 1;
+    inset: 12%;
+    opacity: 0.9;
+    transition: opacity 500ms ease;
+  }
+
+  .living-surface[data-ready='true'] .living-fallback {
+    opacity: 0;
+  }
+
+  .living-fallback::before,
+  .living-fallback::after {
+    position: absolute;
+    content: '';
+  }
+
+  .living-fallback--design::before {
+    inset: 18% 2% 16% 6%;
+    border-radius: 58% 42% 63% 37% / 46% 64% 36% 54%;
+    background:
+      radial-gradient(circle at 28% 18%, #ffd1ad 0 8%, transparent 25%),
+      radial-gradient(ellipse at 64% 58%, #ff7043 0 20%, #9b210f 64%, transparent 72%);
+    filter: blur(1px) drop-shadow(0 2rem 3rem rgba(238, 67, 31, 0.28));
+    transform: rotate(-13deg);
+  }
+
+  .living-fallback--design::after {
+    inset: 36% 10% 30% 22%;
+    border: 2px solid rgba(255, 196, 153, 0.75);
+    border-radius: 50%;
+    transform: rotate(20deg) skewX(-18deg);
+  }
+
+  .living-fallback--develop {
+    background-image:
+      radial-gradient(circle at 26% 28%, #ffb17d 0 0.7rem, transparent 0.8rem),
+      radial-gradient(circle at 67% 21%, #ff7043 0 0.8rem, transparent 0.9rem),
+      radial-gradient(circle at 54% 66%, #f04a24 0 1rem, transparent 1.1rem),
+      radial-gradient(circle at 82% 72%, #ff9b69 0 0.65rem, transparent 0.75rem),
+      repeating-radial-gradient(
+        ellipse at 55% 48%,
+        transparent 0 8%,
+        rgba(240, 74, 36, 0.5) 9% 9.5%,
+        transparent 11% 16%
+      );
+    filter: drop-shadow(0 0 2rem rgba(240, 74, 36, 0.35));
+  }
+
+  .living-fallback--maintain::before {
+    inset: 10%;
+    border: clamp(1.2rem, 3vw, 2.4rem) solid #ee431f;
+    border-top-color: #ffd0a6;
+    border-right-color: #ff7545;
+    border-radius: 50%;
+    filter: drop-shadow(0 0 2.8rem rgba(240, 74, 36, 0.28));
+    transform: rotate(-20deg) scaleX(1.08);
+  }
+
+  .object-grid {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+    background-size: 25% 25%;
+    mix-blend-mode: screen;
+    pointer-events: none;
+  }
+
+  .interaction-hint {
+    position: absolute;
+    z-index: 3;
+    top: 1rem;
+    right: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.38rem 0.52rem;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 0.4rem;
+    background: rgba(17, 17, 20, 0.72);
+    color: #e6e6e2;
+    font-size: 0.68rem;
+    font-weight: 620;
+    letter-spacing: 0.02em;
+    pointer-events: none;
+  }
+
+  .interaction-hint > span:first-child {
+    width: 0.35rem;
+    height: 0.35rem;
+    border-radius: 50%;
+    background: #ff7048;
+    box-shadow: 0 0 0.75rem rgba(255, 112, 72, 0.8);
+  }
+
+  .touch-copy {
+    display: none;
+  }
+
+  @media (pointer: coarse) {
+    .pointer-copy {
+      display: none;
+    }
+
+    .touch-copy {
+      display: inline;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .process-section {
+      min-height: auto;
+    }
+
+    .process-shell {
+      overflow: hidden;
+    }
+
+    .process-intro {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .process-intro h2 {
+      max-width: 10ch;
+    }
+
+    .process-intro > p:last-child {
+      max-width: 34rem;
+    }
+
+    .process-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .process-tabs {
+      position: relative;
+      top: auto;
+      flex-direction: row;
+    }
+
+    .process-tab {
+      min-height: 4.5rem;
+      flex: 1;
+    }
+
+    .process-tab + .process-tab {
+      border-top: 0;
+      border-left: 1px solid #333337;
+    }
+
+    .process-tab :global(svg) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .process-section {
+      padding: 0.5rem;
+    }
+
+    .process-shell {
+      border-radius: 1.35rem;
+    }
+
+    .process-intro {
+      padding: 3rem 1.25rem 2rem;
+    }
+
+    .process-layout {
+      margin: 0 0.65rem 0.65rem;
+      border-radius: 0.9rem;
+    }
+
+    .process-tabs {
+      overflow-x: auto;
+    }
+
+    .process-tab {
+      min-width: 8.5rem;
+      padding-inline: 1rem;
+    }
+
+    .process-panel {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+
+    .process-panel > div:first-child {
+      padding: 2rem 1.25rem 1.5rem;
+    }
+
+    .process-object {
+      min-height: 18rem;
+      cursor: pointer;
+    }
+
+    .pointer-copy {
+      display: none;
+    }
+
+    .touch-copy {
+      display: inline;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .living-surface :global(canvas),
+    .living-fallback {
+      transition: none;
+    }
+  }
+</style>

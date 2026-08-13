@@ -5,7 +5,6 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
-import '../styles/intro.css';
 
 interface Props {
   title?: string;
@@ -22,32 +21,6 @@ const { title, description, image, type, jsonLd, noindex } = Astro.props;
 <!doctype html>
 <html lang={SITE.lang}>
   <head>
-    <!-- Anti-flash: zet het thema vóór de eerste paint, zodat er geen flits is.
-         is:inline houdt dit buiten de bundel en blokkerend in <head>. -->
-    <script is:inline>
-      (() => {
-        const stored = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (stored === 'dark' || (!stored && prefersDark)) {
-          document.documentElement.classList.add('dark');
-        }
-      })();
-    </script>
-
-    <!-- Brand-opening + hero-montage: alleen op de homepage, bij elke volledige
-         paginalading, en alleen zonder reduced-motion. Vóór paint gezet zodat
-         elementen meteen in start-toestand staan (geen flits van de eindstaat).
-         data-intro  = hero-montage, data-intro2 = cinematische opening. -->
-    <script is:inline>
-      (() => {
-        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (location.pathname === '/' && !reduce) {
-          document.documentElement.setAttribute('data-intro', 'play');
-          document.documentElement.setAttribute('data-intro2', 'play');
-        }
-      })();
-    </script>
-
     <BaseHead
       title={title}
       description={description}
@@ -67,21 +40,5 @@ const { title, description, image, type, jsonLd, noindex } = Astro.props;
       <slot />
     </main>
     <Footer />
-
-    <!-- Herstel thema vóór de nieuwe DOM paint na een View Transition (geen flits). -->
-    <script is:inline>
-      document.addEventListener('astro:after-swap', () => {
-        const stored = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.documentElement.classList.toggle(
-          'dark',
-          stored === 'dark' || (!stored && prefersDark),
-        );
-        // De intro speelt alleen bij een volledige paginalading, nooit
-        // opnieuw na een client-side navigatie.
-        document.documentElement.removeAttribute('data-intro');
-        document.documentElement.removeAttribute('data-intro2');
-      });
-    </script>
   </body>
 </html>

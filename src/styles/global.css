@@ -1,7 +1,4 @@
-/* ──────────────────────────────────────────────────────────────────────────
- *  Global stylesheet — Tailwind v4 (CSS-first) + design tokens
- *  Merk: Chris Online. Palet, typografie, spacing & radius als @theme-tokens.
- * ────────────────────────────────────────────────────────────────────────── */
+/* Chris Online — lichte studiobasis met een donkere living-frontend-fase. */
 
 @import 'tailwindcss';
 
@@ -11,32 +8,29 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* ── Kleuren ─────────────────────────────────────────────────────────────
-     Accent-schaal rond het merk-cyaan #00B0D5. Lichtere tinten voor vlakken/
-     accenten, donkere tinten (700/800) voor leesbare accent-TEKST op wit (AA). */
-  --color-accent-50: #e6f8fc;
-  --color-accent-100: #c3eef7;
-  --color-accent-200: #8fe0f0;
-  --color-accent-300: #4fcde6;
-  --color-accent-400: #1bbcdd;
-  --color-accent-500: #00b0d5; /* primair merk-accent */
-  --color-accent-600: #008cab; /* AA voor grote tekst/UI op wit (3.93:1) */
-  --color-accent-700: #007a95; /* AA voor bodytekst op wit (4.98:1) */
-  --color-accent-800: #0a5f73;
-  --color-accent-900: #0e4a58;
+  --color-accent-50: #fff0eb;
+  --color-accent-100: #ffddd2;
+  --color-accent-200: #ffbba5;
+  --color-accent-300: #ff8d69;
+  --color-accent-400: #ff633c;
+  --color-accent-500: #ee4b24;
+  --color-accent-600: #d23d1d;
+  --color-accent-700: #b53017;
+  --color-accent-800: #8d2918;
+  --color-accent-900: #742619;
 
   /* Donkere basis (hero, dark mode) */
-  --color-ink-950: #0a0b15;
-  --color-ink-900: #0e0f1c; /* opgegeven donkere basis */
-  --color-ink-800: #16182b;
-  --color-ink-700: #20233c;
+  --color-ink-950: #080809;
+  --color-ink-900: #0d0d0f;
+  --color-ink-800: #1b1b1e;
+  --color-ink-700: #2f2f33;
 
   /* Tekst & neutralen */
-  --color-text: #1f2937; /* primaire tekst (light) — 14.68:1 op wit */
-  --color-muted: #6b7280; /* subtekst — 4.83:1 op wit (AA) */
-  --color-line: #e5e7eb; /* borders / sectiescheiding */
+  --color-text: #111111;
+  --color-muted: #5f5f5a;
+  --color-line: #deded9;
   --color-surface: #ffffff;
-  --color-surface-alt: #f8fafc; /* subtiele sectie-achtergrond (light) */
+  --color-surface-alt: #f5f5f2;
 
   /* Leesbare neutralen op donkere basis (dark mode) */
   --color-text-invert: #f8fafc;
@@ -90,22 +84,12 @@
 @layer base {
   :root {
     color-scheme: light;
-    --bg: var(--color-surface);
+    --bg: #ffffff;
     --bg-alt: var(--color-surface-alt);
     --fg: var(--color-text);
     --fg-muted: var(--color-muted);
     --border: var(--color-line);
-    --accent-text: var(--color-accent-700); /* leesbaar accent op licht */
-  }
-
-  :root.dark {
-    color-scheme: dark;
-    --bg: var(--color-ink-900);
-    --bg-alt: var(--color-ink-800);
-    --fg: var(--color-text-invert);
-    --fg-muted: var(--color-muted-invert);
-    --border: var(--color-line-invert);
-    --accent-text: var(--color-accent-300); /* leesbaar accent op donker */
+    --accent-text: var(--color-accent-700);
   }
 
   html {
@@ -128,6 +112,17 @@
     overflow-wrap: break-word;
   }
 
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
   /* Grote koppen mogen lange NL-woorden netjes afbreken i.p.v. overlopen. */
   h1,
   h2,
@@ -144,8 +139,8 @@
 
   /* Eén consistente, zichtbare focus-stijl voor toetsenbordnavigatie. */
   :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
-    outline: 2px solid var(--color-accent-500);
-    outline-offset: 2px;
+    outline: 3px solid #ee4b24;
+    outline-offset: 3px;
     border-radius: 4px;
   }
 
@@ -221,7 +216,7 @@
     z-index: 100;
     padding: 0.625rem 1rem;
     border-radius: 0.5rem;
-    background: var(--color-accent-600);
+    background: #111111;
     color: #fff;
     font-weight: 600;
     transition: top 0.2s var(--ease-out-soft);
