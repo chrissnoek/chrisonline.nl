@@ -43,7 +43,7 @@ const phases = [
         </div>
       </div>
 
-      <div class="hero-person">
+      <figure class="hero-person">
         <div class="portrait-frame">
           <Image
             src={chris}
@@ -57,8 +57,7 @@ const phases = [
             class="portrait"
           />
         </div>
-        <p><strong>{SITE.author}</strong><span>{SITE.jobTitle}</span></p>
-      </div>
+      </figure>
 
       <Image
         src={ribbon}
@@ -191,17 +190,21 @@ const phases = [
     position: absolute;
     z-index: 2;
     right: clamp(1.5rem, 5vw, 5rem);
-    bottom: 4.5rem;
-    width: min(33vw, 27rem);
+    bottom: 1.9rem;
+    width: min(34vw, 28rem);
+    margin: 0;
   }
 
   .portrait-frame {
+    position: relative;
     overflow: hidden;
     aspect-ratio: 4 / 5;
-    border: 0.45rem solid rgba(255, 255, 255, 0.9);
-    border-radius: 48% 48% 1.4rem 1.4rem;
+    border: 1px solid rgba(17, 17, 17, 0.16);
+    border-radius: 1.5rem clamp(5.5rem, 10vw, 8.5rem) 1.5rem 1.5rem;
     background: #e6e6e1;
-    box-shadow: 0 2rem 5rem rgba(17, 17, 17, 0.13);
+    box-shadow:
+      0 2rem 5rem rgba(17, 17, 17, 0.14),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.5);
   }
 
   .portrait {
@@ -209,42 +212,25 @@ const phases = [
     height: 100%;
     object-fit: cover;
     object-position: 52% 42%;
-    transform: scale(1.025);
-  }
-
-  .hero-person > p {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    width: calc(100% - 1rem);
-    margin: -0.45rem auto 0;
-    padding: 0.8rem 0.9rem;
-    border: 1px solid #d5d5d0;
-    border-radius: 0.8rem;
-    background: #ffffff;
-    color: #3f3f3b;
-    font-size: 0.85rem;
-    box-shadow: 0 0.8rem 2.25rem rgba(17, 17, 17, 0.1);
-  }
-
-  .hero-person strong {
-    color: #111111;
-    font-weight: 680;
-  }
-
-  .hero-person span {
-    text-align: right;
+    transform: scale(1.015);
   }
 
   .hero-ribbon {
     position: absolute;
     z-index: 1;
-    right: -4%;
-    bottom: -42%;
-    width: 104%;
+    right: -3%;
+    bottom: -24%;
+    width: 96%;
     height: auto;
     max-width: none;
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      transparent 21%,
+      #000 43%,
+      #000 100%
+    );
+    mask-image: linear-gradient(90deg, transparent 0%, transparent 21%, #000 43%, #000 100%);
     pointer-events: none;
     transform: rotate(-2deg);
     transform-origin: 72% 70%;
@@ -323,7 +309,7 @@ const phases = [
       transform: translate3d(0, 0, 0) rotate(-1deg) scale(1);
     }
     to {
-      transform: translate3d(4%, 9%, 0) rotate(2deg) scale(1.035);
+      transform: translate3d(3%, 2%, 0) rotate(1deg) scale(1.025);
     }
   }
 
@@ -335,17 +321,22 @@ const phases = [
 
     .hero-person {
       right: 2rem;
-      width: 31vw;
-    }
-
-    .hero-person > p span {
-      display: none;
+      bottom: 1.75rem;
+      width: 32vw;
     }
 
     .hero-ribbon {
-      right: -12%;
-      bottom: -35%;
-      width: 122%;
+      right: -15%;
+      bottom: -20%;
+      width: 128%;
+      -webkit-mask-image: linear-gradient(
+        90deg,
+        transparent 0%,
+        transparent 30%,
+        #000 52%,
+        #000 100%
+      );
+      mask-image: linear-gradient(90deg, transparent 0%, transparent 30%, #000 52%, #000 100%);
     }
   }
 
@@ -393,25 +384,22 @@ const phases = [
     }
 
     .hero-person {
-      right: 1.25rem;
-      bottom: 2.25rem;
-      width: min(46vw, 12rem);
+      right: 1rem;
+      bottom: 1.5rem;
+      width: min(58vw, 14.5rem);
     }
 
     .portrait-frame {
-      border-width: 0.3rem;
-      border-radius: 48% 48% 1rem 1rem;
-    }
-
-    .hero-person > p {
-      display: none;
+      border-radius: 1.1rem 4.75rem 1.1rem 1.1rem;
     }
 
     .hero-ribbon {
-      right: -63%;
-      bottom: -24%;
+      right: -55%;
+      bottom: -4%;
       left: auto;
-      width: 224%;
+      width: 232%;
+      -webkit-mask-image: none;
+      mask-image: none;
     }
 
     .phase-dock {
