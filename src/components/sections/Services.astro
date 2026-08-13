@@ -3,24 +3,24 @@ import { SERVICES } from '../../config/services';
 import Icon from '../Icon.astro';
 
 const orderedServices = [
-  ...SERVICES.filter((service) => service.title === 'Website-ontwerp & UI/UX'),
-  ...SERVICES.filter((service) => service.title === 'Maatwerk website-development'),
+  ...SERVICES.filter((service) => service.title === 'Shopify-webshop van A tot Z'),
+  ...SERVICES.filter((service) => service.title === 'Shopify-webshopdesign'),
+  ...SERVICES.filter((service) => service.title === 'Shopify-thema op maat'),
+  ...SERVICES.filter((service) => service.title === 'Shopify-analyse & optimalisatie'),
   ...SERVICES.filter((service) => service.title === 'Branding & visuele identiteit'),
   ...SERVICES.filter((service) => service.title === 'Procesautomatisering & AI'),
   ...SERVICES.filter((service) => service.title === 'High-impact display advertising'),
-  ...SERVICES.filter((service) => service.title === 'Tracking, analytics & performance'),
-  ...SERVICES.filter((service) => service.title === 'Shopify webshop-development'),
 ];
 ---
 
 <section id="diensten" class="services-section scroll-mt-24" aria-labelledby="services-heading">
   <div class="services-shell">
     <div class="services-intro reveal-up">
-      <h2 id="services-heading">Wat ik voor je kan maken.</h2>
+      <h2 id="services-heading">Alles rond een webshop die blijft presteren.</h2>
       <p>
-        Mijn kern is design, development en onderhoud. Voor het grotere digitale plaatje werk ik met
-        vaste specialisten en sluit ik automatisering, branding en analytics aan waar dat echt
-        waarde toevoegt.
+        Mijn kern is Shopify-strategie, design, development en onderhoud. Branding, analytics,
+        automatisering en campagnes sluit ik aan wanneer ze je winkelervaring aantoonbaar sterker
+        maken.
       </p>
     </div>
 
@@ -35,9 +35,7 @@ const orderedServices = [
               aria-controls={`service-${index}`}
               data-service-trigger
             >
-              <span>
-                {service.title.replace('Shopify webshop-development', 'Webshop-development')}
-              </span>
+              <span>{service.title}</span>
               <Icon name={index === 0 ? 'close' : 'plus'} size={20} class="service-icon" />
             </button>
             <div id={`service-${index}`} class="service-detail" hidden={index !== 0}>

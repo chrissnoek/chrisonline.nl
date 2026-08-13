@@ -21,20 +21,20 @@ import QuoteForm from './QuoteForm';
 
 const CHIPS = [
   {
-    label: '👀 Laat recent werk zien',
-    text: 'Laat eens wat van je recente werk zien, het liefst een webshop en een maatwerk-site.',
+    label: '👀 Laat relevante ervaring zien',
+    text: 'Laat werk zien dat relevant is voor een complexe, merkgedreven Shopify-webshop.',
   },
   {
-    label: '💶 Wat kost mijn project?',
-    text: 'Ik plan een nieuwe website. Kun je me helpen aan een prijsindicatie en een offerte?',
+    label: '💶 Wat kost een Shopify-webshop?',
+    text: 'Ik plan een nieuwe Shopify-webshop. Kun je me helpen de scope en investering te bepalen?',
   },
   {
-    label: '📅 Plan een gesprek',
-    text: 'Ik wil mijn project even bespreken. Kunnen we een kort gesprek inplannen?',
+    label: '📅 Bespreek mijn webshop',
+    text: 'Ik wil mijn Shopify-webshop even bespreken. Kunnen we een kort gesprek inplannen?',
   },
   {
-    label: '⚡ Wat kan ik automatiseren?',
-    text: 'Ik doe iedere week terugkerend administratief werk. Kun je helpen bepalen wat daarvan verstandig te automatiseren is?',
+    label: '↗️ Kan ik migreren naar Shopify?',
+    text: 'Ik overweeg een migratie naar Shopify. Welke informatie heb je nodig om de aanpak te bepalen?',
   },
 ];
 
@@ -45,11 +45,11 @@ const BOOKING_URL =
 
 /** Wisselende voorbeeldprompts in de placeholder (alleen idle, respecteert reduced-motion). */
 const PLACEHOLDERS = [
-  "Bijv. 'nieuwe webshop in Shopify'…",
-  "Bijv. 'wat kost een snelle maatwerk-site?'…",
-  "Bijv. 'laat werk zien uit de reisbranche'…",
-  "Bijv. 'ik wil mijn website laten redesignen'…",
-  "Bijv. 'welk regelwerk kan ik automatiseren?'…",
+  "Bijv. 'ik wil een Shopify-webshop op maat'…",
+  "Bijv. 'wat kost een Shopify-redesign?'…",
+  "Bijv. 'kan ik migreren naar Shopify?'…",
+  "Bijv. 'mijn huidige thema voelt te standaard'…",
+  "Bijv. 'hoe verbeter ik mijn productpagina's?'…",
 ];
 
 const STORAGE_KEY = 'cw-thread-v1';
@@ -296,13 +296,13 @@ export default function ChatWidget() {
           {/* Eén h1 met naam + rol (SEO/a11y) én de hook; visueel twee regels. */}
           <h1 className="cw-greet-main">
             <span className="cw-greet-sub">
-              Hoi, ik ben Chris Snoek, webdeveloper, designer &amp; automatiseringsspecialist
+              Hoi, ik ben Chris Snoek, Shopify-designer &amp; frontenddeveloper
             </span>
-            Wat wil je laten bouwen?
+            Waar moet je webshop naartoe?
           </h1>
           <p className="cw-greet-subline">
-            Stel je vraag over een website, webshop of terugkerend werk. Ik denk direct met je mee.
-            Geen contactformulier, gewoon typen.
+            Stel je vraag over Shopify, een redesign, migratie of doorontwikkeling. Ik denk direct
+            met je mee. Geen contactformulier, gewoon typen.
           </p>
         </div>
       ) : (
@@ -437,7 +437,7 @@ function ErrorBubble({
           ✉️ Contactformulier
         </a>
         <a className="cw-inline-cta" href={bookingUrl} target="_blank" rel="noopener noreferrer">
-          📅 Plan een gesprek
+          📅 Bespreek je webshop
         </a>
       </div>
     </div>
@@ -508,7 +508,7 @@ function Message({
               target="_blank"
               rel="noopener noreferrer"
             >
-              📅 Plan een gesprek
+              📅 Bespreek je webshop
             </a>
           );
         }

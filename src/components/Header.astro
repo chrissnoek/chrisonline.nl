@@ -31,8 +31,8 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
     </nav>
 
     <div class="header-actions">
-      <a href="/contact" class="header-cta">
-        Plan een gesprek
+      <a href="/contact?dienst=shopify" class="header-cta">
+        Bespreek je webshop
         <Icon name="arrowUpRight" size={17} />
       </a>
       <button
@@ -58,7 +58,9 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
           </a>
         ))
       }
-      <a href="/contact" class="mobile-cta" data-mobile-link> Plan een gesprek </a>
+      <a href="/contact?dienst=shopify" class="mobile-cta" data-mobile-link>
+        Bespreek je webshop
+      </a>
     </nav>
   </div>
 </header>
