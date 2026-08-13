@@ -85,7 +85,8 @@
         rows="5"
         required
         class="focus:border-accent-500 w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-[var(--fg)] transition-colors placeholder:text-[var(--fg-muted)]"
-        placeholder="Vertel kort over je project of vraag…"></textarea>
+        placeholder="Vertel kort over je assortiment, huidige platform en wat je wilt verbeteren…"
+      ></textarea>
       <p id="cf-message-error" class="mt-1.5 hidden text-sm text-red-600 dark:text-red-400"></p>
     </div>
 
@@ -127,6 +128,10 @@
     if (service === 'automatisering' && !input('message').value) {
       input('message').value =
         'Ik wil graag bespreken welke terugkerende taken in mijn bedrijf geautomatiseerd kunnen worden.\n\nDe taak die nu veel tijd kost is: ';
+    }
+    if (service === 'shopify' && !input('message').value) {
+      input('message').value =
+        'Ik wil graag mijn Shopify-webshop bespreken.\n\nHuidig platform: \nWat ik verkoop: \nWat ik wil verbeteren: ';
     }
 
     const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

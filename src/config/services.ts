@@ -28,7 +28,7 @@ export const SERVICES: Service[] = [
     href: '/automatisering',
     featured: true,
     intro:
-      'Terugkerend regelwerk hoeft niet iedere week opnieuw. Ik verbind je bestaande systemen en bouw betrouwbare workflows die het voorwerk doen, met menselijke controle waar die nodig blijft.',
+      'Laat je Shopify-webshop niet naast je bedrijfsprocessen bestaan. Ik koppel terugkerende gegevensstromen en bouw controleerbare workflows rond administratie, fulfillment en klantcontact.',
     points: [
       {
         lead: 'Administratie automatiseren',
@@ -50,73 +50,73 @@ export const SERVICES: Service[] = [
   },
   {
     icon: 'pen',
-    title: 'Website-ontwerp & UI/UX',
+    title: 'Shopify-webshopdesign',
     intro:
-      'Een ontwerp dat past bij je merk én je bezoekers overtuigt, van de eerste schets tot een ontwikkelklaar bestand in Figma.',
+      'Een webshopontwerp waarin merkbeleving en koopgemak samenkomen, van navigatie en collecties tot productpagina, winkelmand en campagnepagina’s.',
     points: [
       {
-        lead: 'Maatwerk ontwerp',
-        text: 'websites en landingspagina’s, afgestemd op je merk en doelgroep',
+        lead: 'Merkgedreven webshopdesign',
+        text: 'een visuele wereld die herkenbaar van jou is en doorloopt tot in ieder winkelmoment',
       },
       {
-        lead: 'Conversiegericht UX',
-        text: 'wireframes en user flows gericht op meer aanvragen',
+        lead: 'Kooproute en informatiearchitectuur',
+        text: 'logische navigatie, collectieopbouw en productkeuzes met minder frictie',
       },
       {
-        lead: 'Mobile-first designsysteem',
-        text: 'consistent en responsive op elk schermformaat',
+        lead: 'Mobile-first Shopify-systeem',
+        text: 'herbruikbare componenten en secties voor elk schermformaat',
       },
       {
-        lead: 'Ontwikkelklaar in Figma',
-        text: 'direct bruikbaar voor mij of je eigen team',
+        lead: 'Prototype in Figma',
+        text: 'belangrijke winkelmomenten getest voordat development begint',
       },
     ],
   },
   {
     icon: 'code',
-    title: 'Maatwerk website-development',
+    title: 'Shopify-thema op maat',
     intro:
-      'Technisch sterke en snelle websites, pixel-perfect gebouwd op een schone, schaalbare codebasis.',
+      'Een snelle maatwerk Shopify-frontend die het ontwerp zorgvuldig vertaalt en door je team praktisch te beheren blijft.',
     points: [
       {
-        lead: 'Moderne frontend',
-        text: 'Vue en React op een nette, schaalbare code-architectuur',
+        lead: 'Maatwerk Liquid en frontend',
+        text: 'een schaalbare theme-codebase zonder onnodige visuele beperkingen',
       },
       {
-        lead: 'ProcessWire CMS',
-        text: 'maatwerk marketingwebsites met makkelijk te beheren content',
+        lead: 'Flexibele storefront',
+        text: 'herbruikbare secties waarmee je team pagina’s en campagnes zelf kan opbouwen',
       },
       {
-        lead: 'Snel en SEO-sterk',
-        text: 'performance en technische vindbaarheid als uitgangspunt',
+        lead: 'Performance en toegankelijkheid',
+        text: 'snel laden en prettig kopen op mobiel, desktop en met ondersteunende technologie',
       },
       {
-        lead: 'Pixel-perfect',
-        text: 'realisatie die het Figma-ontwerp exact volgt',
+        lead: 'Apps en integraties',
+        text: 'alleen koppelingen die functioneel nodig zijn en de storefront niet onnodig belasten',
       },
     ],
   },
   {
     icon: 'cart',
-    title: 'Shopify webshop-development',
+    title: 'Shopify-webshop van A tot Z',
     intro:
-      'Een webshop die verkoopt: van maatwerk thema tot een afrekenproces dat is geoptimaliseerd voor conversie.',
+      'Het complete Shopify-traject voor merken die boven een standaardthema zijn uitgegroeid: strategie, ontwerp, bouw, inrichting en een beheerste livegang.',
     points: [
       {
-        lead: 'Maatwerk thema',
-        text: 'ontwerp en development, uniek voor jouw winkel',
+        lead: 'Nieuwe Shopify-webshop',
+        text: 'van merkverhaal en structuur tot een ingerichte, geteste storefront',
       },
       {
-        lead: 'Conversie-optimalisatie',
-        text: 'product- en afrekenpagina’s die beter verkopen',
+        lead: 'Redesign van je huidige shop',
+        text: 'een sterkere merkervaring en kooproute zonder je werkende basis blind weg te gooien',
       },
       {
-        lead: 'Inrichting en integraties',
-        text: 'winkelconfiguratie, apps en performance',
+        lead: 'Migratie naar Shopify',
+        text: 'producten, content en essentiële URL’s gecontroleerd overzetten vanuit je huidige platform',
       },
       {
-        lead: 'Redesign en migratie',
-        text: 'een nieuw jasje voor bestaande Shopify-winkels',
+        lead: 'Doorontwikkeling',
+        text: 'nieuwe secties, campagnepagina’s en optimalisaties na de livegang',
       },
     ],
   },
@@ -124,7 +124,7 @@ export const SERVICES: Service[] = [
     icon: 'megaphone',
     title: 'High-impact display advertising',
     intro:
-      'Technische implementatie van opvallende, paginavullende advertentieformaten die aansluiten op je campagnedoelen, onder andere voor BetCity.',
+      'Technische implementatie van opvallende digitale campagnes en rich media die bezoekers vanuit aandacht doorsturen naar een passende Shopify-landingspagina.',
     points: [
       {
         lead: 'Homepage Takeovers',
@@ -149,7 +149,7 @@ export const SERVICES: Service[] = [
     title: 'Branding & visuele identiteit',
     badge: 'met vaste partners',
     intro:
-      'Samen met betrouwbare partners zorg ik voor een consistente merkidentiteit die overal klopt, van logo tot complete launch.',
+      'Is je merk nog niet klaar voor een onderscheidende webshop? Met vaste partners vertaal ik positionering naar een visuele identiteit die van verpakking tot Shopify-storefront klopt.',
     points: [
       {
         lead: 'Logo-ontwerp',
@@ -171,10 +171,10 @@ export const SERVICES: Service[] = [
   },
   {
     icon: 'chart',
-    title: 'Tracking, analytics & performance',
+    title: 'Shopify-analyse & optimalisatie',
     badge: 'met vaste partners',
     intro:
-      'Meet wat ertoe doet: betrouwbare data en heldere attributie voor betere marketingbeslissingen.',
+      'Meet waar klanten afhaken en welke winkelmomenten bijdragen aan resultaat, met een trackingbasis die je Shopify-data bruikbaar maakt voor gerichte verbetering.',
     points: [
       {
         lead: 'Google Analytics 4',
