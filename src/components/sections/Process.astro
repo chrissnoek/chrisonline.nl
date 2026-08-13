@@ -1,6 +1,4 @@
 ---
-import { Image } from 'astro:assets';
-import ribbon from '../../assets/brand/living-ribbon.png';
 import Icon from '../Icon.astro';
 
 const phases = [
@@ -73,17 +71,22 @@ const phases = [
                   ))}
                 </ul>
               </div>
-              <div class="process-object" aria-hidden="true">
-                <Image
-                  src={ribbon}
-                  alt=""
-                  widths={[520, 760, 1040]}
-                  sizes="(max-width: 767px) 90vw, 43vw"
-                  format="webp"
-                  quality="mid"
-                />
+              <button
+                type="button"
+                class="process-object"
+                data-living-visual={phase.id}
+                aria-label={`Beïnvloed de levende ${phase.title}-vorm met je aanwijzer of een tik`}
+              >
+                <span class="living-surface" data-visual-host aria-hidden="true">
+                  <span class:list={['living-fallback', `living-fallback--${phase.id}`]} />
+                </span>
                 <div class="object-grid" />
-              </div>
+                <span class="interaction-hint" aria-hidden="true">
+                  <span />
+                  <span class="pointer-copy">Beweeg</span>
+                  <span class="touch-copy">Tik</span>
+                </span>
+              </button>
             </article>
           ))
         }
@@ -93,12 +96,14 @@ const phases = [
 </section>
 
 <script>
+  import { initProcessLivingVisuals } from '../../scripts/process-living-visuals';
+
   let processAbort: AbortController | undefined;
-  let processObserver: IntersectionObserver | undefined;
+  let cleanupProcessVisuals: (() => void) | undefined;
 
   function initProcess() {
     processAbort?.abort();
-    processObserver?.disconnect();
+    cleanupProcessVisuals?.();
     processAbort = new AbortController();
     const { signal } = processAbort;
     const tabs = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-process-tab]'));
@@ -122,20 +127,36 @@ const phases = [
       tab.addEventListener('click', () => activate(tab.dataset.processTab || ''), { signal });
     });
 
-    processObserver = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        const id = (visible?.target as HTMLElement | undefined)?.dataset.processPanel;
-        if (id) activate(id);
-      },
-      { rootMargin: '-18% 0px -52% 0px', threshold: [0, 0.25, 0.5, 0.75] },
-    );
-    panels.forEach((panel) => processObserver?.observe(panel));
+    let scrollFrame = 0;
+    const updateActivePhase = () => {
+      scrollFrame = 0;
+      const focusLine = Math.min(window.innerHeight * 0.34, 320);
+      const closest = panels.reduce<{ panel: HTMLElement; distance: number } | undefined>(
+        (current, panel) => {
+          const bounds = panel.getBoundingClientRect();
+          if (bounds.bottom < 96 || bounds.top > window.innerHeight * 0.82) return current;
+          const distance = Math.abs(bounds.top - focusLine);
+          return !current || distance < current.distance ? { panel, distance } : current;
+        },
+        undefined,
+      );
+      const id = closest?.panel.dataset.processPanel;
+      if (id) activate(id);
+    };
+    const queueActivePhase = () => {
+      if (!scrollFrame) scrollFrame = requestAnimationFrame(updateActivePhase);
+    };
+    window.addEventListener('scroll', queueActivePhase, { signal, passive: true });
+    window.addEventListener('resize', queueActivePhase, { signal, passive: true });
+    signal.addEventListener('abort', () => cancelAnimationFrame(scrollFrame), { once: true });
+    queueActivePhase();
+
+    cleanupProcessVisuals = initProcessLivingVisuals(document);
+    signal.addEventListener('abort', () => cleanupProcessVisuals?.(), { once: true });
   }
 
   document.addEventListener('astro:page-load', initProcess);
+  document.addEventListener('astro:before-swap', () => processAbort?.abort());
 </script>
 
 <style>
@@ -288,22 +309,106 @@ const phases = [
     position: relative;
     min-height: 100%;
     overflow: hidden;
+    padding: 0;
+    border: 0;
     background: #111114;
+    color: inherit;
+    cursor: crosshair;
     isolation: isolate;
+    touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .process-object img {
+  .process-object:focus-visible {
+    outline: 3px solid #ff7048;
+    outline-offset: -4px;
+  }
+
+  .living-surface {
     position: absolute;
     z-index: 1;
-    top: 50%;
-    left: 50%;
-    width: 145%;
-    max-width: none;
-    opacity: 0.72;
-    transform: translate(-49%, -47%) rotate(-8deg) scale(0.96);
-    transition:
-      opacity 600ms ease,
-      transform 750ms cubic-bezier(0.22, 1, 0.36, 1);
+    inset: 0;
+    overflow: hidden;
+    background: #111114;
+  }
+
+  .living-surface :global(canvas) {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 500ms ease;
+  }
+
+  .living-surface[data-ready='true'] :global(canvas) {
+    opacity: 1;
+  }
+
+  .process-object[data-engine='webgl'] .living-surface {
+    filter: saturate(1.08) contrast(1.04);
+  }
+
+  .living-fallback {
+    position: absolute;
+    z-index: 1;
+    inset: 12%;
+    opacity: 0.9;
+    transition: opacity 500ms ease;
+  }
+
+  .living-surface[data-ready='true'] .living-fallback {
+    opacity: 0;
+  }
+
+  .living-fallback::before,
+  .living-fallback::after {
+    position: absolute;
+    content: '';
+  }
+
+  .living-fallback--design::before {
+    inset: 18% 2% 16% 6%;
+    border-radius: 58% 42% 63% 37% / 46% 64% 36% 54%;
+    background:
+      radial-gradient(circle at 28% 18%, #ffd1ad 0 8%, transparent 25%),
+      radial-gradient(ellipse at 64% 58%, #ff7043 0 20%, #9b210f 64%, transparent 72%);
+    filter: blur(1px) drop-shadow(0 2rem 3rem rgba(238, 67, 31, 0.28));
+    transform: rotate(-13deg);
+  }
+
+  .living-fallback--design::after {
+    inset: 36% 10% 30% 22%;
+    border: 2px solid rgba(255, 196, 153, 0.75);
+    border-radius: 50%;
+    transform: rotate(20deg) skewX(-18deg);
+  }
+
+  .living-fallback--develop {
+    background-image:
+      radial-gradient(circle at 26% 28%, #ffb17d 0 0.7rem, transparent 0.8rem),
+      radial-gradient(circle at 67% 21%, #ff7043 0 0.8rem, transparent 0.9rem),
+      radial-gradient(circle at 54% 66%, #f04a24 0 1rem, transparent 1.1rem),
+      radial-gradient(circle at 82% 72%, #ff9b69 0 0.65rem, transparent 0.75rem),
+      repeating-radial-gradient(
+        ellipse at 55% 48%,
+        transparent 0 8%,
+        rgba(240, 74, 36, 0.5) 9% 9.5%,
+        transparent 11% 16%
+      );
+    filter: drop-shadow(0 0 2rem rgba(240, 74, 36, 0.35));
+  }
+
+  .living-fallback--maintain::before {
+    inset: 10%;
+    border: clamp(1.2rem, 3vw, 2.4rem) solid #ee431f;
+    border-top-color: #ffd0a6;
+    border-right-color: #ff7545;
+    border-radius: 50%;
+    filter: drop-shadow(0 0 2.8rem rgba(240, 74, 36, 0.28));
+    transform: rotate(-20deg) scaleX(1.08);
   }
 
   .object-grid {
@@ -318,9 +423,45 @@ const phases = [
     pointer-events: none;
   }
 
-  .process-panel.is-active .process-object img {
-    opacity: 1;
-    transform: translate(-49%, -47%) rotate(-8deg) scale(1);
+  .interaction-hint {
+    position: absolute;
+    z-index: 3;
+    top: 1rem;
+    right: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.38rem 0.52rem;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 0.4rem;
+    background: rgba(17, 17, 20, 0.72);
+    color: #e6e6e2;
+    font-size: 0.68rem;
+    font-weight: 620;
+    letter-spacing: 0.02em;
+    pointer-events: none;
+  }
+
+  .interaction-hint > span:first-child {
+    width: 0.35rem;
+    height: 0.35rem;
+    border-radius: 50%;
+    background: #ff7048;
+    box-shadow: 0 0 0.75rem rgba(255, 112, 72, 0.8);
+  }
+
+  .touch-copy {
+    display: none;
+  }
+
+  @media (pointer: coarse) {
+    .pointer-copy {
+      display: none;
+    }
+
+    .touch-copy {
+      display: inline;
+    }
   }
 
   @media (max-width: 900px) {
@@ -408,11 +549,21 @@ const phases = [
 
     .process-object {
       min-height: 18rem;
+      cursor: pointer;
+    }
+
+    .pointer-copy {
+      display: none;
+    }
+
+    .touch-copy {
+      display: inline;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .process-object img {
+    .living-surface :global(canvas),
+    .living-fallback {
       transition: none;
     }
   }
