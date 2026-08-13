@@ -19,6 +19,11 @@ export default function ProjectGallery({ projects }: { projects: CatalogProject[
             {p.skills?.length ? (
               <span className="cw-card-skills">{p.skills.slice(0, 3).join(' · ')}</span>
             ) : null}
+            {p.demoPassword ? (
+              <span className="cw-card-password">
+                Wachtwoord: <strong>{p.demoPassword}</strong>
+              </span>
+            ) : null}
           </>
         );
         return p.url ? (
@@ -31,7 +36,7 @@ export default function ProjectGallery({ projects }: { projects: CatalogProject[
             rel="noopener noreferrer"
           >
             {card}
-            <span className="cw-card-cta">Bekijk live ↗</span>
+            <span className="cw-card-cta">{p.urlLabel} ↗</span>
           </a>
         ) : (
           <a key={p.slug} className="cw-card" role="listitem" href={`/werk/${p.slug}`}>

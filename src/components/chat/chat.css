@@ -483,6 +483,10 @@
   color: var(--accent-text);
   font-size: 0.78rem;
 }
+.cw-card-password {
+  color: var(--cw-muted);
+  font-size: 0.78rem;
+}
 .cw-card-cta {
   margin-top: 0.4rem;
   font-size: 0.82rem;

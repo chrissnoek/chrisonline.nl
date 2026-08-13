@@ -21,6 +21,8 @@ export interface CatalogProject {
   role: string;
   skills: string[];
   accent: string;
+  urlLabel: string;
+  demoPassword?: string;
   /** Beste beschikbare externe link: live-URL → opdrachtgever → eerste externe link. */
   url?: string;
 }
@@ -37,6 +39,8 @@ export const PROJECTS: CatalogProject[] = entries
     role: e.data.role,
     skills: e.data.skills,
     accent: e.data.accent,
+    urlLabel: e.data.urlLabel,
+    demoPassword: e.data.demoPassword,
     url: e.data.url ?? e.data.opdrachtgever?.url ?? e.data.externalLinks?.[0]?.url,
   }));
 

@@ -40,6 +40,10 @@ const projects = defineCollection({
       order: z.number().default(99),
       /** Optionele live-URL van het project. */
       url: z.string().url().optional(),
+      /** Optioneel label voor de link naar een live project of demo. */
+      urlLabel: z.string().default('Bekijk live'),
+      /** Optioneel wachtwoord voor een afgeschermde demo-omgeving. */
+      demoPassword: z.string().optional(),
       /** Markeer als placeholder-content die nog vervangen moet worden. */
       placeholder: z.boolean().default(false),
       /** Accentkleur die past bij de mockup-achtergrond (voor de kaart-gradient). */
