@@ -39,6 +39,12 @@
     novalidate
   >
     <input type="hidden" name="form-name" value="contact" />
+    <input type="hidden" id="cf-source-page" name="source_page" value="" />
+    <input type="hidden" id="cf-referrer" name="referrer" value="" />
+    <input type="hidden" id="cf-utm-source" name="utm_source" value="" />
+    <input type="hidden" id="cf-utm-medium" name="utm_medium" value="" />
+    <input type="hidden" id="cf-utm-campaign" name="utm_campaign" value="" />
+    <input type="hidden" id="cf-utm-term" name="utm_term" value="" />
 
     <!-- Honeypot: verborgen voor mensen -->
     <p class="hidden" aria-hidden="true">
@@ -124,15 +130,39 @@
     const touched = new Set<Field>();
 
     // Een CTA vanaf een dienstpagina mag het gesprek alvast context geven.
-    const service = new URLSearchParams(window.location.search).get('dienst');
+    const params = new URLSearchParams(window.location.search);
+    const service = params.get('dienst');
+    const question = params.get('vraag');
     if (service === 'automatisering' && !input('message').value) {
       input('message').value =
         'Ik wil graag bespreken welke terugkerende taken in mijn bedrijf geautomatiseerd kunnen worden.\n\nDe taak die nu veel tijd kost is: ';
     }
     if (service === 'shopify' && !input('message').value) {
+      const prompts: Record<string, string> = {
+        migratie:
+          'Ik wil een mogelijke migratie naar Shopify bespreken.\n\nHuidig platform: \nAantal producten: \nBelangrijke koppelingen: \nWat ik wil verbeteren: ',
+        onderhoud:
+          'Ik zoek hulp bij onderhoud en doorontwikkeling van mijn Shopify-webshop.\n\nWebshop-URL: \nHuidig thema: \nWat er nu nodig is: \nGewenste frequentie: ',
+        'noord-holland':
+          'Ik zoek een Shopify-specialist in Noord-Holland.\n\nMijn bedrijf is gevestigd in: \nHuidig platform: \nWat ik wil laten maken of verbeteren: ',
+      };
       input('message').value =
+        (question && prompts[question]) ||
         'Ik wil graag mijn Shopify-webshop bespreken.\n\nHuidig platform: \nWat ik verkoop: \nWat ik wil verbeteren: ';
     }
+
+    // Eerste-partij broninformatie wordt alleen met de vrijwillige aanvraag
+    // meegestuurd. Er worden hiervoor geen trackingcookies of profielen aangemaakt.
+    const setHidden = (id: string, value: string) => {
+      const field = document.getElementById(id) as HTMLInputElement | null;
+      if (field) field.value = value.slice(0, 500);
+    };
+    setHidden('cf-source-page', window.location.href);
+    setHidden('cf-referrer', document.referrer);
+    setHidden('cf-utm-source', params.get('utm_source') || '');
+    setHidden('cf-utm-medium', params.get('utm_medium') || '');
+    setHidden('cf-utm-campaign', params.get('utm_campaign') || '');
+    setHidden('cf-utm-term', params.get('utm_term') || '');
 
     const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     function validate(f: Field): string {
@@ -182,8 +212,9 @@
       fail.classList.add('hidden');
 
       const data = new URLSearchParams();
-      data.append('form-name', 'contact');
-      fields.forEach((f) => data.append(f, input(f).value));
+      for (const [key, value] of new FormData(form).entries()) {
+        if (key !== 'bot-field' && typeof value === 'string') data.append(key, value);
+      }
 
       try {
         const res = await fetch('/', {

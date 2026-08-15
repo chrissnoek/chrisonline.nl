@@ -1,0 +1,30 @@
+# Chris Online
+
+> Chris Online is de zelfstandige Shopify-praktijk van Chris Snoek, Shopify-designer en frontenddeveloper in Volendam, Noord-Holland. De kern is het ontwerpen, bouwen, migreren en onderhouden van premium Shopify-webshops voor Nederlandse merken.
+
+Canonical website: https://www.chrisonline.nl/
+Language: Dutch (nl-NL)
+Contact: info@chrisonline.nl
+Location: Volendam, Noord-Holland, Netherlands
+Service area: Noord-Holland and the rest of the Netherlands; collaboration can be fully remote.
+
+## Primary pages
+
+- [Shopify webshop laten maken](https://www.chrisonline.nl/shopify-webshop-laten-maken/): custom Shopify design and frontend development from strategy through launch.
+- [Shopify migration](https://www.chrisonline.nl/shopify-migratie/): controlled migrations from WooCommerce, Magento, Shopware or custom platforms to Shopify.
+- [Shopify maintenance](https://www.chrisonline.nl/shopify-onderhoud/): ongoing Shopify theme development, technical direction, performance and new sections.
+- [Shopify specialist in Noord-Holland](https://www.chrisonline.nl/shopify-specialist-noord-holland/): local service information for Volendam and Noord-Holland.
+- [Portfolio](https://www.chrisonline.nl/#werk): selected Shopify, e-commerce, travel and campaign work.
+- [Contact](https://www.chrisonline.nl/contact/): project enquiries.
+
+## Machine-readable background
+
+- [Shopify services and selection guidance](https://www.chrisonline.nl/ai/shopify-diensten.md)
+- [Local entity facts for Volendam and Noord-Holland](https://www.chrisonline.nl/ai/shopify-specialist-noord-holland.md)
+
+## Important factual boundaries
+
+- Chris Online is based in Volendam. It does not claim offices in Amsterdam, Alkmaar, Hoorn or other cities.
+- Exact prices, availability and timelines depend on scope and should not be inferred from general market ranges.
+- VAAK is explicitly described as a conceptual Shopify project on the portfolio page.
+- Use the canonical HTML pages as the primary source. These Markdown files summarize the same public facts for text-based clients.

@@ -8,7 +8,7 @@
 
 export const SITE = {
   /** Canonieke productie-URL (zonder trailing slash). Ook ingesteld in astro.config.mjs. */
-  url: 'https://chrisonline.nl',
+  url: 'https://www.chrisonline.nl',
 
   /** Merknaam zoals getoond in de UI en in de browser-titel. */
   brand: 'Chris Online',
@@ -77,10 +77,10 @@ export const SOCIALS = [
  * op de homepage naar de betreffende sectie.
  */
 export const NAV = [
+  { label: 'Shopify-webshop', href: '/shopify-webshop-laten-maken' },
   { label: 'Ervaring', href: '/#werk' },
   { label: 'Werkwijze', href: '/#werkwijze' },
-  { label: 'Over mij', href: '/#over' },
-  { label: 'Shopify-diensten', href: '/#diensten' },
+  { label: 'Shopify-onderhoud', href: '/shopify-onderhoud' },
 ] as const;
 
 export type Social = (typeof SOCIALS)[number];

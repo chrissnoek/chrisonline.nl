@@ -1,0 +1,917 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../Icon.astro';
+import { SITE } from '../../config/site';
+
+interface ContentItem {
+  title: string;
+  text: string;
+}
+
+interface CaseItem extends ContentItem {
+  href: string;
+  linkLabel: string;
+}
+
+interface RelatedItem {
+  title: string;
+  text: string;
+  href: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  meta: string;
+  headline: string;
+  lead: string;
+  primaryLabel?: string;
+  primaryHref?: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+  signalsTitle: string;
+  signals: string[];
+  introTitle: string;
+  introText: string;
+  fit: ContentItem[];
+  deliverablesTitle: string;
+  deliverablesIntro: string;
+  deliverables: ContentItem[];
+  processTitle?: string;
+  processIntro?: string;
+  process: ContentItem[];
+  cases?: CaseItem[];
+  faqs: { question: string; answer: string }[];
+  related: RelatedItem[];
+  serviceName: string;
+  serviceType: string;
+  areaServed?: string | string[];
+}
+
+const {
+  title,
+  description,
+  meta,
+  headline,
+  lead,
+  primaryLabel = 'Bespreek je Shopify-project',
+  primaryHref = '/contact?dienst=shopify#contactformulier',
+  secondaryLabel = 'Bekijk relevante ervaring',
+  secondaryHref = '/#werk',
+  signalsTitle,
+  signals,
+  introTitle,
+  introText,
+  fit,
+  deliverablesTitle,
+  deliverablesIntro,
+  deliverables,
+  processTitle = 'Van eerste vraag naar een beheersbare livegang.',
+  processIntro = 'Je weet steeds welke keuze voorligt, wat ik oplever en wat de volgende stap is. Zo blijft een maatwerktraject overzichtelijk.',
+  process,
+  cases = [],
+  faqs,
+  related,
+  serviceName,
+  serviceType,
+  areaServed = 'Nederland',
+} = Astro.props;
+
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+const normalizedAreas = (Array.isArray(areaServed) ? areaServed : [areaServed]).map((name) => ({
+  '@type': name === 'Nederland' ? 'Country' : 'AdministrativeArea',
+  name,
+}));
+
+const serviceLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  '@id': `${pageUrl}#service`,
+  name: serviceName,
+  serviceType,
+  description,
+  url: pageUrl,
+  provider: { '@id': `${SITE.url}/#business` },
+  areaServed: normalizedAreas,
+};
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+  })),
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: SITE.url,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: title,
+      item: pageUrl,
+    },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description} jsonLd={[serviceLd, faqLd, breadcrumbLd]}>
+  <article class="shopify-page">
+    <section class="shopify-hero" aria-labelledby="shopify-page-title">
+      <div class="shopify-shell shopify-hero__grid">
+        <div class="shopify-hero__copy">
+          <p class="shopify-meta">{meta}</p>
+          <h1 id="shopify-page-title">{headline}</h1>
+          <p class="shopify-lead">{lead}</p>
+          <div class="shopify-actions">
+            <a href={primaryHref} class="shopify-button shopify-button--primary">
+              {primaryLabel}
+              <Icon name="arrowRight" size={18} />
+            </a>
+            <a href={secondaryHref} class="shopify-button shopify-button--secondary">
+              {secondaryLabel}
+            </a>
+          </div>
+          <p class="shopify-response">Meestal binnen één werkdag een persoonlijke reactie.</p>
+        </div>
+
+        <aside class="route-panel" aria-labelledby="route-panel-title">
+          <div class="route-panel__head">
+            <span class="route-light" aria-hidden="true"></span>
+            <h2 id="route-panel-title">{signalsTitle}</h2>
+          </div>
+          <ul>
+            {
+              signals.map((signal) => (
+                <li>
+                  <Icon name="check" size={17} />
+                  <span>{signal}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <div class="route-panel__path" aria-hidden="true">
+            <span>Verhaal</span>
+            <i></i>
+            <span>Kooproute</span>
+            <i></i>
+            <span>Techniek</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="shopify-section shopify-section--intro" aria-labelledby="intro-title">
+      <div class="shopify-shell intro-grid">
+        <h2 id="intro-title">{introTitle}</h2>
+        <div>
+          <p class="section-lead">{introText}</p>
+          <div class="fit-list">
+            {
+              fit.map((item) => (
+                <section>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </section>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shopify-section shopify-section--dark" aria-labelledby="deliverables-title">
+      <div class="shopify-shell">
+        <div class="section-heading section-heading--dark">
+          <h2 id="deliverables-title">{deliverablesTitle}</h2>
+          <p>{deliverablesIntro}</p>
+        </div>
+        <div class="deliverable-grid">
+          {
+            deliverables.map((item) => (
+              <section>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </section>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    {
+      cases.length > 0 && (
+        <section class="shopify-section" aria-labelledby="proof-title">
+          <div class="shopify-shell">
+            <div class="section-heading">
+              <h2 id="proof-title">Relevant werk, geen losse beloftes.</h2>
+              <p>
+                Bekijk hoe merkverhaal, complexe keuzeprocessen en frontend-development in echte
+                projecten samenkomen.
+              </p>
+            </div>
+            <div class="case-grid">
+              {cases.map((item) => (
+                <a href={item.href} class="case-link">
+                  <span>
+                    <strong>{item.title}</strong>
+                    <span>{item.text}</span>
+                  </span>
+                  <span class="case-link__action">
+                    {item.linkLabel}
+                    <Icon name="arrowUpRight" size={18} />
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <section class="shopify-section shopify-section--soft" aria-labelledby="process-title">
+      <div class="shopify-shell">
+        <div class="section-heading">
+          <h2 id="process-title">{processTitle}</h2>
+          <p>{processIntro}</p>
+        </div>
+        <div class="process-list">
+          {
+            process.map((item) => (
+              <section>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </section>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="shopify-section" aria-labelledby="faq-title">
+      <div class="shopify-shell faq-grid">
+        <div>
+          <h2 id="faq-title">Vragen die vaak vóór een goed Shopify-traject komen.</h2>
+          <p>
+            Staat je vraag er niet bij? Stel hem op de homepage aan de Shopify-assistent of stuur
+            hem direct mee in je aanvraag.
+          </p>
+        </div>
+        <div class="faq-list">
+          {
+            faqs.map((faq) => (
+              <details>
+                <summary>
+                  {faq.question}
+                  <Icon name="plus" size={19} />
+                </summary>
+                <p>{faq.answer}</p>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="shopify-section related-section" aria-labelledby="related-title">
+      <div class="shopify-shell">
+        <h2 id="related-title">Kies de route die bij je vraag past.</h2>
+        <div class="related-grid">
+          {
+            related.map((item) => (
+              <a href={item.href}>
+                <strong>{item.title}</strong>
+                <span>{item.text}</span>
+                <Icon name="arrowRight" size={18} />
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="shopify-cta" aria-labelledby="shopify-cta-title">
+      <div class="shopify-shell shopify-cta__inner">
+        <div>
+          <h2 id="shopify-cta-title">Vertel waar je webshop nu vastloopt.</h2>
+          <p>
+            Je hoeft de oplossing nog niet te kennen. Beschrijf je assortiment, huidige platform en
+            ambitie; ik help de juiste eerste stap afbakenen.
+          </p>
+        </div>
+        <a href={primaryHref} class="shopify-button shopify-button--light">
+          {primaryLabel}
+          <Icon name="arrowRight" size={18} />
+        </a>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .shopify-page {
+    --sp-ink: #111111;
+    --sp-muted: #62625d;
+    --sp-paper: #f5f5f2;
+    --sp-orange: #e74822;
+    background: #ffffff;
+    color: var(--sp-ink);
+  }
+
+  .shopify-shell {
+    width: min(calc(100% - 2.5rem), 78rem);
+    margin-inline: auto;
+  }
+
+  .shopify-hero {
+    padding: clamp(2.75rem, 5vw, 5rem) 0 clamp(5rem, 9vw, 8rem);
+    overflow: hidden;
+  }
+
+  .shopify-hero__grid {
+    display: grid;
+    align-items: center;
+    grid-template-columns: minmax(0, 1.15fr) minmax(20rem, 0.75fr);
+    gap: clamp(3rem, 8vw, 7rem);
+  }
+
+  .shopify-hero__copy {
+    min-width: 0;
+  }
+
+  .shopify-meta {
+    margin-bottom: 1.35rem;
+    color: #b73518;
+    font-size: 0.96rem;
+    font-weight: 650;
+  }
+
+  .shopify-hero h1 {
+    max-width: 14ch;
+    font-family: var(--font-display), sans-serif;
+    font-size: clamp(3.1rem, 6.2vw, 5.8rem);
+    font-weight: 570;
+    letter-spacing: -0.067em;
+    line-height: 0.92;
+    text-wrap: balance;
+  }
+
+  .shopify-lead {
+    max-width: 44rem;
+    margin-top: 2rem;
+    color: var(--sp-muted);
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  .shopify-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2.25rem;
+  }
+
+  .shopify-button {
+    display: inline-flex;
+    min-height: 3.35rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    padding: 0.85rem 1.25rem;
+    border-radius: 0.8rem;
+    font-size: 0.92rem;
+    font-weight: 680;
+    transition:
+      transform 180ms ease,
+      background-color 180ms ease,
+      color 180ms ease;
+  }
+
+  .shopify-button:hover,
+  .shopify-button:focus-visible {
+    transform: translateY(-2px);
+  }
+
+  .shopify-button--primary {
+    background: var(--sp-ink);
+    color: #ffffff;
+  }
+
+  .shopify-button--primary:hover,
+  .shopify-button--primary:focus-visible {
+    background: #2c2c29;
+  }
+
+  .shopify-button--secondary {
+    border: 1px solid #bdbdb6;
+    color: var(--sp-ink);
+  }
+
+  .shopify-button--secondary:hover,
+  .shopify-button--secondary:focus-visible {
+    background: var(--sp-paper);
+  }
+
+  .shopify-response {
+    margin-top: 1rem;
+    color: #7a7a74;
+    font-size: 0.82rem;
+  }
+
+  .route-panel {
+    position: relative;
+    padding: 1.5rem;
+    border: 1px solid #d9d9d2;
+    border-radius: 1.4rem;
+    background: var(--sp-paper);
+    box-shadow: 0 2rem 5rem rgba(17, 17, 17, 0.1);
+    transform: rotate(1.25deg);
+  }
+
+  .route-panel::before {
+    position: absolute;
+    z-index: -1;
+    right: -25%;
+    bottom: -35%;
+    width: 18rem;
+    height: 18rem;
+    border-radius: 50%;
+    background: rgba(231, 72, 34, 0.14);
+    content: '';
+    filter: blur(55px);
+  }
+
+  .route-panel__head {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid #d5d5ce;
+  }
+
+  .route-light {
+    width: 0.7rem;
+    height: 0.7rem;
+    flex: none;
+    border-radius: 50%;
+    background: var(--sp-orange);
+    box-shadow: 0 0 0 0.3rem rgba(231, 72, 34, 0.12);
+  }
+
+  .route-panel h2 {
+    font-size: 1rem;
+    font-weight: 680;
+    letter-spacing: -0.015em;
+  }
+
+  .route-panel ul {
+    display: grid;
+    margin-top: 1rem;
+    gap: 0.25rem;
+  }
+
+  .route-panel li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    padding: 0.7rem 0;
+    color: #4f4f4a;
+    line-height: 1.45;
+  }
+
+  .route-panel li :global(svg) {
+    flex: none;
+    margin-top: 0.17rem;
+    color: #b73518;
+  }
+
+  .route-panel__path {
+    display: flex;
+    margin-top: 1.2rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.85rem 0.9rem;
+    border-radius: 0.85rem;
+    background: #111111;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 630;
+  }
+
+  .route-panel__path i {
+    height: 1px;
+    flex: 1;
+    background: #5d5d59;
+  }
+
+  .shopify-section {
+    padding: clamp(5rem, 10vw, 9rem) 0;
+  }
+
+  .shopify-section--intro {
+    border-top: 1px solid #e0e0da;
+  }
+
+  .shopify-section--soft {
+    background: var(--sp-paper);
+  }
+
+  .shopify-section--dark {
+    background: #111111;
+    color: #ffffff;
+  }
+
+  .intro-grid,
+  .faq-grid {
+    display: grid;
+    grid-template-columns: minmax(15rem, 0.72fr) minmax(0, 1.28fr);
+    gap: clamp(3rem, 8vw, 8rem);
+  }
+
+  .intro-grid > h2,
+  .section-heading h2,
+  .faq-grid > div:first-child h2,
+  .related-section > .shopify-shell > h2,
+  .shopify-cta h2 {
+    font-family: var(--font-display), sans-serif;
+    font-size: clamp(2.35rem, 4.8vw, 5rem);
+    font-weight: 570;
+    letter-spacing: -0.06em;
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+
+  .section-lead,
+  .section-heading p,
+  .faq-grid > div:first-child p {
+    color: var(--sp-muted);
+    font-size: 1.08rem;
+    line-height: 1.7;
+    text-wrap: pretty;
+  }
+
+  .fit-list {
+    display: grid;
+    margin-top: 3rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 3rem;
+  }
+
+  .fit-list section {
+    padding-top: 1.2rem;
+    border-top: 2px solid #111111;
+  }
+
+  .fit-list h3,
+  .deliverable-grid h3,
+  .process-list h3 {
+    font-size: 1.13rem;
+    font-weight: 690;
+    letter-spacing: -0.02em;
+  }
+
+  .fit-list p,
+  .deliverable-grid p,
+  .process-list p {
+    margin-top: 0.65rem;
+    color: var(--sp-muted);
+    line-height: 1.65;
+  }
+
+  .section-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.65fr);
+    gap: clamp(2.5rem, 7vw, 7rem);
+    align-items: end;
+  }
+
+  .section-heading--dark p {
+    color: #a5a5a0;
+  }
+
+  .deliverable-grid {
+    display: grid;
+    margin-top: clamp(3rem, 7vw, 6rem);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    overflow: hidden;
+    border: 1px solid #373735;
+    border-radius: 1.25rem;
+    background: #373735;
+  }
+
+  .deliverable-grid section {
+    min-height: 14rem;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    background: #191919;
+  }
+
+  .deliverable-grid p {
+    max-width: 31rem;
+    color: #a5a5a0;
+  }
+
+  .case-grid {
+    display: grid;
+    margin-top: clamp(3rem, 7vw, 6rem);
+    gap: 1rem;
+  }
+
+  .case-link {
+    display: flex;
+    min-height: 10rem;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border: 1px solid #d9d9d2;
+    border-radius: 1.25rem;
+    background: var(--sp-paper);
+    transition:
+      transform 180ms ease,
+      background-color 180ms ease;
+  }
+
+  .case-link:hover,
+  .case-link:focus-visible {
+    background: #ffffff;
+    transform: translateY(-3px);
+  }
+
+  .case-link > span:first-child {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .case-link strong {
+    font-size: clamp(1.35rem, 2.5vw, 2rem);
+    letter-spacing: -0.035em;
+  }
+
+  .case-link > span:first-child > span {
+    max-width: 43rem;
+    color: var(--sp-muted);
+    line-height: 1.55;
+  }
+
+  .case-link__action {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 0.45rem;
+    color: #b73518;
+    font-weight: 660;
+  }
+
+  .process-list {
+    display: grid;
+    margin-top: clamp(3rem, 7vw, 5rem);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2.25rem;
+  }
+
+  .process-list section {
+    position: relative;
+    padding-top: 1.5rem;
+    border-top: 0.32rem solid #111111;
+  }
+
+  .process-list section:not(:last-child)::after {
+    position: absolute;
+    top: -0.32rem;
+    right: -2.25rem;
+    width: 2.25rem;
+    height: 0.32rem;
+    background: #c9c9c3;
+    content: '';
+  }
+
+  .faq-grid > div:first-child p {
+    margin-top: 1.5rem;
+  }
+
+  .faq-list {
+    border-top: 1px solid #cecec7;
+  }
+
+  .faq-list details {
+    border-bottom: 1px solid #cecec7;
+  }
+
+  .faq-list summary {
+    display: flex;
+    min-height: 5rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1rem 0;
+    cursor: pointer;
+    font-size: 1.08rem;
+    font-weight: 650;
+    list-style: none;
+  }
+
+  .faq-list summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-list details[open] summary :global(svg) {
+    transform: rotate(45deg);
+  }
+
+  .faq-list summary :global(svg) {
+    flex: none;
+    transition: transform 180ms ease;
+  }
+
+  .faq-list details p {
+    max-width: 45rem;
+    padding: 0 3rem 1.8rem 0;
+    color: var(--sp-muted);
+    line-height: 1.7;
+  }
+
+  .related-section {
+    padding-top: 0;
+  }
+
+  .related-section > .shopify-shell > h2 {
+    max-width: 12ch;
+  }
+
+  .related-grid {
+    display: grid;
+    margin-top: 2.5rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .related-grid a {
+    display: grid;
+    min-height: 13rem;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr;
+    gap: 0.65rem 1rem;
+    padding: 1.5rem;
+    border: 1px solid #d9d9d2;
+    border-radius: 1rem;
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease;
+  }
+
+  .related-grid a:hover,
+  .related-grid a:focus-visible {
+    border-color: #96968f;
+    transform: translateY(-3px);
+  }
+
+  .related-grid strong {
+    font-size: 1.1rem;
+  }
+
+  .related-grid span {
+    color: var(--sp-muted);
+    line-height: 1.55;
+  }
+
+  .related-grid :global(svg) {
+    grid-row: 1 / 3;
+    grid-column: 2;
+  }
+
+  .shopify-cta {
+    padding: clamp(4rem, 8vw, 7rem) 0;
+    background: var(--sp-orange);
+    color: #ffffff;
+  }
+
+  .shopify-cta__inner {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 3rem;
+  }
+
+  .shopify-cta h2 {
+    max-width: 12ch;
+    font-size: clamp(2.7rem, 5vw, 5.2rem);
+  }
+
+  .shopify-cta p {
+    max-width: 42rem;
+    margin-top: 1.5rem;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 1.07rem;
+    line-height: 1.65;
+  }
+
+  .shopify-button--light {
+    flex: none;
+    background: #ffffff;
+    color: #111111;
+  }
+
+  @media (max-width: 900px) {
+    .shopify-hero__grid,
+    .intro-grid,
+    .faq-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .route-panel {
+      max-width: 36rem;
+      transform: none;
+    }
+
+    .process-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .process-list section::after {
+      display: none;
+    }
+
+    .related-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .related-grid a {
+      min-height: 9rem;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .shopify-shell {
+      width: min(calc(100% - 2rem), 78rem);
+    }
+
+    .shopify-hero {
+      padding-top: 2.5rem;
+    }
+
+    .shopify-hero h1 {
+      font-size: clamp(2.45rem, 10.5vw, 3.7rem);
+    }
+
+    .fit-list,
+    .deliverable-grid,
+    .process-list,
+    .section-heading {
+      grid-template-columns: 1fr;
+    }
+
+    .deliverable-grid section {
+      min-height: 0;
+    }
+
+    .case-link,
+    .shopify-cta__inner {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .case-link__action {
+      margin-top: 1rem;
+    }
+
+    .shopify-button,
+    .shopify-actions,
+    .shopify-actions > a {
+      width: 100%;
+    }
+
+    .route-panel__path {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .route-panel__path i {
+      width: 1px;
+      height: 1rem;
+      flex: none;
+      margin-left: 0.4rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shopify-button,
+    .case-link,
+    .related-grid a,
+    .faq-list summary :global(svg) {
+      transition: none;
+    }
+  }
+</style>

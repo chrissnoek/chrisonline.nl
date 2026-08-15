@@ -1,0 +1,138 @@
+---
+import ShopifyLanding from '../components/marketing/ShopifyLanding.astro';
+
+const fit = [
+  {
+    title: 'De backlog blijft groeien',
+    text: 'Kleine storefrontverbeteringen, campagnewensen en bugs wachten steeds op het volgende grote project.',
+  },
+  {
+    title: 'Apps stapelen zich op',
+    text: 'Iedere nieuwe behoefte lijkt een extra abonnement en meer JavaScript aan de voorkant op te leveren.',
+  },
+  {
+    title: 'Niemand bewaakt het geheel',
+    text: 'Marketing, design en techniek maken ieder logische keuzes, maar samen wordt de winkelervaring steeds minder consistent.',
+  },
+  {
+    title: 'Je wilt sneller kunnen testen',
+    text: 'Nieuwe secties en hypotheses moeten beheerst live kunnen, zonder iedere keer de fundering open te breken.',
+  },
+];
+
+const deliverables = [
+  {
+    title: 'Technische regie',
+    text: 'Een vaste developer die het thema, de afhankelijkheden en eerdere keuzes leert kennen en nieuwe verzoeken in samenhang beoordeelt.',
+  },
+  {
+    title: 'Nieuwe Shopify-secties',
+    text: 'Campagne-, collectie- en productcontent die door je team herbruikbaar wordt beheerd, binnen één consistent designsysteem.',
+  },
+  {
+    title: 'Performance en kwaliteit',
+    text: 'Gerichte controles na themawijzigingen of app-installaties, met aandacht voor mobiel, toegankelijkheid en kritieke kooproutes.',
+  },
+  {
+    title: 'Een eerlijke backlog',
+    text: 'Werk wordt geprioriteerd op klantimpact, risico en inspanning. Niet iedere wens hoeft maatwerk te worden en niet ieder probleem vraagt een app.',
+  },
+];
+
+const process = [
+  {
+    title: 'Technische intake',
+    text: 'We bekijken het thema, apps, werkwijze, openstaande problemen en gewenste ontwikkelsnelheid. Daarna weet je of structurele samenwerking past.',
+  },
+  {
+    title: 'Werk prioriteren',
+    text: 'Verzoeken krijgen context: welk klantprobleem lossen ze op, welk risico dragen ze en wat moet eerst worden gemeten?',
+  },
+  {
+    title: 'In kleine delen leveren',
+    text: 'Verbeteringen worden afgebakend, getest en gedocumenteerd opgeleverd, zodat voortgang niet afhankelijk is van één grote release.',
+  },
+  {
+    title: 'Leren en bijsturen',
+    text: 'Na oplevering kijken we wat het effect of de volgende afhankelijkheid is. De backlog verandert mee met echte resultaten.',
+  },
+];
+
+const faqs = [
+  {
+    question: 'Neem je ook een bestaand Shopify-thema over?',
+    answer:
+      'Ja, na een technische intake. Ik kijk eerst naar codekwaliteit, gebruikte apps, maatwerk, versiebeheer en de belangrijkste risico’s. Als veilig doorontwikkelen niet verantwoord is, leg ik uit welke opschoning of herbouw eerst nodig is.',
+  },
+  {
+    question: 'Is onderhoud hetzelfde als onbeperkt support?',
+    answer:
+      'Nee. We spreken af welke werkzaamheden en reactietijden binnen de samenwerking vallen. Nieuwe features, spoed, externe app-problemen en grotere redesigns hebben ieder een andere impact. Heldere grenzen voorkomen teleurstelling aan beide kanten.',
+  },
+  {
+    question: 'Kun je ook alleen een paar losse verbeteringen uitvoeren?',
+    answer:
+      'Dat kan wanneer de vraag goed af te bakenen is en de bestaande technische basis het toelaat. Voor terugkerende verzoeken is een vaste werkwijze meestal efficiënter, omdat context en testwerk dan niet iedere keer opnieuw beginnen.',
+  },
+  {
+    question: 'Help je bij Shopify-storingen?',
+    answer:
+      'Ik kan storingen in thema, frontend en eigen integraties onderzoeken. Problemen in Shopify zelf of in een externe app blijven mede afhankelijk van die leverancier. Vooraf spreken we af wat spoed betekent en welke bereikbaarheid reëel is.',
+  },
+  {
+    question: 'Hoe bepalen we wat als eerste wordt gebouwd?',
+    answer:
+      'We wegen klantimpact, omzetpotentieel, risico, afhankelijkheden en inspanning. Een duidelijk meetbare verbetering krijgt meestal voorrang op een cosmetische wens, tenzij die wens onderdeel is van een grotere merk- of campagnekeuze.',
+  },
+];
+
+const related = [
+  {
+    title: 'Shopify-webshop laten maken',
+    text: 'Wanneer je huidige fundering niet meer past en een complete nieuwe storefront logischer is.',
+    href: '/shopify-webshop-laten-maken',
+  },
+  {
+    title: 'Migreren naar Shopify',
+    text: 'Een bestaande catalogus en operatie gecontroleerd naar Shopify brengen.',
+    href: '/shopify-migratie',
+  },
+  {
+    title: 'Shopify-specialist Noord-Holland',
+    text: 'Korte lijnen met een zelfstandige designer en developer vanuit Volendam.',
+    href: '/shopify-specialist-noord-holland',
+  },
+];
+---
+
+<ShopifyLanding
+  title="Shopify-onderhoud en doorontwikkeling"
+  description="Shopify-onderhoud en structurele doorontwikkeling door een vaste frontenddeveloper. Nieuwe secties, technische regie, performance en een beheersbare backlog."
+  meta="Vaste Shopify-development voor teams die willen blijven verbeteren"
+  headline="Je Shopify‑webshop is nooit echt af. De technische schuld hoeft niet mee te groeien."
+  lead="Blijf campagnes, content en winkelmomenten verbeteren met één vaste Shopify-developer die je thema leert kennen, keuzes bewaakt en werk in beheersbare delen oplevert."
+  primaryLabel="Bespreek Shopify-onderhoud"
+  primaryHref="/contact?dienst=shopify&vraag=onderhoud#contactformulier"
+  signalsTitle="Structurele hulp past wanneer…"
+  signals={[
+    'je team een terugkerende developmentbacklog heeft',
+    'snelheid belangrijk is, maar kwaliteit ook',
+    'apps en maatwerk in balans moeten blijven',
+    'je één technisch aanspreekpunt wilt',
+  ]}
+  introTitle="Van losse tickets naar technische continuïteit."
+  introText="Goed onderhoud is niet wachten tot iets breekt. Het is begrijpen hoe marketingwensen, themawijzigingen, apps en performance elkaar beïnvloeden, en vervolgens het juiste werk in de juiste volgorde doen."
+  {fit}
+  deliverablesTitle="Wat een vaste Shopify-partner toevoegt."
+  deliverablesIntro="Je koopt geen verzameling uren zonder richting, maar context die zich opbouwt. Daardoor worden inschattingen beter, overdracht kleiner en keuzes consistenter."
+  {deliverables}
+  processTitle="Een werkritme dat ook voor een klein team werkt."
+  processIntro="De samenwerking blijft bewust licht: genoeg structuur voor grip, zonder vergaderlaag of log ticketsysteem als doel op zich."
+  {process}
+  cases={[]}
+  {faqs}
+  {related}
+  serviceName="Shopify-onderhoud en doorontwikkeling"
+  serviceType="Shopify-onderhoud"
+  areaServed="Nederland"
+/>
