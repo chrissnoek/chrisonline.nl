@@ -1,0 +1,138 @@
+---
+import ShopifyLanding from '../components/marketing/ShopifyLanding.astro';
+
+const fit = [
+  {
+    title: 'Je huidige platform kost steeds meer onderhoud',
+    text: 'Updates, plugins of maatwerk maken kleine verbeteringen traag en technisch risicovol.',
+  },
+  {
+    title: 'Het team wil eenvoudiger beheren',
+    text: 'Producten, content, acties en markten moeten zonder omwegen door het e-commerceteam te beheren zijn.',
+  },
+  {
+    title: 'Je wilt verbeteren tijdens de overstap',
+    text: 'Een migratie is het moment om niet alleen data, maar ook structuur en kooproute kritisch mee te nemen.',
+  },
+  {
+    title: 'Vindbaarheid en omzet mogen niet blind mee verhuizen',
+    text: 'Belangrijke URL’s, content, tracking en verkooproutes verdienen een gecontroleerd migratieplan.',
+  },
+];
+
+const deliverables = [
+  {
+    title: 'Migratie-inventaris',
+    text: 'Overzicht van catalogus, content, URL’s, accounts, talen, betaalroutes, verzending, apps en koppelingen die de overstap raken.',
+  },
+  {
+    title: 'Nieuwe Shopify-architectuur',
+    text: 'Een doordachte inrichting van producten, collecties, metafields, navigatie en pagina’s, in plaats van oude beperkingen één op één kopiëren.',
+  },
+  {
+    title: 'Storefront en integraties',
+    text: 'Een passende Shopify-frontend en alleen de apps of maatwerkkoppelingen die voor je dagelijkse operatie nodig zijn.',
+  },
+  {
+    title: 'Redirect- en livegangplan',
+    text: 'Controle van kritieke URL’s, formulieren, tracking, checkout, e-mail en mobiele routes rond het moment van overstappen.',
+  },
+];
+
+const process = [
+  {
+    title: 'Risico’s zichtbaar maken',
+    text: 'Eerst brengen we in kaart wat omzet, data of vindbaarheid kan raken. Daarmee bepalen we wat automatisch kan en wat handmatig gecontroleerd moet worden.',
+  },
+  {
+    title: 'Structuur en ontwerp vastleggen',
+    text: 'De nieuwe productstructuur en belangrijke winkelmomenten worden bepaald voordat data en code zich opstapelen.',
+  },
+  {
+    title: 'Bouwen en proefmigreren',
+    text: 'De Shopify-store wordt opgebouwd en representatieve data wordt getest. Zo worden afwijkingen zichtbaar vóór de definitieve omzetting.',
+  },
+  {
+    title: 'Omschakelen en bewaken',
+    text: 'We spreken het livegangmoment, controles en verantwoordelijkheden af. Na de omschakeling worden de belangrijkste routes opnieuw nagelopen.',
+  },
+];
+
+const faqs = [
+  {
+    question: 'Van welke platforms kun je naar Shopify migreren?',
+    answer:
+      'Veel voorkomende vertrekpunten zijn WooCommerce, Magento, Shopware en maatwerkplatforms. De haalbaarheid hangt minder af van de naam van het platform dan van de kwaliteit van de export, productstructuur, klantdata, orderhistorie en koppelingen. Dat onderzoek ik eerst.',
+  },
+  {
+    question: 'Gaat alle historische data automatisch mee?',
+    answer:
+      'Niet altijd, en niet alles hoeft in Shopify zelf terecht te komen. Producten, klanten, bestellingen, content en SEO-data hebben ieder andere eisen. We bepalen vooraf wat operationeel nodig is, wat bewaard moet blijven en welke gegevens veilig en toegestaan kunnen worden overgezet.',
+  },
+  {
+    question: 'Verlies ik mijn posities in Google bij een migratie?',
+    answer:
+      'Een platformmigratie brengt altijd risico met zich mee. Een goede URL-inventaris, passende redirects, behoud van waardevolle content, consistente interne links en controle in Search Console verkleinen dat risico. Ik beloof geen onveranderde rankings, wel een beheerste aanpak.',
+  },
+  {
+    question: 'Kan de webshop tijdens de migratie blijven verkopen?',
+    answer:
+      'Meestal wel. De nieuwe Shopify-store wordt naast de bestaande omgeving voorbereid. Voor de definitieve omschakeling spreken we af hoe recente producten, klanten en orders worden bijgewerkt en welk moment het minste operationele risico geeft.',
+  },
+  {
+    question: 'Is Shopify altijd de juiste bestemming?',
+    answer:
+      'Nee. Productlogica, B2B-processen, internationale eisen of diepe maatwerkkoppelingen kunnen een andere keuze rechtvaardigen. Als de voordelen van Shopify niet opwegen tegen de migratiekosten en beperkingen, is niet migreren een valide uitkomst.',
+  },
+];
+
+const related = [
+  {
+    title: 'Shopify-webshop laten maken',
+    text: 'Een complete, merkgedreven Shopify-storefront van eerste route tot livegang.',
+    href: '/shopify-webshop-laten-maken',
+  },
+  {
+    title: 'Shopify-onderhoud',
+    text: 'Na de migratie gericht blijven verbeteren zonder opnieuw technische schuld op te bouwen.',
+    href: '/shopify-onderhoud',
+  },
+  {
+    title: 'Shopify-specialist Noord-Holland',
+    text: 'Persoonlijke Shopify-samenwerking vanuit Volendam, in de regio en online.',
+    href: '/shopify-specialist-noord-holland',
+  },
+];
+---
+
+<ShopifyLanding
+  title="Migreren naar Shopify"
+  description="Gecontroleerd migreren van WooCommerce, Magento, Shopware of maatwerk naar Shopify. Met aandacht voor productdata, URL’s, integraties, design en livegang."
+  meta="Shopify-migratie met grip op data, vindbaarheid en operatie"
+  headline="Migreren naar Shopify zonder oude problemen mee te verhuizen."
+  lead="Een platformwissel is meer dan producten importeren. Ik help de nieuwe structuur, storefront, noodzakelijke koppelingen en livegang als één migratieroute ontwerpen en bouwen."
+  primaryLabel="Bespreek je migratie"
+  primaryHref="/contact?dienst=shopify&vraag=migratie#contactformulier"
+  signalsTitle="Een migratie verdient onderzoek naar…"
+  signals={[
+    'product- en klantdata',
+    'URL’s en organische vindbaarheid',
+    'apps, betalingen en koppelingen',
+    'de dagelijkse operatie rond livegang',
+  ]}
+  introTitle="Niet alles hoeft mee. Wat waarde heeft wel."
+  introText="De beste migratie kopieert geen technisch verleden. We onderscheiden wat klanten, je team en zoekmachines werkelijk nodig hebben van wat alleen bestaat omdat het oude platform zo werkte."
+  {fit}
+  deliverablesTitle="Een migratieplan dat verder gaat dan importeren."
+  deliverablesIntro="Iedere overstap is anders. Deze bouwstenen maken afhankelijkheden expliciet en voorkomen dat belangrijke keuzes pas op de livegangdag boven water komen."
+  {deliverables}
+  processTitle="Eerst begrijpen, dan pas verplaatsen."
+  processIntro="Data, design en operatie lopen in een migratie door elkaar. De volgorde hieronder houdt beslissingen controleerbaar en maakt ruimte voor een echte proefronde."
+  {process}
+  cases={[]}
+  {faqs}
+  {related}
+  serviceName="Migreren naar Shopify"
+  serviceType="Shopify-migratie"
+  areaServed="Nederland"
+/>

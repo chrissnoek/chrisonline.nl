@@ -9,7 +9,7 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   // Required for absolute canonical URLs, Open Graph images and the sitemap.
-  site: 'https://chrisonline.nl',
+  site: 'https://www.chrisonline.nl',
   // De site blijft statisch: elke pagina wordt geprerenderd, behalve de enkele
   // on-demand route(s) die expliciet `export const prerender = false` zetten
   // (de AI-chat-endpoint). De Netlify-adapter draait die als één Function.
@@ -25,6 +25,8 @@ export default defineConfig({
       // A clean, modern lastmod helps crawlers; one entry per page.
       changefreq: 'monthly',
       priority: 0.7,
+      // De bedankpagina is noindex en hoort daarom niet in de sitemap.
+      filter: (page) => !page.includes('/bedankt/'),
     }),
   ],
 

@@ -1,0 +1,153 @@
+---
+import ShopifyLanding from '../components/marketing/ShopifyLanding.astro';
+
+const fit = [
+  {
+    title: 'Dichtbij wanneer dat waarde heeft',
+    text: 'Strategie en ontwerp kunnen online, maar soms werkt een sessie met product, team en processen op tafel gewoon sneller.',
+  },
+  {
+    title: 'Geen overdracht tussen sales en uitvoering',
+    text: 'Je spreekt direct met degene die analyseert, ontwerpt en bouwt. Aannames verdwijnen niet in een accountlaag.',
+  },
+  {
+    title: 'Ervaring met merk én techniek',
+    text: 'Niet alleen Liquid-code of alleen een Figma-ontwerp: de winkelervaring wordt als één product bekeken.',
+  },
+  {
+    title: 'Een samenwerking op passende schaal',
+    text: 'Rechtstreeks voor merken en e-commerceteams, of als specialist naast een bureau en bestaande partners.',
+  },
+];
+
+const deliverables = [
+  {
+    title: 'Shopify-webshop van A tot Z',
+    text: 'Strategie, webshopdesign, maatwerk frontend, Shopify-inrichting en een beheerste livegang in één traject.',
+  },
+  {
+    title: 'Redesign en conversieroute',
+    text: 'Een sterkere merkervaring en duidelijker keuzeproces, zonder werkende onderdelen van je huidige shop blind te vervangen.',
+  },
+  {
+    title: 'Migratie naar Shopify',
+    text: 'Productdata, content, belangrijke URL’s en technische afhankelijkheden gecontroleerd naar een nieuwe Shopify-basis.',
+  },
+  {
+    title: 'Onderhoud en doorontwikkeling',
+    text: 'Een vaste developer voor nieuwe secties, technische regie, performance en verbeteringen na de livegang.',
+  },
+];
+
+const process = [
+  {
+    title: 'Kennismaken',
+    text: 'Je deelt waar de webshop staat, wat je verkoopt en welke verandering commercieel of technisch nodig is.',
+  },
+  {
+    title: 'De route afbakenen',
+    text: 'Je krijgt terug welke aanpak passend lijkt, welke informatie nog ontbreekt en welke risico’s vooraf onderzocht moeten worden.',
+  },
+  {
+    title: 'Samen bouwen',
+    text: 'Ontwerp en development blijven dicht bij elkaar. Je ziet voortgang in concrete winkelmomenten in plaats van alleen losse deliverables.',
+  },
+  {
+    title: 'Lokaal of online afstemmen',
+    text: 'De meeste samenwerking kan efficiënt online. Wanneer een werksessie of bezoek in Noord-Holland echt iets toevoegt, plannen we dat bewust.',
+  },
+];
+
+const cases = [
+  {
+    title: 'VAAK — premium Shopify-thema op maat',
+    text: 'Een conceptuele Nederlandse storefront waarin circulair productverhaal, collectie, filters en Shopify-beheer samenkomen.',
+    href: '/werk/vaak-premium-shopify-webshop',
+    linkLabel: 'Bekijk de Shopify-case',
+  },
+  {
+    title: 'GP Travel — ontwerp voor een complexe boekingsroute',
+    text: 'Een helder platform voor circuits, raceweekenden, tickets en reisarrangementen met veel keuzevariabelen.',
+    href: '/werk/gp-travel',
+    linkLabel: 'Bekijk de designcase',
+  },
+];
+
+const faqs = [
+  {
+    question: 'Waar is Chris Online gevestigd?',
+    answer:
+      'Chris Online is gevestigd in Volendam, gemeente Edam-Volendam, in Noord-Holland. De samenwerking is online ingericht en kan waar passend worden aangevuld met een sessie op locatie.',
+  },
+  {
+    question: 'Voor welke plaatsen in Noord-Holland werk je?',
+    answer:
+      'Ik werk onder meer voor organisaties in en rond Volendam, Edam, Purmerend, Hoorn, Alkmaar, Zaandam, Haarlem en Amsterdam. Die plaatsen zijn geen losse vestigingen; mijn basis is Volendam en projecten kunnen ook uit de rest van Nederland komen.',
+  },
+  {
+    question: 'Ben je een Shopify-bureau of freelancer?',
+    answer:
+      'Chris Online is de zelfstandige praktijk van Shopify-designer en frontenddeveloper Chris Snoek. Je werkt rechtstreeks met mij. Voor branding, analytics of andere specialistische onderdelen kan ik met vaste partners aansluiten wanneer de scope dat nodig maakt.',
+  },
+  {
+    question: 'Kunnen we ook volledig op afstand samenwerken?',
+    answer:
+      'Ja. Intake, workshops, ontwerpfeedback, testmomenten en oplevering kunnen volledig online. Fysieke nabijheid is een optie voor sessies waar dat aantoonbaar sneller of duidelijker werkt, geen voorwaarde.',
+  },
+  {
+    question: 'Werk je alleen aan nieuwe Shopify-webshops?',
+    answer:
+      'Nee. Je kunt ook terecht voor een redesign, migratie naar Shopify, een maatwerk thema, nieuwe secties en structurele doorontwikkeling van een bestaande shop.',
+  },
+];
+
+const related = [
+  {
+    title: 'Shopify-webshop laten maken',
+    text: 'Bekijk wat een compleet maatwerktraject inhoudt en voor welke situaties het past.',
+    href: '/shopify-webshop-laten-maken',
+  },
+  {
+    title: 'Migreren naar Shopify',
+    text: 'Stap gecontroleerd over met aandacht voor data, URL’s, storefront en operatie.',
+    href: '/shopify-migratie',
+  },
+  {
+    title: 'Shopify-onderhoud',
+    text: 'Werk met een vaste developer aan een consistente en beheersbare verbeterbacklog.',
+    href: '/shopify-onderhoud',
+  },
+];
+---
+
+<ShopifyLanding
+  title="Shopify-specialist Noord-Holland"
+  description="Shopify-specialist in Noord-Holland, gevestigd in Volendam. Maatwerk Shopify-webshops, redesign, migratie en doorontwikkeling door één designer en frontenddeveloper."
+  meta="Shopify-design en development vanuit Volendam"
+  headline="Een Shopify-specialist in Noord-Holland, dichtbij zonder bureaulagen."
+  lead="Chris Online ontwerpt, bouwt en onderhoudt premium Shopify-webshops vanuit Volendam. Voor e-commercemerken in Noord-Holland die rechtstreeks willen schakelen met de maker van hun storefront."
+  primaryLabel="Bespreek je Shopify-vraag"
+  primaryHref="/contact?dienst=shopify&vraag=noord-holland#contactformulier"
+  signalsTitle="Vanuit Volendam, inzetbaar voor…"
+  signals={[
+    'Volendam, Edam en Purmerend',
+    'Hoorn, Alkmaar en Zaanstreek',
+    'Amsterdam, Haarlem en omgeving',
+    'online Shopify-projecten in heel Nederland',
+  ]}
+  introTitle="Lokale nabijheid is pas waardevol als de inhoud ook klopt."
+  introText="Een Shopify-specialist kiezen op postcode alleen is te mager. Je zoekt iemand die je merk begrijpt, de kooproute kan ontwerpen én de frontend zorgvuldig bouwt. Dat combineer ik met korte lijnen vanuit Volendam."
+  {fit}
+  deliverablesTitle="Shopify-expertise voor verschillende groeifases."
+  deliverablesIntro="Van een nieuw merk dat een sterke eerste storefront nodig heeft tot een bestaand e-commerceteam met een technische backlog. De samenwerking schaalt mee met de echte vraag."
+  {deliverables}
+  processTitle="Persoonlijk samenwerken zonder onnodige reistijd."
+  processIntro="Online waar het efficiënter is, fysiek waar dat echt iets oplost. Zo blijft de samenwerking persoonlijk én praktisch voor een compact team."
+  {process}
+  {cases}
+  {faqs}
+  {related}
+  serviceName="Shopify-specialist Noord-Holland"
+  serviceType="Shopify webdesign, development en onderhoud"
+  areaServed={['Noord-Holland', 'Nederland']}
+/>

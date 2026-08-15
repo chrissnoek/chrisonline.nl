@@ -1,5 +1,5 @@
 ---
-import { SITE, SEO, SOCIALS } from '../config/site';
+import { SITE, SEO, SOCIALS, CONTACT } from '../config/site';
 import { Font } from 'astro:assets';
 
 interface Props {
@@ -40,6 +40,42 @@ const personLd = {
   url: origin,
   image: new URL('/og/og-default.png', Astro.site).href,
   sameAs: SOCIALS.filter((s) => s.url.startsWith('http')).map((s) => s.url),
+  homeLocation: {
+    '@type': 'Place',
+    name: 'Volendam, Noord-Holland',
+  },
+  knowsAbout: [
+    'Shopify',
+    'Shopify Liquid',
+    'Webshopdesign',
+    'Frontenddevelopment',
+    'E-commerce',
+    'Web performance',
+  ],
+};
+
+const businessLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  '@id': `${origin}/#business`,
+  name: SITE.brand,
+  url: origin,
+  email: CONTACT.email,
+  description: SEO.defaultDescription,
+  image: new URL('/og/og-default.png', Astro.site).href,
+  founder: { '@id': `${origin}/#person` },
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Volendam',
+    addressRegion: 'Noord-Holland',
+    addressCountry: 'NL',
+  },
+  areaServed: [
+    { '@type': 'City', name: 'Volendam' },
+    { '@type': 'AdministrativeArea', name: 'Noord-Holland' },
+    { '@type': 'Country', name: 'Nederland' },
+  ],
+  sameAs: SOCIALS.filter((s) => s.url.startsWith('http')).map((s) => s.url),
 };
 
 const websiteLd = {
@@ -49,10 +85,10 @@ const websiteLd = {
   name: `${SITE.author} | ${SITE.brand}`,
   url: origin,
   inLanguage: SITE.lang,
-  publisher: { '@id': `${origin}/#person` },
+  publisher: { '@id': `${origin}/#business` },
 };
 
-const allJsonLd = [personLd, websiteLd, ...jsonLd];
+const allJsonLd = [personLd, businessLd, websiteLd, ...jsonLd];
 ---
 
 <meta charset="utf-8" />

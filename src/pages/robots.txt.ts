@@ -4,7 +4,10 @@ import type { APIRoute } from 'astro';
  * Dynamische robots.txt — leidt de sitemap-URL af uit de `site`-optie,
  * zodat hij altijd klopt, ongeacht het domein.
  */
-const robotsTxt = (sitemapURL: URL) => `User-agent: *
+const robotsTxt = (
+  sitemapURL: URL,
+) => `# Publieke pagina's mogen worden gebruikt voor zoeken en AI-zoekresultaten.
+User-agent: *
 Allow: /
 
 Sitemap: ${sitemapURL.href}

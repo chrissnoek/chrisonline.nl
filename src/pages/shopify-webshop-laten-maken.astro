@@ -1,0 +1,149 @@
+---
+import ShopifyLanding from '../components/marketing/ShopifyLanding.astro';
+
+const fit = [
+  {
+    title: 'Je merk is sterker dan je huidige thema',
+    text: 'Je assortiment klopt, maar de webshop vertelt nog niet waarom klanten juist voor jouw merk moeten kiezen.',
+  },
+  {
+    title: 'De kooproute heeft te veel omwegen',
+    text: 'Navigatie, collectiepagina’s of productkeuzes vragen te veel uitleg en bezoekers haken onderweg af.',
+  },
+  {
+    title: 'Je team wil zelf kunnen doorbouwen',
+    text: 'Campagnes en content mogen niet voor iedere wijziging afhankelijk zijn van een developer of extra app.',
+  },
+  {
+    title: 'Je zoekt één betrokken maker',
+    text: 'Strategie, design en frontend-development blijven bij dezelfde persoon, met korte lijnen en duidelijke keuzes.',
+  },
+];
+
+const deliverables = [
+  {
+    title: 'Een eigen winkelervaring',
+    text: 'Een helder visueel concept dat je merkverhaal doorvertaalt naar navigatie, collecties, productpagina’s en winkelmand.',
+  },
+  {
+    title: 'Maatwerk zonder beheerchaos',
+    text: 'Herbruikbare Shopify-secties waarmee je team nieuwe content en campagnepagina’s kan maken zonder de vorm te verliezen.',
+  },
+  {
+    title: 'Een snelle, toegankelijke frontend',
+    text: 'Liquid, HTML, CSS en JavaScript die bewust worden ingezet, zonder een stapel apps voor functies die het thema zelf kan dragen.',
+  },
+  {
+    title: 'Een beheerste livegang',
+    text: 'Testen van belangrijke routes, redirects waar nodig, controle van mobiel en overdracht van wat je na livegang zelf beheert.',
+  },
+];
+
+const process = [
+  {
+    title: 'Richting bepalen',
+    text: 'We brengen assortiment, merk, klanten, techniek en commerciële doelen terug tot de keuzes die de webshop echt sturen.',
+  },
+  {
+    title: 'Kooproute ontwerpen',
+    text: 'Belangrijke schermen en interacties worden ontworpen voordat development begint. Zo lossen we frictie op vóór die in code zit.',
+  },
+  {
+    title: 'Shopify bouwen',
+    text: 'Het ontwerp wordt vertaald naar een beheersbaar Online Store 2.0-thema met flexibele secties en passende koppelingen.',
+  },
+  {
+    title: 'Lanceren en verbeteren',
+    text: 'Na testen volgt de livegang. Daarna kunnen onderhoud, nieuwe secties en conversieverbeteringen gericht worden ingepland.',
+  },
+];
+
+const cases = [
+  {
+    title: 'VAAK — conceptuele premium Shopify-webshop',
+    text: 'Van merkconcept en visuele identiteit tot een custom Shopify-thema, productpresentatie, filters en checkoutflow.',
+    href: '/werk/vaak-premium-shopify-webshop',
+    linkLabel: 'Bekijk de Shopify-case',
+  },
+  {
+    title: 'VI Travel — complexe keuzes helder maken',
+    text: 'Een boekingsplatform waarin veel reisopties, wedstrijden en pakketten toch als één begrijpelijke route voelen.',
+    href: '/werk/vi-travel',
+    linkLabel: 'Bekijk de travel-case',
+  },
+];
+
+const faqs = [
+  {
+    question: 'Wat kost een Shopify-webshop laten maken?',
+    answer:
+      'De investering wordt vooral bepaald door de hoeveelheid maatwerk, het aantal unieke paginatypen, productvarianten, content, talen en koppelingen. Ik werk daarom niet met een lokprijs die later oploopt. Na een eerste gesprek krijg je een afgebakende scope, de aannames en een voorstel. Shopify-abonnementen, betaaltransacties, eventuele betaalde apps en externe licenties staan daar los en zichtbaar naast.',
+  },
+  {
+    question: 'Bouw je met een bestaand thema of volledig op maat?',
+    answer:
+      'Dat hangt af van wat je merk en kooproute nodig hebben. Als een bestaand thema de gewenste ervaring goed kan dragen, is gericht aanpassen vaak verstandig. Wanneer de structuur en interactie wezenlijk anders moeten, bouw ik een maatwerk Shopify-thema. Het middel volgt de businesscase.',
+  },
+  {
+    question: 'Kan mijn team de webshop na oplevering zelf beheren?',
+    answer:
+      'Ja. Ik richt pagina’s en secties zo in dat terugkerende content beheersbaar blijft in Shopify. Voor de livegang spreken we af welke onderdelen flexibel moeten zijn en waar vaste ontwerpregels juist fouten voorkomen.',
+  },
+  {
+    question: 'Help je ook met productdata, betaalmethoden en apps?',
+    answer:
+      'Ik help de Shopify-inrichting en benodigde koppelingen afbakenen. Productimport, markten, betaalroutes, verzending en apps worden per project verdeeld: wat ik doe, wat jij aanlevert en wat eventueel bij een specialist hoort, staat vooraf in de scope.',
+  },
+  {
+    question: 'Werk je alleen voor bedrijven in Noord-Holland?',
+    answer:
+      'Nee. Chris Online is gevestigd in Volendam en werkt voor merken in Noord-Holland en de rest van Nederland. Overleg en oplevering kunnen volledig online; waar dat nuttig is kan een sessie op locatie worden afgesproken.',
+  },
+];
+
+const related = [
+  {
+    title: 'Migreren naar Shopify',
+    text: 'Van WooCommerce, Magento, Shopware of maatwerk naar een beheersbare Shopify-basis.',
+    href: '/shopify-migratie',
+  },
+  {
+    title: 'Shopify-onderhoud',
+    text: 'Structurele technische regie, nieuwe secties en doorontwikkeling na de livegang.',
+    href: '/shopify-onderhoud',
+  },
+  {
+    title: 'Shopify-specialist Noord-Holland',
+    text: 'Korte lijnen vanuit Volendam, voor e-commercemerken in de regio en daarbuiten.',
+    href: '/shopify-specialist-noord-holland',
+  },
+];
+---
+
+<ShopifyLanding
+  title="Shopify-webshop laten maken"
+  description="Een premium Shopify-webshop laten maken met maatwerk design, een snelle frontend en flexibele secties. Eén betrokken Shopify-designer en developer van strategie tot livegang."
+  meta="Shopify design en development door één betrokken maker"
+  headline="Een Shopify‑webshop die niet voelt als een ingevuld thema."
+  lead="Laat merkverhaal, koopgemak en techniek als één geheel werken. Ik ontwerp en bouw Shopify-webshops voor merken die verder zijn dan een standaardtemplate, maar geen log bureauproces zoeken."
+  signalsTitle="Dit traject past wanneer je…"
+  signals={[
+    'een onderscheidende merkervaring wilt',
+    'meer grip nodig hebt op de kooproute',
+    'maatwerk én praktisch beheer belangrijk vindt',
+    'één aanspreekpunt zoekt voor design en frontend',
+  ]}
+  introTitle="Niet meer pagina’s. Een betere route naar aankoop."
+  introText="Een premium Shopify-webshop begint niet bij kleuren of animaties, maar bij de vraag wat een klant moet begrijpen, vertrouwen en kiezen. Vanuit die route bepaal ik waar maatwerk waarde toevoegt en waar eenvoud juist beter converteert."
+  {fit}
+  deliverablesTitle="Wat er na afloop werkelijk staat."
+  deliverablesIntro="Geen los ontwerpbestand en geen ondoorzichtige codebase, maar een Shopify-storefront die merk, verkoop en dagelijks beheer met elkaar verbindt."
+  {deliverables}
+  {process}
+  {cases}
+  {faqs}
+  {related}
+  serviceName="Shopify-webshop laten maken"
+  serviceType="Shopify webdesign en development"
+  areaServed={['Nederland', 'Noord-Holland']}
+/>
