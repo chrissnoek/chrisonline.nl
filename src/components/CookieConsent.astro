@@ -84,6 +84,10 @@ import { ANALYTICS } from '../config/analytics';
       ad_user_data: 'denied',
       ad_personalization: 'denied',
     });
+    // Zelfde start-event als in het standaard GTM-fragment. Zonder dit event
+    // krijgt de "Initialization - All Pages"-trigger geen kans om de GA4-tag
+    // te activeren wanneer de container pas na toestemming wordt geladen.
+    window.dataLayer?.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
     const tag = document.createElement('script');
     tag.async = true;
     tag.dataset.gtmContainer = containerId;
