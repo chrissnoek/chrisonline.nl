@@ -228,6 +228,9 @@
         fields.forEach(render);
         form.classList.add('hidden');
         success.classList.remove('hidden');
+        window.dispatchEvent(
+          new CustomEvent('co:lead-submitted', { detail: { form_name: 'contact' } }),
+        );
       } catch {
         fail.classList.remove('hidden');
       } finally {

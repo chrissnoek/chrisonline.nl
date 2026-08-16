@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { CONTACT } from '../config/site';
+---
+
+<BaseLayout
+  title="Privacy en cookies"
+  description="Hoe Chris Online omgaat met contactgegevens, analyse en cookievoorkeuren."
+>
+  <section class="container-page py-section">
+    <div class="mx-auto max-w-3xl">
+      <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">Privacy</p>
+      <h1 class="text-h1 mt-3 font-bold text-balance">Duidelijk over je gegevens.</h1>
+      <p class="text-lead mt-5 text-[var(--fg-muted)]">
+        Chris Online gebruikt je gegevens alleen om je vraag te beantwoorden en de website te
+        verbeteren. Geen advertentietracking, geen verkoop van gegevens.
+      </p>
+
+      <div class="privacy-copy mt-12 space-y-10">
+        <section>
+          <h2>Wie verwerkt je gegevens?</h2>
+          <p>
+            Chris Online, van Chris Snoek, is verantwoordelijk voor de verwerking van gegevens via
+            deze website. Voor vragen over privacy kun je mailen naar
+            <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>.
+          </p>
+        </section>
+        <section>
+          <h2>Wanneer je contact opneemt</h2>
+          <p>
+            Via het contactformulier of de offerte-aanvraag verwerken we de gegevens die je zelf
+            invult, zoals naam, e-mailadres, bedrijfsnaam en projectvraag. We gebruiken die alleen
+            om je aanvraag te behandelen en vervolgcontact mogelijk te maken. Aanvragen komen via
+            Netlify Forms binnen. Bewaartermijnen hangen af van de relatie en eventuele wettelijke
+            administratieplicht.
+          </p>
+        </section>
+        <section>
+          <h2>Cookies en meting</h2>
+          <p>
+            De website werkt zonder analyse-cookies. Alleen als je op “Analyse toestaan” klikt,
+            laden we Google Tag Manager en Google Analytics 4. Daarmee zien we geaggregeerd hoe
+            bezoekers pagina’s gebruiken en of een formulier succesvol is verzonden. We gebruiken in
+            deze fase geen advertentie- of remarketingcookies.
+          </p>
+          <p>
+            Je toestemming wordt maximaal 180 dagen bewaard in een functioneel cookie, zodat we je
+            keuze onthouden. Je kunt die keuze altijd aanpassen.
+          </p>
+          <button type="button" class="privacy-settings" data-cookie-settings>
+            Cookiekeuze aanpassen
+          </button>
+        </section>
+        <section>
+          <h2>Jouw rechten</h2>
+          <p>
+            Je kunt vragen om inzage, correctie of verwijdering van je gegevens, of bezwaar maken
+            tegen een verwerking. Mail daarvoor naar <a href={`mailto:${CONTACT.email}`}
+              >{CONTACT.email}</a
+            >. Kom je er met ons niet uit, dan kun je een klacht indienen bij de Autoriteit
+            Persoonsgegevens.
+          </p>
+        </section>
+        <section>
+          <h2>Wijzigingen</h2>
+          <p>Deze verklaring is voor het laatst bijgewerkt op 16 augustus 2026.</p>
+        </section>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .privacy-copy h2 {
+    font-family: var(--font-display, var(--font-sans));
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+  .privacy-copy p {
+    margin-top: 0.75rem;
+    color: var(--fg-muted);
+  }
+  .privacy-copy a {
+    color: var(--accent-text);
+    text-decoration: underline;
+    text-underline-offset: 0.16em;
+  }
+  .privacy-settings {
+    margin-top: 1rem;
+    border-bottom: 1px solid currentColor;
+    color: var(--accent-text);
+    font-weight: 700;
+  }
+</style>

@@ -80,6 +80,9 @@ export default function QuoteForm({
       });
       if (res.ok) {
         setStatus('sent');
+        window.dispatchEvent(
+          new CustomEvent('co:lead-submitted', { detail: { form_name: 'offerte' } }),
+        );
         onSubmitted?.();
         return;
       }

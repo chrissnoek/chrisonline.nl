@@ -33,7 +33,12 @@ const year = new Date().getFullYear();
 
   <div class="footer-bottom">
     <p>Shopify · Design · Develop · Maintain</p>
-    <p>&copy; {year} {SITE.author}. Alle rechten voorbehouden.</p>
+    <p>
+      &copy; {year}
+      {SITE.author}. Alle rechten voorbehouden.
+      <a href="/privacy">Privacy</a>
+      <button type="button" data-cookie-settings>Cookiekeuze</button>
+    </p>
   </div>
 </footer>
 
@@ -104,6 +109,19 @@ const year = new Date().getFullYear();
     border-top: 1px solid #343438;
     color: #8f8f8b;
     font-size: 0.78rem;
+  }
+
+  .footer-bottom p:last-child {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .footer-bottom a,
+  .footer-bottom button {
+    color: #c9c9c5;
+    text-decoration: underline;
+    text-underline-offset: 0.16em;
   }
 
   @media (max-width: 700px) {
