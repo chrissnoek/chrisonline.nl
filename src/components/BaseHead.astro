@@ -1,5 +1,5 @@
 ---
-import { SITE, SEO, SOCIALS, CONTACT } from '../config/site';
+import { BUSINESS, SITE, SEO, SOCIALS, CONTACT } from '../config/site';
 import { Font } from 'astro:assets';
 
 interface Props {
@@ -58,17 +58,21 @@ const businessLd = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
   '@id': `${origin}/#business`,
-  name: SITE.brand,
+  name: BUSINESS.name,
+  legalName: BUSINESS.name,
   url: origin,
   email: CONTACT.email,
   description: SEO.defaultDescription,
   image: new URL('/og/og-default.png', Astro.site).href,
   founder: { '@id': `${origin}/#person` },
+  identifier: {
+    '@type': 'PropertyValue',
+    propertyID: 'KvK',
+    value: BUSINESS.kvkNumber,
+  },
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'Volendam',
-    addressRegion: 'Noord-Holland',
-    addressCountry: 'NL',
+    ...BUSINESS.address,
   },
   areaServed: [
     { '@type': 'City', name: 'Volendam' },
