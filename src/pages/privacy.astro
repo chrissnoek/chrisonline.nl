@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { CONTACT } from '../config/site';
+import { BUSINESS, CONTACT } from '../config/site';
 ---
 
 <BaseLayout
@@ -20,8 +20,11 @@ import { CONTACT } from '../config/site';
         <section>
           <h2>Wie verwerkt je gegevens?</h2>
           <p>
-            Chris Online, van Chris Snoek, is verantwoordelijk voor de verwerking van gegevens via
-            deze website. Voor vragen over privacy kun je mailen naar
+            {BUSINESS.name}, ingeschreven bij de Kamer van Koophandel onder nummer
+            {BUSINESS.kvkNumber}, gevestigd aan {BUSINESS.address.streetAddress},{' '}
+            {BUSINESS.address.postalCode}
+            {BUSINESS.address.addressLocality}, is verantwoordelijk voor de verwerking van gegevens
+            via deze website. Voor vragen over privacy kun je mailen naar
             <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>.
           </p>
         </section>

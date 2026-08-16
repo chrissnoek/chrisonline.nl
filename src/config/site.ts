@@ -54,6 +54,22 @@ export const CONTACT = {
 } as const;
 
 /**
+ * Formele bedrijfsgegevens voor privacytekst en structured data.
+ * Houd deze gegevens gelijk aan de inschrijving bij de KvK.
+ */
+export const BUSINESS = {
+  name: 'Chris Online',
+  kvkNumber: '80020097',
+  address: {
+    streetAddress: 'Dirkslandstraat 15',
+    postalCode: '1131 CD',
+    addressLocality: 'Volendam',
+    addressRegion: 'Noord-Holland',
+    addressCountry: 'NL',
+  },
+} as const;
+
+/**
  * Social profielen. De `url`-waarden komen ook in JSON-LD `sameAs` terecht,
  * dus houd ze volledig en correct.
  */
