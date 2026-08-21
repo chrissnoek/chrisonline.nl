@@ -1,0 +1,36 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import BaseHead from '../components/BaseHead.astro';
+import CookieConsent from '../components/CookieConsent.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="nl" class="dark">
+  <head>
+    <BaseHead title={title} description={description} noindex />
+    <meta name="theme-color" content="#080809" />
+    <ClientRouter />
+  </head>
+  <body class="lead-layout min-h-screen">
+    <a href="#main" class="skip-link">Direct naar de inhoud</a>
+    <main id="main">
+      <slot />
+    </main>
+    <CookieConsent />
+  </body>
+</html>
+
+<style is:global>
+  .lead-layout {
+    background: #080809;
+    color: #f8fafc;
+  }
+</style>
