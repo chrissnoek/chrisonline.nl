@@ -25,8 +25,9 @@ export default defineConfig({
       // A clean, modern lastmod helps crawlers; one entry per page.
       changefreq: 'monthly',
       priority: 0.7,
-      // De bedankpagina is noindex en hoort daarom niet in de sitemap.
-      filter: (page) => !page.includes('/bedankt/'),
+      // Noindex-routes horen niet in de sitemap: de bedankpagina en persoonlijke
+      // voorstelpagina's onder /voor/.
+      filter: (page) => !page.includes('/bedankt/') && !page.includes('/voor/'),
     }),
   ],
 

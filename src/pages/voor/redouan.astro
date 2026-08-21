@@ -1,0 +1,1410 @@
+---
+import { Image } from 'astro:assets';
+import LeadLayout from '../../layouts/LeadLayout.astro';
+import Logo from '../../components/Logo.astro';
+import heroImage from '../../assets/leads/barbershop-razor.png';
+import chrisImage from '../../assets/me/chris-snoek.jpg';
+
+const title = 'Een sterke digitale basis voor jouw barbershop, Redouan';
+const description =
+  'Een persoonlijk voorstel van Chris Online voor de website, boekingsmodule en toekomstige groei van Redouans barbershop.';
+---
+
+<LeadLayout title={title} description={description}>
+  <div class="lead-page">
+    <header class="lead-header">
+      <a href="/" aria-label="Chris Online, naar de homepage">
+        <Logo height={38} inverse />
+      </a>
+      <a class="work-link" href="/#werk">Bekijk mijn werk <span aria-hidden="true">→</span></a>
+    </header>
+
+    <section class="hero" aria-labelledby="lead-title">
+      <div class="hero-copy">
+        <h1 id="lead-title">Redouan, jouw barbershop verdient meer dan een mooie website.</h1>
+        <p class="hero-lead">
+          Elke aanraking met je zaak moet hetzelfde gevoel geven: van de eerste zoekopdracht tot de
+          stoel in je shop. Ik bouw die merkbeleving digitaal door.
+        </p>
+
+        <div class="personal-note">
+          <h2>Hoi Redouan — ik las je aanvraag.</h2>
+          <p>
+            Je zoekt een sterke basiswebsite die je diensten, beeld en boeking samenbrengt. Precies
+            daar begint een merk dat later moeiteloos kan doorgroeien naar eigen producten en online
+            marketing.
+          </p>
+        </div>
+
+        <div class="hero-actions">
+          <a class="primary-action" href="#samenstellen">Stel je website samen <span>→</span></a>
+          <a class="text-action" href="#aanpak">Lees eerst mijn aanpak</a>
+        </div>
+      </div>
+
+      <div class="hero-media" aria-hidden="true">
+        <Image
+          src={heroImage}
+          alt=""
+          width={1536}
+          height={1024}
+          loading="eager"
+          quality={82}
+          format="webp"
+        />
+      </div>
+      <span class="cut-line cut-line--hero" aria-hidden="true"></span>
+    </section>
+
+    <section id="aanpak" class="vision section-shell" aria-labelledby="vision-title">
+      <div class="vision-copy">
+        <h2 id="vision-title">Een merk wordt beleefd in ieder detail.</h2>
+        <p class="vision-lead">
+          Vijf jaar bij Coolblue liet me van dichtbij zien hoe krachtig het wordt wanneer iedere
+          ervaring hetzelfde merkverhaal vertelt. Niet alleen het logo of de homepage, maar ook de
+          snelheid, de duidelijkheid en het gemak waarmee iemand boekt.
+        </p>
+      </div>
+
+      <div class="vision-story">
+        <p>
+          Ik maak al jarenlang websites en verschuif mijn focus nu verder naar webshops. Dat
+          betekent niet dat ik geen websites meer bouw. Integendeel: daardoor kijk ik vanaf de
+          eerste pagina al naar conversie, techniek en wat je later nodig hebt om producten te
+          verkopen.
+        </p>
+        <p>
+          Voor jouw barbershop bouwen we dus geen dertien-in-een-dozijn template. We maken een
+          herkenbare digitale voordeur die nu sterk opent en straks met je plannen meegroeit.
+        </p>
+      </div>
+
+      <div class="craft-proof">
+        <Image
+          src={chrisImage}
+          alt="Chris Snoek"
+          width={144}
+          height={144}
+          quality={80}
+          format="webp"
+        />
+        <div>
+          <strong>Chris Snoek</strong>
+          <span>Webdeveloper, designer en automatiseringsspecialist</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="samenstellen" class="configurator section-shell" aria-labelledby="config-title">
+      <div class="config-intro">
+        <h2 id="config-title">Kies wat jouw opening nodig heeft.</h2>
+        <p>
+          De basis staat vast. Jij bepaalt of we fotografie, video en extra vindbaarheid direct
+          meenemen.
+        </p>
+      </div>
+
+      <div class="config-layout">
+        <fieldset class="service-list" aria-describedby="pricing-note">
+          <legend class="sr-only">Onderdelen voor de website</legend>
+
+          <div class="service-row service-row--locked">
+            <span class="service-check service-check--locked" aria-hidden="true">✓</span>
+            <div class="service-copy">
+              <span class="service-name">Basiswebsite</span>
+              <span class="service-description">
+                Onderscheidend ontwerp, volledig responsive, tot vijf pagina’s, je boekingsmodule
+                geïntegreerd en voorbereid op een toekomstige webshop.
+              </span>
+              <span class="service-included">Altijd inbegrepen</span>
+            </div>
+            <span class="service-price">€ 1.250</span>
+          </div>
+
+          <label class="service-row">
+            <input type="checkbox" name="service" value="Fotografie op locatie" data-price="650" />
+            <span class="service-check" aria-hidden="true">✓</span>
+            <span class="service-copy">
+              <span class="service-name">Fotografie op locatie</span>
+              <span class="service-description">
+                Professionele fotografie van je zaak, team, diensten en sfeer via mijn vaste
+                partner.
+              </span>
+            </span>
+            <span class="service-price">€ 650</span>
+          </label>
+
+          <label class="service-row">
+            <input type="checkbox" name="service" value="Video op locatie" data-price="750" />
+            <span class="service-check" aria-hidden="true">✓</span>
+            <span class="service-copy">
+              <span class="service-name">Video op locatie</span>
+              <span class="service-description">
+                Een professionele sfeer- of merkvideo voor je website en social kanalen via mijn
+                vaste partner.
+              </span>
+            </span>
+            <span class="service-price">€ 750</span>
+          </label>
+
+          <label class="service-row">
+            <input
+              type="checkbox"
+              name="service"
+              value="SEO en lokale vindbaarheid"
+              data-price="250"
+              checked
+            />
+            <span class="service-check" aria-hidden="true">✓</span>
+            <span class="service-copy">
+              <span class="service-name">SEO en lokale vindbaarheid</span>
+              <span class="service-description">
+                Technische SEO, metadata, lokale zoektermen en praktisch advies voor je Google
+                Bedrijfsprofiel en reviews.
+              </span>
+              <span class="service-included">Genoemd in je aanvraag</span>
+            </span>
+            <span class="service-price">€ 250</span>
+          </label>
+
+          <label class="service-row service-row--future">
+            <input
+              type="checkbox"
+              name="service"
+              value="Webshop"
+              data-price="3000"
+              data-no-discount="true"
+            />
+            <span class="service-check" aria-hidden="true">✓</span>
+            <span class="service-copy">
+              <span class="service-name">Webshop</span>
+              <span class="service-description">
+                Een complete webshop voor je eigen producten, ontworpen in dezelfde merkbeleving en
+                ingericht om direct te kunnen verkopen.
+              </span>
+              <span class="service-included">Kan ook later aan de basis worden toegevoegd</span>
+            </span>
+            <span class="service-price">€ 3.000</span>
+          </label>
+
+          <p id="pricing-note" class="pricing-note">
+            Alle bedragen zijn eenmalig en exclusief btw. Partnerproductie, hosting, domein en
+            eventuele kosten van je boekingssysteem stem ik vooraf helder met je af.
+          </p>
+        </fieldset>
+
+        <aside class="proposal" aria-live="polite" aria-labelledby="proposal-title">
+          <h3 id="proposal-title">Jouw voorstel</h3>
+          <div class="proposal-count"><strong data-count>2</strong> <span>onderdelen</span></div>
+          <dl>
+            <div>
+              <dt>Los</dt>
+              <dd data-subtotal>€ 1.500</dd>
+            </div>
+            <div class="discount-row" hidden data-discount-row>
+              <dt>Pakketvoordeel</dt>
+              <dd data-discount>− € 0</dd>
+            </div>
+          </dl>
+          <div class="proposal-total">
+            <span data-total-label>Indicatie</span>
+            <strong data-total>€ 1.500</strong>
+            <small>exclusief btw</small>
+          </div>
+          <p data-package-note>Kies minimaal twee extra diensten voor 10% pakketvoordeel.</p>
+          <a class="primary-action" href="#vertellen">Vertel me over je shop <span>→</span></a>
+        </aside>
+      </div>
+    </section>
+
+    <section id="vertellen" class="contact-section section-shell" aria-labelledby="contact-title">
+      <div class="mobile-summary" aria-live="polite">
+        <div>
+          <strong>Jouw website</strong>
+          <span
+            ><span data-mobile-count>2 onderdelen</span> · <span data-mobile-total>€ 1.500</span> excl.
+            btw</span
+          >
+        </div>
+        <a href="#samenstellen">Wijzig keuzes</a>
+      </div>
+
+      <div class="contact-intro">
+        <h2 id="contact-title">Vertel me wat je voor ogen hebt.</h2>
+        <p>
+          Je zit nergens aan vast. Ik gebruik je keuzes als startpunt en reageer persoonlijk met een
+          heldere aanpak.
+        </p>
+      </div>
+
+      <div
+        id="lead-success"
+        class="form-success"
+        role="status"
+        aria-live="polite"
+        tabindex="-1"
+        hidden
+      >
+        <h3>Dank je, Redouan.</h3>
+        <p>Je keuzes en ideeën zijn rechtstreeks bij mij binnengekomen. Ik neem snel contact op.</p>
+      </div>
+
+      <form
+        id="lead-form"
+        name="barbershop-redouan"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        class="lead-form"
+        novalidate
+      >
+        <input type="hidden" name="form-name" value="barbershop-redouan" />
+        <input type="hidden" name="lead" value="Redouan — opdracht 2410" />
+        <input
+          type="hidden"
+          name="gekozen_diensten"
+          id="selected-services"
+          value="Basiswebsite, SEO en lokale vindbaarheid"
+        />
+        <input type="hidden" name="losse_prijs" id="selected-subtotal" value="€ 1.500" />
+        <input type="hidden" name="pakketvoordeel" id="selected-discount" value="€ 0" />
+        <input type="hidden" name="indicatie" id="selected-total" value="€ 1.500 excl. btw" />
+        <p class="honeypot" aria-hidden="true">
+          <label>Niet invullen: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+        </p>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="lead-name">Naam</label>
+            <input
+              id="lead-name"
+              name="naam"
+              type="text"
+              value="Redouan"
+              autocomplete="name"
+              required
+            />
+            <p id="lead-name-error" class="field-error" data-error-for="lead-name"></p>
+          </div>
+          <div class="field">
+            <label for="lead-email">E-mail</label>
+            <input
+              id="lead-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              placeholder="naam@voorbeeld.nl"
+              required
+            />
+            <p id="lead-email-error" class="field-error" data-error-for="lead-email"></p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="lead-company">Naam barbershop <span>(optioneel)</span></label>
+          <input
+            id="lead-company"
+            name="barbershop"
+            type="text"
+            autocomplete="organization"
+            placeholder="Jouw zaak"
+          />
+        </div>
+
+        <div class="field">
+          <label for="lead-message">Waar wil je mee beginnen?</label>
+          <textarea
+            id="lead-message"
+            name="bericht"
+            rows="6"
+            placeholder="Vertel bijvoorbeeld wanneer je opent, welke boekingswidget je gebruikt en welke sfeer bij je zaak past."
+            required></textarea>
+          <p id="lead-message-error" class="field-error" data-error-for="lead-message"></p>
+        </div>
+
+        <label class="consent">
+          <input id="lead-consent" name="toestemming" type="checkbox" value="Ja" required />
+          <span class="consent-box" aria-hidden="true">✓</span>
+          <span>Ja, Chris mag contact opnemen over deze aanvraag.</span>
+        </label>
+        <p id="lead-consent-error" class="field-error consent-error" data-error-for="lead-consent">
+        </p>
+
+        <button class="primary-action submit-action" type="submit">
+          <span data-submit-label>Stuur mijn ideeën naar Chris</span><span aria-hidden="true"
+            >→</span
+          >
+        </button>
+        <p class="form-trust">Rechtstreeks naar Chris · meestal binnen één werkdag antwoord</p>
+        <p class="form-failure" role="alert" hidden>
+          Versturen lukte niet. Mail je ideeën rechtstreeks naar
+          <a href="mailto:info@chrisonline.nl">info@chrisonline.nl</a>.
+        </p>
+      </form>
+    </section>
+
+    <footer class="lead-footer section-shell">
+      <div>
+        <Logo height={32} inverse />
+        <p>Geen template. Wel een sterke digitale basis die met je zaak meegroeit.</p>
+      </div>
+      <nav aria-label="Voettekst">
+        <a href="/privacy">Privacy</a>
+        <a href="mailto:info@chrisonline.nl">info@chrisonline.nl</a>
+      </nav>
+    </footer>
+  </div>
+
+  <form name="barbershop-redouan" method="POST" data-netlify="true" hidden>
+    <input type="hidden" name="form-name" value="barbershop-redouan" />
+    <input type="text" name="lead" />
+    <input type="text" name="gekozen_diensten" />
+    <input type="text" name="losse_prijs" />
+    <input type="text" name="pakketvoordeel" />
+    <input type="text" name="indicatie" />
+    <input type="text" name="naam" />
+    <input type="email" name="email" />
+    <input type="text" name="barbershop" />
+    <textarea name="bericht"></textarea>
+    <input type="text" name="toestemming" />
+    <input name="bot-field" />
+  </form>
+</LeadLayout>
+
+<script>
+  function initLeadExperience() {
+    const page = document.querySelector<HTMLElement>('.lead-page');
+    if (!page || page.dataset.bound === 'true') return;
+    page.dataset.bound = 'true';
+
+    const BASE_PRICE = 1250;
+    const DISCOUNT_THRESHOLD = 2;
+    const DISCOUNT_RATE = 0.1;
+    const currency = new Intl.NumberFormat('nl-NL', {
+      style: 'currency',
+      currency: 'EUR',
+      maximumFractionDigits: 0,
+    });
+    const format = (value: number) => currency.format(value).replace(/\u00a0/g, ' ');
+    const options = Array.from(page.querySelectorAll<HTMLInputElement>('input[name="service"]'));
+
+    const one = <T extends Element>(selector: string) => page.querySelector<T>(selector);
+    const all = <T extends Element>(selector: string) =>
+      Array.from(page.querySelectorAll<T>(selector));
+
+    function updateProposal() {
+      const selected = options.filter((option) => option.checked);
+      const addOnTotal = selected.reduce((sum, option) => sum + Number(option.dataset.price), 0);
+      const subtotal = BASE_PRICE + addOnTotal;
+      const discountable = selected.filter((option) => option.dataset.noDiscount !== 'true');
+      const discountBase =
+        BASE_PRICE + discountable.reduce((sum, option) => sum + Number(option.dataset.price), 0);
+      const discount =
+        discountable.length >= DISCOUNT_THRESHOLD ? Math.round(discountBase * DISCOUNT_RATE) : 0;
+      const total = subtotal - discount;
+      const count = selected.length + 1;
+      const countLabel = count === 1 ? 'onderdeel' : 'onderdelen';
+
+      one<HTMLElement>('[data-count]')!.textContent = String(count);
+      one<HTMLElement>('[data-count]')!.nextElementSibling!.textContent = countLabel;
+      one<HTMLElement>('[data-subtotal]')!.textContent = format(subtotal);
+      one<HTMLElement>('[data-discount]')!.textContent = `− ${format(discount)}`;
+      one<HTMLElement>('[data-total]')!.textContent = format(total);
+      one<HTMLElement>('[data-total-label]')!.textContent = 'Indicatie';
+      one<HTMLElement>('[data-mobile-count]')!.textContent = `${count} ${countLabel}`;
+      one<HTMLElement>('[data-mobile-total]')!.textContent = format(total);
+
+      const discountRow = one<HTMLElement>('[data-discount-row]')!;
+      discountRow.hidden = discount === 0;
+      one<HTMLElement>('[data-package-note]')!.textContent =
+        discount > 0
+          ? 'Je pakketvoordeel op de openingsdiensten is direct verwerkt.'
+          : 'Kies minimaal twee extra diensten voor 10% pakketvoordeel.';
+
+      all<HTMLElement>('.service-row').forEach((row) => {
+        const input = row.querySelector<HTMLInputElement>('input[name="service"]');
+        row.classList.toggle('is-selected', Boolean(input?.checked));
+      });
+
+      const serviceNames = ['Basiswebsite', ...selected.map((option) => option.value)];
+      one<HTMLInputElement>('#selected-services')!.value = serviceNames.join(', ');
+      one<HTMLInputElement>('#selected-subtotal')!.value = format(subtotal);
+      one<HTMLInputElement>('#selected-discount')!.value = format(discount);
+      one<HTMLInputElement>('#selected-total')!.value = `${format(total)} excl. btw`;
+    }
+
+    options.forEach((option) => option.addEventListener('change', updateProposal));
+    updateProposal();
+
+    const form = one<HTMLFormElement>('#lead-form');
+    const success = one<HTMLElement>('#lead-success');
+    const failure = one<HTMLElement>('.form-failure');
+    const submit = one<HTMLButtonElement>('.submit-action');
+    const submitLabel = one<HTMLElement>('[data-submit-label]');
+    if (!form || !success || !failure || !submit || !submitLabel) return;
+
+    const fields = [
+      one<HTMLInputElement>('#lead-name'),
+      one<HTMLInputElement>('#lead-email'),
+      one<HTMLTextAreaElement>('#lead-message'),
+      one<HTMLInputElement>('#lead-consent'),
+    ].filter(Boolean) as Array<HTMLInputElement | HTMLTextAreaElement>;
+
+    function validate(field: HTMLInputElement | HTMLTextAreaElement) {
+      let message = '';
+      if (field instanceof HTMLInputElement && field.type === 'checkbox') {
+        if (!field.checked) message = 'Vink aan dat ik contact met je mag opnemen.';
+      } else if (!field.value.trim()) {
+        message = 'Vul dit veld in.';
+      } else if (field.type === 'email' && !field.validity.valid) {
+        message = 'Vul een geldig e-mailadres in.';
+      } else if (field.id === 'lead-message' && field.value.trim().length < 10) {
+        message = 'Vertel in minimaal 10 tekens waar je mee wilt beginnen.';
+      }
+      const error = one<HTMLElement>(`[data-error-for="${field.id}"]`);
+      if (error) error.textContent = message;
+      field.setAttribute('aria-invalid', String(Boolean(message)));
+      if (message && error) field.setAttribute('aria-describedby', error.id);
+      else field.removeAttribute('aria-describedby');
+      return !message;
+    }
+
+    fields.forEach((field) => {
+      field.addEventListener('blur', () => validate(field));
+      field.addEventListener('input', () => {
+        if (field.getAttribute('aria-invalid') === 'true') validate(field);
+      });
+      field.addEventListener('change', () => validate(field));
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      failure.hidden = true;
+      const valid = fields.map(validate).every(Boolean);
+      const honeypot = form.querySelector<HTMLInputElement>('[name="bot-field"]');
+      if (!valid || honeypot?.value) {
+        fields.find((field) => field.getAttribute('aria-invalid') === 'true')?.focus();
+        return;
+      }
+
+      submit.disabled = true;
+      submitLabel.textContent = 'Versturen…';
+      const data = new URLSearchParams();
+      for (const [key, value] of new FormData(form).entries()) {
+        if (key !== 'bot-field' && typeof value === 'string') data.append(key, value);
+      }
+
+      try {
+        const response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: data.toString(),
+        });
+        if (!response.ok) throw new Error(String(response.status));
+        form.hidden = true;
+        success.hidden = false;
+        success.focus({ preventScroll: true });
+        success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } catch {
+        failure.hidden = false;
+      } finally {
+        submit.disabled = false;
+        submitLabel.textContent = 'Stuur mijn ideeën naar Chris';
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initLeadExperience);
+</script>
+
+<style>
+  :global(.lead-page) {
+    --lead-bg: #080809;
+    --lead-surface: #111214;
+    --lead-surface-strong: #17181a;
+    --lead-text: #f8fafc;
+    --lead-muted: #a6adb8;
+    --lead-rule: #34373c;
+    --lead-coral: #ee4b24;
+    --lead-coral-dark: #c83919;
+    --lead-blue: #168ab3;
+    min-height: 100vh;
+    overflow: clip;
+    background: var(--lead-bg);
+    color: var(--lead-text);
+  }
+
+  .lead-header,
+  .section-shell,
+  .lead-footer {
+    width: min(100% - 2.5rem, 76rem);
+    margin-inline: auto;
+  }
+
+  .lead-header {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    min-height: 5.5rem;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--lead-rule);
+  }
+
+  .work-link,
+  .text-action {
+    color: var(--lead-muted);
+    text-decoration: none;
+    transition: color 180ms ease;
+  }
+
+  .work-link:hover,
+  .text-action:hover {
+    color: var(--lead-text);
+  }
+
+  .work-link span {
+    margin-left: 0.65rem;
+    color: var(--lead-coral);
+  }
+
+  .hero {
+    position: relative;
+    display: grid;
+    width: min(100% - 2.5rem, 90rem);
+    min-height: 46rem;
+    margin-inline: auto;
+    grid-template-columns: minmax(0, 1.08fr) minmax(28rem, 0.92fr);
+    border-bottom: 1px solid var(--lead-rule);
+  }
+
+  .hero-copy {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    max-width: 48rem;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5rem 4rem 5rem 0;
+  }
+
+  .hero h1,
+  .vision h2,
+  .configurator h2,
+  .contact-section h2 {
+    margin: 0;
+    font-family: var(--font-display, var(--font-sans));
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .hero h1 {
+    max-width: 13ch;
+    font-size: clamp(3rem, 5.4vw, 5.7rem);
+    line-height: 0.99;
+  }
+
+  .hero-lead {
+    max-width: 42rem;
+    margin: 1.75rem 0 0;
+    color: var(--lead-muted);
+    font-size: clamp(1.1rem, 1.4vw, 1.35rem);
+    line-height: 1.55;
+  }
+
+  .personal-note {
+    max-width: 39rem;
+    margin-top: 2.4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--lead-rule);
+  }
+
+  .personal-note h2 {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  .personal-note p {
+    margin: 0.5rem 0 0;
+    color: var(--lead-muted);
+    line-height: 1.65;
+  }
+
+  .hero-actions {
+    display: flex;
+    margin-top: 2rem;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .primary-action {
+    display: inline-flex;
+    min-height: 3.5rem;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    border: 1px solid var(--lead-coral);
+    border-radius: 0.25rem;
+    background: var(--lead-coral);
+    color: white;
+    font-weight: 700;
+    line-height: 1.2;
+    padding: 0.95rem 1.25rem;
+    text-decoration: none;
+    transition:
+      background 180ms ease,
+      border-color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .primary-action:hover {
+    border-color: var(--lead-coral-dark);
+    background: var(--lead-coral-dark);
+    transform: translateY(-2px);
+  }
+
+  .hero-media {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: max(0px, calc((100vw - 90rem) / -2));
+    bottom: 0;
+    width: min(55vw, 52rem);
+    overflow: hidden;
+    clip-path: polygon(25% 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  .hero-media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 58% center;
+  }
+
+  .hero-media::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(8, 8, 9, 0.52), transparent 34%);
+    content: '';
+    pointer-events: none;
+  }
+
+  .cut-line--hero {
+    position: absolute;
+    z-index: 4;
+    top: 28%;
+    left: 33%;
+    width: 37%;
+    height: 1px;
+    background: var(--lead-coral);
+    transform-origin: left;
+  }
+
+  .section-shell {
+    padding-block: 7rem;
+  }
+
+  .vision {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(18rem, 0.75fr);
+    column-gap: 7rem;
+    border-bottom: 1px solid var(--lead-rule);
+  }
+
+  .vision h2,
+  .configurator h2,
+  .contact-section h2 {
+    font-size: clamp(2.5rem, 4.3vw, 4.75rem);
+    line-height: 1.03;
+  }
+
+  .vision-lead {
+    margin: 2rem 0 0;
+    color: var(--lead-muted);
+    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+    line-height: 1.65;
+  }
+
+  .vision-story {
+    align-self: end;
+    color: var(--lead-muted);
+    font-size: 1.05rem;
+  }
+
+  .vision-story p {
+    margin: 0;
+  }
+
+  .vision-story p + p {
+    margin-top: 1.4rem;
+  }
+
+  .craft-proof {
+    display: flex;
+    margin-top: 3.5rem;
+    align-items: center;
+    gap: 1rem;
+    grid-column: 1 / -1;
+  }
+
+  .craft-proof :global(img) {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    filter: grayscale(1);
+    object-fit: cover;
+  }
+
+  .craft-proof strong,
+  .craft-proof span {
+    display: block;
+  }
+
+  .craft-proof span {
+    margin-top: 0.15rem;
+    color: var(--lead-muted);
+    font-size: 0.9rem;
+  }
+
+  .configurator {
+    border-bottom: 1px solid var(--lead-rule);
+  }
+
+  .config-intro {
+    display: grid;
+    align-items: end;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.5fr);
+    gap: 4rem;
+  }
+
+  .config-intro p,
+  .contact-intro p {
+    margin: 0;
+    color: var(--lead-muted);
+    font-size: 1.1rem;
+    line-height: 1.65;
+  }
+
+  .config-layout {
+    display: grid;
+    margin-top: 4rem;
+    align-items: start;
+    grid-template-columns: minmax(0, 1fr) minmax(19rem, 0.4fr);
+    gap: 4rem;
+  }
+
+  .service-list {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .service-row {
+    position: relative;
+    display: grid;
+    min-height: 7.5rem;
+    align-items: center;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 1.25rem;
+    border-bottom: 1px solid var(--lead-rule);
+    cursor: pointer;
+    padding: 1.4rem 1rem;
+    transition: background 180ms ease;
+  }
+
+  .service-row:first-of-type {
+    border-top: 1px solid var(--lead-rule);
+  }
+
+  .service-row:has(input:focus-visible) {
+    outline: 3px solid var(--lead-blue);
+    outline-offset: -3px;
+  }
+
+  .service-row.is-selected,
+  .service-row--locked {
+    background: var(--lead-surface);
+  }
+
+  .service-row input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .service-check,
+  .consent-box {
+    display: grid;
+    width: 2.35rem;
+    height: 2.35rem;
+    flex: none;
+    place-items: center;
+    border: 1px solid #7e848d;
+    border-radius: 0.2rem;
+    color: transparent;
+    font-weight: 800;
+    transition:
+      background 160ms ease,
+      border-color 160ms ease,
+      color 160ms ease;
+  }
+
+  .service-check--locked,
+  .service-row input:checked + .service-check,
+  .consent input:checked + .consent-box {
+    border-color: var(--lead-coral);
+    background: var(--lead-coral);
+    color: white;
+  }
+
+  .service-copy,
+  .service-name,
+  .service-description,
+  .service-included {
+    display: block;
+  }
+
+  .service-name {
+    color: var(--lead-text);
+    font-size: 1.1rem;
+    font-weight: 750;
+  }
+
+  .service-description {
+    max-width: 42rem;
+    margin-top: 0.25rem;
+    color: var(--lead-muted);
+    line-height: 1.5;
+  }
+
+  .service-included {
+    width: fit-content;
+    margin-top: 0.55rem;
+    color: var(--lead-blue);
+    font-size: 0.85rem;
+    font-weight: 650;
+  }
+
+  .service-price {
+    color: var(--lead-text);
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .pricing-note {
+    max-width: 48rem;
+    margin: 1.5rem 0 0;
+    color: var(--lead-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .proposal {
+    position: sticky;
+    top: 1.5rem;
+    border: 1px solid #4c5057;
+    border-radius: 0.5rem;
+    padding: 2rem;
+  }
+
+  .proposal h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+  }
+
+  .proposal-count {
+    display: flex;
+    margin-top: 2rem;
+    align-items: baseline;
+    gap: 0.65rem;
+  }
+
+  .proposal-count strong {
+    color: var(--lead-coral);
+    font-family: var(--font-display);
+    font-size: 2.7rem;
+    line-height: 1;
+  }
+
+  .proposal dl {
+    margin: 1.75rem 0 0;
+    padding-block: 1.25rem;
+    border-block: 1px solid var(--lead-rule);
+  }
+
+  .proposal dl div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .proposal dl div + div {
+    margin-top: 0.75rem;
+  }
+
+  .proposal dt,
+  .proposal dd {
+    margin: 0;
+  }
+
+  .discount-row {
+    color: var(--lead-coral);
+  }
+
+  .proposal-total {
+    margin-top: 1.5rem;
+  }
+
+  .proposal-total span,
+  .proposal-total strong,
+  .proposal-total small {
+    display: block;
+  }
+
+  .proposal-total span,
+  .proposal-total small {
+    color: var(--lead-muted);
+  }
+
+  .proposal-total strong {
+    margin-top: 0.25rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.7rem, 4vw, 4rem);
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .proposal > p {
+    margin: 1.5rem 0;
+    color: var(--lead-muted);
+    font-size: 0.9rem;
+  }
+
+  .proposal .primary-action {
+    width: 100%;
+  }
+
+  .contact-section {
+    width: min(100% - 2.5rem, 58rem);
+  }
+
+  .mobile-summary {
+    display: none;
+  }
+
+  .contact-intro {
+    display: grid;
+    align-items: end;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.6fr);
+    gap: 4rem;
+  }
+
+  .lead-form {
+    display: grid;
+    margin-top: 3.5rem;
+    gap: 1.5rem;
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .field label {
+    display: block;
+    margin-bottom: 0.55rem;
+    font-weight: 650;
+  }
+
+  .field label span {
+    color: var(--lead-muted);
+    font-weight: 400;
+  }
+
+  .field input,
+  .field textarea {
+    width: 100%;
+    min-height: 3.5rem;
+    border: 1px solid #777d86;
+    border-radius: 0.3rem;
+    background: #0c0d0e;
+    color: var(--lead-text);
+    padding: 0.9rem 1rem;
+    transition:
+      border-color 160ms ease,
+      box-shadow 160ms ease;
+  }
+
+  .field textarea {
+    min-height: 10rem;
+    resize: vertical;
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: #7f8793;
+  }
+
+  .field input:focus,
+  .field textarea:focus {
+    border-color: var(--lead-blue);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(22, 138, 179, 0.24);
+  }
+
+  .field input[aria-invalid='true'],
+  .field textarea[aria-invalid='true'] {
+    border-color: #ff765b;
+  }
+
+  .field-error {
+    min-height: 1.25rem;
+    margin: 0.35rem 0 0;
+    color: #ff927c;
+    font-size: 0.85rem;
+  }
+
+  .consent {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    cursor: pointer;
+  }
+
+  .consent input {
+    position: absolute;
+    opacity: 0;
+  }
+
+  .consent:has(input:focus-visible) {
+    outline: 3px solid var(--lead-blue);
+    outline-offset: 4px;
+  }
+
+  .consent-error {
+    margin-top: -1rem;
+  }
+
+  .submit-action {
+    width: 100%;
+    border: 0;
+    font-size: 1.05rem;
+  }
+
+  .submit-action:disabled {
+    cursor: wait;
+    opacity: 0.65;
+  }
+
+  .form-trust,
+  .form-failure {
+    margin: -0.5rem 0 0;
+    text-align: center;
+  }
+
+  .form-trust {
+    color: var(--lead-muted);
+    font-size: 0.9rem;
+  }
+
+  .form-failure {
+    color: #ff927c;
+  }
+
+  .form-failure a {
+    color: inherit;
+  }
+
+  .form-success {
+    margin-top: 3rem;
+    border: 1px solid var(--lead-blue);
+    border-radius: 0.5rem;
+    background: var(--lead-surface);
+    padding: 2rem;
+  }
+
+  .form-success h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 2rem;
+  }
+
+  .form-success p {
+    margin: 0.5rem 0 0;
+    color: var(--lead-muted);
+  }
+
+  .honeypot {
+    position: absolute;
+    left: -9999px;
+  }
+
+  .lead-footer {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    border-top: 1px solid var(--lead-rule);
+    padding-block: 3rem;
+  }
+
+  .lead-footer p {
+    max-width: 32rem;
+    margin: 1rem 0 0;
+    color: var(--lead-muted);
+  }
+
+  .lead-footer nav {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .lead-footer a {
+    color: var(--lead-muted);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cut-line--hero {
+      animation: cut-in 900ms 220ms var(--ease-out-soft) both;
+    }
+
+    .hero-copy > * {
+      animation: lead-enter 700ms var(--ease-out-soft) both;
+    }
+
+    .hero-copy > :nth-child(2) {
+      animation-delay: 80ms;
+    }
+
+    .hero-copy > :nth-child(3) {
+      animation-delay: 160ms;
+    }
+
+    .hero-copy > :nth-child(4) {
+      animation-delay: 240ms;
+    }
+  }
+
+  @keyframes cut-in {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  @keyframes lead-enter {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 1000px) {
+    .hero {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    .hero-copy {
+      max-width: 43rem;
+      padding: 4rem 0;
+    }
+
+    .hero-media {
+      position: relative;
+      right: auto;
+      width: 100%;
+      height: 26rem;
+      clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%);
+    }
+
+    .cut-line--hero {
+      top: auto;
+      bottom: 26rem;
+      left: 0;
+      width: 36%;
+    }
+
+    .vision {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .vision-story {
+      max-width: 43rem;
+    }
+
+    .config-intro,
+    .contact-intro {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .config-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .proposal {
+      position: static;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .lead-header,
+    .section-shell,
+    .lead-footer,
+    .hero {
+      width: min(100% - 2rem, 76rem);
+    }
+
+    .lead-header {
+      min-height: 4.75rem;
+    }
+
+    .lead-header :global(.brand-lockup) {
+      --logo-height: 32px !important;
+      --logo-width: 139px !important;
+    }
+
+    .work-link {
+      font-size: 0.85rem;
+    }
+
+    .hero-copy {
+      padding: 3.25rem 0;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.6rem, 13vw, 4rem);
+    }
+
+    .hero-actions {
+      align-items: stretch;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .text-action {
+      text-align: center;
+    }
+
+    .hero-media {
+      height: 17rem;
+    }
+
+    .hero-media::after {
+      background: linear-gradient(90deg, rgba(8, 8, 9, 0.32), transparent 45%);
+    }
+
+    .cut-line--hero {
+      bottom: 17rem;
+    }
+
+    .section-shell {
+      padding-block: 5rem;
+    }
+
+    .vision h2,
+    .configurator h2,
+    .contact-section h2 {
+      font-size: clamp(2.35rem, 11vw, 3.5rem);
+    }
+
+    .craft-proof {
+      align-items: flex-start;
+    }
+
+    .config-layout {
+      margin-top: 2.5rem;
+      gap: 2.5rem;
+    }
+
+    .service-row {
+      min-height: 0;
+      align-items: start;
+      grid-template-columns: auto minmax(0, 1fr);
+      padding: 1.35rem 0.25rem;
+    }
+
+    .service-price {
+      margin-left: 3.6rem;
+      text-align: left;
+      grid-column: 1 / -1;
+    }
+
+    .proposal {
+      display: none;
+    }
+
+    .mobile-summary {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      display: flex;
+      margin: -5rem -1rem 3rem;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      border-bottom: 1px solid var(--lead-rule);
+      background: rgba(8, 8, 9, 0.96);
+      padding: 1rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .mobile-summary strong,
+    .mobile-summary > div > span {
+      display: block;
+    }
+
+    .mobile-summary > div > span {
+      margin-top: 0.1rem;
+      color: var(--lead-muted);
+      font-size: 0.8rem;
+    }
+
+    .mobile-summary a {
+      flex: none;
+      color: var(--lead-coral);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .contact-intro {
+      gap: 1rem;
+    }
+
+    .lead-form {
+      margin-top: 2.5rem;
+    }
+
+    .field-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .lead-footer {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .lead-footer nav {
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+  }
+</style>
