@@ -111,7 +111,20 @@ const description =
           <div class="service-row service-row--locked">
             <span class="service-check service-check--locked" aria-hidden="true">✓</span>
             <div class="service-copy">
-              <span class="service-name">Basiswebsite</span>
+              <span class="service-title">
+                <span class="service-name">Basiswebsite</span>
+                <button
+                  class="process-trigger"
+                  type="button"
+                  aria-label="Bekijk hoe het maken van de basiswebsite verloopt"
+                  aria-controls="basiswebsite-process"
+                  aria-expanded="false"
+                  aria-haspopup="dialog"
+                  data-process-open
+                >
+                  <span aria-hidden="true">i</span>
+                </button>
+              </span>
               <span class="service-description">
                 Onderscheidend ontwerp, volledig responsive, tot vijf pagina’s, je boekingsmodule
                 geïntegreerd en voorbereid op een toekomstige webshop.
@@ -218,6 +231,89 @@ const description =
           <a class="primary-action" href="#vertellen">Vertel me over je shop <span>→</span></a>
         </aside>
       </div>
+
+      <dialog
+        id="basiswebsite-process"
+        class="process-dialog"
+        aria-labelledby="process-title"
+        data-process-dialog
+      >
+        <div class="process-dialog__frame">
+          <div class="process-dialog__intro">
+            <button
+              class="process-close"
+              type="button"
+              aria-label="Sluit uitleg over het proces"
+              autofocus
+              data-process-close
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+            <p>Zo bouwen we jouw basiswebsite</p>
+            <h3 id="process-title">Van eerste richting naar een barbershop die online klopt.</h3>
+            <p class="process-dialog__lead">
+              Geen verrassingen halverwege. Bij iedere fase weet je wat je krijgt, waar jij aan zet
+              bent en wat ik daarna voor je bouw.
+            </p>
+          </div>
+
+          <div class="process-flow">
+            <article class="process-phase">
+              <div>
+                <h4>De basis scherpstellen</h4>
+                <p>
+                  We bespreken je doelgroep, sfeer, diensten, content en bestaande boekingswidget.
+                </p>
+              </div>
+              <strong>Resultaat: een heldere creatieve briefing</strong>
+            </article>
+
+            <article class="process-phase">
+              <div>
+                <h4>Drie designrichtingen verkennen</h4>
+                <p>
+                  Je krijgt drie onderscheidende homepageconcepten. Zo kiezen we bewust de stijl die
+                  jouw zaak het sterkst neerzet.
+                </p>
+              </div>
+              <strong>Jij kiest de richting die het beste voelt</strong>
+            </article>
+
+            <article class="process-phase">
+              <div>
+                <h4>Het gekozen ontwerp aanscherpen</h4>
+                <p>
+                  Ik werk de gekozen richting uit voor desktop en mobiel. Met jouw feedback maken we
+                  typografie, inhoud en details definitief.
+                </p>
+              </div>
+              <strong>Resultaat: een goedgekeurd websiteontwerp</strong>
+            </article>
+
+            <article class="process-phase">
+              <div>
+                <h4>Bouwen en boeken koppelen</h4>
+                <p>
+                  Ik ontwikkel de pagina’s responsive, integreer je boekingsmodule en controleer
+                  snelheid, techniek en gebruiksgemak.
+                </p>
+              </div>
+              <strong>Jij kunt tussentijds meekijken</strong>
+            </article>
+
+            <article class="process-phase">
+              <div>
+                <h4>Live zetten en overdragen</h4>
+                <p>
+                  Na de laatste controle verbind ik domein en hosting, zet ik de website live en leg
+                  ik uit wat je zelf kunt beheren.
+                </p>
+              </div>
+              <strong>Resultaat: een sterke basis die kan meegroeien</strong>
+            </article>
+          </div>
+        </div>
+      </dialog>
     </section>
 
     <section id="vertellen" class="contact-section section-shell" aria-labelledby="contact-title">
@@ -438,6 +534,32 @@ const description =
 
     options.forEach((option) => option.addEventListener('change', updateProposal));
     updateProposal();
+
+    const processDialog = one<HTMLDialogElement>('[data-process-dialog]');
+    const processOpen = one<HTMLButtonElement>('[data-process-open]');
+    const processClose = one<HTMLButtonElement>('[data-process-close]');
+
+    if (processDialog && processOpen && processClose) {
+      const closeProcess = () => {
+        processDialog.close();
+        processOpen.setAttribute('aria-expanded', 'false');
+      };
+
+      processOpen.addEventListener('click', () => {
+        processDialog.showModal();
+        processOpen.setAttribute('aria-expanded', 'true');
+      });
+      processClose.addEventListener('click', closeProcess);
+      processDialog.addEventListener('click', (event) => {
+        if (event.target === processDialog) closeProcess();
+      });
+      processDialog.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          closeProcess();
+        }
+      });
+    }
 
     const form = one<HTMLFormElement>('#lead-form');
     const success = one<HTMLElement>('#lead-success');
@@ -866,16 +988,209 @@ const description =
   }
 
   .service-copy,
+  .service-title,
   .service-name,
   .service-description,
   .service-included {
     display: block;
   }
 
+  .service-title {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
   .service-name {
     color: var(--lead-text);
     font-size: 1.1rem;
     font-weight: 750;
+  }
+
+  .process-trigger {
+    display: grid;
+    width: 1.65rem;
+    height: 1.65rem;
+    flex: none;
+    place-items: center;
+    border: 1px solid #747b85;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--lead-muted);
+    cursor: pointer;
+    font-family: Georgia, serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    font-weight: 700;
+    line-height: 1;
+    padding: 0;
+    transition:
+      border-color 160ms ease,
+      background 160ms ease,
+      color 160ms ease,
+      transform 160ms ease;
+  }
+
+  .process-trigger:hover {
+    border-color: var(--lead-coral);
+    background: var(--lead-coral);
+    color: white;
+    transform: rotate(-8deg);
+  }
+
+  .process-trigger:focus-visible,
+  .process-close:focus-visible {
+    outline: 3px solid var(--lead-blue);
+    outline-offset: 3px;
+  }
+
+  .process-dialog {
+    width: min(68rem, calc(100% - 2.5rem));
+    max-width: none;
+    max-height: min(52rem, calc(100dvh - 2.5rem));
+    margin: auto;
+    overflow: hidden;
+    border: 1px solid #50545b;
+    border-radius: 0.35rem;
+    background: var(--lead-surface);
+    color: var(--lead-text);
+    padding: 0;
+    box-shadow: 0 2rem 7rem rgba(0, 0, 0, 0.72);
+  }
+
+  .process-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(7px);
+  }
+
+  .process-dialog__frame {
+    display: grid;
+    min-height: min(45rem, calc(100dvh - 2.5rem));
+    max-height: min(52rem, calc(100dvh - 2.5rem));
+    overflow: auto;
+    grid-template-columns: minmax(19rem, 0.72fr) minmax(0, 1.28fr);
+  }
+
+  :global(html:has(.process-dialog[open])) {
+    overflow: hidden;
+  }
+
+  .process-dialog__intro {
+    position: relative;
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    background: #0a0a0b;
+    padding: 3.25rem;
+  }
+
+  .process-dialog__intro::after {
+    position: absolute;
+    top: -18%;
+    right: -5rem;
+    width: 1px;
+    height: 142%;
+    background: var(--lead-coral);
+    content: '';
+    transform: rotate(18deg);
+    transform-origin: center;
+  }
+
+  .process-dialog__intro > p,
+  .process-dialog__intro > h3 {
+    position: relative;
+    z-index: 1;
+  }
+
+  .process-dialog__intro > p:first-of-type {
+    margin: 0 0 1rem;
+    color: var(--lead-coral);
+    font-weight: 700;
+  }
+
+  .process-dialog h3 {
+    max-width: 12ch;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.15rem, 3.5vw, 3.8rem);
+    letter-spacing: -0.045em;
+    line-height: 1.02;
+    text-wrap: balance;
+  }
+
+  .process-dialog__lead {
+    max-width: 31rem;
+    margin: 1.5rem 0 0;
+    color: var(--lead-muted);
+    line-height: 1.65;
+  }
+
+  .process-close {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    place-items: center;
+    border: 1px solid #5b6068;
+    border-radius: 50%;
+    background: rgba(8, 8, 9, 0.9);
+    color: var(--lead-text);
+    cursor: pointer;
+    font-size: 1.7rem;
+    line-height: 1;
+    padding: 0 0 0.15rem;
+    transition:
+      border-color 160ms ease,
+      color 160ms ease,
+      transform 160ms ease;
+  }
+
+  .process-close:hover {
+    border-color: var(--lead-coral);
+    color: var(--lead-coral);
+    transform: rotate(8deg);
+  }
+
+  .process-flow {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem 3.25rem;
+  }
+
+  .process-phase {
+    display: grid;
+    align-items: start;
+    grid-template-columns: minmax(0, 1fr) minmax(10rem, 0.48fr);
+    gap: 2rem;
+    padding-block: 1.45rem;
+  }
+
+  .process-phase + .process-phase {
+    border-top: 1px solid var(--lead-rule);
+  }
+
+  .process-phase h4 {
+    margin: 0;
+    font-size: 1.08rem;
+  }
+
+  .process-phase p {
+    margin: 0.4rem 0 0;
+    color: var(--lead-muted);
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .process-phase strong {
+    color: #d9dde3;
+    font-size: 0.82rem;
+    font-weight: 650;
+    line-height: 1.45;
   }
 
   .service-description {
@@ -1266,6 +1581,18 @@ const description =
     .proposal {
       position: static;
     }
+
+    .process-dialog__frame {
+      grid-template-columns: 1fr;
+    }
+
+    .process-dialog__intro {
+      min-height: 22rem;
+    }
+
+    .process-dialog h3 {
+      max-width: 17ch;
+    }
   }
 
   @media (max-width: 640px) {
@@ -1349,6 +1676,51 @@ const description =
       margin-left: 3.6rem;
       text-align: left;
       grid-column: 1 / -1;
+    }
+
+    .process-dialog {
+      width: 100%;
+      max-height: calc(100dvh - 1rem);
+      margin: auto 0 0;
+      border-width: 1px 0 0;
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
+
+    .process-dialog__frame {
+      min-height: 0;
+      max-height: calc(100dvh - 1rem);
+    }
+
+    .process-dialog__intro {
+      min-height: 20rem;
+      padding: 5rem 1.5rem 2rem;
+    }
+
+    .process-dialog__intro::after {
+      right: 0;
+    }
+
+    .process-dialog h3 {
+      font-size: clamp(2rem, 10.5vw, 3rem);
+    }
+
+    .process-dialog__lead {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .process-flow {
+      padding: 0.75rem 1.5rem 1.5rem;
+    }
+
+    .process-phase {
+      grid-template-columns: 1fr;
+      gap: 0.65rem;
+      padding-block: 1.25rem;
+    }
+
+    .process-phase strong {
+      color: var(--lead-blue);
     }
 
     .proposal {
