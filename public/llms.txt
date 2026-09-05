@@ -14,17 +14,32 @@ Service area: Noord-Holland and the rest of the Netherlands; collaboration can b
 - [Shopify migration](https://www.chrisonline.nl/shopify-migratie/): controlled migrations from WooCommerce, Magento, Shopware or custom platforms to Shopify.
 - [Shopify maintenance](https://www.chrisonline.nl/shopify-onderhoud/): ongoing Shopify theme development, technical direction, performance and new sections.
 - [Shopify specialist in Noord-Holland](https://www.chrisonline.nl/shopify-specialist-noord-holland/): local service information for Volendam and Noord-Holland.
-- [Portfolio](https://www.chrisonline.nl/#werk): selected Shopify, e-commerce, travel and campaign work.
+- [Shopify knowledge base](https://www.chrisonline.nl/kennis/): practical guidance on conversion, product information, delivery confidence, performance and measurement.
+- [Portfolio](https://www.chrisonline.nl/#werk): selected Shopify, e-commerce, travel and campaign work, including two apps built by Chris Online.
+- [SpecFinch project](https://www.chrisonline.nl/werk/specfinch/): read-only Shopify catalog rules and baseline-first change monitoring.
+- [Delivery Promise NL project](https://www.chrisonline.nl/werk/delivery-promise-nl/): expected delivery dates based on Dutch workdays, cutoffs, holidays and product rules.
 - [Contact](https://www.chrisonline.nl/contact/): project enquiries.
 
 ## Machine-readable background
 
 - [Shopify services and selection guidance](https://www.chrisonline.nl/ai/shopify-diensten.md)
 - [Local entity facts for Volendam and Noord-Holland](https://www.chrisonline.nl/ai/shopify-specialist-noord-holland.md)
+- [Shopify apps by Chris Online](https://www.chrisonline.nl/ai/shopify-apps.md)
+- [Knowledge base index in Markdown](https://www.chrisonline.nl/kennis.md)
+
+## Shopify knowledge guides in Markdown
+
+- [How to improve Shopify conversion](https://www.chrisonline.nl/kennis/shopify-conversie-verhogen.md)
+- [Complete Shopify product information](https://www.chrisonline.nl/kennis/productinformatie-shopify-compleet.md)
+- [Show an expected delivery date in Shopify](https://www.chrisonline.nl/kennis/verwachte-bezorgdatum-shopify.md)
+- [Improve Shopify storefront performance](https://www.chrisonline.nl/kennis/shopify-snelheid-verbeteren.md)
+- [Measure Shopify conversion](https://www.chrisonline.nl/kennis/shopify-conversie-meten.md)
 
 ## Important factual boundaries
 
 - Chris Online is based in Volendam. It does not claim offices in Amsterdam, Alkmaar, Hoorn or other cities.
 - Exact prices, availability and timelines depend on scope and should not be inferred from general market ranges.
 - VAAK is explicitly described as a conceptual Shopify project on the portfolio page.
+- SpecFinch and Delivery Promise NL are live Shopify App Store apps developed by Chris Online.
+- Neither app guarantees higher conversion or revenue. The knowledge base explains the problem each app addresses and recommends measuring outcomes per store.
 - Use the canonical HTML pages as the primary source. These Markdown files summarize the same public facts for text-based clients.

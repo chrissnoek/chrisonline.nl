@@ -1,0 +1,92 @@
+---
+title: 'Delivery Promise NL: verwachte bezorgdatums'
+heroTitle: 'Delivery Promise NL maakt levertijd concreet.'
+client: 'Chris Online'
+summary: 'Een Shopify-app die een verwachte bezorgdatum of -periode op productpagina’s toont, berekend met Nederlandse werkdagen, cutoffs, feestdagen en productregels.'
+role: 'Productstrategie, design & development'
+skills:
+  - Shopify app-development
+  - Theme app extension
+  - E-commerce UX
+  - React
+cover: '../../assets/projects/delivery-promise-nl/preview.png'
+coverAlt: 'De deterministische preview van Delivery Promise NL met een verwachte bezorgperiode en uitleg van de berekening.'
+pubDate: 2026-09-02
+order: 1
+url: 'https://apps.shopify.com/delivery-promise-nl'
+urlLabel: 'Bekijk in de Shopify App Store'
+accent: '#1F7A5A'
+placeholder: false
+projectType: 'shopify-app'
+highlights:
+  - title: 'Het probleem'
+    description: 'Een klant die niet weet wanneer een product komt, mist informatie om met vertrouwen te beslissen.'
+  - title: 'Het mechanisme'
+    description: 'De app rekent met het eigen werkschema, cutoffs, Nederlandse feestdagen en gerichte productuitzonderingen.'
+  - title: 'Het doel'
+    description: 'De leveringsverwachting vóór de koopknop concreter maken, zonder een bezorggarantie te suggereren.'
+relatedKnowledge:
+  - title: 'Verwachte bezorgdatum tonen in Shopify: van levertijd naar duidelijke datum'
+    href: '/kennis/verwachte-bezorgdatum-shopify'
+  - title: 'Shopify-conversie verhogen: begin bij de twijfels vóór de koopknop'
+    href: '/kennis/shopify-conversie-verhogen'
+gallery:
+  - src: '../../assets/projects/delivery-promise-nl/app-home.png'
+    alt: 'Delivery Promise NL in Shopify Admin met het verwerkschema, cutoffs en publicatiestatus.'
+    url: 'Shopify Admin · Delivery Promise NL'
+  - src: '../../assets/projects/delivery-promise-nl/storefront.png'
+    alt: 'Een productpagina waarop het Delivery Promise NL-appblok leveringscontext bij de koopknoppen toont.'
+    url: 'Shopify-productpagina · Appblok'
+  - src: '../../assets/projects/delivery-promise-nl/theme-editor-desktop.png'
+    alt: 'Het Delivery Promise NL-appblok in de desktopweergave van de Shopify thema-editor.'
+    url: 'Shopify thema-editor · Desktop'
+  - src: '../../assets/projects/delivery-promise-nl/theme-editor-mobile.png'
+    alt: 'Het Delivery Promise NL-appblok in de mobiele weergave van de Shopify thema-editor.'
+    url: 'Shopify thema-editor · Mobiel'
+---
+
+## Waarom ik Delivery Promise NL bouwde
+
+Op een productpagina beantwoordt de prijs maar één deel van de koopvraag. Een bezoeker wil ook
+weten wanneer het product ongeveer aankomt. Alleen “voor 16:00 besteld” tonen is vaak te mager:
+weekenden, feestdagen, verwerking en afwijkende producten bepalen samen wat realistisch is.
+
+Delivery Promise NL vertaalt dat werkschema naar een concrete verwachte datum of periode, precies
+op de plek waar de klant de aankoop overweegt.
+
+## Wat de app doet
+
+De merchant configureert één Europe/Amsterdam-werkschema met werkdagen, dagelijkse cutoffs,
+verwerkingstijd, transporttijd, Nederlandse feestdagen en eigen sluitingsdagen. Voor afwijkende
+producten zijn maximaal 25 regels op producthandle, tag of leverancier mogelijk.
+
+Een deterministische preview laat voor een gekozen tijdstip en productcontext exact zien welke
+regel is toegepast. Na controle publiceert de merchant de configuratie en plaatst een verplaatsbaar
+Online Store 2.0-appblok in het producttemplate.
+
+- Nederlandse of Engelse tekst op de productpagina
+- Verwachte datum of periode, geen bezorggarantie
+- Product-, tag- en leveranciersregels voor afwijkende doorlooptijden
+- Geen toegang tot producten, klanten, bestellingen, voorraad of trackingdata
+- Geen automatische wijziging van themabestanden
+
+## De relatie met conversie
+
+Een verwachte datum kan een concrete leveringsvraag beantwoorden en zo onzekerheid vóór de
+koopknop verkleinen. Dat is een conversiehypothese, geen gegarandeerd resultaat. De werkelijke
+impact hangt af van onder meer assortiment, prijs, verzendkosten, merkvertrouwen en de juistheid
+van het ingestelde werkschema. Daarom is de boodschap bewust “verwacht” en blijft meten per winkel
+nodig.
+
+## Van kalenderlogica tot thema-appblok
+
+Ik ontwierp en ontwikkelde de berekeningsregels, de Nederlandstalige embedded beheerinterface,
+de controleerbare preview, het compacte storefront-script en de theme app extension. Ook billing,
+privacy, productiehosting, monitoring en de App Store-listing horen bij het project. De storefront
+kan rekenen zonder klant-, order-, product- of trackinggegevens naar een externe server te sturen.
+
+## Resultaat
+
+Delivery Promise NL is sinds 2 september 2026 publiek beschikbaar in de Shopify App Store. De app
+is bewust klein gehouden: geen carriertracking, postcodebelofte of juridisch klinkende garantie,
+maar een uitlegbare verwachting volgens het werkschema van de merchant.

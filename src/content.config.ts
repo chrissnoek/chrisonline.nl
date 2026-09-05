@@ -14,6 +14,8 @@ const projects = defineCollection({
     z.object({
       /** Titel van het project. */
       title: z.string(),
+      /** Optionele, redactionelere kop voor de hero van een projectdetail. */
+      heroTitle: z.string().optional(),
       /** Klant/merknaam (kan afwijken van de titel). */
       client: z.string(),
       /** Opdrachtgever — wie het werk in opdracht gaf (kan afwijken van de klant, bijv. een bureau). */
@@ -73,7 +75,57 @@ const projects = defineCollection({
           }),
         )
         .default([]),
+      /** Eigen Shopify-apps krijgen een productgerichte projectpagina. */
+      projectType: z.enum(['client-project', 'shopify-app']).default('client-project'),
+      /** Drie feitelijke kolommen voor probleem, mechanisme en doel. */
+      highlights: z
+        .array(
+          z.object({
+            title: z.string(),
+            description: z.string(),
+          }),
+        )
+        .max(3)
+        .default([]),
+      /** Relevante gidsen uit de kennisbank. */
+      relatedKnowledge: z
+        .array(
+          z.object({
+            title: z.string(),
+            href: z.string(),
+          }),
+        )
+        .default([]),
     }),
 });
 
-export const collections = { projects };
+/**
+ * Kennisbank. Dezelfde bron levert een leesbare HTML-pagina en een openbare
+ * Markdown-route op, zodat zoekmachines en AI-clients niet uit elkaar lopen.
+ */
+const knowledge = defineCollection({
+  loader: glob({ base: './src/content/kennis', pattern: '**/[^_]*.md' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    intro: z.string(),
+    answer: z.string(),
+    category: z.string(),
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date(),
+    readingMinutes: z.number().int().positive(),
+    order: z.number().default(99),
+    featured: z.boolean().default(false),
+    keyTakeaways: z.array(z.string()).min(2).max(6),
+    faqs: z
+      .array(
+        z.object({
+          question: z.string(),
+          answer: z.string(),
+        }),
+      )
+      .default([]),
+  }),
+});
+
+export const collections = { projects, knowledge };
