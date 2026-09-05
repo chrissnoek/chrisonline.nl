@@ -1,0 +1,89 @@
+---
+title: 'SpecFinch: catalogusregels bewaken'
+heroTitle: 'SpecFinch houdt nieuwe catalogusfouten klein.'
+client: 'Chris Online'
+summary: 'Een read-only Shopify-app die na imports en productedits zichtbaar maakt welke vereiste productvelden nieuw ontbreken, terwijl bestaand opschoonwerk apart blijft.'
+role: 'Productstrategie, design & development'
+skills:
+  - Shopify app-development
+  - Productdata
+  - UX
+  - React
+cover: '../../assets/projects/specfinch/overview.png'
+coverAlt: 'Het SpecFinch-overzicht in Shopify Admin met één actief datacontract, nul actuele bevindingen en de laatst voltooide scan.'
+pubDate: 2026-09-03
+order: 0
+url: 'https://apps.shopify.com/specfinch'
+urlLabel: 'Bekijk in de Shopify App Store'
+accent: '#EE4B24'
+placeholder: false
+projectType: 'shopify-app'
+highlights:
+  - title: 'Het probleem'
+    description: 'Imports, koppelingen en dagelijkse edits kunnen vereiste velden ongemerkt leeg achterlaten.'
+  - title: 'Het mechanisme'
+    description: 'De winkel bepaalt de regels; een eerste baseline houdt oude achterstand los van nieuwe afwijkingen.'
+  - title: 'Het doel'
+    description: 'Catalogusproblemen eerder en gerichter laten beoordelen, zonder productdata door de app te laten wijzigen.'
+relatedKnowledge:
+  - title: 'Waarom complete productinformatie twijfel vóór de koopknop wegneemt'
+    href: '/kennis/productinformatie-shopify-compleet'
+  - title: 'Shopify-conversie verhogen: begin bij de twijfels vóór de koopknop'
+    href: '/kennis/shopify-conversie-verhogen'
+gallery:
+  - src: '../../assets/projects/specfinch/contract-builder.png'
+    alt: 'De SpecFinch contractbouwer met selectie van vereiste productvelden en metafields.'
+    url: 'Shopify Admin · SpecFinch · Datacontract'
+  - src: '../../assets/projects/specfinch/scan-history.png'
+    alt: 'De scanhistorie van SpecFinch met baseline- en opvolgscans en de status van gevonden afwijkingen.'
+    url: 'Shopify Admin · SpecFinch · Scanhistorie'
+---
+
+## Waarom ik SpecFinch bouwde
+
+Shopify-productdata wordt zelden door één persoon op één plek beheerd. Leveranciersbestanden,
+PIM- of ERP-koppelingen, bulkbewerkingen en dagelijkse productedits kunnen allemaal een veld
+leegmaken waar een filter, feed, thema of intern proces op rekent. Een algemene kwaliteitsscore
+weet alleen niet welke velden voor déze catalogus echt verplicht zijn.
+
+SpecFinch begint daarom niet met een generiek oordeel, maar met regels die de merchant zelf
+bepaalt. Dat maakt de controle specifiek voor het assortiment en de manier waarop de winkel werkt.
+
+## Wat de app doet
+
+Een merchant maakt maximaal tien datacontracten voor alle actieve producten, geselecteerde
+producttypen of collecties. Per contract zijn ingebouwde product- en variantvelden en bestaande
+metafields als vereist te markeren.
+
+De eerste volledige scan vormt de baseline. Bestaande afwijkingen blijven zichtbaar als
+opschoonwerk. Latere succesvolle scans onderscheiden nieuw ontstane, teruggekeerde, verergerde en
+opgeloste bevindingen. Zo hoeft een team niet bij iedere controle opnieuw door dezelfde oude lijst.
+
+- Dagelijkse, volledige controles met handmatige scanoptie
+- Directe links terug naar het betreffende Shopify-product
+- Filterbare bevindingen, scanhistorie en CSV-export
+- Optionele e-maildigest voor relevante veranderingen
+- Uitsluitend leestoegang tot producten; de app wijzigt geen catalogusdata
+
+## De relatie met vindbaarheid en conversie
+
+Complete data is geen garantie op meer omzet. Het is wel de basis waarop productpagina's,
+filters, feeds en metafield-gedreven onderdelen vertrouwen. Een ontbrekende maataanduiding,
+materiaalwaarde, afbeelding of variant-SKU kan informatie onvolledig maken of een verkoopkanaal
+verstoren. SpecFinch helpt die afwijkingen afgebakend zichtbaar te maken; de merchant bepaalt en
+uitvoert iedere correctie zelf.
+
+## Van productspecificatie tot live Shopify-app
+
+Ik heb de volledige app ontworpen en ontwikkeld: productafbakening, embedded Shopify Admin-UX,
+scan- en baselinegedrag, privacygrenzen, billing, productiehosting, monitoring en de App
+Store-presentatie. De belangrijkste ontwerpkeuze was juist wat de app níet doet: geen catalogus
+herschrijven, geen AI-content en geen brede kwaliteitsscore. Eén controleerbaar probleem, met zo
+weinig mogelijk rechten.
+
+## Resultaat
+
+SpecFinch is sinds 3 september 2026 publiek beschikbaar in de Shopify App Store. De listing en
+deze projectpagina beschrijven aantoonbare productfunctionaliteit; installaties, omzetgroei of
+conversiewinst worden niet als resultaat geclaimd zolang daar geen betrouwbare gebruikersdata voor
+is.

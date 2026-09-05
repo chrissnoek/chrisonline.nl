@@ -1,0 +1,563 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import ribbon from '../../assets/brand/living-ribbon-wide.png';
+import specFinch from '../../assets/projects/specfinch/overview.png';
+import deliveryPromise from '../../assets/projects/delivery-promise-nl/storefront.png';
+
+const articles = (await getCollection('knowledge')).sort((a, b) => a.data.order - b.data.order);
+const featured = articles.find((article) => article.data.featured) ?? articles[0];
+const origin = Astro.site!.origin;
+
+const collectionLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Shopify-kennisbank van Chris Online',
+  description:
+    'Praktische gidsen over Shopify-conversie, productinformatie, leveringsvertrouwen, performance en meten.',
+  url: new URL('/kennis/', Astro.site).href,
+  inLanguage: 'nl-NL',
+  author: { '@id': `${origin}/#person` },
+  hasPart: articles.map((article) => ({
+    '@type': 'Article',
+    headline: article.data.title,
+    url: new URL(`/kennis/${article.id}/`, Astro.site).href,
+  })),
+};
+---
+
+<BaseLayout
+  title="Shopify-kennisbank: conversie, productdata en performance"
+  description="Praktische Shopify-gidsen over vindbaarheid, productinformatie, koopvertrouwen, snelheid en meten, geschreven vanuit ontwerp en development."
+  jsonLd={[collectionLd]}
+>
+  <section class="knowledge-hero" aria-labelledby="knowledge-title">
+    <div class="knowledge-container knowledge-hero-grid">
+      <div>
+        <h1 id="knowledge-title" class="enter-up">
+          Kennis voor webshops die willen blijven verbeteren.
+        </h1>
+        <p class="enter-up" style="--enter-delay: 0.1s">
+          Praktische Shopify-gidsen over vindbaarheid, productinformatie, koopvertrouwen en
+          snelheid—geschreven vanuit ontwerp en development.
+        </p>
+        <a href="#gidsen" class="knowledge-primary enter-up" style="--enter-delay: 0.18s">
+          Bekijk alle gidsen
+          <Icon name="arrowDown" size={18} />
+        </a>
+      </div>
+
+      <div
+        class="decision-map enter-up"
+        style="--enter-delay: 0.16s"
+        aria-label="Vijf onderdelen van een sterke kooproute"
+      >
+        <p>Een betere kooproute maakt de volgende beslissing steeds eenvoudiger.</p>
+        <ol>
+          <li>Vindbaar</li>
+          <li>Duidelijk</li>
+          <li>Vertrouwd</li>
+          <li>Snel</li>
+          <li>Meetbaar</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <div class="knowledge-container">
+    <a href={`/kennis/${featured.id}`} class="featured-guide reveal-up">
+      <div class="featured-visual">
+        <Image
+          src={ribbon}
+          alt="Oranje levende lijn uit de visuele identiteit van Chris Online."
+          widths={[600, 900, 1200]}
+          sizes="(max-width: 800px) 100vw, 43vw"
+          format="avif"
+          quality="mid"
+        />
+      </div>
+      <div class="featured-copy">
+        <span>{featured.data.category} · {featured.data.readingMinutes} min lezen</span>
+        <h2>{featured.data.title}</h2>
+        <p>{featured.data.intro}</p>
+        <strong>
+          Lees de gids
+          <Icon name="arrowRight" size={18} />
+        </strong>
+      </div>
+    </a>
+
+    <section id="gidsen" class="guide-index" aria-labelledby="guide-index-heading">
+      <div class="guide-index-intro reveal-up">
+        <h2 id="guide-index-heading">Gidsen per koopvraag</h2>
+        <p>
+          Begin bij de twijfel die je in klantvragen, gedrag of retouren daadwerkelijk terugziet.
+        </p>
+      </div>
+      <div class="guide-list">
+        {
+          articles.map((article) => (
+            <a href={`/kennis/${article.id}`} class="reveal-up">
+              <span class="guide-category">{article.data.category}</span>
+              <span class="guide-title">{article.data.title}</span>
+              <span class="guide-time">{article.data.readingMinutes} min</span>
+              <Icon name="arrowRight" size={19} />
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="knowledge-apps" aria-labelledby="apps-heading">
+      <div class="apps-intro reveal-up">
+        <h2 id="apps-heading">Twee eigen apps voor twee specifieke twijfels</h2>
+        <p>
+          Niet iedere conversievraag vraagt om een app. Deze twee producten zijn gebouwd voor
+          problemen die herhaalbare controle of berekening nodig hebben.
+        </p>
+      </div>
+
+      <div class="app-row reveal-up">
+        <div class="app-row-image">
+          <Image
+            src={specFinch}
+            alt="SpecFinch-overzicht met actieve datacontracten en de laatste catalogusscan."
+            widths={[560, 840, 1120]}
+            sizes="(max-width: 799px) 100vw, 39vw"
+            format="avif"
+            quality="mid"
+          />
+        </div>
+        <div>
+          <h3>SpecFinch</h3>
+          <p>
+            Houdt nieuwe ontbrekende productvelden en metafields apart van bestaande
+            catalogusachterstand. Read-only en bepaald door de regels van de merchant.
+          </p>
+          <div class="app-links">
+            <a href="/werk/specfinch">Bekijk het project <Icon name="arrowRight" size={17} /></a>
+            <a href="https://apps.shopify.com/specfinch" target="_blank" rel="noopener"
+              >App Store <Icon name="arrowUpRight" size={17} /></a
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="app-row reveal-up">
+        <div class="app-row-image">
+          <Image
+            src={deliveryPromise}
+            alt="Shopify-productpagina met leveringscontext van Delivery Promise NL bij de koopknoppen."
+            widths={[560, 840, 1120]}
+            sizes="(max-width: 799px) 100vw, 39vw"
+            format="avif"
+            quality="mid"
+          />
+        </div>
+        <div>
+          <h3>Delivery Promise NL</h3>
+          <p>
+            Berekent een verwachte bezorgdatum of -periode met Nederlandse werkdagen, cutoffs,
+            feestdagen en productregels. Duidelijk verwacht, nooit gegarandeerd.
+          </p>
+          <div class="app-links">
+            <a href="/werk/delivery-promise-nl"
+              >Bekijk het project <Icon name="arrowRight" size={17} /></a
+            >
+            <a href="https://apps.shopify.com/delivery-promise-nl" target="_blank" rel="noopener"
+              >App Store <Icon name="arrowUpRight" size={17} /></a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="knowledge-cta">
+    <div class="knowledge-container">
+      <h2>Weet je waar klanten afhaken, maar nog niet wat je moet veranderen?</h2>
+      <p>Ik help het probleem terugbrengen tot een concrete ontwerp- of developmentbeslissing.</p>
+      <a href="/contact?dienst=shopify">
+        Bespreek je webshop
+        <Icon name="arrowRight" size={18} />
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .knowledge-container {
+    width: min(100% - 3rem, 78rem);
+    margin-inline: auto;
+  }
+
+  .knowledge-hero {
+    padding: clamp(4rem, 8vw, 8rem) 0 clamp(3rem, 6vw, 6rem);
+    background: #fff;
+  }
+
+  .knowledge-hero-grid {
+    display: grid;
+    align-items: end;
+    grid-template-columns: minmax(0, 1.12fr) minmax(28rem, 0.88fr);
+    gap: clamp(3rem, 7vw, 7rem);
+  }
+
+  .knowledge-hero h1 {
+    max-width: 14ch;
+    color: #111;
+    font-size: clamp(3.25rem, 6.4vw, 6.6rem);
+    font-weight: 640;
+    letter-spacing: -0.065em;
+    line-height: 0.94;
+  }
+
+  .knowledge-hero-grid > div:first-child > p {
+    max-width: 41rem;
+    margin-top: 1.6rem;
+    color: #5f5f5a;
+    font-size: clamp(1.08rem, 1.45vw, 1.32rem);
+    line-height: 1.55;
+  }
+
+  .knowledge-primary,
+  .knowledge-cta a {
+    display: inline-flex;
+    min-height: 3.1rem;
+    margin-top: 2rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    padding: 0.78rem 1.15rem;
+    border-radius: 0.65rem;
+    background: #111;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 650;
+    transition:
+      background-color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .knowledge-primary:hover,
+  .knowledge-primary:focus-visible,
+  .knowledge-cta a:hover,
+  .knowledge-cta a:focus-visible {
+    background: #ee4b24;
+    transform: translateY(-2px);
+  }
+
+  .decision-map {
+    padding: 2rem 0 0;
+    border-top: 1px solid #d9d9d4;
+  }
+
+  .decision-map > p {
+    max-width: 31rem;
+    color: #60605b;
+    font-size: 0.92rem;
+  }
+
+  .decision-map ol {
+    display: flex;
+    margin-top: 2rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    list-style: none;
+  }
+
+  .decision-map li {
+    position: relative;
+    color: #111;
+    font-size: clamp(0.72rem, 1vw, 0.86rem);
+    font-weight: 620;
+  }
+
+  .decision-map li:not(:last-child)::after {
+    margin-left: 0.75rem;
+    color: #00a7c8;
+    content: '→';
+  }
+
+  .decision-map li:nth-child(3) {
+    color: #d23d1d;
+  }
+
+  .featured-guide {
+    display: grid;
+    overflow: hidden;
+    border-block: 1px solid #d9d9d4;
+    color: #111;
+    grid-template-columns: 0.9fr 1.1fr;
+  }
+
+  .featured-visual {
+    position: relative;
+    min-height: 23rem;
+    overflow: hidden;
+    background: #101011;
+  }
+
+  .featured-visual img {
+    position: absolute;
+    right: -14%;
+    bottom: -12%;
+    width: 124%;
+    max-width: none;
+  }
+
+  .featured-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: clamp(2rem, 5vw, 4.5rem);
+  }
+
+  .featured-copy > span,
+  .guide-category,
+  .guide-time {
+    color: #74746f;
+    font-size: 0.78rem;
+  }
+
+  .featured-copy h2 {
+    max-width: 17ch;
+    margin-top: 0.8rem;
+    font-size: clamp(2rem, 3.7vw, 3.7rem);
+    font-weight: 620;
+    letter-spacing: -0.055em;
+    line-height: 1;
+  }
+
+  .featured-copy p {
+    max-width: 35rem;
+    margin-top: 1rem;
+    color: #62625d;
+  }
+
+  .featured-copy strong {
+    display: inline-flex;
+    margin-top: 1.6rem;
+    align-items: center;
+    gap: 0.55rem;
+    color: #111;
+    font-size: 0.9rem;
+  }
+
+  .guide-index,
+  .knowledge-apps {
+    padding: clamp(6rem, 10vw, 10rem) 0;
+  }
+
+  .guide-index {
+    display: grid;
+    grid-template-columns: 0.56fr 1.44fr;
+    gap: clamp(3rem, 7vw, 7rem);
+  }
+
+  .guide-index-intro h2,
+  .apps-intro h2,
+  .knowledge-cta h2 {
+    max-width: 14ch;
+    color: #111;
+    font-size: clamp(2.3rem, 4.5vw, 4.5rem);
+    font-weight: 620;
+    letter-spacing: -0.055em;
+    line-height: 0.98;
+  }
+
+  .guide-index-intro p,
+  .apps-intro p {
+    max-width: 31rem;
+    margin-top: 1rem;
+    color: #686863;
+  }
+
+  .guide-list {
+    border-top: 1px solid #d9d9d4;
+  }
+
+  .guide-list a {
+    display: grid;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.35rem 0;
+    border-bottom: 1px solid #d9d9d4;
+    color: #111;
+    grid-template-columns: 7.5rem minmax(0, 1fr) auto auto;
+    transition: color 180ms ease;
+  }
+
+  .guide-list a:hover,
+  .guide-list a:focus-visible {
+    color: #d23d1d;
+  }
+
+  .guide-title {
+    font-size: clamp(1rem, 1.3vw, 1.18rem);
+    font-weight: 620;
+    line-height: 1.35;
+  }
+
+  .knowledge-apps {
+    border-top: 1px solid #d9d9d4;
+  }
+
+  .apps-intro {
+    display: grid;
+    align-items: end;
+    grid-template-columns: 1fr 0.72fr;
+    gap: 3rem;
+  }
+
+  .app-row {
+    display: grid;
+    margin-top: 3.5rem;
+    align-items: center;
+    padding-block: 1.5rem;
+    border-block: 1px solid #d9d9d4;
+    grid-template-columns: minmax(0, 0.85fr) minmax(19rem, 1.15fr);
+    gap: clamp(2rem, 6vw, 6rem);
+  }
+
+  .app-row + .app-row {
+    margin-top: 0;
+    border-top: 0;
+  }
+
+  .app-row-image {
+    overflow: hidden;
+    border: 1px solid #deded9;
+    border-radius: 0.8rem;
+    background: #f5f5f2;
+  }
+
+  .app-row-image img {
+    display: block;
+    width: 100%;
+  }
+
+  .app-row h3 {
+    font-size: clamp(1.8rem, 3.2vw, 3.2rem);
+    font-weight: 640;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+
+  .app-row > div:last-child > p {
+    max-width: 38rem;
+    margin-top: 1rem;
+    color: #62625d;
+  }
+
+  .app-links {
+    display: flex;
+    margin-top: 1.35rem;
+    flex-wrap: wrap;
+    gap: 0.8rem 1.25rem;
+  }
+
+  .app-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #111;
+    font-size: 0.86rem;
+    font-weight: 650;
+  }
+
+  .app-links a:hover,
+  .app-links a:focus-visible {
+    color: #d23d1d;
+  }
+
+  .knowledge-cta {
+    padding: clamp(5rem, 8vw, 8rem) 0;
+    background: #101011;
+    color: #fff;
+  }
+
+  .knowledge-cta .knowledge-container {
+    display: grid;
+    align-items: end;
+    grid-template-columns: 1.1fr 0.7fr auto;
+    gap: 2rem;
+  }
+
+  .knowledge-cta h2 {
+    color: #fff;
+  }
+
+  .knowledge-cta p {
+    color: #b9b9b3;
+  }
+
+  @media (max-width: 899px) {
+    .knowledge-container {
+      width: min(100% - 2.5rem, 42rem);
+    }
+
+    .knowledge-hero-grid,
+    .featured-guide,
+    .guide-index,
+    .apps-intro,
+    .app-row,
+    .knowledge-cta .knowledge-container {
+      grid-template-columns: 1fr;
+    }
+
+    .knowledge-hero-grid {
+      gap: 4rem;
+    }
+
+    .featured-visual {
+      min-height: 18rem;
+    }
+
+    .guide-list a {
+      grid-template-columns: 7rem minmax(0, 1fr) auto;
+    }
+
+    .guide-time {
+      display: none;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .knowledge-hero h1 {
+      font-size: clamp(2.65rem, 13.5vw, 4.2rem);
+    }
+
+    .decision-map ol {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .decision-map li:not(:last-child)::after {
+      margin-left: 0.45rem;
+      content: '↓';
+    }
+
+    .guide-list a {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.45rem 1rem;
+    }
+
+    .guide-category {
+      grid-column: 1;
+    }
+
+    .guide-title {
+      grid-column: 1;
+    }
+
+    .guide-list svg {
+      grid-column: 2;
+      grid-row: 1 / 3;
+    }
+  }
+</style>

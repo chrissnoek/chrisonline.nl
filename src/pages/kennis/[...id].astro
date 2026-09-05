@@ -1,0 +1,508 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+
+export async function getStaticPaths() {
+  const articles = (await getCollection('knowledge')).sort((a, b) => a.data.order - b.data.order);
+  return articles.map((entry) => ({ params: { id: entry.id }, props: { entry, articles } }));
+}
+
+const { entry, articles } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+const related = articles.filter((article) => article.id !== entry.id).slice(0, 3);
+const origin = Astro.site!.origin;
+const canonical = new URL(`/kennis/${entry.id}/`, Astro.site).href;
+const formatDate = (date: Date) =>
+  date.toLocaleDateString('nl-NL', { year: 'numeric', month: 'long', day: 'numeric' });
+
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: data.title,
+  description: data.description,
+  datePublished: data.pubDate.toISOString(),
+  dateModified: data.updatedDate.toISOString(),
+  inLanguage: 'nl-NL',
+  mainEntityOfPage: canonical,
+  author: { '@id': `${origin}/#person` },
+  publisher: { '@id': `${origin}/#business` },
+};
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: data.faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+  })),
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Kennisbank',
+      item: new URL('/kennis/', Astro.site).href,
+    },
+    { '@type': 'ListItem', position: 2, name: data.title, item: canonical },
+  ],
+};
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  type="article"
+  jsonLd={[articleLd, breadcrumbLd, ...(data.faqs.length ? [faqLd] : [])]}
+>
+  <article class="knowledge-article">
+    <div class="article-container">
+      <a href="/kennis" class="article-back enter-up">
+        <Icon name="arrowLeft" size={17} />
+        Naar de kennisbank
+      </a>
+
+      <header class="article-header">
+        <div>
+          <h1 class="enter-up" style="--enter-delay: 0.08s">{data.title}</h1>
+          <p class="article-intro enter-up" style="--enter-delay: 0.16s">{data.intro}</p>
+        </div>
+        <dl class="article-meta enter-up" style="--enter-delay: 0.2s">
+          <div><dt>Onderwerp</dt><dd>{data.category}</dd></div>
+          <div><dt>Leestijd</dt><dd>{data.readingMinutes} minuten</dd></div>
+          <div><dt>Bijgewerkt</dt><dd>{formatDate(data.updatedDate)}</dd></div>
+          <div>
+            <dt>Ook beschikbaar</dt><dd><a href={`/kennis/${entry.id}.md`}>Markdownversie</a></dd>
+          </div>
+        </dl>
+      </header>
+
+      <section
+        class="direct-answer enter-up"
+        aria-labelledby="short-answer-heading"
+        style="--enter-delay: 0.24s"
+      >
+        <h2 id="short-answer-heading">Kort antwoord</h2>
+        <p>{data.answer}</p>
+      </section>
+
+      <div class="article-grid">
+        <aside aria-labelledby="takeaways-heading">
+          <h2 id="takeaways-heading">Wat je meeneemt</h2>
+          <ul>
+            {data.keyTakeaways.map((takeaway) => <li>{takeaway}</li>)}
+          </ul>
+        </aside>
+
+        <div class="knowledge-prose">
+          <Content />
+        </div>
+      </div>
+
+      {
+        data.faqs.length > 0 && (
+          <section class="article-faq" aria-labelledby="faq-heading">
+            <h2 id="faq-heading">Veelgestelde vragen</h2>
+            <div>
+              {data.faqs.map((faq) => (
+                <details>
+                  <summary>
+                    {faq.question}
+                    <Icon name="plus" size={18} />
+                  </summary>
+                  <p>{faq.answer}</p>
+                </details>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      <section class="more-guides" aria-labelledby="more-guides-heading">
+        <div>
+          <h2 id="more-guides-heading">Verder verbeteren</h2>
+          <p>Lees verder bij de volgende vraag in de kooproute.</p>
+        </div>
+        <nav aria-label="Meer kennisartikelen">
+          {
+            related.map((article) => (
+              <a href={`/kennis/${article.id}`}>
+                <span>{article.data.title}</span>
+                <Icon name="arrowRight" size={19} />
+              </a>
+            ))
+          }
+        </nav>
+      </section>
+    </div>
+  </article>
+
+  <section class="article-cta">
+    <div class="article-container">
+      <h2>Van inzicht naar een verbetering die in je Shopify-thema werkt.</h2>
+      <p>Ik help met analyse, ontwerp en development—zonder de winkel vol tactieken te stapelen.</p>
+      <a href="/contact?dienst=shopify">
+        Bespreek je webshop
+        <Icon name="arrowRight" size={18} />
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style is:global>
+  .knowledge-article {
+    padding: clamp(2.5rem, 5vw, 5rem) 0 clamp(7rem, 11vw, 11rem);
+    background: #fff;
+    color: #111;
+  }
+
+  .article-container {
+    width: min(100% - 3rem, 74rem);
+    margin-inline: auto;
+  }
+
+  .article-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: #696964;
+    font-size: 0.86rem;
+    font-weight: 560;
+  }
+
+  .article-back:hover,
+  .article-back:focus-visible {
+    color: #111;
+  }
+
+  .article-header {
+    display: grid;
+    margin-top: clamp(3rem, 6vw, 6rem);
+    align-items: end;
+    grid-template-columns: minmax(0, 1.35fr) minmax(15rem, 0.65fr);
+    gap: clamp(3rem, 8vw, 8rem);
+  }
+
+  .article-header h1 {
+    max-width: 16ch;
+    font-size: clamp(3rem, 6.2vw, 6.4rem);
+    font-weight: 640;
+    letter-spacing: -0.064em;
+    line-height: 0.95;
+  }
+
+  .article-intro {
+    max-width: 49rem;
+    margin-top: 1.6rem;
+    color: #5f5f5a;
+    font-size: clamp(1.1rem, 1.45vw, 1.35rem);
+    line-height: 1.6;
+  }
+
+  .article-meta {
+    border-top: 1px solid #d9d9d4;
+  }
+
+  .article-meta > div {
+    display: grid;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #d9d9d4;
+    grid-template-columns: 6.8rem 1fr;
+    gap: 1rem;
+    font-size: 0.78rem;
+  }
+
+  .article-meta dt {
+    color: #7a7a74;
+  }
+
+  .article-meta dd,
+  .article-meta a {
+    color: #111;
+    font-weight: 600;
+  }
+
+  .article-meta a {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .direct-answer {
+    display: grid;
+    margin-top: clamp(4rem, 7vw, 7rem);
+    padding: clamp(2rem, 4vw, 4rem);
+    background: #fff0eb;
+    grid-template-columns: 0.42fr 1.58fr;
+    gap: 2rem;
+  }
+
+  .direct-answer h2 {
+    font-size: 1.05rem;
+    font-weight: 650;
+  }
+
+  .direct-answer p {
+    max-width: 48rem;
+    font-size: clamp(1.25rem, 2.3vw, 2rem);
+    font-weight: 560;
+    letter-spacing: -0.025em;
+    line-height: 1.35;
+  }
+
+  .article-grid {
+    display: grid;
+    margin-top: clamp(5rem, 8vw, 8rem);
+    align-items: start;
+    grid-template-columns: minmax(13rem, 0.46fr) minmax(0, 1.54fr);
+    gap: clamp(3rem, 8vw, 8rem);
+  }
+
+  .article-grid aside {
+    position: sticky;
+    top: 7rem;
+    padding-top: 1.25rem;
+    border-top: 2px solid #111;
+  }
+
+  .article-grid aside h2 {
+    font-size: 1rem;
+    font-weight: 650;
+  }
+
+  .article-grid aside ul {
+    margin-top: 1rem;
+    list-style: none;
+  }
+
+  .article-grid aside li {
+    padding: 0.8rem 0;
+    border-top: 1px solid #d9d9d4;
+    color: #62625d;
+    font-size: 0.83rem;
+    line-height: 1.5;
+  }
+
+  .knowledge-prose {
+    max-width: 48rem;
+    font-size: 1.02rem;
+    line-height: 1.78;
+  }
+
+  .knowledge-prose > * + * {
+    margin-top: 1.35rem;
+  }
+
+  .knowledge-prose h2 {
+    margin-top: 3.5rem;
+    font-size: clamp(1.9rem, 3.4vw, 3.1rem);
+    font-weight: 620;
+    letter-spacing: -0.045em;
+    line-height: 1.05;
+  }
+
+  .knowledge-prose h3 {
+    margin-top: 2.4rem;
+    font-size: 1.25rem;
+    font-weight: 650;
+  }
+
+  .knowledge-prose p,
+  .knowledge-prose li {
+    color: #50504c;
+  }
+
+  .knowledge-prose strong {
+    color: #111;
+    font-weight: 660;
+  }
+
+  .knowledge-prose a {
+    color: #b53017;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+  }
+
+  .knowledge-prose ul,
+  .knowledge-prose ol {
+    padding-left: 1.35rem;
+  }
+
+  .knowledge-prose li + li {
+    margin-top: 0.55rem;
+  }
+
+  .article-faq,
+  .more-guides {
+    margin-top: clamp(6rem, 10vw, 10rem);
+    padding-top: clamp(2rem, 4vw, 4rem);
+    border-top: 1px solid #d9d9d4;
+  }
+
+  .article-faq {
+    display: grid;
+    grid-template-columns: 0.55fr 1.45fr;
+    gap: clamp(3rem, 8vw, 8rem);
+  }
+
+  .article-faq > h2,
+  .more-guides h2,
+  .article-cta h2 {
+    max-width: 14ch;
+    font-size: clamp(2.2rem, 4.2vw, 4.2rem);
+    font-weight: 620;
+    letter-spacing: -0.055em;
+    line-height: 0.98;
+  }
+
+  .article-faq details {
+    border-bottom: 1px solid #d9d9d4;
+  }
+
+  .article-faq details:first-child {
+    border-top: 1px solid #d9d9d4;
+  }
+
+  .article-faq summary {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.35rem 0;
+    font-size: 1rem;
+    font-weight: 650;
+    list-style: none;
+  }
+
+  .article-faq summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .article-faq details[open] summary svg {
+    transform: rotate(45deg);
+  }
+
+  .article-faq summary svg {
+    flex: none;
+    transition: transform 180ms ease;
+  }
+
+  .article-faq details p {
+    max-width: 42rem;
+    padding: 0 2.5rem 1.4rem 0;
+    color: #5d5d58;
+  }
+
+  .more-guides {
+    display: grid;
+    grid-template-columns: 0.65fr 1.35fr;
+    gap: clamp(3rem, 8vw, 8rem);
+  }
+
+  .more-guides > div > p {
+    max-width: 22rem;
+    margin-top: 1rem;
+    color: #686863;
+  }
+
+  .more-guides nav a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid #d9d9d4;
+    color: #111;
+    font-weight: 620;
+    line-height: 1.35;
+  }
+
+  .more-guides nav a:first-child {
+    border-top: 1px solid #d9d9d4;
+  }
+
+  .more-guides nav a:hover,
+  .more-guides nav a:focus-visible {
+    color: #d23d1d;
+  }
+
+  .article-cta {
+    padding: clamp(5rem, 8vw, 8rem) 0;
+    background: #101011;
+    color: #fff;
+  }
+
+  .article-cta .article-container {
+    display: grid;
+    align-items: end;
+    grid-template-columns: 1.1fr 0.7fr auto;
+    gap: 2rem;
+  }
+
+  .article-cta p {
+    color: #b9b9b3;
+  }
+
+  .article-cta a {
+    display: inline-flex;
+    min-height: 3.1rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    padding: 0.78rem 1.15rem;
+    border-radius: 0.65rem;
+    background: #ee4b24;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 650;
+    transition:
+      background-color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .article-cta a:hover,
+  .article-cta a:focus-visible {
+    background: #ff633c;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 899px) {
+    .article-container {
+      width: min(100% - 2.5rem, 42rem);
+    }
+
+    .article-header,
+    .direct-answer,
+    .article-grid,
+    .article-faq,
+    .more-guides,
+    .article-cta .article-container {
+      grid-template-columns: 1fr;
+    }
+
+    .article-grid aside {
+      position: static;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .article-header h1 {
+      font-size: clamp(2.6rem, 13vw, 4.1rem);
+    }
+
+    .article-meta > div {
+      grid-template-columns: 6rem 1fr;
+    }
+
+    .direct-answer {
+      padding: 1.5rem;
+    }
+  }
+</style>
