@@ -1,5 +1,5 @@
 import process from 'node:process';
-import { submitUrls } from '../plugins/indexnow/index.js';
+import { submitUrls } from '../plugins/indexnow/implementation.js';
 
 const urls = process.argv.slice(2);
 if (!urls.length)
