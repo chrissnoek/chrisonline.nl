@@ -8,7 +8,6 @@ const key = '1cc5200c00490e2c430f337d635f08fe';
 const manifestName = 'indexnow-manifest.json';
 const cacheFile = '.netlify/indexnow/accepted.json';
 const hash = (value) => createHash('sha256').update(value).digest('hex');
-let current;
 
 export function changedUrls(previous, next) {
   return [...new Set([...Object.keys(previous), ...Object.keys(next)])].filter(
@@ -94,13 +93,18 @@ export async function submitUrls(urlList) {
 export async function onPostBuild({ constants }) {
   if (process.env.CONTEXT !== 'production') return;
   const pages = await buildManifest(constants.PUBLISH_DIR);
-  current = { version: 1, fingerprint: hash(JSON.stringify(pages)), pages };
+  const current = { version: 1, fingerprint: hash(JSON.stringify(pages)), pages };
   await writeFile(path.join(constants.PUBLISH_DIR, manifestName), JSON.stringify(current));
+  console.log(`[IndexNow] Prepared ${Object.keys(pages).length} public URLs for this deployment.`);
 }
 
-export async function onSuccess({ utils }) {
-  if (process.env.CONTEXT !== 'production' || !current) return;
+export async function onSuccess({ constants, utils }) {
+  if (process.env.CONTEXT !== 'production') return;
   try {
+    // Netlify can start a fresh plugin process for post-deploy events.
+    const current = JSON.parse(
+      await readFile(path.join(constants.PUBLISH_DIR, manifestName), 'utf8'),
+    );
     // A successful deploy can still be unpublished (for example a locked deploy).
     const live = JSON.parse(await getLive(manifestName));
     if (live.fingerprint !== current.fingerprint) {
@@ -119,6 +123,7 @@ export async function onSuccess({ utils }) {
     await mkdir(path.dirname(cacheFile), { recursive: true });
     await writeFile(cacheFile, JSON.stringify(current.pages));
     await utils.cache.save(cacheFile);
+    console.log(`[IndexNow] ${result}`);
     utils.status.show({ title: 'IndexNow', summary: result });
   } catch (error) {
     utils.build.failPlugin(`IndexNow: ${error.message}. Retry with the next production deploy.`);
