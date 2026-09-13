@@ -10,6 +10,7 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "indexnow": "node scripts/submit-indexnow.mjs",
     "check": "astro check",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",

@@ -10,6 +10,17 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   ...eslintPluginAstro.configs.recommended,
   {
+    files: ['plugins/**/*.js', 'scripts/**/*.mjs'],
+    languageOptions: {
+      globals: {
+        URL: 'readonly',
+        fetch: 'readonly',
+        AbortSignal: 'readonly',
+        console: 'readonly',
+      },
+    },
+  },
+  {
     rules: {
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [

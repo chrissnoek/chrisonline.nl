@@ -21,6 +21,10 @@
   # gewoon gescand. (Offerte-mail loopt nu via Netlify Forms, niet meer via Resend.)
   SECRETS_SCAN_OMIT_KEYS = "QUOTE_TO_EMAIL,QUOTE_FROM_EMAIL"
 
+# Meld alleen na een succesvolle productiepublicatie nieuwe/gewijzigde URL's.
+[[plugins]]
+  package = "./plugins/indexnow"
+
 # Veiligheids- en performance-headers.
 [[headers]]
   for = "/*"
