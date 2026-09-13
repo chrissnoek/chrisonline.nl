@@ -129,6 +129,35 @@ De `netlify.toml` is al ingesteld (`build = npm run build`, `publish = dist`, No
 3. Zet je productiedomein. De canonieke URL staat in `astro.config.mjs` (`site:`) en in
    `src/config/site.ts`; pas die aan als het domein wijzigt.
 
+### Zoekmachines en IndexNow
+
+De sitemap wordt bij elke build bijgewerkt op `/sitemap-index.xml`. Dien deze URL in
+bij Google Search Console en Bing Webmaster Tools. Google gebruikt geen IndexNow;
+individuele indexeringsverzoeken blijven beschikbaar via URL-inspectie in Search Console.
+
+De lokale Netlify-plugin in `plugins/indexnow/` meldt na een succesvolle
+productiepublicatie de nieuwe, gewijzigde en uit de sitemap verwijderde URL's via
+IndexNow. Hij vergelijkt HTML-hashes met de laatste geaccepteerde inzending in de
+Netlify-buildcache. De eerste run (of een gewiste cache) meldt alle openbare
+sitemap-URL's. Previewbuilds sturen niets. Het live manifest en het publieke
+verificatiebestand worden gecontroleerd voordat de melding wordt verstuurd.
+
+De status staat in het Netlify-deploylog onder **IndexNow**. HTTP 200 betekent
+ontvangen; bij HTTP 202 moet IndexNow de sleutel nog valideren. Dit garandeert geen
+indexering. Een fout markeert de plugin als mislukt, laat de gepubliceerde site
+staan en bewaart de vorige inzendstatus voor een volgende productiepublicatie.
+
+Een losse URL opnieuw aanmelden, nadat het verificatiebestand live staat:
+
+```bash
+npm run indexnow -- https://www.chrisonline.nl/werk/specfinch/
+```
+
+De IndexNow-sleutel is een publiek verificatiebestand, geen toegangstoken voor
+Google, Bing of Netlify. Bij een domeinwijziging moet ook de origin in de plugin
+worden bijgewerkt. De plugin volgt uitsluitend de openbare HTML-sitemap;
+persoonlijke `/voor/`-pagina's en de bedankpagina zijn daarvan uitgesloten.
+
 ## Projectstructuur
 
 ```
