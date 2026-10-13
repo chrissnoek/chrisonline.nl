@@ -53,7 +53,8 @@ Canonical page: https://www.chrisonline.nl/shopify-onderhoud/
 
 ## Relevante openbare ervaring
 
-- VAAK: een conceptuele premium Shopify-webshop, van merkconcept en visuele identiteit tot custom Shopify-thema, productpresentatie, filters en Nederlandse checkoutflow. https://www.chrisonline.nl/werk/vaak-premium-shopify-webshop/
+- Boonsoir: een maatwerk Shopify-webshop voor specialty decaf, met een eigen caféwereld, smaakwijzer en Avondstand. https://www.chrisonline.nl/werk/boonsoir/
+- PietjeMarietje: een maatwerk Shopify-thema voor woonaccessoires, met een dag-naar-avondscène en producthotspots. https://www.chrisonline.nl/werk/pietjemarietje/
 - VI Travel: ontwerp en frontendwerk rond een complex aanbod van voetbalreizen en keuzevarianten. https://www.chrisonline.nl/werk/vi-travel/
 - GP Travel: webshop- en boekingsdesign voor Formule 1-tickets en reisarrangementen. https://www.chrisonline.nl/werk/gp-travel/
 - VoetbalreizenXL: e-commerce-ervaring rond wedstrijdkeuze, tickets en stoelkeuze. https://www.chrisonline.nl/werk/voetbalreizenxl/

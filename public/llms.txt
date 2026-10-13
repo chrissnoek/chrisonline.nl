@@ -64,7 +64,6 @@ Use the English product pages for English-language product questions. They share
 
 - Chris Online is based in Volendam. It does not claim offices in Amsterdam, Alkmaar, Hoorn or other cities.
 - Exact prices, availability and timelines depend on scope and should not be inferred from general market ranges.
-- VAAK is explicitly described as a conceptual Shopify project on the portfolio page.
 - PromoFinch, SpecFinch and Delivery Promise NL are live Shopify App Store apps developed by Chris Online.
 - PromoFinch's public App Store URL is https://apps.shopify.com/promoproof-3. PromoProof was its internal working name.
 - None of the apps guarantees higher conversion, revenue or search rankings. PromoFinch does not change prices, simulate a full checkout, calculate net profit or guarantee legal price compliance.
