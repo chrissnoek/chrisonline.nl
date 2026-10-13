@@ -1,115 +1,219 @@
-/* Chris Online — lichte studiobasis met een donkere living-frontend-fase. */
+/* ──────────────────────────────────────────────────────────────────────────
+ *  Chris Online — designsysteem
+ *
+ *  Eén tokenset voor de hele site. Componenten gebruiken uitsluitend de
+ *  CSS-variabelen hieronder (nooit losse hexwaarden), zodat de dag-/avondstand
+ *  en de daglichtfases overal consistent doorwerken.
+ *
+ *  Dagstand/avondstand: <html data-daypart="morning|day|evening|night"
+ *  data-scheme="light|dark"> wordt vóór de eerste paint gezet (zie
+ *  components/Daylight.astro). De avondstand is een volwaardig donker schema.
+ * ────────────────────────────────────────────────────────────────────────── */
 
 @import 'tailwindcss';
+@import './motion.css';
 
-/* Handmatige dark mode via .dark op <html> (i.p.v. enkel prefers-color-scheme),
-   zodat de toggle werkt. De toggle-init zet zelf de juiste class op basis van
-   opgeslagen voorkeur of het OS. */
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where([data-scheme='dark'], [data-scheme='dark'] *));
 
-@theme {
-  --color-accent-50: #fff0eb;
-  --color-accent-100: #ffddd2;
-  --color-accent-200: #ffbba5;
+/* ── Runtime-tokens (wisselen per daglichtfase) ──────────────────────────── */
+:root {
+  color-scheme: light;
+
+  /* Oppervlakken */
+  --paper: #f4f4ef;
+  --paper-raised: #fbfbf8;
+  --paper-deep: #e9eae3;
+  --ink: #141512;
+  --ink-soft: #52544c;
+  --ink-faint: #868880;
+  --line: #d4d5cc;
+  --line-strong: #b9bbb0;
+
+  /* Merkaccent: vermiljoen uit het beeldmerk en het lint */
+  --vermilion: #ee4b24;
+  --vermilion-ink: #c1360f; /* tekstveilig op papier (≥ 4.5:1) */
+  --vermilion-soft: #fde6dd;
+  --vermilion-glow: rgba(238, 75, 36, 0.28);
+
+  /* Donkere podia (werkwijze, slot-CTA) bestaan in élke stand */
+  --stage: #141512;
+  --stage-raised: #1d1e1a;
+  --stage-ink: #f4f4ef;
+  --stage-soft: #b9bab2;
+  --stage-line: #30312c;
+
+  /* Het studiolicht: positie en kleur van de "zon" in de hero */
+  --sun-x: 68%;
+  --sun-y: 8%;
+  --sun-size: 52rem;
+  --sun-color: rgba(255, 214, 170, 0.55);
+  --sun-color-2: rgba(238, 75, 36, 0.1);
+
+  --shadow-soft: 0 1px 2px rgba(20, 21, 18, 0.05), 0 18px 48px -24px rgba(20, 21, 18, 0.28);
+  --shadow-lift: 0 2px 6px rgba(20, 21, 18, 0.06), 0 30px 70px -30px rgba(20, 21, 18, 0.38);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --radius-stage: 1.75rem;
+  --radius-card: 1rem;
+  --radius-control: 0.8rem;
+
+  --header-h: 4.5rem;
+}
+
+:root[data-daypart='morning'] {
+  --paper: #f6f6f1;
+  --sun-x: 22%;
+  --sun-y: -6%;
+  --sun-color: rgba(255, 236, 190, 0.7);
+  --sun-color-2: rgba(255, 170, 120, 0.12);
+}
+
+:root[data-daypart='evening'] {
+  --paper: #f3efe7;
+  --paper-raised: #faf7f1;
+  --paper-deep: #e8e2d6;
+  --line: #d3cdbf;
+  --sun-x: 78%;
+  --sun-y: 46%;
+  --sun-size: 60rem;
+  --sun-color: rgba(255, 162, 96, 0.6);
+  --sun-color-2: rgba(238, 75, 36, 0.22);
+}
+
+:root[data-scheme='dark'] {
+  color-scheme: dark;
+  --paper: #121311;
+  --paper-raised: #1a1b18;
+  --paper-deep: #1f201c;
+  --ink: #f1f0ea;
+  --ink-soft: #b1b2a9;
+  --ink-faint: #7f8178;
+  --line: #2c2d29;
+  --line-strong: #3f403a;
+  --vermilion-ink: #ff7b55;
+  --vermilion-soft: #3a1f16;
+  --vermilion-glow: rgba(238, 75, 36, 0.42);
+  --stage: #0b0c0a;
+  --stage-raised: #151613;
+  --stage-line: #262723;
+  --sun-x: 74%;
+  --sun-y: 10%;
+  --sun-size: 36rem;
+  --sun-color: rgba(214, 222, 240, 0.16);
+  --sun-color-2: rgba(238, 75, 36, 0.12);
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4), 0 18px 48px -24px rgba(0, 0, 0, 0.7);
+  --shadow-lift: 0 2px 6px rgba(0, 0, 0, 0.5), 0 30px 70px -30px rgba(0, 0, 0, 0.8);
+}
+
+/* Legacy-aliassen zodat oudere, nog niet omgezette stukken blijven werken. */
+:root {
+  --bg: var(--paper);
+  --bg-alt: var(--paper-deep);
+  --fg: var(--ink);
+  --fg-muted: var(--ink-soft);
+  --border: var(--line);
+  --accent-text: var(--vermilion-ink);
+}
+
+/* ── Tailwind-tokens (verwijzen naar de runtime-variabelen) ──────────────── */
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-paper-deep: var(--paper-deep);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-vermilion: var(--vermilion);
+  --color-vermilion-ink: var(--vermilion-ink);
+  --color-vermilion-soft: var(--vermilion-soft);
+  --color-stage: var(--stage);
+  --color-stage-raised: var(--stage-raised);
+  --color-stage-ink: var(--stage-ink);
+  --color-stage-soft: var(--stage-soft);
+  --color-stage-line: var(--stage-line);
+
+  /* Oude accentnamen blijven bruikbaar in utilities. */
+  --color-accent-500: var(--vermilion);
+  --color-accent-600: var(--vermilion-ink);
   --color-accent-300: #ff8d69;
-  --color-accent-400: #ff633c;
-  --color-accent-500: #ee4b24;
-  --color-accent-600: #d23d1d;
-  --color-accent-700: #b53017;
-  --color-accent-800: #8d2918;
-  --color-accent-900: #742619;
+  --color-ink-900: var(--stage);
 
-  /* Donkere basis (hero, dark mode) */
-  --color-ink-950: #080809;
-  --color-ink-900: #0d0d0f;
-  --color-ink-800: #1b1b1e;
-  --color-ink-700: #2f2f33;
-
-  /* Tekst & neutralen */
-  --color-text: #111111;
-  --color-muted: #5f5f5a;
-  --color-line: #deded9;
-  --color-surface: #ffffff;
-  --color-surface-alt: #f5f5f2;
-
-  /* Leesbare neutralen op donkere basis (dark mode) */
-  --color-text-invert: #f8fafc;
-  --color-muted-invert: #94a3b8; /* 7.42:1 op ink-900 */
-  --color-line-invert: #2a2d44;
-
-  /* ── Typografie ──────────────────────────────────────────────────────────
-     --font-sans wordt geleverd door de Astro Fonts API (Inter Variable). */
   --font-sans:
-    'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
 
-  /* Vloeiende type-schaal (clamp) voor grote koppen zonder media queries.
-     De min is bewust laag genoeg om lange NL-woorden op 320px-schermen te laten passen.
-     Tracking is afgestemd op Space Grotesk (display-face): die vraagt minder
-     negatieve letter-spacing dan Inter. */
-  --text-display: clamp(2.25rem, 1.1rem + 5.6vw, 5.25rem);
-  --text-display--line-height: 1.04;
-  --text-display--letter-spacing: -0.02em;
-  --text-display--font-weight: 700;
+  --radius-card: var(--radius-card);
+  --radius-pill: 9999px;
+  --radius-control: var(--radius-control);
 
-  --text-h1: clamp(2rem, 1.3rem + 3vw, 3.5rem);
-  --text-h1--line-height: 1.07;
-  --text-h1--letter-spacing: -0.015em;
+  --shadow-card: var(--shadow-soft);
+  --shadow-card-hover: var(--shadow-lift);
 
-  --text-h2: clamp(1.75rem, 1.3rem + 1.8vw, 2.5rem);
-  --text-h2--line-height: 1.12;
-  --text-h2--letter-spacing: -0.01em;
+  --spacing-section: clamp(5rem, 9vw, 8.5rem);
+  --spacing-gutter: clamp(1.25rem, 4vw, 2.5rem);
 
-  --text-lead: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  /* Typografische schaal */
+  --text-display-xl: clamp(3rem, 1.6rem + 6.4vw, 7.25rem);
+  --text-display-xl--line-height: 0.96;
+  --text-display-xl--letter-spacing: -0.02em;
+  --text-display-lg: clamp(2.5rem, 1.5rem + 4.4vw, 5.25rem);
+  --text-display-lg--line-height: 0.98;
+  --text-display-lg--letter-spacing: -0.018em;
+  --text-display-md: clamp(2rem, 1.3rem + 2.6vw, 3.6rem);
+  --text-display-md--line-height: 1.02;
+  --text-display-md--letter-spacing: -0.015em;
+  --text-display-sm: clamp(1.55rem, 1.2rem + 1.4vw, 2.3rem);
+  --text-display-sm--line-height: 1.08;
+  --text-display-sm--letter-spacing: -0.01em;
+  --text-lead: clamp(1.1rem, 1rem + 0.5vw, 1.35rem);
   --text-lead--line-height: 1.55;
 
-  /* ── Spacing & layout ──────────────────────────────────────────────────── */
-  --spacing-section: 7rem; /* verticale ruimte tussen secties */
-  --spacing-gutter: 1.5rem;
-
-  /* ── Radius ──────────────────────────────────────────────────────────────── */
-  --radius-card: 1.25rem;
-  --radius-pill: 9999px;
-
-  /* ── Schaduwen (zacht, modern) ───────────────────────────────────────────── */
-  --shadow-card: 0 1px 2px rgba(15, 16, 28, 0.04), 0 8px 24px -8px rgba(15, 16, 28, 0.12);
-  --shadow-card-hover: 0 2px 4px rgba(15, 16, 28, 0.06), 0 18px 40px -12px rgba(15, 16, 28, 0.22);
-
-  /* ── Easing & animatie ───────────────────────────────────────────────────── */
-  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Legacy-schaal (koppen in Inter op oudere pagina's) */
+  --text-h1: var(--text-display-lg);
+  --text-h1--line-height: 0.98;
+  --text-h2: var(--text-display-md);
+  --text-h2--line-height: 1.02;
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
- *  Basislaag — semantische standaardstijlen
+ *  Basislaag
  * ────────────────────────────────────────────────────────────────────────── */
 @layer base {
-  :root {
-    color-scheme: light;
-    --bg: #ffffff;
-    --bg-alt: var(--color-surface-alt);
-    --fg: var(--color-text);
-    --fg-muted: var(--color-muted);
-    --border: var(--color-line);
-    --accent-text: var(--color-accent-700);
-  }
-
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
-    /* Voorkom dat sticky-header content onder ankers verbergt. */
-    scroll-padding-top: 5.5rem;
+    scroll-padding-top: calc(var(--header-h) + 1rem);
+    background-color: var(--paper);
   }
 
   body {
-    background-color: var(--bg);
-    color: var(--fg);
+    min-height: 100svh;
+    background-color: var(--paper);
+    color: var(--ink);
     font-family: var(--font-sans);
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.6;
-    /* Vangnet tegen horizontale overflow door lange woorden op smalle schermen. */
     overflow-wrap: break-word;
+  }
+
+  /* Zachte kleurovergang wanneer de stand wisselt (toggle of fase). */
+  html.is-switching,
+  html.is-switching *,
+  html.is-switching *::before,
+  html.is-switching *::after {
+    transition:
+      background-color 600ms var(--ease-in-out-soft),
+      color 600ms var(--ease-in-out-soft),
+      border-color 600ms var(--ease-in-out-soft),
+      fill 600ms var(--ease-in-out-soft) !important;
   }
 
   button,
@@ -117,34 +221,70 @@
   textarea,
   select {
     font: inherit;
+    color: inherit;
   }
 
   button {
     cursor: pointer;
   }
 
-  /* Grote koppen mogen lange NL-woorden netjes afbreken i.p.v. overlopen. */
+  ::selection {
+    background: var(--vermilion);
+    color: #fff;
+  }
+
   h1,
   h2,
   h3 {
     overflow-wrap: break-word;
   }
 
-  /* Display-face (Space Grotesk, via de Astro Fonts API) voor de grote koppen;
-     h3 en kleiner blijven Inter zodat de UI rustig blijft. */
+  /* Display-face voor de twee hoogste kopniveaus; kleinere koppen blijven Inter. */
   h1,
-  h2 {
-    font-family: var(--font-display, var(--font-sans));
+  h2,
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-variant-numeric: lining-nums;
   }
 
-  /* Eén consistente, zichtbare focus-stijl voor toetsenbordnavigatie. */
+  h1 {
+    font-size: var(--text-display-lg);
+    line-height: var(--text-display-lg--line-height);
+    letter-spacing: var(--text-display-lg--letter-spacing);
+    text-wrap: balance;
+  }
+
+  h2 {
+    font-size: var(--text-display-md);
+    line-height: var(--text-display-md--line-height);
+    letter-spacing: var(--text-display-md--letter-spacing);
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+  }
+
+  em {
+    font-style: italic;
+  }
+
   :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
-    outline: 3px solid #ee4b24;
+    outline: 3px solid var(--vermilion);
     outline-offset: 3px;
     border-radius: 4px;
   }
 
-  /* Respecteer reduced motion globaal (vangnet bovenop component-specifieke guards). */
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
@@ -160,55 +300,541 @@
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
- *  Componentachtige utilities
+ *  Componentlaag
  * ────────────────────────────────────────────────────────────────────────── */
 @layer components {
-  /* Gecentreerde inhoudscontainer met responsive gutters. */
-  .container-page {
-    width: 100%;
-    max-width: 76rem;
+  /* ── Layout ─────────────────────────────────────────────────────────────── */
+  .shell {
+    width: min(100% - 2 * var(--spacing-gutter), 84rem);
     margin-inline: auto;
-    padding-inline: 1.25rem;
   }
-  @media (min-width: 640px) {
-    .container-page {
-      padding-inline: 2rem;
-    }
+  .shell--wide {
+    width: min(100% - 2 * var(--spacing-gutter), 92rem);
+  }
+  .shell--read {
+    width: min(100% - 2 * var(--spacing-gutter), 46rem);
+  }
+  /* Legacy */
+  .container-page {
+    width: min(100% - 2 * var(--spacing-gutter), 76rem);
+    margin-inline: auto;
   }
 
-  /* Hexagon-knoop in de vorm van het logo-mark, gevuld met het merk-gradient.
-     Gedeeld merk-motief (About-pijlers, samenwerkingsvormen). De clip-path zit
-     op een ::before zodat de drop-shadow op het element zelf de geclipte vorm
-     volgt (clip op hetzelfde element zou de gloed wegknippen). */
-  .pillar-node {
+  .section {
+    padding-block: var(--spacing-section);
+  }
+  .section--tight {
+    padding-block: clamp(3rem, 6vw, 5rem);
+  }
+  .section--deep {
+    background: var(--paper-deep);
+  }
+
+  /* Afgerond podium (hero, werkwijze, slot-CTA). */
+  .stage {
     position: relative;
-    z-index: 1;
-    width: 3.5rem;
-    height: 3.5rem;
-    filter: drop-shadow(0 4px 10px rgba(0, 176, 213, 0.25));
+    overflow: hidden;
+    border-radius: var(--radius-stage);
+    background: var(--paper-deep);
+    isolation: isolate;
   }
-  .pillar-node::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    background: linear-gradient(135deg, #00b0d5 0%, #0064d5 100%);
+  .stage--ink {
+    background: var(--stage);
+    color: var(--stage-ink);
   }
-  .pillar-node--sm {
-    width: 2.75rem;
-    height: 2.75rem;
-  }
-  .group:hover .pillar-node {
-    filter: drop-shadow(0 6px 16px rgba(0, 176, 213, 0.55));
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .pillar-node {
-      transition: filter 0.3s var(--ease-out-soft);
+  @media (max-width: 640px) {
+    .stage {
+      border-radius: 1.25rem;
     }
   }
 
-  /* Skip-to-content link: verborgen tot focus. */
+  /* ── Typografie ─────────────────────────────────────────────────────────── */
+  .display-xl {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--text-display-xl);
+    line-height: var(--text-display-xl--line-height);
+    letter-spacing: var(--text-display-xl--letter-spacing);
+    text-wrap: balance;
+  }
+  .display-lg {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--text-display-lg);
+    line-height: var(--text-display-lg--line-height);
+    letter-spacing: var(--text-display-lg--letter-spacing);
+    text-wrap: balance;
+  }
+  .display-md {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--text-display-md);
+    line-height: var(--text-display-md--line-height);
+    letter-spacing: var(--text-display-md--letter-spacing);
+    text-wrap: balance;
+  }
+  .display-sm {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--text-display-sm);
+    line-height: var(--text-display-sm--line-height);
+    letter-spacing: var(--text-display-sm--letter-spacing);
+    text-wrap: balance;
+  }
+  .lead {
+    color: var(--ink-soft);
+    font-size: var(--text-lead);
+    line-height: var(--text-lead--line-height);
+    text-wrap: pretty;
+  }
+  .muted {
+    color: var(--ink-soft);
+  }
+  .meta {
+    color: var(--ink-soft);
+    font-size: 0.86rem;
+    line-height: 1.5;
+  }
+  /* Een korte, inhoudelijke aanloopzin boven een kop (sentence case, geen kapitalen). */
+  .kicker {
+    color: var(--vermilion-ink);
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+    font-weight: 560;
+    line-height: 1.4;
+  }
+
+  /* ── Knoppen ────────────────────────────────────────────────────────────── */
+  .btn {
+    display: inline-flex;
+    min-height: 3.25rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    padding: 0.85rem 1.3rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-control);
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.005em;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      transform 220ms var(--ease-out-soft),
+      background-color 220ms var(--ease-out-soft),
+      border-color 220ms var(--ease-out-soft),
+      color 220ms var(--ease-out-soft),
+      box-shadow 220ms var(--ease-out-soft);
+  }
+  .btn:hover,
+  .btn:focus-visible {
+    transform: translateY(-2px);
+  }
+  .btn:active {
+    transform: translateY(0);
+  }
+  .btn > svg {
+    flex: none;
+    transition: transform 260ms var(--ease-out-soft);
+  }
+  .btn:hover > svg,
+  .btn:focus-visible > svg {
+    transform: translateX(3px);
+  }
+  .btn--up:hover > svg,
+  .btn--up:focus-visible > svg {
+    transform: translate(2px, -2px);
+  }
+  .btn--primary {
+    background: var(--vermilion);
+    color: #fff;
+    box-shadow: 0 10px 28px -14px var(--vermilion-glow);
+  }
+  .btn--primary:hover,
+  .btn--primary:focus-visible {
+    background: var(--vermilion-ink);
+  }
+  .btn--ink {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .btn--ink:hover,
+  .btn--ink:focus-visible {
+    background: var(--vermilion);
+    color: #fff;
+  }
+  .btn--line {
+    border-color: var(--line-strong);
+    color: var(--ink);
+    background: transparent;
+  }
+  .btn--line:hover,
+  .btn--line:focus-visible {
+    background: var(--paper-raised);
+    border-color: var(--ink);
+  }
+  /* Varianten voor donkere podia */
+  .btn--light {
+    background: var(--stage-ink);
+    color: var(--stage);
+  }
+  .btn--light:hover,
+  .btn--light:focus-visible {
+    background: #fff;
+  }
+  .btn--outline-light {
+    border-color: rgba(255, 255, 255, 0.28);
+    color: var(--stage-ink);
+    background: transparent;
+  }
+  .btn--outline-light:hover,
+  .btn--outline-light:focus-visible {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+  .btn--sm {
+    min-height: 2.75rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.88rem;
+  }
+  .btn[disabled],
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
+  }
+
+  /* Tekstlink met pijl die meeschuift. */
+  .link-arrow {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .link-arrow > svg {
+    flex: none;
+    transition: transform 260ms var(--ease-out-soft);
+  }
+  .link-arrow:hover,
+  .link-arrow:focus-visible {
+    color: var(--vermilion-ink);
+  }
+  .link-arrow:hover > svg,
+  .link-arrow:focus-visible > svg {
+    transform: translateX(4px);
+  }
+  .link-arrow--up:hover > svg,
+  .link-arrow--up:focus-visible > svg {
+    transform: translate(3px, -3px);
+  }
+  .link-arrow--accent {
+    color: var(--vermilion-ink);
+  }
+  .link-arrow--accent:hover,
+  .link-arrow--accent:focus-visible {
+    color: var(--ink);
+  }
+
+  /* Inline tekstlink in lopende tekst. */
+  .text-link {
+    color: var(--vermilion-ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+  }
+  .text-link:hover {
+    color: var(--ink);
+  }
+
+  /* ── Oppervlakken ───────────────────────────────────────────────────────── */
+  .surface {
+    border-radius: var(--radius-card);
+    background: var(--paper-raised);
+  }
+  .surface--deep {
+    background: var(--paper-deep);
+  }
+  .frame {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    background: var(--paper-deep);
+  }
+  .frame--lift {
+    box-shadow: var(--shadow-soft);
+  }
+
+  /* Rij-lijst: alternatief voor kaarten bij sequentiële of gelijkwaardige inhoud. */
+  .rows {
+    border-top: 1px solid var(--line);
+  }
+  .rows > * {
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* Tag/chip met inhoudelijke betekenis (skill, categorie). */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
+    padding: 0.3rem 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  /* ── Broodkruimels ──────────────────────────────────────────────────────── */
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.6rem;
+    color: var(--ink-soft);
+    font-size: 0.86rem;
+  }
+  .crumbs a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 180ms ease;
+  }
+  .crumbs a:hover,
+  .crumbs a:focus-visible {
+    color: var(--vermilion-ink);
+  }
+  .crumbs svg {
+    flex: none;
+    opacity: 0.55;
+  }
+  .crumbs [aria-current] {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ── Uitklapper (FAQ, diensten) ─────────────────────────────────────────── */
+  .disclosure {
+    border-bottom: 1px solid var(--line);
+  }
+  .disclosure:first-child {
+    border-top: 1px solid var(--line);
+  }
+  .disclosure > summary {
+    display: flex;
+    min-height: 4.5rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.1rem 0;
+    cursor: pointer;
+    font-size: clamp(1.02rem, 1rem + 0.3vw, 1.18rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    list-style: none;
+  }
+  .disclosure > summary::-webkit-details-marker {
+    display: none;
+  }
+  .disclosure__icon {
+    display: grid;
+    width: 2.25rem;
+    height: 2.25rem;
+    flex: none;
+    place-items: center;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    color: var(--ink);
+    transition:
+      transform 320ms var(--ease-out-soft),
+      background-color 220ms ease,
+      color 220ms ease;
+  }
+  .disclosure[open] > summary .disclosure__icon {
+    background: var(--ink);
+    color: var(--paper);
+    transform: rotate(45deg);
+  }
+  /* Hoogte-animatie bij openen (browsers met ::details-content); elders direct. */
+  @supports (interpolate-size: allow-keywords) {
+    .disclosure {
+      interpolate-size: allow-keywords;
+    }
+    .disclosure::details-content {
+      block-size: 0;
+      overflow: hidden;
+      transition:
+        block-size 380ms var(--ease-out-soft),
+        content-visibility 380ms allow-discrete;
+    }
+    .disclosure[open]::details-content {
+      block-size: auto;
+    }
+  }
+  .disclosure__body {
+    padding: 0 3.5rem 1.6rem 0;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+  .disclosure__body > * + * {
+    margin-top: 0.9rem;
+  }
+  @media (max-width: 640px) {
+    .disclosure__body {
+      padding-right: 0;
+    }
+  }
+
+  /* ── Formulieren ────────────────────────────────────────────────────────── */
+  .field {
+    display: grid;
+    gap: 0.45rem;
+  }
+  .field > label {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .input {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-control);
+    background: var(--paper-raised);
+    color: var(--ink);
+    transition:
+      border-color 180ms ease,
+      box-shadow 180ms ease;
+  }
+  .input::placeholder {
+    color: var(--ink-faint);
+  }
+  .input:focus {
+    outline: none;
+    border-color: var(--vermilion);
+    box-shadow: 0 0 0 4px var(--vermilion-soft);
+  }
+  .input[aria-invalid='true'] {
+    border-color: #c62828;
+  }
+  .field__error {
+    color: #c62828;
+    font-size: 0.85rem;
+  }
+  [data-scheme='dark'] .field__error,
+  [data-scheme='dark'] .input[aria-invalid='true'] {
+    color: #ff8a80;
+    border-color: #ff8a80;
+  }
+
+  /* ── Lopende tekst (projectcases, kennisbank, gidsen) ───────────────────── */
+  .prose {
+    font-size: 1.04rem;
+    line-height: 1.75;
+    color: var(--ink);
+  }
+  .prose > * + * {
+    margin-top: 1.3rem;
+  }
+  .prose h2 {
+    margin-top: 3.25rem;
+    font-size: var(--text-display-sm);
+    line-height: var(--text-display-sm--line-height);
+    letter-spacing: var(--text-display-sm--letter-spacing);
+  }
+  .prose h2:first-child {
+    margin-top: 0;
+  }
+  .prose h3 {
+    margin-top: 2.25rem;
+    font-size: 1.22rem;
+    font-weight: 600;
+  }
+  .prose p,
+  .prose li {
+    color: var(--ink-soft);
+  }
+  .prose strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .prose a {
+    color: var(--vermilion-ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+  }
+  .prose a:hover {
+    color: var(--ink);
+  }
+  .prose ul,
+  .prose ol {
+    padding-left: 1.4rem;
+  }
+  .prose ul {
+    list-style: disc;
+  }
+  .prose ol {
+    list-style: decimal;
+  }
+  .prose li + li {
+    margin-top: 0.55rem;
+  }
+  .prose li::marker {
+    color: var(--vermilion-ink);
+  }
+  .prose blockquote {
+    padding: 1rem 1.4rem;
+    border-left: 0;
+    border-radius: var(--radius-card);
+    background: var(--paper-deep);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    line-height: 1.35;
+  }
+  .prose blockquote p {
+    color: inherit;
+  }
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.94rem;
+  }
+  .prose th,
+  .prose td {
+    padding: 0.75rem 0.6rem;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+    overflow-wrap: anywhere;
+  }
+  .prose th {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .prose code {
+    padding: 0.1em 0.35em;
+    border-radius: 0.3em;
+    background: var(--paper-deep);
+    font-size: 0.92em;
+  }
+  .prose img {
+    border-radius: var(--radius-card);
+  }
+  .prose hr {
+    border: 0;
+    border-top: 1px solid var(--line);
+  }
+  /* Legacy-naam */
+  .prose-project {
+    font-size: 1.04rem;
+    line-height: 1.75;
+  }
+
+  /* ── Skip-link ──────────────────────────────────────────────────────────── */
   .skip-link {
     position: absolute;
     left: 1rem;
@@ -216,96 +842,45 @@
     z-index: 100;
     padding: 0.625rem 1rem;
     border-radius: 0.5rem;
-    background: #111111;
-    color: #fff;
+    background: var(--ink);
+    color: var(--paper);
     font-weight: 600;
     transition: top 0.2s var(--ease-out-soft);
   }
   .skip-link:focus {
     top: 1rem;
   }
-}
 
-/* ──────────────────────────────────────────────────────────────────────────
- *  Scroll-reveal — pure CSS, off-main-thread, volledig reduced-motion-proof.
- *  Veilige default = ZICHTBAAR. Alleen wanneer motion mag én de browser
- *  scroll-driven animaties ondersteunt, starten elementen verborgen.
- * ────────────────────────────────────────────────────────────────────────── */
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .reveal {
-      opacity: 0;
-      animation: reveal-in linear both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 22%;
-    }
-    .reveal-up {
-      opacity: 0;
-      animation: reveal-up linear both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 24%;
-    }
+  /* ── Studiolicht ────────────────────────────────────────────────────────── */
+  .sun {
+    position: absolute;
+    z-index: 0;
+    left: var(--sun-x);
+    top: var(--sun-y);
+    width: var(--sun-size);
+    height: var(--sun-size);
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at center,
+      var(--sun-color) 0%,
+      var(--sun-color-2) 38%,
+      transparent 68%
+    );
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    will-change: transform;
   }
 }
 
-@keyframes reveal-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@keyframes reveal-up {
-  from {
-    opacity: 0;
-    transform: translateY(28px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ──────────────────────────────────────────────────────────────────────────
- *  Page-enter — entree voor content boven de vouw op subpagina's.
- *  Scroll-reveals werken daar niet (het element is al in beeld bij load),
- *  dus deze spelen één keer bij het tonen van de pagina — ook na een
- *  View Transition. Stagger via --enter-delay (inline style).
- *  Eindtoestand is de default; animatie alleen wanneer motion mag.
- * ────────────────────────────────────────────────────────────────────────── */
-@media (prefers-reduced-motion: no-preference) {
-  .enter-up {
-    animation: enter-up 0.65s var(--ease-out-soft) both;
-    animation-delay: var(--enter-delay, 0s);
-  }
-  .enter-pop {
-    animation: enter-pop 0.55s var(--ease-out-soft) both;
-    animation-delay: var(--enter-delay, 0s);
-  }
-}
-
-@keyframes enter-up {
-  from {
-    opacity: 0;
-    transform: translateY(22px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes enter-pop {
-  0% {
-    opacity: 0;
-    transform: scale(0.5);
-  }
-  60% {
-    opacity: 1;
-    transform: scale(1.08);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
+/* Schermlezer-only (Tailwind heeft sr-only, maar ook buiten utilities beschikbaar). */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }

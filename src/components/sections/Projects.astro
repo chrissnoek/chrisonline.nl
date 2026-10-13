@@ -11,16 +11,18 @@ const projects = (
 ).sort((a, b) => a.data.order - b.data.order);
 ---
 
-<section id="werk" class="work-section scroll-mt-24" aria-labelledby="work-heading">
-  <div class="work-heading-row reveal-up">
+<section id="werk" class="work" aria-labelledby="work-heading">
+  <div class="shell work__head lift-in">
     <div>
-      <h2 id="work-heading">Websites en webshops.<br />Gebouwd voor het merk.</h2>
-      <p>
+      <h2 id="work-heading" class="display-lg">
+        Websites en webshops.<br />Gebouwd voor het merk.
+      </h2>
+      <p class="lead">
         Een selectie van mijn werk voor merken en bureaus. Van premium Shopify-webshops tot
         reisplatforms, boekingsflows en campagnes.
       </p>
     </div>
-    <div class="carousel-controls" role="group" aria-label="Bediening projectcarrousel">
+    <div class="work__controls" role="group" aria-label="Bediening projectcarrousel">
       <button type="button" data-project-prev aria-label="Vorige projecten">
         <Icon name="arrowLeft" size={19} />
       </button>
@@ -30,13 +32,13 @@ const projects = (
     </div>
   </div>
 
-  <div class="project-viewport">
-    <div class="project-track" data-project-track tabindex="0" role="region" aria-label="Projecten">
+  <div class="work__viewport">
+    <div class="work__track" data-project-track tabindex="0" role="region" aria-label="Projecten">
       {
         projects.map((project, index) => (
-          <article class="project-slide reveal">
+          <article class="work__slide">
             <a href={`/werk/${project.id}`} aria-label={`Bekijk project: ${project.data.title}`}>
-              <div class="project-media" style={`--project-accent:${project.data.accent}`}>
+              <div class="work__media" style={`--project-accent:${project.data.accent}`}>
                 <Image
                   src={project.data.cover}
                   alt={project.data.coverAlt}
@@ -45,22 +47,25 @@ const projects = (
                   format="avif"
                   quality="mid"
                   loading={index < 2 ? 'eager' : 'lazy'}
-                  class="project-image"
+                  transition:name={`cover-${project.id}`}
                 />
               </div>
-              <div class="project-meta">
+              <div class="work__meta">
                 <div>
-                  <h3>{project.data.title}</h3>
+                  <h3 class="display-sm">{project.data.title}</h3>
                   <p>{project.data.role}</p>
                 </div>
-                <span aria-hidden="true">
-                  <Icon name="arrowUpRight" size={22} />
+                <span class="work__go" aria-hidden="true">
+                  <Icon name="arrowUpRight" size={20} />
                 </span>
               </div>
             </a>
           </article>
         ))
       }
+    </div>
+    <div class="shell work__progress" aria-hidden="true">
+      <span data-project-progress></span>
     </div>
   </div>
 </section>
@@ -75,37 +80,41 @@ const projects = (
     const track = document.querySelector<HTMLElement>('[data-project-track]');
     const previous = document.querySelector<HTMLButtonElement>('[data-project-prev]');
     const next = document.querySelector<HTMLButtonElement>('[data-project-next]');
+    const progress = document.querySelector<HTMLElement>('[data-project-progress]');
     if (!track || !previous || !next) return;
 
+    const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
     const getStep = () => {
-      const slide = track.querySelector<HTMLElement>('.project-slide');
+      const slide = track.querySelector<HTMLElement>('.work__slide');
       return slide
         ? slide.offsetWidth + parseFloat(getComputedStyle(track).gap)
         : track.clientWidth * 0.75;
     };
+    const scroll = (dir: 1 | -1) =>
+      track.scrollBy({ left: dir * getStep(), behavior: reduce() ? 'instant' : 'smooth' });
 
-    previous.addEventListener(
-      'click',
-      () =>
-        track.scrollBy({
-          left: -getStep(),
-          behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-        }),
-      {
-        signal,
+    previous.addEventListener('click', () => scroll(-1), { signal });
+    next.addEventListener('click', () => scroll(1), { signal });
+    track.addEventListener(
+      'keydown',
+      (e) => {
+        if (e.key === 'ArrowRight') scroll(1);
+        if (e.key === 'ArrowLeft') scroll(-1);
       },
+      { signal },
     );
-    next.addEventListener(
-      'click',
-      () =>
-        track.scrollBy({
-          left: getStep(),
-          behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-        }),
-      {
-        signal,
-      },
-    );
+
+    // Voortgang + knopstatus volgen de scrollpositie.
+    const update = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      const ratio = max > 0 ? track.scrollLeft / max : 0;
+      progress?.style.setProperty('--progress', String(ratio));
+      previous.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= max - 2;
+    };
+    update();
+    track.addEventListener('scroll', update, { passive: true, signal });
+    window.addEventListener('resize', update, { passive: true, signal });
   }
 
   document.addEventListener('astro:page-load', initProjects);
@@ -113,201 +122,189 @@ const projects = (
 </script>
 
 <style>
-  .work-section {
+  .work {
     padding: 0 0 clamp(4rem, 7vw, 7rem);
     overflow: hidden;
-    background: #ffffff;
   }
 
-  .work-heading-row {
+  .work__head {
     display: flex;
-    width: min(100% - 3rem, 78rem);
-    margin-inline: auto;
     align-items: end;
     justify-content: space-between;
     gap: 2rem;
   }
-
-  h2 {
-    color: #111111;
-    font-size: clamp(2.4rem, 4.7vw, 4.8rem);
-    font-weight: 580;
-    letter-spacing: -0.055em;
-    line-height: 1;
+  .work__head h2 {
+    max-width: 16ch;
+  }
+  .work__head .lead {
+    max-width: 34rem;
+    margin-top: 1.25rem;
   }
 
-  .work-heading-row p {
-    max-width: 35rem;
-    margin-top: 1rem;
-    color: #62625e;
-    font-size: 1.05rem;
-  }
-
-  .carousel-controls {
+  .work__controls {
     display: flex;
     flex: none;
     gap: 0.5rem;
   }
-
-  .carousel-controls button {
+  .work__controls button {
     display: grid;
     width: 3.1rem;
     height: 3.1rem;
     place-items: center;
-    border: 1px solid #cecec8;
+    border: 1px solid var(--line-strong);
     border-radius: 50%;
-    color: #111111;
+    color: var(--ink);
     transition:
       color 180ms ease,
       background-color 180ms ease,
-      transform 180ms ease;
+      transform 180ms ease,
+      opacity 180ms ease;
   }
-
-  .carousel-controls button:hover,
-  .carousel-controls button:focus-visible {
-    background: #111111;
-    color: #ffffff;
+  .work__controls button:hover:not(:disabled),
+  .work__controls button:focus-visible {
+    background: var(--ink);
+    color: var(--paper);
     transform: translateY(-2px);
   }
+  .work__controls button:disabled {
+    cursor: default;
+    opacity: 0.35;
+  }
 
-  .project-viewport {
+  .work__viewport {
     width: 100%;
     margin-top: 3rem;
   }
 
-  .project-track {
+  .work__track {
     display: flex;
     gap: 1.5rem;
     overflow-x: auto;
-    padding: 0 max(1.5rem, calc((100vw - 78rem) / 2)) 1.5rem;
-    scroll-padding-inline: max(1.5rem, calc((100vw - 78rem) / 2));
+    padding: 0.5rem max(var(--spacing-gutter), calc((100vw - 84rem) / 2)) 1.5rem;
+    scroll-padding-inline: max(var(--spacing-gutter), calc((100vw - 84rem) / 2));
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
   }
-
-  .project-track::-webkit-scrollbar {
+  .work__track::-webkit-scrollbar {
     display: none;
   }
+  .work__track:focus-visible {
+    outline-offset: -3px;
+  }
 
-  .project-slide {
+  .work__slide {
     width: min(46rem, 58vw);
     flex: 0 0 auto;
     scroll-snap-align: start;
   }
-
-  .project-slide a {
+  .work__slide a {
     display: block;
-    color: #111111;
+    color: var(--ink);
+    text-decoration: none;
   }
 
-  .project-media {
+  .work__media {
     position: relative;
     overflow: hidden;
     aspect-ratio: 16 / 10;
-    border-radius: 1.4rem;
-    background: color-mix(in srgb, var(--project-accent) 17%, #f0f0ec);
+    border-radius: var(--radius-stage);
+    background: color-mix(in srgb, var(--project-accent) 18%, var(--paper-deep));
   }
-
-  .project-image {
+  .work__media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 900ms var(--ease-out-soft);
   }
-
-  .project-slide a:hover .project-image,
-  .project-slide a:focus-visible .project-image {
+  .work__slide a:hover img,
+  .work__slide a:focus-visible img {
     transform: scale(1.035);
   }
 
-  .project-meta {
+  .work__meta {
     display: flex;
     align-items: start;
     justify-content: space-between;
     gap: 1.5rem;
     padding: 1.25rem 0.15rem 0;
   }
-
-  .project-meta h3 {
-    font-size: clamp(1.35rem, 2.2vw, 2.1rem);
-    font-weight: 620;
-    letter-spacing: -0.04em;
-    line-height: 1.1;
-  }
-
-  .project-meta p {
+  .work__meta p {
     margin-top: 0.35rem;
-    color: #70706b;
-    font-size: 0.88rem;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
   }
-
-  .project-meta > span {
+  .work__go {
     display: grid;
     width: 2.85rem;
     height: 2.85rem;
     flex: none;
     place-items: center;
-    border: 1px solid #cecec8;
+    border: 1px solid var(--line-strong);
     border-radius: 50%;
     transition:
-      background-color 180ms ease,
-      color 180ms ease;
+      background-color 220ms ease,
+      color 220ms ease,
+      border-color 220ms ease,
+      transform 300ms var(--ease-out-soft);
+  }
+  .work__slide a:hover .work__go,
+  .work__slide a:focus-visible .work__go {
+    background: var(--vermilion);
+    border-color: var(--vermilion);
+    color: #fff;
+    transform: rotate(45deg);
   }
 
-  .project-slide a:hover .project-meta > span,
-  .project-slide a:focus-visible .project-meta > span {
-    background: #ee4b24;
-    color: #ffffff;
+  .work__progress {
+    height: 2px;
+    margin-top: 0.5rem;
+    border-radius: 2px;
+    background: var(--line);
+    overflow: hidden;
+  }
+  .work__progress span {
+    display: block;
+    width: 22%;
+    height: 100%;
+    background: var(--vermilion);
+    transform: translateX(calc(var(--progress, 0) * (100% / 0.22 - 100%)));
+    transition: transform 120ms linear;
   }
 
   @media (max-width: 767px) {
-    .work-heading-row {
-      width: min(100% - 2.5rem, 35rem);
+    .work__head {
       align-items: end;
     }
-
-    .work-heading-row p {
+    .work__head .lead {
       max-width: 24rem;
-      font-size: 0.95rem;
+      font-size: 1rem;
     }
-
-    .project-track {
+    .work__track {
       gap: 0.9rem;
-      padding-inline: 1.25rem;
-      scroll-padding-inline: 1.25rem;
     }
-
-    .project-slide {
+    .work__slide {
       width: min(86vw, 32rem);
     }
-
-    .project-media {
-      border-radius: 1rem;
+    .work__media {
+      border-radius: 1.1rem;
     }
-
-    .carousel-controls button {
+    .work__controls button {
       width: 2.9rem;
       height: 2.9rem;
     }
   }
-
   @media (max-width: 520px) {
-    .work-heading-row {
-      align-items: flex-end;
-    }
-
-    .carousel-controls button:first-child {
+    .work__controls button:first-child {
       display: none;
     }
   }
-
   @media (prefers-reduced-motion: reduce) {
-    .project-track {
+    .work__track {
       scroll-behavior: auto;
     }
-
-    .project-image,
-    .carousel-controls button {
+    .work__media img,
+    .work__controls button,
+    .work__go {
       transition: none;
     }
   }

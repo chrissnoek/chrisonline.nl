@@ -177,16 +177,23 @@ const english = lang === 'en';
     bottom: 1rem;
     left: 1rem;
     display: grid;
-    max-width: 48rem;
+    max-width: 46rem;
     grid-template-columns: auto minmax(0, 1fr) auto;
     gap: 1rem;
     margin-inline: auto;
-    padding: 1.1rem;
-    border: 1px solid color-mix(in srgb, var(--border) 74%, #ee4b24);
-    border-radius: 1.25rem;
-    background: color-mix(in srgb, var(--bg) 96%, transparent);
-    box-shadow: 0 18px 52px -20px rgb(8 8 9 / 42%);
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    background: color-mix(in srgb, var(--paper-raised) 94%, transparent);
+    box-shadow: var(--shadow-lift);
     backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .cookie-consent:not([hidden]) {
+      animation: enter-up 0.6s var(--ease-out-soft) both;
+      animation-delay: 0.8s;
+    }
   }
 
   .cookie-consent__mark {
@@ -195,8 +202,8 @@ const english = lang === 'en';
     height: 2.5rem;
     place-items: center;
     border-radius: 0.7rem;
-    background: var(--color-accent-500);
-    color: white;
+    background: var(--vermilion);
+    color: #fff;
     font-size: 0.72rem;
     font-weight: 800;
     letter-spacing: -0.06em;
@@ -207,17 +214,17 @@ const english = lang === 'en';
   }
   .cookie-consent__copy p {
     margin: 0;
-    color: var(--fg-muted);
+    color: var(--ink-soft);
     font-size: 0.84rem;
     line-height: 1.5;
   }
   .cookie-consent__copy .cookie-consent__title {
-    color: var(--fg);
+    color: var(--ink);
     font-size: 0.95rem;
-    font-weight: 750;
+    font-weight: 650;
   }
   .cookie-consent__copy a {
-    color: var(--accent-text);
+    color: var(--vermilion-ink);
     text-underline-offset: 0.15em;
   }
   .cookie-consent__actions {
@@ -226,22 +233,25 @@ const english = lang === 'en';
     gap: 0.55rem;
   }
   .cookie-consent__actions button {
+    min-height: 2.5rem;
     border-radius: 999px;
-    padding: 0.58rem 0.85rem;
-    font-size: 0.78rem;
-    font-weight: 700;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 600;
     white-space: nowrap;
+    transition: background-color 180ms ease;
   }
   .cookie-consent__decline {
-    border: 1px solid var(--border);
-    color: var(--fg);
+    border: 1px solid var(--line-strong);
+    color: var(--ink);
   }
   .cookie-consent__accept {
-    background: var(--color-accent-500);
-    color: white;
+    background: var(--ink);
+    color: var(--paper);
   }
   .cookie-consent__accept:hover {
-    background: var(--color-accent-600);
+    background: var(--vermilion);
+    color: #fff;
   }
 
   @media (max-width: 680px) {

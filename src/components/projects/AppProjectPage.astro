@@ -3,8 +3,11 @@ import { Image } from 'astro:assets';
 import { render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../Icon.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import CtaBand from '../CtaBand.astro';
 import { withUtm } from '../../utils/utm';
 import { appName } from '../../lib/shopify-apps';
+import { breadcrumbLd } from '../../lib/seo';
 import { SITE } from '../../config/site';
 
 interface Props {
@@ -22,20 +25,11 @@ const dateLabel = data.pubDate.toLocaleDateString('nl-NL', {
   month: 'long',
   day: 'numeric',
 });
-const breadcrumbLd = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
-  itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE.url}/` },
-    { '@type': 'ListItem', position: 2, name: 'Shopify Apps', item: `${SITE.url}/shopify-apps/` },
-    {
-      '@type': 'ListItem',
-      position: 3,
-      name: appName(entry),
-      item: `${SITE.url}/werk/${entry.id}/`,
-    },
-  ],
-};
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Shopify Apps', href: '/shopify-apps/' },
+  { label: appName(entry) },
+];
 ---
 
 <BaseLayout
@@ -44,7 +38,7 @@ const breadcrumbLd = {
   type="article"
   jsonLd={[
     jsonLd,
-    breadcrumbLd,
+    breadcrumbLd(crumbs, `/werk/${entry.id}/`),
     {
       '@context': 'https://schema.org',
       '@type': 'WebPage',
@@ -58,52 +52,64 @@ const breadcrumbLd = {
   ]}
   markdown={`/werk/${entry.id}.md`}
 >
-  <article class="app-project">
-    <div class="app-project-container">
-      <a href="/shopify-apps" class="back-link enter-up">
-        <Icon name="arrowLeft" size={17} />
-        Alle Shopify Apps
-      </a>
+  <article class="app">
+    <div class="shell">
+      <Breadcrumbs items={crumbs} class="enter-up" />
 
-      <header class="app-project-hero">
-        <div class="app-project-copy">
-          <h1 class="enter-up" style="--enter-delay: 0.08s">{data.heroTitle ?? data.title}</h1>
-          <p class="app-project-summary enter-up" style="--enter-delay: 0.16s">
-            {data.summary}
-          </p>
-          <div class="app-project-actions enter-up" style="--enter-delay: 0.24s">
+      <header class="app__hero">
+        <div class="app__copy">
+          <h1 class="display-lg enter-up" style="--enter-delay: 0.08s">
+            {data.heroTitle ?? data.title}
+          </h1>
+          <p class="lead enter-up" style="--enter-delay: 0.16s">{data.summary}</p>
+          <div class="app__actions enter-up" style="--enter-delay: 0.24s">
             {
               data.url && (
-                <a href={withUtm(data.url)} target="_blank" rel="noopener" class="store-link">
+                <a
+                  href={withUtm(data.url)}
+                  target="_blank"
+                  rel="noopener"
+                  class="btn btn--ink btn--up"
+                >
                   {data.urlLabel}
                   <Icon name="arrowUpRight" size={18} />
                 </a>
               )
             }
-            <span>Live sinds {dateLabel}</span>
+            <span class="meta">Live sinds {dateLabel}</span>
           </div>
         </div>
 
-        <figure class="app-project-cover enter-up" style="--enter-delay: 0.18s">
-          <Image
-            src={data.cover}
-            alt={data.coverAlt}
-            widths={[720, 1080, 1440, data.cover.width]}
-            sizes="(max-width: 899px) 100vw, 58vw"
-            format="avif"
-            quality="high"
-            priority
-            transition:name={`cover-${entry.id}`}
-          />
-          <figcaption>{data.coverAlt}</figcaption>
+        <figure
+          class="app__cover enter-unveil"
+          style="--enter-delay: 0.2s; --unveil-radius: var(--radius-stage)"
+        >
+          <div class="frame frame--lift">
+            <Image
+              src={data.cover}
+              alt={data.coverAlt}
+              widths={[720, 1080, 1440, data.cover.width]}
+              sizes="(max-width: 899px) 100vw, 58vw"
+              format="avif"
+              quality="high"
+              priority
+              transition:name={`cover-${entry.id}`}
+            />
+          </div>
+          <figcaption class="meta">{data.coverAlt}</figcaption>
         </figure>
       </header>
 
       {
         data.application && (
-          <section class="app-product-facts" aria-labelledby="app-facts-heading">
+          <section
+            class="app__facts surface surface--deep reveal-up"
+            aria-labelledby="app-facts-heading"
+          >
             <div>
-              <h2 id="app-facts-heading">Wat doet {appName(entry)}?</h2>
+              <h2 id="app-facts-heading" class="display-sm">
+                Wat doet {appName(entry)}?
+              </h2>
               <ul>
                 {data.application.features.map((feature) => (
                   <li>{feature}</li>
@@ -112,22 +118,16 @@ const breadcrumbLd = {
             </div>
             <dl>
               <div>
-                <>
-                  <dt>Voor wie</dt>
-                  <dd>{data.application.audience}</dd>
-                </>
+                <dt>Voor wie</dt>
+                <dd>{data.application.audience}</dd>
               </div>
               <div>
-                <>
-                  <dt>App-talen</dt>
-                  <dd>{data.application.languages.join(' en ')}</dd>
-                </>
+                <dt>App-talen</dt>
+                <dd>{data.application.languages.join(' en ')}</dd>
               </div>
               <div>
-                <>
-                  <dt>Maker</dt>
-                  <dd>Chris Snoek, Chris Online</dd>
-                </>
+                <dt>Maker</dt>
+                <dd>Chris Snoek, Chris Online</dd>
               </div>
             </dl>
           </section>
@@ -136,9 +136,9 @@ const breadcrumbLd = {
 
       {
         data.highlights.length > 0 && (
-          <section class="app-project-highlights" aria-label="Project in het kort">
+          <section class="app__highlights reveal-up" aria-label="Project in het kort">
             {data.highlights.map((highlight) => (
-              <div class="reveal-up">
+              <div>
                 <h2>{highlight.title}</h2>
                 <p>{highlight.description}</p>
               </div>
@@ -146,11 +146,13 @@ const breadcrumbLd = {
           </section>
         )
       }
+    </div>
 
-      <div class="app-project-content prose-project reveal-up">
+    <div class="shell shell--read app__content">
+      <div class="prose reveal-up">
         {
           data.updatedDate && (
-            <p>
+            <p class="meta">
               Productinformatie bijgewerkt op{' '}
               <time datetime={data.updatedDate.toISOString().split('T')[0]}>
                 {data.updatedDate.toLocaleDateString('nl-NL', {
@@ -165,18 +167,22 @@ const breadcrumbLd = {
         }
         <Content />
       </div>
+    </div>
 
+    <div class="shell">
       {
         data.gallery.length > 0 && (
-          <section class="app-project-gallery" aria-labelledby="app-gallery-heading">
-            <div class="gallery-heading reveal-up">
-              <h2 id="app-gallery-heading">Van beheer naar zichtbaar resultaat</h2>
-              <p>Echte schermen uit de gepubliceerde app en de Shopify-omgeving.</p>
+          <section class="app__gallery" aria-labelledby="app-gallery-heading">
+            <div class="app__gallery-head lift-in">
+              <h2 id="app-gallery-heading" class="display-md">
+                Van beheer naar zichtbaar resultaat
+              </h2>
+              <p class="lead">Echte schermen uit de gepubliceerde app en de Shopify-omgeving.</p>
             </div>
-            <div class="gallery-grid">
+            <div class="app__gallery-grid">
               {data.gallery.map((shot, index) => (
-                <figure class:list={['reveal-up', index === 0 && 'gallery-featured']}>
-                  <div class="gallery-image-wrap">
+                <figure class:list={['reveal-up', index === 0 && 'app__gallery-featured']}>
+                  <div class="frame">
                     <Image
                       src={shot.src}
                       alt={shot.alt}
@@ -193,7 +199,7 @@ const breadcrumbLd = {
                   </div>
                   <figcaption>
                     <span>{shot.url}</span>
-                    <p>{shot.alt}</p>
+                    <p class="meta">{shot.alt}</p>
                   </figcaption>
                 </figure>
               ))}
@@ -204,14 +210,18 @@ const breadcrumbLd = {
 
       {
         data.relatedKnowledge.length > 0 && (
-          <section class="related-knowledge" aria-labelledby="related-heading">
+          <section class="app__related reveal-up" aria-labelledby="related-heading">
             <div>
-              <h2 id="related-heading">De gedachte achter het product</h2>
-              <p>Praktische gidsen over het klantprobleem waarop deze app is gericht.</p>
+              <h2 id="related-heading" class="display-md">
+                De gedachte achter het product
+              </h2>
+              <p class="lead">
+                Praktische gidsen over het klantprobleem waarop deze app is gericht.
+              </p>
             </div>
-            <nav aria-label="Gerelateerde kennisartikelen">
+            <nav class="rows" aria-label="Gerelateerde kennisartikelen">
               {data.relatedKnowledge.map((item) => (
-                <a href={item.href}>
+                <a href={item.href} class="app__related-link">
                   <span>{item.title}</span>
                   <Icon name="arrowRight" size={19} />
                 </a>
@@ -223,23 +233,23 @@ const breadcrumbLd = {
 
       {
         (prev || next) && (
-          <nav class="project-neighbours" aria-label="Meer Shopify Apps">
+          <nav class="app__neighbours reveal-up" aria-label="Meer Shopify Apps">
             {prev ? (
-              <a href={`/werk/${prev.id}`}>
+              <a href={`/werk/${prev.id}`} class="app__neighbour">
                 <Icon name="arrowLeft" size={18} />
                 <span>
-                  <small>Vorige app</small>
-                  {prev.data.title}
+                  <span class="meta">Vorige app</span>
+                  <span class="app__neighbour-title">{prev.data.title}</span>
                 </span>
               </a>
             ) : (
               <span />
             )}
             {next && (
-              <a href={`/werk/${next.id}`} class="next-project">
+              <a href={`/werk/${next.id}`} class="app__neighbour app__neighbour--next">
                 <span>
-                  <small>Volgende app</small>
-                  {next.data.title}
+                  <span class="meta">Volgende app</span>
+                  <span class="app__neighbour-title">{next.data.title}</span>
                 </span>
                 <Icon name="arrowRight" size={18} />
               </a>
@@ -250,420 +260,281 @@ const breadcrumbLd = {
     </div>
   </article>
 
-  <section class="app-project-cta">
-    <div>
-      <h2>Een specifiek Shopify-probleem dat om een eigen oplossing vraagt?</h2>
-      <p>
-        Ik denk mee over de kleinste app, extensie of themewijziging die het probleem echt oplost.
-      </p>
-      <a href="/contact?dienst=shopify">
-        Bespreek je idee
-        <Icon name="arrowRight" size={18} />
-      </a>
-    </div>
-  </section>
+  <CtaBand
+    id="app-cta-heading"
+    compact
+    title="Een specifiek Shopify-probleem dat om een eigen oplossing vraagt?"
+    text="Ik denk mee over de kleinste app, extensie of themewijziging die het probleem echt oplost."
+    primary={{ label: 'Bespreek je idee', href: '/contact?dienst=shopify' }}
+  />
 </BaseLayout>
 
 <style>
-  .app-product-facts {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 3rem;
-    padding: 2rem;
-    margin-top: 3rem;
-    background: #f5f5f2;
-    border-radius: 1.25rem;
-  }
-  .app-product-facts h2 {
-    font-size: 1.65rem;
-    line-height: 1.2;
-    font-weight: 600;
-    letter-spacing: -0.035em;
-  }
-  .app-product-facts ul {
-    display: grid;
-    gap: 0.6rem;
-    margin: 1rem 0 0;
-    padding-left: 1.1rem;
-    list-style: disc;
-    color: #62625e;
-  }
-  .app-product-facts dl {
-    display: grid;
-    gap: 1rem;
-    align-content: start;
-  }
-  .app-product-facts dt {
-    font-weight: 650;
-  }
-  .app-product-facts dd {
-    margin-top: 0.2rem;
-    color: #62625e;
-  }
-  @media (max-width: 767px) {
-    .app-product-facts {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-      padding: 1.5rem;
-    }
-  }
-  .app-project {
-    padding: clamp(2.25rem, 4vw, 4rem) 0 clamp(6rem, 10vw, 10rem);
-    background: #fff;
-    color: #111;
+  .app {
+    padding: clamp(1.5rem, 3vw, 2.5rem) 0 clamp(5rem, 8vw, 7rem);
   }
 
-  .app-project-container,
-  .app-project-cta > div {
-    width: min(100% - 3rem, 78rem);
-    margin-inline: auto;
-  }
-
-  .back-link {
-    display: inline-flex;
+  .app__hero {
+    display: grid;
+    grid-template-columns: minmax(20rem, 0.9fr) minmax(0, 1.1fr);
     align-items: center;
-    gap: 0.55rem;
-    color: #686863;
-    font-size: 0.88rem;
-    font-weight: 560;
-    transition: color 180ms ease;
+    gap: clamp(2.5rem, 5vw, 5rem);
+    margin-top: clamp(2rem, 4vw, 3.5rem);
   }
-
-  .back-link:hover,
-  .back-link:focus-visible {
-    color: #111;
+  .app__copy h1 {
+    overflow-wrap: anywhere;
   }
-
-  .app-project-hero {
-    display: grid;
-    min-height: 31rem;
-    margin-top: 2rem;
-    align-items: center;
-    grid-template-columns: minmax(22rem, 0.9fr) minmax(30rem, 1.1fr);
-    gap: clamp(2.5rem, 4vw, 4rem);
-  }
-
-  .app-project-copy h1 {
-    font-size: clamp(2.4rem, 3.6vw, 4.1rem);
-    font-weight: 640;
-    letter-spacing: -0.06em;
-    line-height: 1.04;
-    overflow-wrap: normal;
-    word-break: normal;
-  }
-
-  .app-project-summary {
+  .app__copy .lead {
     max-width: 34rem;
-    margin-top: 1.6rem;
-    color: #565652;
-    font-size: clamp(1.08rem, 1.35vw, 1.3rem);
-    line-height: 1.55;
+    margin-top: 1.5rem;
   }
-
-  .app-project-actions {
+  .app__actions {
     display: flex;
-    margin-top: 2rem;
-    align-items: center;
     flex-wrap: wrap;
-    gap: 1rem 1.3rem;
-  }
-
-  .store-link,
-  .app-project-cta a {
-    display: inline-flex;
-    min-height: 3.15rem;
     align-items: center;
-    justify-content: center;
-    gap: 0.65rem;
-    padding: 0.8rem 1.2rem;
-    border-radius: 0.65rem;
-    background: #111;
-    color: #fff;
-    font-size: 0.9rem;
-    font-weight: 650;
-    transition:
-      background-color 180ms ease,
-      transform 180ms ease;
+    gap: 1rem 1.3rem;
+    margin-top: 2rem;
   }
 
-  .store-link:hover,
-  .store-link:focus-visible,
-  .app-project-cta a:hover,
-  .app-project-cta a:focus-visible {
-    background: #ee4b24;
-    transform: translateY(-2px);
-  }
-
-  .app-project-actions > span {
-    color: #71716b;
-    font-size: 0.83rem;
-  }
-
-  .app-project-cover {
+  .app__cover {
     min-width: 0;
+    margin: 0;
   }
-
-  .app-project-cover img,
-  .gallery-image-wrap img {
-    display: block;
+  .app__cover .frame {
+    border-radius: var(--radius-stage);
+    background: var(--paper-raised);
+  }
+  .app__cover img {
     width: 100%;
     height: auto;
   }
-
-  .app-project-cover img {
-    border: 1px solid #dadad5;
-    border-radius: 1.4rem;
-    box-shadow: 0 24px 70px -46px rgba(17, 17, 17, 0.55);
-  }
-
-  .app-project-cover figcaption {
+  .app__cover figcaption {
     max-width: 42rem;
     margin-top: 0.8rem;
-    color: #777771;
-    font-size: 0.76rem;
-    line-height: 1.45;
+    font-size: 0.78rem;
   }
 
-  .app-project-highlights {
+  .app__facts {
     display: grid;
-    margin-top: clamp(3rem, 5vw, 5rem);
-    border-block: 1px solid #deded9;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1.2fr 1fr;
+    gap: 3rem;
+    margin-top: clamp(3rem, 5vw, 4.5rem);
+    padding: clamp(1.5rem, 3vw, 2.75rem);
+  }
+  .app__facts ul {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 1.2rem;
+    padding-left: 1.1rem;
+    list-style: disc;
+    color: var(--ink-soft);
+  }
+  .app__facts li::marker {
+    color: var(--vermilion-ink);
+  }
+  .app__facts dl {
+    display: grid;
+    gap: 1.1rem;
+    align-content: start;
+  }
+  .app__facts dt {
+    font-weight: 600;
+  }
+  .app__facts dd {
+    margin-top: 0.2rem;
+    color: var(--ink-soft);
   }
 
-  .app-project-highlights > div {
-    padding: 2rem clamp(1.25rem, 3vw, 2.5rem) 2.2rem 0;
+  .app__highlights {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.5rem;
+    margin-top: clamp(3rem, 5vw, 4.5rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--line);
   }
-
-  .app-project-highlights > div + div {
-    padding-left: clamp(1.25rem, 3vw, 2.5rem);
-    border-left: 1px solid #deded9;
+  .app__highlights h2 {
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
   }
-
-  .app-project-highlights h2 {
-    font-size: 1.2rem;
-    font-weight: 650;
-    letter-spacing: -0.025em;
-  }
-
-  .app-project-highlights p {
-    margin-top: 0.65rem;
-    color: #62625d;
-    font-size: 0.94rem;
+  .app__highlights p {
+    margin-top: 0.6rem;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
     line-height: 1.6;
   }
 
-  .app-project-content {
-    max-width: 47rem;
-    margin: clamp(5rem, 9vw, 9rem) auto 0;
+  .app__content {
+    margin-top: clamp(4rem, 7vw, 6.5rem);
   }
 
-  .app-project-gallery {
-    margin-top: clamp(6rem, 10vw, 10rem);
+  .app__gallery {
+    margin-top: clamp(4.5rem, 8vw, 7rem);
   }
-
-  .gallery-heading {
+  .app__gallery-head {
     display: flex;
     align-items: end;
     justify-content: space-between;
     gap: 2rem;
   }
-
-  .gallery-heading h2,
-  .related-knowledge h2,
-  .app-project-cta h2 {
+  .app__gallery-head h2 {
     max-width: 14ch;
-    font-size: clamp(2.25rem, 4.4vw, 4.3rem);
-    font-weight: 620;
-    letter-spacing: -0.055em;
-    line-height: 0.98;
   }
-
-  .gallery-heading p,
-  .related-knowledge > div > p {
-    max-width: 29rem;
-    color: #686863;
+  .app__gallery-head .lead {
+    max-width: 28rem;
+    font-size: 1rem;
   }
-
-  .gallery-grid {
+  .app__gallery-grid {
     display: grid;
-    margin-top: 2.6rem;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 3.5rem 1.5rem;
+    gap: 3rem 1.5rem;
+    margin-top: 2.5rem;
   }
-
-  .gallery-featured {
+  .app__gallery-grid figure {
+    margin: 0;
+  }
+  .app__gallery-featured {
     grid-column: 1 / -1;
   }
-
-  .gallery-image-wrap {
-    overflow: hidden;
-    border: 1px solid #deded9;
-    border-radius: 1rem;
-    background: #f5f5f2;
+  .app__gallery-grid img {
+    width: 100%;
+    height: auto;
   }
-
-  .gallery-grid figcaption {
+  .app__gallery-grid figcaption {
     padding: 0.9rem 0.1rem 0;
   }
-
-  .gallery-grid figcaption span {
-    color: #111;
-    font-size: 0.82rem;
-    font-weight: 650;
+  .app__gallery-grid figcaption span {
+    font-size: 0.85rem;
+    font-weight: 600;
   }
-
-  .gallery-grid figcaption p {
+  .app__gallery-grid figcaption p {
     max-width: 44rem;
-    margin-top: 0.3rem;
-    color: #70706b;
-    font-size: 0.8rem;
-    line-height: 1.5;
+    margin-top: 0.25rem;
+    font-size: 0.82rem;
   }
 
-  .related-knowledge {
+  .app__related {
     display: grid;
-    margin-top: clamp(6rem, 10vw, 10rem);
-    padding: clamp(2rem, 4vw, 4rem) 0;
-    border-block: 1px solid #deded9;
-    grid-template-columns: 0.78fr 1.22fr;
-    gap: clamp(3rem, 7vw, 7rem);
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: clamp(2.5rem, 6vw, 6rem);
+    margin-top: clamp(4.5rem, 8vw, 7rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--line);
   }
-
-  .related-knowledge nav a {
+  .app__related h2 {
+    max-width: 14ch;
+  }
+  .app__related .lead {
+    max-width: 28rem;
+    margin-top: 1rem;
+    font-size: 1rem;
+  }
+  .app__related-link {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 2rem;
-    padding: 1.35rem 0;
-    border-bottom: 1px solid #deded9;
-    color: #111;
-    font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+    padding: 1.25rem 0;
+    color: var(--ink);
+    font-size: clamp(1.05rem, 1rem + 0.5vw, 1.35rem);
+    font-weight: 600;
+    line-height: 1.3;
+    text-decoration: none;
+    transition: color 180ms ease;
+  }
+  .app__related-link :global(svg) {
+    flex: none;
+    transition: transform 240ms var(--ease-out-soft);
+  }
+  .app__related-link:hover,
+  .app__related-link:focus-visible {
+    color: var(--vermilion-ink);
+  }
+  .app__related-link:hover :global(svg) {
+    transform: translateX(4px);
+  }
+
+  .app__neighbours {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin-top: clamp(3.5rem, 6vw, 5rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .app__neighbour {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .app__neighbour > span {
+    display: grid;
+    gap: 0.15rem;
+  }
+  .app__neighbour-title {
     font-weight: 600;
     line-height: 1.3;
     transition: color 180ms ease;
   }
-
-  .related-knowledge nav a:first-child {
-    border-top: 1px solid #deded9;
+  .app__neighbour :global(svg) {
+    flex: none;
+    transition: transform 240ms var(--ease-out-soft);
   }
-
-  .related-knowledge nav a:hover,
-  .related-knowledge nav a:focus-visible {
-    color: #d23d1d;
+  .app__neighbour:hover .app__neighbour-title,
+  .app__neighbour:focus-visible .app__neighbour-title {
+    color: var(--vermilion-ink);
   }
-
-  .project-neighbours {
-    display: grid;
-    margin-top: 4rem;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+  .app__neighbour:hover :global(svg) {
+    transform: translateX(-4px);
   }
-
-  .project-neighbours a {
-    display: flex;
-    align-items: center;
-    gap: 0.9rem;
-    color: #111;
-    font-size: 0.95rem;
-    font-weight: 620;
-  }
-
-  .project-neighbours .next-project {
+  .app__neighbour--next {
     justify-content: flex-end;
     text-align: right;
   }
-
-  .project-neighbours small {
-    display: block;
-    margin-bottom: 0.15rem;
-    color: #767670;
-    font-size: 0.72rem;
-    font-weight: 520;
-  }
-
-  .app-project-cta {
-    padding: clamp(5rem, 8vw, 8rem) 0;
-    background: #101011;
-    color: #fff;
-  }
-
-  .app-project-cta > div {
-    display: grid;
-    align-items: end;
-    grid-template-columns: 1.2fr 0.75fr auto;
-    gap: 2rem;
-  }
-
-  .app-project-cta p {
-    color: #b9b9b3;
-    line-height: 1.6;
+  .app__neighbour--next:hover :global(svg) {
+    transform: translateX(4px);
   }
 
   @media (max-width: 899px) {
-    .app-project-container,
-    .app-project-cta > div {
-      width: min(100% - 2.5rem, 42rem);
-    }
-
-    .app-project-hero,
-    .related-knowledge,
-    .app-project-cta > div {
+    .app__hero,
+    .app__related {
       grid-template-columns: 1fr;
     }
-
-    .app-project-hero {
-      min-height: 0;
-      gap: 2.5rem;
+    .app__hero {
+      gap: 2rem;
     }
-
-    .app-project-copy h1 {
-      max-width: 100%;
-      overflow-wrap: anywhere;
-    }
-
-    .app-project-highlights {
+    .app__facts {
       grid-template-columns: 1fr;
+      gap: 2rem;
     }
-
-    .app-project-highlights > div,
-    .app-project-highlights > div + div {
-      padding: 1.5rem 0;
-      border-left: 0;
+    .app__highlights {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
     }
-
-    .app-project-highlights > div + div {
-      border-top: 1px solid #deded9;
-    }
-
-    .gallery-heading {
+    .app__gallery-head {
       display: block;
     }
-
-    .gallery-heading p {
+    .app__gallery-head .lead {
       margin-top: 1rem;
     }
-
-    .gallery-grid {
+    .app__gallery-grid {
       grid-template-columns: 1fr;
-      gap: 2.6rem;
+      gap: 2.5rem;
     }
-
-    .gallery-featured {
+    .app__gallery-featured {
       grid-column: auto;
     }
   }
-
   @media (max-width: 560px) {
-    .app-project-copy h1 {
-      font-size: clamp(2.25rem, 10vw, 3.6rem);
-    }
-
-    .project-neighbours {
+    .app__neighbours {
       grid-template-columns: 1fr;
     }
-
-    .project-neighbours .next-project {
+    .app__neighbour--next {
       justify-content: flex-start;
       text-align: left;
     }

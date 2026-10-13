@@ -1,10 +1,10 @@
-<section class="manifesto" aria-labelledby="manifesto-heading">
-  <div class="manifesto-inner reveal-up">
-    <h2 id="manifesto-heading">
+<section class="manifesto section" aria-labelledby="manifesto-heading">
+  <div class="shell manifesto__inner lift-in">
+    <h2 id="manifesto-heading" class="display-lg">
       De sterkste webshops zijn niet alleen mooi.
       <span>Ze laten je merk voelen, maken kiezen eenvoudig en geven klanten vertrouwen.</span>
     </h2>
-    <p>
+    <p class="lead">
       Daarom verbind ik merkstrategie, UX en Shopify-development tot één winkelervaring. Van de
       eerste indruk en productkeuze tot winkelmand en terugkerende klant.
     </p>
@@ -13,50 +13,30 @@
 
 <style>
   .manifesto {
-    padding: clamp(7.5rem, 14vw, 13rem) 1.25rem;
-    background: #ffffff;
+    padding-block: clamp(6rem, 12vw, 11rem);
   }
-
-  .manifesto-inner {
-    max-width: 71rem;
-    margin-inline: auto;
+  .manifesto__inner {
+    max-width: 72rem;
     text-align: center;
   }
-
-  h2 {
-    color: #111111;
-    font-size: clamp(2.55rem, 5.2vw, 5.75rem);
-    font-weight: 570;
-    letter-spacing: -0.06em;
-    line-height: 1;
-    text-wrap: balance;
+  .manifesto h2 {
+    max-width: none;
+    color: var(--ink);
   }
-
-  h2 span {
+  .manifesto h2 span {
     display: block;
-    color: #9a9a94;
+    color: var(--ink-faint);
   }
-
-  p {
+  .manifesto .lead {
     max-width: 38rem;
     margin: 2.2rem auto 0;
-    color: #565652;
-    font-size: clamp(1rem, 1.5vw, 1.2rem);
-    line-height: 1.6;
-    text-wrap: pretty;
   }
-
   @media (max-width: 640px) {
-    .manifesto {
-      padding-block: 7rem;
-    }
-
-    h2 {
+    .manifesto__inner {
       text-align: left;
     }
-
-    p {
-      text-align: left;
+    .manifesto .lead {
+      margin-left: 0;
     }
   }
 </style>

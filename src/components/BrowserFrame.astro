@@ -14,27 +14,12 @@ interface Props {
 const { src, alt, url, eager = false } = Astro.props;
 ---
 
-<figure
-  class="group shadow-card hover:shadow-card-hover overflow-hidden rounded-[0.9rem] border border-[var(--border)] bg-[var(--bg-alt)] transition-shadow duration-300"
->
-  <!-- Browser-chrome -->
-  <div class="flex items-center gap-3 border-b border-[var(--border)] bg-[var(--bg)] px-4 py-2.5">
-    <span class="flex gap-1.5" aria-hidden="true">
-      <span class="h-2.5 w-2.5 rounded-full bg-[#FF5F57]/70"></span>
-      <span class="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]/70"></span>
-      <span class="h-2.5 w-2.5 rounded-full bg-[#28C840]/70"></span>
-    </span>
-    {
-      url && (
-        <span class="hidden flex-1 truncate rounded-md bg-[var(--bg-alt)] px-3 py-1 text-center text-xs text-[var(--fg-muted)] sm:block">
-          {url}
-        </span>
-      )
-    }
+<figure class="browser-frame frame">
+  <div class="browser-frame__chrome" aria-hidden="true">
+    <span class="browser-frame__dots"><i></i><i></i><i></i></span>
+    {url && <span class="browser-frame__url">{url}</span>}
   </div>
-
-  <!-- Screenshot: vaste viewport-ratio, toon de bovenkant van de pagina -->
-  <div class="aspect-[16/10] overflow-hidden bg-white">
+  <div class="browser-frame__screen">
     <Image
       src={src}
       alt={alt}
@@ -43,8 +28,74 @@ const { src, alt, url, eager = false } = Astro.props;
       format="avif"
       quality="mid"
       loading={eager ? 'eager' : 'lazy'}
-      class="ease-out-soft h-full w-full object-cover object-top transition-transform duration-[1200ms] group-hover:object-bottom"
     />
   </div>
-  <figcaption class="sr-only">{alt}</figcaption>
+  <figcaption class="visually-hidden">{alt}</figcaption>
 </figure>
+
+<style>
+  .browser-frame {
+    margin: 0;
+    background: var(--paper-raised);
+    transition: box-shadow 300ms var(--ease-out-soft);
+  }
+  .browser-frame:hover {
+    box-shadow: var(--shadow-soft);
+  }
+  .browser-frame__chrome {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    border-bottom: 1px solid var(--line);
+    background: var(--paper-deep);
+  }
+  .browser-frame__dots {
+    display: inline-flex;
+    gap: 0.35rem;
+  }
+  .browser-frame__dots i {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--line-strong);
+  }
+  .browser-frame__url {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    padding: 0.2rem 0.75rem;
+    border-radius: 0.4rem;
+    background: var(--paper-raised);
+    color: var(--ink-soft);
+    font-size: 0.75rem;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .browser-frame__screen {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #fff;
+  }
+  .browser-frame__screen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    transition: object-position 1400ms var(--ease-in-out-soft);
+  }
+  .browser-frame:hover .browser-frame__screen img {
+    object-position: bottom;
+  }
+  @media (max-width: 480px) {
+    .browser-frame__url {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .browser-frame__screen img {
+      transition: none;
+    }
+  }
+</style>

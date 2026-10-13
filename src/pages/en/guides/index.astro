@@ -2,10 +2,14 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Icon from '../../../components/Icon.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import { breadcrumbLd } from '../../../lib/seo';
 import { SITE } from '../../../config/site';
+
 const guides = await getCollection('englishGuides');
 const description =
   'Practical Shopify guides to checking missing SKUs, barcodes and metafields, and calculating estimated gross margins after percentage discounts.';
+const crumbs = [{ label: 'Shopify Apps', href: '/en/shopify-apps/' }, { label: 'Guides' }];
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
@@ -29,96 +33,118 @@ const jsonLd = {
   lang="en"
   title="Shopify Product Data & Discount Margin Guides"
   description={description}
-  jsonLd={[jsonLd]}
+  jsonLd={[jsonLd, breadcrumbLd(crumbs, '/en/guides/')]}
 >
   <section class="guides">
-    <div class="guides-container">
-      <h1>Practical checks for your Shopify catalog & campaigns.</h1>
-      <p class="guides-intro">
-        Learn the manual workflow, review the inputs and decide when a recurring app check helps.
-      </p>
-      <nav aria-label="Practical Shopify guides">
+    <div class="shell">
+      <Breadcrumbs items={crumbs} lang="en" class="enter-up" />
+      <header class="guides__header">
+        <h1 class="display-lg enter-lines" style="--enter-delay: 0.08s">
+          <span class="line" style="--i:0"><span>Practical checks for your</span></span>
+          <span class="line" style="--i:1"><span>Shopify catalog & campaigns.</span></span>
+        </h1>
+        <p class="lead enter-up" style="--enter-delay: 0.3s">
+          Learn the manual workflow, review the inputs and decide when a recurring app check helps.
+        </p>
+      </header>
+
+      <nav class="guide-list rows reveal-up" aria-label="Practical Shopify guides">
         {
           guides.map((guide) => (
-            <a href={`/en/guides/${guide.id}/`}>
-              <>
-                <div>
-                  <>
-                    <h2>{guide.data.title}</h2>
-                    <p>{guide.data.intro}</p>
-                  </>
-                </div>
-                <Icon name="arrowRight" size={24} />
-              </>
+            <a href={`/en/guides/${guide.id}/`} class="guide-list__item">
+              <div>
+                <h2 class="display-sm">{guide.data.title}</h2>
+                <p>{guide.data.intro}</p>
+              </div>
+              <span class="guide-list__go" aria-hidden="true">
+                <Icon name="arrowRight" size={20} />
+              </span>
             </a>
           ))
         }
       </nav>
-      <a class="apps-link" href="/en/shopify-apps/"
+
+      <a class="link-arrow link-arrow--accent guides__apps reveal-up" href="/en/shopify-apps/"
         >Explore Shopify Apps <Icon name="arrowRight" size={18} /></a
       >
     </div>
   </section>
 </BaseLayout>
+
 <style>
   .guides {
-    background: #fff;
-    color: #111;
-    padding: clamp(3rem, 6vw, 6rem) 0 clamp(5rem, 9vw, 9rem);
+    padding: clamp(1.5rem, 3vw, 2.5rem) 0 clamp(5rem, 9vw, 8rem);
   }
-  .guides-container {
-    width: min(100% - 2.5rem, 68rem);
-    margin-inline: auto;
+  .guides__header {
+    max-width: 60rem;
+    margin-top: clamp(2rem, 4vw, 3.5rem);
   }
-  h1 {
-    max-width: 58rem;
-    font-size: clamp(2.4rem, 5vw, 4.5rem);
-    line-height: 1.05;
-    letter-spacing: -0.055em;
-    font-weight: 620;
+  .guides__header h1 {
+    color: var(--ink);
   }
-  .guides-intro {
+  .guides__header .lead {
     max-width: 40rem;
     margin-top: 1.5rem;
-    color: #62625e;
-    font-size: 1.15rem;
   }
-  nav {
-    margin-top: 3rem;
-    border-top: 1px solid #deded9;
+
+  .guide-list {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
   }
-  nav a {
+  .guide-list__item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
     padding: 2rem 0;
-    border-bottom: 1px solid #deded9;
+    color: var(--ink);
+    text-decoration: none;
   }
-  h2 {
-    font-size: clamp(1.5rem, 2.8vw, 2.2rem);
-    font-weight: 620;
-    letter-spacing: -0.03em;
-    line-height: 1.2;
+  .guide-list__item h2 {
+    transition: color 180ms ease;
   }
-  nav p {
+  .guide-list__item p {
     max-width: 48rem;
     margin-top: 0.75rem;
-    color: #62625e;
+    color: var(--ink-soft);
+    line-height: 1.6;
   }
-  nav svg {
+  .guide-list__go {
+    display: grid;
+    width: 2.85rem;
+    height: 2.85rem;
     flex: none;
+    place-items: center;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    transition:
+      background-color 220ms ease,
+      border-color 220ms ease,
+      color 220ms ease,
+      transform 300ms var(--ease-out-soft);
   }
-  a:hover h2 {
-    color: var(--accent-text);
+  .guide-list__item:hover h2,
+  .guide-list__item:focus-visible h2 {
+    color: var(--vermilion-ink);
   }
-  .apps-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
+  .guide-list__item:hover .guide-list__go,
+  .guide-list__item:focus-visible .guide-list__go {
+    background: var(--vermilion);
+    border-color: var(--vermilion);
+    color: #fff;
+    transform: translateX(4px);
+  }
+
+  .guides__apps {
     margin-top: 2rem;
-    color: var(--accent-text);
-    font-weight: 650;
-    min-height: 2.8rem;
+  }
+
+  @media (max-width: 560px) {
+    .guides__header h1 {
+      font-size: clamp(2.2rem, 9.5vw, 3.2rem);
+      overflow-wrap: anywhere;
+    }
+    .guide-list__item {
+      padding: 1.5rem 0;
+    }
   }
 </style>

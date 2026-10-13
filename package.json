@@ -2,7 +2,7 @@
   "name": "chrisonline",
   "type": "module",
   "version": "1.0.0",
-  "description": "Portfolio van Chris Snoek — Chris Online. Razendsnelle maatwerk-websites.",
+  "description": "Portfolio van Chris Snoek — Chris Online. Premium Shopify-webshops met een sterk verhaal en levende frontend.",
   "author": "Chris Snoek <info@chrisonline.nl>",
   "license": "MIT",
   "scripts": {
@@ -14,7 +14,8 @@
     "check": "astro check",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
-    "astro": "astro"
+    "astro": "astro",
+    "og": "node scripts/generate-og.mjs"
   },
   "dependencies": {
     "@ai-sdk/groq": "^3.0.41",

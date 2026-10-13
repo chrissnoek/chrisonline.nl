@@ -1,22 +1,31 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { BUSINESS, CONTACT } from '../config/site';
+import { breadcrumbLd } from '../lib/seo';
+
+const crumbs = [{ label: 'Home', href: '/' }, { label: 'Privacy en cookies' }];
 ---
 
 <BaseLayout
   title="Privacy en cookies"
   description="Hoe Chris Online omgaat met contactgegevens, analyse en cookievoorkeuren."
+  jsonLd={[breadcrumbLd(crumbs, Astro.url.pathname)]}
 >
-  <section class="container-page py-section">
-    <div class="mx-auto max-w-3xl">
-      <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">Privacy</p>
-      <h1 class="text-h1 mt-3 font-bold text-balance">Duidelijk over je gegevens.</h1>
-      <p class="text-lead mt-5 text-[var(--fg-muted)]">
-        Chris Online gebruikt je gegevens alleen om je vraag te beantwoorden en de website te
-        verbeteren. Geen advertentietracking, geen verkoop van gegevens.
-      </p>
+  <article class="privacy">
+    <div class="shell shell--read">
+      <Breadcrumbs items={crumbs} class="enter-up" />
+      <header class="privacy__header">
+        <h1 class="display-lg enter-up" style="--enter-delay: 0.06s">
+          Duidelijk over je gegevens.
+        </h1>
+        <p class="lead enter-up" style="--enter-delay: 0.14s">
+          Chris Online gebruikt je gegevens alleen om je vraag te beantwoorden en de website te
+          verbeteren. Geen advertentietracking, geen verkoop van gegevens.
+        </p>
+      </header>
 
-      <div class="privacy-copy mt-12 space-y-10">
+      <div class="prose privacy__body enter-up" style="--enter-delay: 0.22s">
         <section>
           <h2>Wie verwerkt je gegevens?</h2>
           <p>
@@ -50,9 +59,11 @@ import { BUSINESS, CONTACT } from '../config/site';
             Je toestemming wordt maximaal 180 dagen bewaard in een functioneel cookie, zodat we je
             keuze onthouden. Je kunt die keuze altijd aanpassen.
           </p>
-          <button type="button" class="privacy-settings" data-cookie-settings>
-            Cookiekeuze aanpassen
-          </button>
+          <p>
+            <button type="button" class="btn btn--line btn--sm" data-cookie-settings>
+              Cookiekeuze aanpassen
+            </button>
+          </p>
         </section>
         <section>
           <h2>Jouw rechten</h2>
@@ -70,29 +81,23 @@ import { BUSINESS, CONTACT } from '../config/site';
         </section>
       </div>
     </div>
-  </section>
+  </article>
 </BaseLayout>
 
 <style>
-  .privacy-copy h2 {
-    font-family: var(--font-display, var(--font-sans));
-    font-size: 1.35rem;
-    font-weight: 700;
-    letter-spacing: -0.015em;
+  .privacy {
+    padding: clamp(1.5rem, 3vw, 2.5rem) 0 var(--spacing-section);
   }
-  .privacy-copy p {
-    margin-top: 0.75rem;
-    color: var(--fg-muted);
+  .privacy__header {
+    margin-top: clamp(2rem, 4vw, 3rem);
   }
-  .privacy-copy a {
-    color: var(--accent-text);
-    text-decoration: underline;
-    text-underline-offset: 0.16em;
+  .privacy__header .lead {
+    margin-top: 1.25rem;
   }
-  .privacy-settings {
-    margin-top: 1rem;
-    border-bottom: 1px solid currentColor;
-    color: var(--accent-text);
-    font-weight: 700;
+  .privacy__body {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  .privacy__body section + section {
+    margin-top: 2.5rem;
   }
 </style>

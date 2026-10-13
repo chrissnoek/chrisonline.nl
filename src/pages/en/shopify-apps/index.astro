@@ -39,18 +39,18 @@ const jsonLd = {
   jsonLd={[jsonLd]}
   markdown="/en/shopify-apps.md"
 >
-  <div class="english-apps">
-    <div class="apps-container">
-      <header class="apps-hero">
-        <h1 class="enter-up">Focused Shopify apps.<br />Built for daily work.</h1>
-        <p class="enter-up">
+  <div class="apps-page">
+    <div class="shell">
+      <header class="apps-page__hero">
+        <h1 class="display-xl enter-up">Focused Shopify apps.<br />Built for daily work.</h1>
+        <p class="lead enter-up" style="--enter-delay: 0.1s">
           Monitor required product data and check promotion prices. Independent apps designed and
           built by Chris Snoek.
         </p>
       </header>
 
-      <section aria-labelledby="catalog-heading">
-        <h2 id="catalog-heading" class="sr-only">Shopify Apps by Chris Online</h2>
+      <section class="enter-up" style="--enter-delay: 0.2s" aria-labelledby="catalog-heading">
+        <h2 id="catalog-heading" class="visually-hidden">Shopify Apps by Chris Online</h2>
         <ShopifyAppGrid
           apps={apps.map((app) => app.project)}
           lang="en"
@@ -58,62 +58,75 @@ const jsonLd = {
         />
       </section>
 
-      <section class="app-choice" aria-labelledby="choice-heading">
-        <h2 id="choice-heading">Start with the problem you need to check.</h2>
-        <div class="choice-grid">
-          <div>
-            <p>Each app has a defined job and can be installed independently.</p>
-            <dl>
-              <div>
-                <dt><a href="/en/shopify-apps/specfinch/">SpecFinch</a></dt><dd>
-                  Monitor missing required product fields after imports and edits, with new issues
-                  separated from existing cleanup work.
-                </dd>
-              </div>
-              <div>
-                <dt><a href="/en/shopify-apps/promofinch/">PromoFinch</a></dt><dd>
-                  Check supported percentage promotions against your price and estimated
-                  gross-margin limits, then monitor campaign changes.
-                </dd>
-              </div>
-            </dl>
-            <p class="app-limits">
-              Both apps are read-only. Your team reviews findings and makes corrections in Shopify.
-              Their product pages explain supported checks and limits.
-            </p>
-          </div>
-          <div class="app-help">
-            <h3>Support from the person who built it.</h3>
-            <p>
-              Have a question about setup or which app fits your store? Contact Chris Online
-              directly.
-            </p>
-            <a href={`mailto:${CONTACT.email}`}
-              >Contact app support <Icon name="arrowRight" size={18} /></a
-            >
-            <p class="pricing-note">
-              Install through the Shopify App Store. Each listing has current pricing and trial
-              details. Both app interfaces are in English.
-            </p>
-          </div>
+      <section class="apps-page__choice" aria-labelledby="choice-heading">
+        <div class="apps-page__choice-copy lift-in">
+          <h2 id="choice-heading" class="display-md">Start with the problem you need to check.</h2>
+          <p class="lead">Each app has a defined job and can be installed independently.</p>
+          <dl class="rows apps-page__list">
+            <div>
+              <dt>
+                <a href="/en/shopify-apps/specfinch/" class="link-arrow">
+                  SpecFinch <Icon name="arrowRight" size={17} />
+                </a>
+              </dt>
+              <dd>
+                Monitor missing required product fields after imports and edits, with new issues
+                separated from existing cleanup work.
+              </dd>
+            </div>
+            <div>
+              <dt>
+                <a href="/en/shopify-apps/promofinch/" class="link-arrow">
+                  PromoFinch <Icon name="arrowRight" size={17} />
+                </a>
+              </dt>
+              <dd>
+                Check supported percentage promotions against your price and estimated gross-margin
+                limits, then monitor campaign changes.
+              </dd>
+            </div>
+          </dl>
+          <p class="apps-page__limits">
+            Both apps are read-only. Your team reviews findings and makes corrections in Shopify.
+            Their product pages explain supported checks and limits.
+          </p>
+        </div>
+        <div class="apps-page__help surface surface--deep reveal-up">
+          <h3 class="display-sm">Support from the person who built it.</h3>
+          <p>
+            Have a question about setup or which app fits your store? Contact Chris Online directly.
+          </p>
+          <a href={`mailto:${CONTACT.email}`} class="btn btn--ink">
+            Contact app support <Icon name="arrowRight" size={18} />
+          </a>
+          <p class="meta">
+            Install through the Shopify App Store. Each listing has current pricing and trial
+            details. Both app interfaces are in English.
+          </p>
         </div>
       </section>
-      <section class="app-choice" aria-labelledby="guides-heading">
-        <h2 id="guides-heading">Understand the check before choosing an app.</h2>
-        <dl>
+
+      <section class="apps-page__guides reveal-up" aria-labelledby="guides-heading">
+        <h2 id="guides-heading" class="display-md">Understand the check before choosing an app.</h2>
+        <dl class="rows apps-page__list">
           <div>
             <dt>
-              <a href="/en/guides/find-missing-shopify-product-data/"
-                >Find missing Shopify SKUs, barcodes and metafields</a
-              >
-            </dt><dd>A manual audit, CSV limitations and the baseline workflow.</dd>
+              <a href="/en/guides/find-missing-shopify-product-data/" class="link-arrow">
+                Find missing Shopify SKUs, barcodes and metafields <Icon
+                  name="arrowRight"
+                  size={17}
+                />
+              </a>
+            </dt>
+            <dd>A manual audit, CSV limitations and the baseline workflow.</dd>
           </div>
           <div>
             <dt>
-              <a href="/en/guides/check-shopify-discount-margins/"
-                >Check Shopify discount prices and gross margins</a
-              >
-            </dt><dd>A worked calculation, missing costs and a campaign review checklist.</dd>
+              <a href="/en/guides/check-shopify-discount-margins/" class="link-arrow">
+                Check Shopify discount prices and gross margins <Icon name="arrowRight" size={17} />
+              </a>
+            </dt>
+            <dd>A worked calculation, missing costs and a campaign review checklist.</dd>
           </div>
         </dl>
       </section>
@@ -122,104 +135,91 @@ const jsonLd = {
 </BaseLayout>
 
 <style>
-  .english-apps {
-    background: #f5f5f2;
-    color: #111;
-    padding-bottom: clamp(5rem, 9vw, 9rem);
+  .apps-page {
+    padding: clamp(2rem, 4vw, 3.5rem) 0 clamp(5rem, 9vw, 8rem);
   }
-  .apps-container {
-    width: min(100% - 3rem, 78rem);
-    margin-inline: auto;
+  .apps-page__hero {
+    padding-bottom: clamp(3rem, 5vw, 5rem);
   }
-  .apps-hero {
-    padding: clamp(2.5rem, 5vw, 5rem) 0 clamp(3rem, 5vw, 5rem);
+  .apps-page__hero h1 {
+    max-width: 14ch;
   }
-  h1 {
-    max-width: 68rem;
-    font-size: clamp(2.65rem, 5.5vw, 5.4rem);
-    font-weight: 580;
-    letter-spacing: -0.06em;
-    line-height: 1.04;
-  }
-  .apps-hero p {
+  .apps-page__hero .lead {
     max-width: 38rem;
     margin-top: 1.5rem;
-    color: #62625e;
-    font-size: 1.1rem;
   }
-  .app-choice {
-    padding-top: clamp(4rem, 7vw, 7rem);
-  }
-  h2 {
-    max-width: 54rem;
-    font-size: clamp(2rem, 3.5vw, 3.3rem);
-    line-height: 1.1;
-    font-weight: 580;
-    letter-spacing: -0.045em;
-  }
-  .choice-grid {
+
+  .apps-page__choice {
     display: grid;
-    grid-template-columns: 1.25fr 1fr;
-    gap: clamp(2rem, 6vw, 6rem);
+    grid-template-columns: minmax(0, 1.25fr) minmax(18rem, 0.8fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
+    margin-top: clamp(5rem, 9vw, 8rem);
+    padding-top: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid var(--line);
+  }
+  .apps-page__choice-copy h2,
+  .apps-page__guides h2 {
+    max-width: 18ch;
+  }
+  .apps-page__choice-copy .lead {
+    max-width: 36rem;
+    margin-top: 1.25rem;
+    font-size: 1.05rem;
+  }
+  .apps-page__list {
     margin-top: 2rem;
   }
-  .choice-grid p,
-  dd {
-    color: #62625e;
+  .apps-page__list > div {
+    padding: 1.1rem 0;
   }
-  dl {
-    display: grid;
-    gap: 1.7rem;
-    margin-top: 2rem;
-  }
-  dt {
-    font-weight: 650;
-    margin-bottom: 0.35rem;
-  }
-  dt a:hover {
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
-  }
-  .app-limits {
-    margin-top: 2rem;
-  }
-  .app-help {
-    align-self: start;
-    padding: clamp(1.5rem, 3vw, 2.5rem);
-    border-radius: 1.25rem;
-    background: #fff;
-  }
-  .app-help h3 {
-    font-size: 1.5rem;
-    line-height: 1.2;
-    letter-spacing: -0.035em;
-    font-weight: 620;
-  }
-  .app-help p {
-    margin-top: 1rem;
-  }
-  .app-help a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    min-height: 2.8rem;
-    margin-top: 1.3rem;
-    color: var(--accent-text);
+  .apps-page__list dt {
     font-weight: 600;
   }
-  .app-help .pricing-note {
-    font-size: 0.85rem;
+  .apps-page__list dt .link-arrow {
+    text-align: left;
+  }
+  .apps-page__list dd {
+    max-width: 44rem;
+    margin-top: 0.2rem;
+    color: var(--ink-soft);
+  }
+  .apps-page__limits {
+    max-width: 44rem;
+    margin-top: 1.75rem;
+    color: var(--ink-soft);
+  }
+
+  .apps-page__help {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: start;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .apps-page__help h3 {
+    font-weight: 400;
+  }
+  .apps-page__help p {
+    margin-top: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .apps-page__help .btn {
     margin-top: 1.5rem;
   }
-  @media (max-width: 767px) {
-    .apps-container {
-      width: min(100% - 2.5rem, 35rem);
-    }
-    .choice-grid {
+  .apps-page__help .meta {
+    margin-top: 1.5rem;
+    font-size: 0.82rem;
+  }
+
+  .apps-page__guides {
+    margin-top: clamp(4rem, 7vw, 6rem);
+    padding-top: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid var(--line);
+  }
+
+  @media (max-width: 899px) {
+    .apps-page__choice {
       grid-template-columns: 1fr;
-    }
-    .apps-hero p {
-      font-size: 1rem;
     }
   }
 </style>

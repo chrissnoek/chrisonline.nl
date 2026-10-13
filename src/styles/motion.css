@@ -1,0 +1,205 @@
+/* ──────────────────────────────────────────────────────────────────────────
+ *  Motion
+ *
+ *  Principes:
+ *  - De eindtoestand is altijd de standaard. Animatie wordt alleen toegevoegd
+ *    wanneer motion is toegestaan en, voor scroll-gedreven effecten, wanneer de
+ *    browser ze ondersteunt. Zonder JS of met reduced motion is alles zichtbaar.
+ *  - Alleen opacity/transform (compositor). Geen layout-animaties.
+ *  - Eén georkestreerde entree per pagina (hero); daarna alleen secties die
+ *    rustig "oplichten" bij binnenkomst, en interacties die tonen wat verandert.
+ * ────────────────────────────────────────────────────────────────────────── */
+
+/* ── Entree boven de vouw (eenmalig bij tonen van de pagina) ──────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  .enter-up {
+    animation: enter-up 0.8s var(--ease-out-soft) both;
+    animation-delay: var(--enter-delay, 0s);
+  }
+  .enter-fade {
+    animation: enter-fade 1.1s var(--ease-out-soft) both;
+    animation-delay: var(--enter-delay, 0s);
+  }
+  .enter-pop {
+    animation: enter-pop 0.6s var(--ease-out-soft) both;
+    animation-delay: var(--enter-delay, 0s);
+  }
+  /* Mask-reveal van onderaf (portret, covers). */
+  .enter-unveil {
+    animation: enter-unveil 1.1s var(--ease-out-soft) both;
+    animation-delay: var(--enter-delay, 0s);
+  }
+  /* Regel-voor-regel entree in een kop: wikkel iedere regel in <span class="line"><span>…</span></span>. */
+  .enter-lines .line {
+    display: block;
+    overflow: hidden;
+    padding-block: 0.06em;
+    margin-block: -0.06em;
+  }
+  .enter-lines .line > span {
+    display: block;
+    animation: enter-line 0.9s var(--ease-out-soft) both;
+    animation-delay: calc(var(--enter-delay, 0s) + var(--i, 0) * 90ms);
+  }
+}
+
+@keyframes enter-up {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes enter-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes enter-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes enter-unveil {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.985);
+    clip-path: inset(0 0 100% 0 round var(--unveil-radius, 1rem));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    clip-path: inset(0 0 0 0 round var(--unveil-radius, 1rem));
+  }
+}
+@keyframes enter-line {
+  from {
+    opacity: 0;
+    transform: translateY(105%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Scroll-gedreven: secties lichten op bij binnenkomst ──────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 24%;
+    }
+    .reveal-up {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 26%;
+    }
+    .lift-in {
+      animation: lift-in linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 28%;
+    }
+  }
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes lift-in {
+  from {
+    opacity: 0.001;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Scroll-gekoppeld: het beeldmerk draait mee met de pagina ─────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    .spin-with-scroll {
+      animation: spin-quarter linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 120rem;
+    }
+  }
+}
+@keyframes spin-quarter {
+  to {
+    transform: rotate(180deg);
+  }
+}
+
+/* ── Beeldmerk: korte "stergroet" bij hover ───────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  .mark-hover:hover .brand-mark,
+  .mark-hover:focus-visible .brand-mark {
+    animation: mark-greet 700ms var(--ease-out-soft);
+  }
+}
+@keyframes mark-greet {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(45deg) scale(1.08);
+  }
+  100% {
+    transform: rotate(90deg) scale(1);
+  }
+}
+
+/* ── Uitklappen met hoogte (details/summary, menu's) ──────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  .grow-open {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 420ms var(--ease-out-soft);
+  }
+  .grow-open > * {
+    min-height: 0;
+    overflow: hidden;
+  }
+  .grow-open.is-open {
+    grid-template-rows: 1fr;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .grow-open:not(.is-open) {
+    display: none;
+  }
+}

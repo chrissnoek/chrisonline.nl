@@ -1,56 +1,48 @@
 ---
 import { SITE } from '../config/site';
+import BrandMark from './BrandMark.astro';
 
 interface Props {
-  /** Hoogte in pixels; het woordmerk schaalt als één geheel mee. */
+  /** Hoogte van het beeldmerk in pixels; het woordmerk schaalt mee. */
   height?: number;
   class?: string;
+  /** Laat het beeldmerk meedraaien met de scrollpositie (alleen in de header). */
+  spin?: boolean;
+  /** Lichte variant voor donkere vlakken (het woordmerk erft anders de tekstkleur). */
   inverse?: boolean;
 }
 
-const { height = 30, class: className, inverse = false } = Astro.props;
-const width = Math.round(height * 4.35);
+const { height = 30, class: className, spin = false, inverse = false } = Astro.props;
 ---
 
 <span
   class:list={['brand-lockup', inverse && 'brand-lockup--inverse', className]}
-  style={`--logo-height:${height}px;--logo-width:${width}px`}
+  style={`--logo-h:${height}px`}
 >
-  <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
-    <path d="M24 3v42M3 24h42M9.15 9.15l29.7 29.7M38.85 9.15l-29.7 29.7"></path>
-  </svg>
-  <span>{SITE.brand}</span>
+  <span class:list={['brand-lockup__mark', spin && 'spin-with-scroll']}>
+    <BrandMark size={height} />
+  </span>
+  <span class="brand-lockup__name">{SITE.brand}</span>
 </span>
 
 <style>
   .brand-lockup {
     display: inline-flex;
-    width: var(--logo-width);
-    height: var(--logo-height);
     align-items: center;
-    gap: calc(var(--logo-height) * 0.25);
-    color: #111111;
-    font-family: var(--font-display, var(--font-sans));
-    font-size: calc(var(--logo-height) * 0.42);
+    gap: calc(var(--logo-h) * 0.3);
+    color: inherit;
+    font-size: calc(var(--logo-h) * 0.5);
     font-weight: 650;
-    letter-spacing: -0.045em;
+    letter-spacing: -0.035em;
     line-height: 1;
     white-space: nowrap;
   }
-
   .brand-lockup--inverse {
-    color: #ffffff;
+    color: #fff;
   }
-
-  .brand-mark {
-    width: var(--logo-height);
-    height: var(--logo-height);
+  .brand-lockup__mark {
+    display: block;
     flex: none;
-    overflow: visible;
-    color: #ee4b24;
-    fill: none;
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-width: 3;
+    color: var(--vermilion);
   }
 </style>

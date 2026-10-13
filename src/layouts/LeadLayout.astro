@@ -13,13 +13,12 @@ const { title, description } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="nl" class="dark">
+<html lang="nl" data-scheme="dark" data-daypart="night" data-scheme-pref="dark">
   <head>
-    <BaseHead title={title} description={description} noindex />
-    <meta name="theme-color" content="#080809" />
+    <BaseHead title={title} description={description} noindex daylight={false} />
     <ClientRouter />
   </head>
-  <body class="lead-layout min-h-screen">
+  <body class="lead-layout">
     <a href="#main" class="skip-link">Direct naar de inhoud</a>
     <main id="main">
       <slot />

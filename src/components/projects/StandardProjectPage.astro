@@ -4,8 +4,11 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../Icon.astro';
 import BrowserFrame from '../BrowserFrame.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import CtaBand from '../CtaBand.astro';
 import { SITE } from '../../config/site';
 import { withUtm } from '../../utils/utm';
+import { breadcrumbLd } from '../../lib/seo';
 
 interface Props {
   entry: CollectionEntry<'projects'>;
@@ -24,49 +27,44 @@ const dateLabel = data.pubDate.toLocaleDateString('nl-NL', {
 });
 
 const origin = Astro.site!.origin;
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
 const creativeWorkLd = {
   '@context': 'https://schema.org',
   '@type': 'CreativeWork',
   name: data.title,
   headline: data.title,
   description: data.summary,
-  url: new URL(Astro.url.pathname, Astro.site).href,
+  url: pageUrl,
   about: data.skills.join(', '),
   dateCreated: data.pubDate.toISOString().split('T')[0],
   image: new URL(data.cover.src, Astro.site).href,
   creator: { '@id': `${origin}/#person` },
   ...(data.url ? { sameAs: [data.url] } : {}),
 };
+
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Ervaring', href: '/#werk' },
+  { label: data.title },
+];
 ---
 
-<BaseLayout title={data.title} description={data.summary} type="article" jsonLd={[creativeWorkLd]}>
-  <article class="container-page py-16 md:py-20">
-    <!-- Terug-link -->
-    <a
-      href="/#werk"
-      class="group enter-up inline-flex items-center gap-2 text-sm font-medium text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
-    >
-      <Icon
-        name="arrowRight"
-        size={16}
-        class="rotate-180 transition-transform group-hover:-translate-x-1"
-      />
-      Terug naar werk
-    </a>
+<BaseLayout
+  title={data.title}
+  description={data.summary}
+  type="article"
+  jsonLd={[creativeWorkLd, breadcrumbLd(crumbs, Astro.url.pathname)]}
+>
+  <article class="case">
+    <div class="shell">
+      <Breadcrumbs items={crumbs} class="enter-up" />
 
-    <!-- Kop: gestaffelde entree, in lijn met de hero-montage op de homepage. -->
-    <header class="mt-6 max-w-3xl">
-      <div
-        class="enter-up flex flex-wrap items-center gap-3 text-sm text-[var(--fg-muted)]"
-        style="--enter-delay: 0.05s"
-      >
-        <span class="font-medium text-[var(--accent-text)]">{data.role}</span>
-        <span aria-hidden="true">·</span>
-        <time datetime={data.pubDate.toISOString()}>{dateLabel}</time>
-        {
-          data.opdrachtgever && (
-            <>
-              <span aria-hidden="true">·</span>
+      <header class="case__header">
+        <p class="case__meta meta enter-up" style="--enter-delay: 0.05s">
+          <span class="case__role">{data.role}</span>
+          <time datetime={data.pubDate.toISOString()}>{dateLabel}</time>
+          {
+            data.opdrachtgever && (
               <span>
                 In opdracht van{' '}
                 {data.opdrachtgever.url ? (
@@ -74,151 +72,108 @@ const creativeWorkLd = {
                     href={withUtm(data.opdrachtgever.url)}
                     target="_blank"
                     rel="noopener"
-                    class="font-medium text-[var(--fg)] underline decoration-[var(--border)] underline-offset-2 transition-colors hover:text-[var(--accent-text)] hover:decoration-current"
+                    class="text-link"
                   >
                     {data.opdrachtgever.name}
                   </a>
                 ) : (
-                  <span class="font-medium text-[var(--fg)]">{data.opdrachtgever.name}</span>
+                  <strong>{data.opdrachtgever.name}</strong>
                 )}
               </span>
-            </>
+            )
+          }
+          {data.placeholder && <span class="chip">placeholder-content</span>}
+        </p>
+        <h1 class="display-lg enter-up" style="--enter-delay: 0.12s">{data.title}</h1>
+        <p class="lead enter-up" style="--enter-delay: 0.2s">{data.summary}</p>
+
+        <div class="case__skills enter-up" style="--enter-delay: 0.28s">
+          {data.skills.map((skill) => <span class="chip">{skill}</span>)}
+        </div>
+
+        {
+          data.url && (
+            <div class="case__live enter-up" style="--enter-delay: 0.34s">
+              <a
+                href={withUtm(data.url)}
+                target="_blank"
+                rel="noopener"
+                class="btn btn--ink btn--up"
+              >
+                {data.urlLabel}
+                <Icon name="arrowUpRight" size={18} />
+              </a>
+              {data.demoPassword && (
+                <span class="case__password meta">
+                  Wachtwoord: <code>{data.demoPassword}</code>
+                </span>
+              )}
+            </div>
           )
         }
-        {
-          data.placeholder && (
-            <span class="rounded-pill bg-amber-500/15 px-2.5 py-0.5 text-xs font-medium text-amber-700 dark:text-amber-400">
-              placeholder-content
-            </span>
-          )
-        }
-      </div>
-      <h1 class="text-h1 enter-up mt-4 font-bold text-balance" style="--enter-delay: 0.12s">
-        {data.title}
-      </h1>
-      <p
-        class="text-lead enter-up mt-5 text-pretty text-[var(--fg-muted)]"
-        style="--enter-delay: 0.2s"
-      >
-        {data.summary}
-      </p>
+      </header>
 
-      <div class="enter-up mt-6 flex flex-wrap gap-2" style="--enter-delay: 0.28s">
-        {
-          data.skills.map((skill) => (
-            <span class="rounded-pill border border-[var(--border)] px-3 py-1 text-sm font-medium text-[var(--fg-muted)]">
-              {skill}
-            </span>
-          ))
-        }
-      </div>
-
-      {
-        data.url && (
-          <div
-            class="enter-up mt-6 flex flex-wrap items-center gap-x-4 gap-y-2"
-            style="--enter-delay: 0.34s"
-          >
-            <a
-              href={withUtm(data.url)}
-              target="_blank"
-              rel="noopener"
-              class="group inline-flex items-center gap-2 font-semibold text-[var(--accent-text)] hover:underline"
-            >
-              {data.urlLabel}
-              <Icon
-                name="arrowUpRight"
-                size={18}
-                class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-              />
-            </a>
-            {data.demoPassword && (
-              <span class="rounded-pill border border-[var(--border)] bg-[var(--bg-alt)] px-3 py-1.5 text-sm text-[var(--fg-muted)]">
-                Wachtwoord: <code class="font-semibold text-[var(--fg)]">{data.demoPassword}</code>
-              </span>
-            )}
-          </div>
-        )
-      }
-    </header>
-
-    <!-- Cover -->
-    <figure class="mt-10">
-      <div
-        class="rounded-card overflow-hidden border border-[var(--border)]"
-        style={`background: radial-gradient(120% 120% at 80% 0%, ${data.accent}26, transparent 60%), var(--bg-alt);`}
+      <figure
+        class="case__cover frame enter-unveil"
+        style={`--enter-delay: 0.3s; --unveil-radius: var(--radius-stage); --case-accent:${data.accent}`}
       >
         <Image
           src={data.cover}
           alt={data.coverAlt}
           widths={[640, 960, 1280, data.cover.width]}
-          sizes="(max-width: 880px) 100vw, 880px"
+          sizes="(max-width: 900px) 100vw, 1280px"
           format="avif"
           quality="high"
           priority
           transition:name={`cover-${entry.id}`}
-          class="w-full object-cover"
         />
-      </div>
-      <figcaption class="sr-only">{data.coverAlt}</figcaption>
-    </figure>
-
-    <!-- Inhoud (Markdown/MDX) -->
-    <div class="prose-project mx-auto mt-12 max-w-3xl text-[var(--fg)]">
-      <Content />
+        <figcaption class="visually-hidden">{data.coverAlt}</figcaption>
+      </figure>
     </div>
 
-    <!-- Externe links (bijv. live campagne-previews) -->
-    {
-      data.externalLinks.length > 0 && (
-        <div class="reveal-up mx-auto mt-10 max-w-3xl">
-          <h2 class="text-sm font-semibold text-[var(--accent-text)]">Bekijk live</h2>
-          <div class="mt-4 flex flex-wrap gap-3">
-            {data.externalLinks.map((link) => (
-              <a
-                href={withUtm(link.url)}
-                target="_blank"
-                rel="noopener"
-                class="group hover:border-accent-500/50 rounded-pill inline-flex items-center gap-2 border border-[var(--border)] bg-[var(--bg-alt)] px-4 py-2.5 text-sm font-medium text-[var(--fg)] transition-all hover:-translate-y-0.5 hover:text-[var(--accent-text)]"
-              >
-                {link.label}
-                <Icon
-                  name="arrowUpRight"
-                  size={16}
-                  class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
-              </a>
-            ))}
-          </div>
-        </div>
-      )
-    }
+    <div class="shell shell--read case__body">
+      <div class="prose">
+        <Content />
+      </div>
 
-    <!-- Ontwerpgalerij — uniform browser-frame raster -->
+      {
+        data.externalLinks.length > 0 && (
+          <section class="case__external reveal-up" aria-labelledby="live-heading">
+            <h2 id="live-heading" class="display-sm">
+              Bekijk live
+            </h2>
+            <div class="case__external-links">
+              {data.externalLinks.map((link) => (
+                <a
+                  href={withUtm(link.url)}
+                  target="_blank"
+                  rel="noopener"
+                  class="link-arrow link-arrow--up"
+                >
+                  {link.label}
+                  <Icon name="arrowUpRight" size={17} />
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
+    </div>
+
     {
       data.gallery.length > 0 && (
-        <section class="mt-16" aria-labelledby="gallery-heading">
-          <h2 id="gallery-heading" class="lift-in text-h2 font-bold text-balance">
+        <section class="shell case__gallery" aria-labelledby="gallery-heading">
+          <h2 id="gallery-heading" class="display-md lift-in">
             Uit het ontwerp
           </h2>
           <ul
             class:list={[
-              'mt-8 grid gap-5 sm:grid-cols-2',
-              // Oneven aantal: laatste beeld centreren onder de twee erboven.
-              data.gallery.length % 2 === 1 && '[&>li:last-child]:sm:col-span-2',
+              'case__gallery-grid reveal-up',
+              data.gallery.length % 2 === 1 && 'case__gallery-grid--odd',
             ]}
           >
             {data.gallery.map((shot, i) => (
-              <li
-                class:list={[
-                  'reveal-up',
-                  // Bij een oneven laatste item: niet full-width oprekken, maar
-                  // gecentreerd op halve breedte houden.
-                  data.gallery.length % 2 === 1 &&
-                    i === data.gallery.length - 1 &&
-                    'sm:mx-auto sm:w-1/2',
-                ]}
-              >
+              <li>
                 <BrowserFrame src={shot.src} alt={shot.alt} url={shot.url} eager={i < 2} />
               </li>
             ))}
@@ -227,35 +182,27 @@ const creativeWorkLd = {
       )
     }
 
-    <!-- Vorige / volgende -->
     {
       (prev || next) && (
-        <nav
-          class="reveal-up mt-16 grid gap-4 border-t border-[var(--border)] pt-8 sm:grid-cols-2"
-          aria-label="Meer projecten"
-        >
+        <nav class="shell case__neighbours reveal-up" aria-label="Meer projecten">
           {prev ? (
-            <a
-              href={`/werk/${prev.id}`}
-              class="group rounded-card hover:border-accent-500/40 hover:shadow-card border border-[var(--border)] p-5 transition-all hover:-translate-y-0.5"
-            >
-              <span class="text-xs font-medium text-[var(--fg-muted)]">Vorige</span>
-              <p class="mt-1 font-semibold transition-colors group-hover:text-[var(--accent-text)]">
-                {prev.data.title}
-              </p>
+            <a href={`/werk/${prev.id}`} class="case__neighbour">
+              <Icon name="arrowLeft" size={18} />
+              <span>
+                <span class="meta">Vorige</span>
+                <span class="case__neighbour-title">{prev.data.title}</span>
+              </span>
             </a>
           ) : (
             <span />
           )}
           {next && (
-            <a
-              href={`/werk/${next.id}`}
-              class="group rounded-card hover:border-accent-500/40 hover:shadow-card border border-[var(--border)] p-5 text-right transition-all hover:-translate-y-0.5 sm:col-start-2"
-            >
-              <span class="text-xs font-medium text-[var(--fg-muted)]">Volgende</span>
-              <p class="mt-1 font-semibold transition-colors group-hover:text-[var(--accent-text)]">
-                {next.data.title}
-              </p>
+            <a href={`/werk/${next.id}`} class="case__neighbour case__neighbour--next">
+              <span>
+                <span class="meta">Volgende</span>
+                <span class="case__neighbour-title">{next.data.title}</span>
+              </span>
+              <Icon name="arrowRight" size={18} />
             </a>
           )}
         </nav>
@@ -263,22 +210,169 @@ const creativeWorkLd = {
     }
   </article>
 
-  <!-- CTA -->
-  <section class="container-page pb-section">
-    <div
-      class="reveal-up rounded-card border border-[var(--border)] bg-[var(--bg-alt)] p-8 text-center sm:p-12"
-    >
-      <h2 class="text-h2 font-bold text-balance">Zoiets voor jouw merk?</h2>
-      <p class="mx-auto mt-3 max-w-md text-pretty text-[var(--fg-muted)]">
-        Laten we bespreken hoe ik {SITE.brand} kan inzetten voor jouw project.
-      </p>
-      <a
-        href="/contact"
-        class="group rounded-pill bg-accent-500 hover:bg-accent-600 mt-6 inline-flex items-center gap-2 px-7 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5"
-      >
-        Neem contact op
-        <Icon name="arrowRight" size={18} class="transition-transform group-hover:translate-x-1" />
-      </a>
-    </div>
-  </section>
+  <CtaBand
+    id="case-cta-heading"
+    compact
+    title="Zoiets voor jouw merk?"
+    text={`Laten we bespreken hoe ik ${SITE.brand} kan inzetten voor jouw project.`}
+    primary={{ label: 'Neem contact op', href: '/contact' }}
+  />
 </BaseLayout>
+
+<style>
+  .case {
+    padding: clamp(1.5rem, 3vw, 2.5rem) 0 clamp(5rem, 8vw, 7rem);
+  }
+
+  .case__header {
+    max-width: 52rem;
+    margin-top: clamp(2rem, 4vw, 3.5rem);
+  }
+  .case__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 1rem;
+  }
+  .case__role {
+    color: var(--vermilion-ink);
+    font-weight: 600;
+  }
+  .case__meta strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .case__header h1 {
+    margin-top: 1rem;
+  }
+  .case__header .lead {
+    max-width: 44rem;
+    margin-top: 1.5rem;
+  }
+  .case__skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.75rem;
+  }
+  .case__live {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+    margin-top: 1.75rem;
+  }
+  .case__password code {
+    padding: 0.15em 0.45em;
+    border-radius: 0.35em;
+    background: var(--paper-deep);
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .case__cover {
+    margin: clamp(2.5rem, 5vw, 4rem) 0 0;
+    border-radius: var(--radius-stage);
+    background:
+      radial-gradient(
+        120% 120% at 80% 0%,
+        color-mix(in srgb, var(--case-accent) 18%, transparent),
+        transparent 60%
+      ),
+      var(--paper-deep);
+  }
+  .case__cover img {
+    width: 100%;
+    height: auto;
+  }
+
+  .case__body {
+    margin-top: clamp(3.5rem, 6vw, 5.5rem);
+  }
+
+  .case__external {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+  .case__external-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .case__gallery {
+    margin-top: clamp(4rem, 7vw, 6rem);
+  }
+  .case__gallery-grid {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 640px) {
+    .case__gallery-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .case__gallery-grid--odd > li:last-child {
+      grid-column: 1 / -1;
+      width: calc(50% - 0.75rem);
+      margin-inline: auto;
+    }
+  }
+
+  .case__neighbours {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin-top: clamp(4rem, 7vw, 6rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .case__neighbour {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .case__neighbour > span {
+    display: grid;
+    gap: 0.15rem;
+  }
+  .case__neighbour-title {
+    font-weight: 600;
+    line-height: 1.3;
+    transition: color 180ms ease;
+  }
+  .case__neighbour :global(svg) {
+    flex: none;
+    transition: transform 240ms var(--ease-out-soft);
+  }
+  .case__neighbour:hover .case__neighbour-title,
+  .case__neighbour:focus-visible .case__neighbour-title {
+    color: var(--vermilion-ink);
+  }
+  .case__neighbour:hover :global(svg) {
+    transform: translateX(-4px);
+  }
+  .case__neighbour--next {
+    justify-content: flex-end;
+    text-align: right;
+  }
+  .case__neighbour--next:hover :global(svg) {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 560px) {
+    .case__neighbours {
+      grid-template-columns: 1fr;
+    }
+    .case__neighbour--next {
+      justify-content: flex-start;
+      text-align: left;
+    }
+  }
+</style>

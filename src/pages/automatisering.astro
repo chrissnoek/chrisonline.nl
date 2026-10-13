@@ -1,7 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
-import SpotlightCards from '../components/SpotlightCards.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { breadcrumbLd, faqLd } from '../lib/seo';
 import { CONTACT, SITE } from '../config/site';
 
 const contactHref = '/contact?dienst=automatisering#contactformulier';
@@ -143,133 +147,101 @@ const serviceLd = {
   url: `${SITE.url}/automatisering`,
 };
 
-const faqLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqs.map((faq) => ({
-    '@type': 'Question',
-    name: faq.question,
-    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
-  })),
-};
+const crumbs = [{ label: 'Home', href: '/' }, { label: title }];
 ---
 
-<BaseLayout title={title} description={description} jsonLd={[serviceLd, faqLd]}>
-  <SpotlightCards />
+<BaseLayout
+  title={title}
+  description={description}
+  jsonLd={[serviceLd, faqLd(faqs), breadcrumbLd(crumbs, Astro.url.pathname)]}
+>
+  <section class="auto-hero" aria-labelledby="automation-title">
+    <div class="shell shell--wide">
+      <div class="auto-hero__stage stage">
+        <span class="sun" aria-hidden="true"></span>
 
-  <section class="automation-hero" aria-labelledby="automation-title">
-    <div class="automation-glow" aria-hidden="true"></div>
-    <div
-      class="container-page grid items-center gap-12 py-20 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 lg:py-28"
-    >
-      <div class="relative z-10">
-        <a
-          href="/#diensten"
-          class="enter-up mb-6 inline-flex items-center gap-2 text-sm font-semibold text-[var(--accent-text)] hover:underline"
-        >
-          <span aria-hidden="true">←</span> Alle diensten
-        </a>
-        <p
-          class="enter-up text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase"
-          style="--enter-delay: 0.06s"
-        >
-          Procesautomatisering & AI voor het mkb
-        </p>
-        <h1
-          id="automation-title"
-          class="text-h1 enter-up mt-4 max-w-3xl font-bold text-balance"
-          style="--enter-delay: 0.12s"
-        >
-          Terugkerend regelwerk? Laat je systemen het voorwerk doen.
-        </h1>
-        <p
-          class="text-lead enter-up mt-6 max-w-2xl text-pretty text-[var(--fg-muted)]"
-          style="--enter-delay: 0.2s"
-        >
-          Offertes opvolgen, werkbonnen overtypen, facturen klaarzetten of een mailbox sorteren. Jij
-          laat zien waar tijd weglekt; ik bouw een betrouwbare workflow rond de programma’s die je
-          al gebruikt.
-        </p>
-        <div class="enter-up mt-8 flex flex-wrap gap-3" style="--enter-delay: 0.28s">
+        <div class="auto-hero__copy">
+          <Breadcrumbs items={crumbs} class="auto-hero__crumbs enter-up" />
           <a
-            href={contactHref}
-            class="group rounded-pill bg-accent-500 hover:bg-accent-600 inline-flex items-center gap-2 px-6 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5"
+            href="/#diensten"
+            class="link-arrow auto-hero__back enter-up"
+            style="--enter-delay: 0.04s"
           >
-            Vraag mijn gratis procescheck aan
-            <Icon
-              name="arrowRight"
-              size={18}
-              class="transition-transform group-hover:translate-x-1"
-            />
+            <Icon name="arrowLeft" size={16} /> Alle diensten
           </a>
-          <a
-            href="#werkwijze"
-            class="rounded-pill inline-flex items-center px-6 py-3.5 font-semibold text-[var(--fg)] ring-1 ring-[var(--border)] transition-colors hover:bg-[var(--bg-alt)]"
-          >
-            Bekijk hoe het werkt
-          </a>
+          <p class="kicker enter-up" style="--enter-delay: 0.08s">
+            Procesautomatisering & AI voor het mkb
+          </p>
+          <h1 id="automation-title" class="display-xl enter-up" style="--enter-delay: 0.14s">
+            Terugkerend regelwerk? Laat je systemen het voorwerk doen.
+          </h1>
+          <p class="lead enter-up" style="--enter-delay: 0.22s">
+            Offertes opvolgen, werkbonnen overtypen, facturen klaarzetten of een mailbox sorteren.
+            Jij laat zien waar tijd weglekt; ik bouw een betrouwbare workflow rond de programma’s
+            die je al gebruikt.
+          </p>
+          <div class="auto-hero__actions enter-up" style="--enter-delay: 0.3s">
+            <a href={contactHref} class="btn btn--primary">
+              Vraag mijn gratis procescheck aan
+              <Icon name="arrowRight" size={18} />
+            </a>
+            <a href="#werkwijze" class="btn btn--line">Bekijk hoe het werkt</a>
+          </div>
+          <p class="meta enter-up" style="--enter-delay: 0.36s">
+            Gratis eerste procescheck · meestal reactie binnen één werkdag · geen verplichting
+          </p>
         </div>
-        <p class="enter-up mt-4 text-sm text-[var(--fg-muted)]" style="--enter-delay: 0.34s">
-          Gratis eerste procescheck · meestal reactie binnen één werkdag · geen verplichting
-        </p>
-      </div>
 
-      <div
-        class="enter-up workflow-window"
-        style="--enter-delay: 0.2s"
-        aria-label="Voorbeeld van een geautomatiseerde avondlijst"
-      >
-        <div class="workflow-window__head">
-          <span class="flex items-center gap-2 font-semibold"
-            ><span class="status-dot"></span> Avondlijst</span
-          >
-          <span>dinsdag · 18:10</span>
-        </div>
-        <ol class="workflow-list">
-          <li style="--flow-delay: 0.15s">
-            <span>18:10</span><strong>Werkbon controleren</strong><em>klaar</em>
-          </li>
-          <li style="--flow-delay: 0.3s">
-            <span>18:12</span><strong>Conceptfactuur maken</strong><em>klaar</em>
-          </li>
-          <li style="--flow-delay: 0.45s">
-            <span>18:13</span><strong>Open offertes signaleren</strong><em>klaar</em>
-          </li>
-          <li style="--flow-delay: 0.6s">
-            <span>18:14</span><strong>Uren doorzetten</strong><em>klaar</em>
-          </li>
-        </ol>
-        <div class="workflow-result">
-          <span>Jij controleert alleen de uitzonderingen.</span>
-          <strong>avond terug</strong>
+        <div
+          class="workflow-window enter-up"
+          style="--enter-delay: 0.24s"
+          aria-label="Voorbeeld van een geautomatiseerde avondlijst"
+        >
+          <div class="workflow-window__head">
+            <span class="workflow-window__status"><span class="status-dot"></span> Avondlijst</span>
+            <span>dinsdag · 18:10</span>
+          </div>
+          <ol class="workflow-list">
+            <li style="--flow-delay: 0.45s">
+              <span>18:10</span><strong>Werkbon controleren</strong><em>klaar</em>
+            </li>
+            <li style="--flow-delay: 0.6s">
+              <span>18:12</span><strong>Conceptfactuur maken</strong><em>klaar</em>
+            </li>
+            <li style="--flow-delay: 0.75s">
+              <span>18:13</span><strong>Open offertes signaleren</strong><em>klaar</em>
+            </li>
+            <li style="--flow-delay: 0.9s">
+              <span>18:14</span><strong>Uren doorzetten</strong><em>klaar</em>
+            </li>
+          </ol>
+          <div class="workflow-result">
+            <span>Jij controleert alleen de uitzonderingen.</span>
+            <strong>avond terug</strong>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section
-    class="border-y border-[var(--border)] bg-[var(--bg-alt)]"
-    aria-label="Wanneer automatisering past"
-  >
-    <div class="container-page grid gap-px py-8 md:grid-cols-2 md:py-0">
-      <div class="reveal-up py-5 md:py-10 md:pr-12">
-        <h2 class="flex items-center gap-3 text-lg font-bold">
+  <section class="section section--tight" aria-label="Wanneer automatisering past">
+    <div class="shell fit-split reveal-up">
+      <div class="fit-split__item">
+        <h2>
           <span class="fit-icon fit-icon--yes"><Icon name="check" size={19} /></span>
           Vaak geschikt
         </h2>
-        <p class="mt-3 text-[var(--fg-muted)]">
+        <p>
           Een taak komt wekelijks terug, volgt meestal dezelfde stappen en gebruikt informatie die
           al digitaal beschikbaar is.
         </p>
       </div>
-      <div
-        class="reveal-up border-t border-[var(--border)] py-5 md:border-t-0 md:border-l md:py-10 md:pl-12"
-      >
-        <h2 class="flex items-center gap-3 text-lg font-bold">
+      <div class="fit-split__item">
+        <h2>
           <span class="fit-icon fit-icon--no" aria-hidden="true">×</span>
           Niet altijd verstandig
         </h2>
-        <p class="mt-3 text-[var(--fg-muted)]">
+        <p>
           Een taak gebeurt zelden, verandert telkens of vraagt bij iedere stap menselijk oordeel.
           Dan adviseer ik iets anders.
         </p>
@@ -277,156 +249,104 @@ const faqLd = {
     </div>
   </section>
 
-  <section id="werkwijze" class="scroll-mt-24" aria-labelledby="process-title">
-    <div class="container-page py-section">
-      <div class="reveal-up max-w-3xl">
-        <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
-          Zo werkt het
-        </p>
-        <h2 id="process-title" class="lift-in text-h2 mt-3 font-bold text-balance">
-          Eerst het proces begrijpen. Dan pas automatiseren.
-        </h2>
-        <p class="text-lead mt-5 text-pretty text-[var(--fg-muted)]">
-          Een goede automatisering begint niet bij een tool, maar bij de manier waarop het werk nu
-          echt loopt.
-        </p>
-      </div>
+  <section id="werkwijze" class="section auto-process" aria-labelledby="process-title">
+    <div class="shell">
+      <SectionHeading
+        id="process-title"
+        kicker="Zo werkt het"
+        title="Eerst het proces begrijpen. Dan pas automatiseren."
+        lead="Een goede automatisering begint niet bij een tool, maar bij de manier waarop het werk nu echt loopt."
+        split
+      />
 
-      <ol class="process-grid mt-14 grid gap-5 lg:grid-cols-3">
+      <ol class="steps reveal-up">
         {
-          steps.map((step, index) => (
-            <li class="reveal spotlight-card rounded-card relative border border-[var(--border)] bg-[var(--bg)] p-7">
-              <span class="process-number" aria-hidden="true">
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              <h3 class="mt-8 text-xl font-bold tracking-tight">{step.title}</h3>
-              <p class="mt-3 leading-relaxed text-[var(--fg-muted)]">{step.text}</p>
+          steps.map((step) => (
+            <li class="step">
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
             </li>
           ))
         }
       </ol>
 
-      <div
-        class="reveal-up rounded-card mt-6 flex flex-col gap-4 border border-[var(--border)] bg-[var(--bg-alt)] p-6 sm:flex-row sm:items-center sm:justify-between"
-      >
-        <p class="max-w-3xl text-sm leading-relaxed text-[var(--fg-muted)]">
-          <strong class="text-[var(--fg)]">Wat krijg je bij de eerste procescheck?</strong>
+      <div class="procescheck surface surface--deep reveal-up">
+        <p>
+          <strong>Wat krijg je bij de eerste procescheck?</strong>
           Een korte beoordeling van de tijdvreter, de belangrijkste vragen en een eerlijk beeld van wat
           wel of niet logisch te automatiseren is.
         </p>
-        <a
-          href={contactHref}
-          class="shrink-0 font-semibold text-[var(--accent-text)] hover:underline"
-          >Vraag de gratis procescheck aan →</a
-        >
+        <a href={contactHref} class="link-arrow link-arrow--accent">
+          Vraag de gratis procescheck aan <Icon name="arrowRight" size={17} />
+        </a>
       </div>
     </div>
   </section>
 
-  <section
-    id="mogelijkheden"
-    class="scroll-mt-24 border-y border-[var(--border)] bg-[var(--bg-alt)]"
-    aria-labelledby="menu-title"
-  >
-    <div class="container-page py-section">
-      <div class="reveal-up mx-auto max-w-3xl text-center">
-        <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
-          Veelgevraagde automatiseringen
-        </p>
-        <h2 id="menu-title" class="lift-in text-h2 mt-3 font-bold text-balance">
-          Kies geen softwarepakket. Begin bij het werk dat je terug wilt.
-        </h2>
-        <p class="text-lead mt-5 text-pretty text-[var(--fg-muted)]">
-          Dit zijn indicatieve, eenmalige projecten exclusief btw. Je definitieve voorstel vermeldt
-          de scope, vaste projectprijs en eventuele softwarekosten afzonderlijk.
-        </p>
-      </div>
+  <section id="mogelijkheden" class="section section--deep" aria-labelledby="menu-title">
+    <div class="shell">
+      <SectionHeading
+        id="menu-title"
+        kicker="Veelgevraagde automatiseringen"
+        title="Kies geen softwarepakket. Begin bij het werk dat je terug wilt."
+        lead="Dit zijn indicatieve, eenmalige projecten exclusief btw. Je definitieve voorstel vermeldt de scope, vaste projectprijs en eventuele softwarekosten afzonderlijk."
+        split
+      />
 
-      <ul class="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3" aria-describedby="time-disclaimer">
+      <ul class="automations rows reveal-up" aria-describedby="time-disclaimer">
         {
           automations.map((item) => (
-            <li class="reveal group spotlight-card rounded-card hover:shadow-card flex flex-col border border-[var(--border)] bg-[var(--bg)] p-6 transition-all duration-300 hover:-translate-y-1">
-              <span class="automation-icon">
-                <Icon name="automation" size={21} />
-              </span>
-              <h3 class="mt-5 text-lg font-bold tracking-tight">{item.title}</h3>
-              <p class="mt-3 flex-1 text-sm leading-relaxed text-[var(--fg-muted)]">
-                {item.description}
-              </p>
-              <div class="mt-6 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border)] pt-5">
-                <span class="text-sm font-semibold">{item.price}</span>
-                <span class="time-badge">{item.time}</span>
+            <li class="automation">
+              <div class="automation__copy">
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </div>
+              <div class="automation__facts">
+                <span class="automation__price">{item.price}</span>
+                <span class="automation__time">{item.time}</span>
               </div>
             </li>
           ))
         }
       </ul>
 
-      <p
-        id="time-disclaimer"
-        class="mx-auto mt-7 max-w-4xl text-center text-xs leading-relaxed text-[var(--fg-muted)]"
-      >
+      <p id="time-disclaimer" class="disclaimer meta">
         * De tijdwinstlabels zijn een eerste inschatting op basis van de genoemde taak, geen
         garantie. De uiteindelijke uitkomst hangt af van je proces, systemen, uitzonderingen,
         datatoegang en gewenste controles.
       </p>
 
-      <div
-        class="reveal-up rounded-card bg-ink-900 relative mt-12 overflow-hidden p-7 text-white sm:flex sm:items-center sm:justify-between sm:gap-10 sm:p-9"
-      >
-        <div
-          class="pointer-events-none absolute -top-24 -left-24 h-64 w-64 rounded-full bg-cyan-400/15 blur-3xl"
-          aria-hidden="true"
-        >
+      <div class="stage stage--ink ask reveal-up">
+        <div>
+          <h3>Staat jouw tijdvreter er niet tussen?</h3>
+          <p>Beschrijf de terugkerende taak. Ik laat je weten of automatiseren logisch lijkt.</p>
         </div>
-        <div class="relative">
-          <h3 class="text-xl font-bold">Staat jouw tijdvreter er niet tussen?</h3>
-          <p class="mt-2 max-w-2xl text-slate-300">
-            Beschrijf de terugkerende taak. Ik laat je weten of automatiseren logisch lijkt.
-          </p>
-        </div>
-        <a
-          href={contactHref}
-          class="rounded-pill bg-accent-500 hover:bg-accent-400 relative mt-5 inline-flex shrink-0 items-center px-6 py-3 font-semibold text-white transition-colors sm:mt-0"
-          >Vraag mijn gratis procescheck aan</a
-        >
+        <a href={contactHref} class="btn btn--primary">Vraag mijn gratis procescheck aan</a>
       </div>
     </div>
   </section>
 
-  <section aria-labelledby="calculation-title">
-    <div
-      class="container-page py-section grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-16"
-    >
-      <div class="reveal-up">
-        <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
-          Controleerbare rekensom
-        </p>
-        <h2 id="calculation-title" class="lift-in text-h2 mt-3 font-bold text-balance">
-          Reken met aannames die je kunt aanpassen.
-        </h2>
-        <p class="text-lead mt-5 text-pretty text-[var(--fg-muted)]">
+  <section class="section" aria-labelledby="calculation-title">
+    <div class="shell calc">
+      <div class="lift-in">
+        <p class="kicker">Controleerbare rekensom</p>
+        <h2 id="calculation-title" class="display-md">Reken met aannames die je kunt aanpassen.</h2>
+        <p class="lead">
           Dit fictieve voorbeeld laat alleen de eenvoudige waarde van handmatige uren zien. Het is
           geen belofte over jouw werkelijke besparing.
         </p>
-        <p class="mt-5 text-sm font-medium text-[var(--fg-muted)]">
+        <p class="calc__assumption">
           Uitgangspunt: 7 uur per week, 46 werkweken per jaar en een interne uurwaarde van €45.
         </p>
       </div>
 
-      <div
-        class="reveal-up calculation-card rounded-card shadow-card overflow-hidden border border-[var(--border)] bg-[var(--bg)]"
-      >
-        <div
-          class="border-b border-[var(--border)] bg-[var(--bg-alt)] px-6 py-4 text-sm font-semibold"
-        >
-          Voorbeeld · 7 uur terugkerend werk per week
-        </div>
-        <dl class="divide-y divide-[var(--border)]">
+      <div class="calc__card frame frame--lift reveal-up">
+        <p class="calc__head">Voorbeeld · 7 uur terugkerend werk per week</p>
+        <dl>
           <div><dt>Handmatige tijd per jaar</dt><dd>7 × 46 = 322 uur</dd></div>
           <div><dt>Waarde bij €45 per uur</dt><dd>€ 14.490 per jaar</dd></div>
           <div><dt>Twee indicatieve projecten</dt><dd>€ 3.500–6.000</dd></div>
-          <div class="calculation-total">
+          <div class="calc__total">
             <dt>Eenvoudige terugverdientijd</dt><dd><strong>ongeveer 3–5 maanden</strong></dd>
           </div>
         </dl>
@@ -434,35 +354,21 @@ const faqLd = {
     </div>
   </section>
 
-  <section
-    class="border-y border-[var(--border)] bg-[var(--bg-alt)]"
-    aria-labelledby="agreements-title"
-  >
-    <div class="container-page py-section">
-      <div class="reveal-up max-w-3xl">
-        <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
-          Vooraf duidelijk
-        </p>
-        <h2 id="agreements-title" class="lift-in text-h2 mt-3 font-bold text-balance">
-          Geen grote beloftes. Wel concrete afspraken.
-        </h2>
-        <p class="text-lead mt-5 text-pretty text-[var(--fg-muted)]">
-          Automatisering raakt je dagelijkse werk. Daarom horen grenzen, controles en eigenaarschap
-          bij het voorstel, niet pas bij de oplevering.
-        </p>
-      </div>
-
-      <ul class="mt-14 grid gap-5 md:grid-cols-2">
+  <section class="section section--deep" aria-labelledby="agreements-title">
+    <div class="shell">
+      <SectionHeading
+        id="agreements-title"
+        kicker="Vooraf duidelijk"
+        title="Geen grote beloftes. Wel concrete afspraken."
+        lead="Automatisering raakt je dagelijkse werk. Daarom horen grenzen, controles en eigenaarschap bij het voorstel, niet pas bij de oplevering."
+        split
+      />
+      <ul class="agreements reveal-up">
         {
-          agreements.map((item, index) => (
-            <li class="reveal spotlight-card rounded-card flex gap-5 border border-[var(--border)] bg-[var(--bg)] p-6">
-              <span class="pillar-node pillar-node--sm grid shrink-0 place-items-center text-sm font-bold text-white">
-                {index + 1}
-              </span>
-              <div>
-                <h3 class="text-lg font-bold">{item.title}</h3>
-                <p class="mt-2 leading-relaxed text-[var(--fg-muted)]">{item.text}</p>
-              </div>
+          agreements.map((item) => (
+            <li class="agreement">
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
             </li>
           ))
         }
@@ -470,179 +376,140 @@ const faqLd = {
     </div>
   </section>
 
-  <section aria-labelledby="faq-title">
-    <div class="container-page py-section grid gap-10 lg:grid-cols-[0.65fr_1.35fr] lg:gap-16">
-      <div class="reveal-up">
-        <p class="text-sm font-semibold tracking-wide text-[var(--accent-text)] uppercase">
-          Veelgestelde vragen
-        </p>
-        <h2 id="faq-title" class="lift-in text-h2 mt-3 font-bold text-balance">
-          Wat je vooraf wilt weten.
-        </h2>
-        <p class="mt-5 text-[var(--fg-muted)]">
-          Staat je vraag er niet tussen? <a
-            href={contactHref}
-            class="font-semibold text-[var(--accent-text)] hover:underline"
+  <section class="section" aria-labelledby="faq-title">
+    <div class="shell auto-faq">
+      <div class="lift-in">
+        <p class="kicker">Veelgestelde vragen</p>
+        <h2 id="faq-title" class="display-md">Wat je vooraf wilt weten.</h2>
+        <p class="lead">
+          Staat je vraag er niet tussen? <a href={contactHref} class="text-link"
             >Leg je situatie aan me voor.</a
           >
         </p>
       </div>
-      <div class="reveal-up divide-y divide-[var(--border)] border-y border-[var(--border)]">
-        {
-          faqs.map((faq) => (
-            <details class="faq-item group py-5">
-              <summary class="flex cursor-pointer list-none items-center justify-between gap-5 font-semibold">
-                {faq.question}
-                <span class="faq-plus" aria-hidden="true">
-                  +
-                </span>
-              </summary>
-              <p class="mt-4 max-w-3xl pr-10 leading-relaxed text-[var(--fg-muted)]">
-                {faq.answer}
-              </p>
-            </details>
-          ))
-        }
+      <div class="reveal-up">
+        <Faq items={faqs} />
       </div>
     </div>
   </section>
 
-  <section aria-labelledby="automation-cta-title">
-    <div class="container-page pb-section">
-      <div
-        class="reveal-up rounded-card bg-ink-900 relative overflow-hidden px-6 py-14 text-center text-white sm:px-12 sm:py-20"
-      >
-        <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-          <div
-            class="bg-accent-500/20 absolute top-[-70%] left-1/2 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full blur-3xl"
-          >
-          </div>
-        </div>
-        <div class="relative mx-auto max-w-2xl">
-          <p class="text-accent-300 text-sm font-semibold tracking-wide uppercase">
-            Gratis eerste procescheck
-          </p>
-          <h2 id="automation-cta-title" class="text-h2 mt-3 font-bold text-balance">
-            Welke terugkerende taak wil jij niet nóg een jaar handmatig doen?
-          </h2>
-          <p class="text-lead mt-5 text-pretty text-slate-300">
-            Vertel kort wat er nu gebeurt, hoeveel tijd het kost en welke programma’s je gebruikt.
-            Ik reageer meestal binnen één werkdag met de eerste vragen en een eerlijke inschatting.
-          </p>
-          <div class="mt-9 flex flex-wrap justify-center gap-3">
-            <a
-              href={contactHref}
-              class="group rounded-pill bg-accent-500 hover:bg-accent-400 inline-flex items-center gap-2 px-7 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5"
-            >
-              Vraag mijn gratis procescheck aan
-              <Icon
-                name="arrowRight"
-                size={18}
-                class="transition-transform group-hover:translate-x-1"
-              />
-            </a>
-            <a
-              href={`mailto:${CONTACT.email}?subject=Vraag over automatisering`}
-              class="rounded-pill inline-flex items-center gap-2 border border-white/20 px-7 py-3.5 font-semibold text-white transition-colors hover:bg-white/10"
-            >
-              <Icon name="mail" size={18} />
-              Mail direct
-            </a>
-          </div>
-          <p class="mt-5 text-sm text-slate-400">
-            Geen verplichting. Geen automatische offerte. Eerst bepalen of automatiseren zinvol is.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <CtaBand
+    id="automation-cta-title"
+    title="Welke terugkerende taak wil jij niet nóg een jaar handmatig doen?"
+    text="Vertel kort wat er nu gebeurt, hoeveel tijd het kost en welke programma’s je gebruikt. Ik reageer meestal binnen één werkdag met de eerste vragen en een eerlijke inschatting."
+    primary={{ label: 'Vraag mijn gratis procescheck aan', href: contactHref }}
+    secondary={{
+      label: 'Mail direct',
+      href: `mailto:${CONTACT.email}?subject=Vraag over automatisering`,
+    }}
+    note="Geen verplichting. Geen automatische offerte. Eerst bepalen of automatiseren zinvol is."
+  />
 </BaseLayout>
 
 <style>
-  .automation-hero {
+  /* ── Hero ───────────────────────────────────────────────────────────────── */
+  .auto-hero {
+    padding: 0.5rem 0 0;
+  }
+  .auto-hero__stage {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(20rem, 0.85fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 5rem);
+    padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 5vw, 5.5rem) clamp(2.5rem, 5vw, 4.5rem);
+  }
+  .auto-hero__copy {
     position: relative;
-    isolation: isolate;
-    overflow: hidden;
+    z-index: 2;
+    min-width: 0;
+  }
+  .auto-hero__crumbs {
+    margin-bottom: clamp(1.5rem, 4vw, 3rem);
+  }
+  .auto-hero__back {
+    min-height: 2.25rem;
+    margin-bottom: 1rem;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+  .auto-hero__back:hover :global(svg) {
+    transform: translateX(-4px);
+  }
+  .auto-hero__copy .kicker {
+    margin-bottom: 1.1rem;
+  }
+  .auto-hero__copy h1 {
+    max-width: 17ch;
+    color: var(--ink);
+    font-size: clamp(2.6rem, 1rem + 3.9vw, 5.2rem);
+  }
+  .auto-hero__copy .lead {
+    max-width: 38rem;
+    margin-top: 1.5rem;
+  }
+  .auto-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2.1rem;
+  }
+  .auto-hero__copy .meta {
+    margin-top: 1rem;
   }
 
-  .automation-hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-    background-image:
-      linear-gradient(color-mix(in srgb, var(--border) 45%, transparent) 1px, transparent 1px),
-      linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--border) 45%, transparent) 1px,
-        transparent 1px
-      );
-    background-size: 44px 44px;
-    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent 90%);
-  }
-
-  .automation-glow {
-    position: absolute;
-    top: -16rem;
-    right: -12rem;
-    z-index: -1;
-    width: 38rem;
-    height: 38rem;
-    border-radius: 9999px;
-    background: color-mix(in srgb, var(--color-accent-500) 18%, transparent);
-    filter: blur(80px);
-  }
-
+  /* Avondlijst: een voorbeeld van wat de workflow ’s avonds al klaarzet. */
   .workflow-window {
     position: relative;
+    z-index: 2;
     overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--border) 80%, var(--color-accent-500));
-    border-radius: 1.25rem;
-    background: color-mix(in srgb, var(--bg) 90%, transparent);
-    box-shadow: var(--shadow-card-hover);
-    backdrop-filter: blur(16px);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    background: var(--paper-raised);
+    box-shadow: var(--shadow-lift);
   }
-
   .workflow-window::after {
     content: '';
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: linear-gradient(120deg, transparent 25%, rgba(0, 176, 213, 0.09), transparent 65%);
+    background: linear-gradient(120deg, transparent 25%, var(--vermilion-soft), transparent 65%);
+    opacity: 0.7;
     transform: translateX(-100%);
   }
-
   .workflow-window__head,
   .workflow-result {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 1rem 1.25rem;
-    font-size: 0.75rem;
-    color: var(--fg-muted);
+    padding: 0.9rem 1.25rem;
+    color: var(--ink-soft);
+    font-size: 0.8rem;
   }
-
   .workflow-window__head {
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-alt);
+    border-bottom: 1px solid var(--line);
+    background: var(--paper-deep);
   }
-
+  .workflow-window__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--ink);
+    font-weight: 600;
+  }
   .status-dot {
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 50%;
-    background: var(--color-accent-500);
-    box-shadow: 0 0 0 5px rgba(0, 176, 213, 0.12);
+    background: var(--vermilion);
+    box-shadow: 0 0 0 5px var(--vermilion-soft);
   }
-
   .workflow-list {
     position: relative;
     margin: 0;
-    padding: 0.75rem 1.25rem;
+    padding: 0.6rem 1.25rem;
     list-style: none;
   }
-
   .workflow-list::before {
     content: '';
     position: absolute;
@@ -650,9 +517,8 @@ const faqLd = {
     bottom: 2rem;
     left: 4.42rem;
     width: 1px;
-    background: var(--border);
+    background: var(--line);
   }
-
   .workflow-list li {
     position: relative;
     display: grid;
@@ -661,176 +527,65 @@ const faqLd = {
     gap: 1rem;
     padding-block: 0.85rem;
   }
-
   .workflow-list li::before {
     content: '';
     position: absolute;
     left: 3.16rem;
     width: 0.55rem;
     height: 0.55rem;
-    border: 2px solid var(--color-accent-500);
+    border: 2px solid var(--vermilion);
     border-radius: 50%;
-    background: var(--bg);
+    background: var(--paper-raised);
   }
-
   .workflow-list span,
   .workflow-list em {
-    font-size: 0.7rem;
+    color: var(--ink-soft);
+    font-size: 0.74rem;
     font-style: normal;
-    color: var(--fg-muted);
   }
-
   .workflow-list strong {
     overflow: hidden;
-    font-size: 0.85rem;
+    color: var(--ink);
+    font-size: 0.88rem;
+    font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-
   .workflow-list em {
-    border-radius: 9999px;
-    padding: 0.2rem 0.5rem;
-    background: color-mix(in srgb, var(--color-accent-500) 12%, transparent);
-    color: var(--accent-text);
-    font-weight: 700;
-  }
-
-  .workflow-result {
-    border-top: 1px solid var(--border);
-    background: var(--color-ink-900);
-    color: #cbd5e1;
-  }
-
-  .workflow-result strong {
-    transform: rotate(-2deg);
-    border: 1px solid rgba(79, 205, 230, 0.65);
-    border-radius: 0.35rem;
-    padding: 0.35rem 0.6rem;
-    color: var(--color-accent-300);
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .fit-icon,
-  .automation-icon {
-    display: grid;
-    flex: 0 0 auto;
-    width: 2.5rem;
-    height: 2.5rem;
-    place-items: center;
-    border-radius: 0.75rem;
-  }
-
-  .fit-icon--yes,
-  .automation-icon {
-    background: color-mix(in srgb, var(--color-accent-500) 12%, transparent);
-    color: var(--accent-text);
-  }
-
-  .fit-icon--no {
-    background: color-mix(in srgb, var(--fg-muted) 12%, transparent);
-    color: var(--fg-muted);
-    font-size: 1.5rem;
-  }
-
-  .process-grid {
-    counter-reset: process;
-  }
-
-  .process-number {
-    color: var(--accent-text);
-    font-family: var(--font-display, var(--font-sans));
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-  }
-
-  .process-number::after {
-    content: '';
-    position: absolute;
-    top: 3rem;
-    right: 1.75rem;
-    left: 4.3rem;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .time-badge {
-    border: 1px solid color-mix(in srgb, var(--color-accent-500) 35%, transparent);
-    border-radius: 9999px;
-    padding: 0.35rem 0.65rem;
-    background: color-mix(in srgb, var(--color-accent-500) 10%, transparent);
-    color: var(--accent-text);
-    font-size: 0.7rem;
-    font-weight: 700;
-    white-space: nowrap;
-  }
-
-  .calculation-card dl > div {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 1.5rem;
-    padding: 1.1rem 1.5rem;
-  }
-
-  .calculation-card dt {
-    color: var(--fg-muted);
-  }
-
-  .calculation-card dd {
-    text-align: right;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: var(--vermilion-soft);
+    color: var(--vermilion-ink);
     font-weight: 600;
   }
-
-  .calculation-total {
-    align-items: center;
-    background: color-mix(in srgb, var(--color-accent-500) 8%, var(--bg));
+  .workflow-result {
+    border-top: 1px solid var(--line);
+    background: var(--stage);
+    color: var(--stage-soft);
   }
-
-  .calculation-total strong {
-    display: inline-block;
-    transform: rotate(-1deg);
-    border: 1px solid color-mix(in srgb, var(--color-accent-500) 45%, transparent);
-    border-radius: 0.5rem;
-    padding: 0.45rem 0.7rem;
-    background: color-mix(in srgb, var(--color-accent-500) 12%, transparent);
-    color: var(--accent-text);
-    box-shadow: 0 6px 18px -12px rgba(0, 176, 213, 0.75);
+  .workflow-result strong {
+    padding: 0.35rem 0.6rem;
+    border: 1px solid rgba(255, 141, 105, 0.55);
+    border-radius: 0.4rem;
+    color: #ff8d69;
+    font-size: 0.74rem;
+    font-weight: 600;
     white-space: nowrap;
-  }
-
-  .faq-plus {
-    display: grid;
-    flex: 0 0 auto;
-    width: 2rem;
-    height: 2rem;
-    place-items: center;
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    color: var(--accent-text);
-    transition: transform 0.25s var(--ease-out-soft);
-  }
-
-  .faq-item[open] .faq-plus {
-    transform: rotate(45deg);
+    transform: rotate(-2deg);
   }
 
   @media (prefers-reduced-motion: no-preference) {
     .workflow-window::after {
-      animation: workflow-scan 4.5s ease-in-out 1s infinite;
+      animation: workflow-scan 4.5s ease-in-out 1.2s infinite;
     }
-
     .workflow-list li {
       animation: workflow-row 0.55s var(--ease-out-soft) both;
       animation-delay: var(--flow-delay);
     }
-
     .status-dot {
       animation: status-pulse 2.5s ease-in-out infinite;
     }
   }
-
   @keyframes workflow-row {
     from {
       opacity: 0;
@@ -841,7 +596,6 @@ const faqLd = {
       transform: translateX(0);
     }
   }
-
   @keyframes workflow-scan {
     0%,
     70% {
@@ -851,52 +605,329 @@ const faqLd = {
       transform: translateX(100%);
     }
   }
-
   @keyframes status-pulse {
     0%,
     100% {
-      box-shadow: 0 0 0 5px rgba(0, 176, 213, 0.12);
+      box-shadow: 0 0 0 5px var(--vermilion-soft);
     }
     50% {
-      box-shadow: 0 0 0 9px rgba(0, 176, 213, 0.03);
+      box-shadow: 0 0 0 10px transparent;
     }
   }
 
-  @media (max-width: 479px) {
+  /* ── Geschikt / niet geschikt ───────────────────────────────────────────── */
+  .fit-split {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem 4rem;
+  }
+  .fit-split__item h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-sans);
+    font-size: 1.2rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+  .fit-split__item p {
+    max-width: 34rem;
+    margin-top: 0.75rem;
+    color: var(--ink-soft);
+    line-height: 1.65;
+  }
+  .fit-icon {
+    display: grid;
+    flex: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    place-items: center;
+    border-radius: 0.75rem;
+  }
+  .fit-icon--yes {
+    background: var(--vermilion-soft);
+    color: var(--vermilion-ink);
+  }
+  .fit-icon--no {
+    background: var(--paper-deep);
+    color: var(--ink-soft);
+    font-size: 1.5rem;
+  }
+
+  /* ── Werkwijze: drie stappen in leesvolgorde ────────────────────────────── */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+    margin: clamp(2.5rem, 5vw, 4rem) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .step {
+    padding-top: 1.25rem;
+    border-top: 2px solid var(--ink);
+  }
+  .step h3,
+  .agreement h3 {
+    font-size: 1.15rem;
+  }
+  .step p,
+  .agreement p,
+  .automation__copy p {
+    margin-top: 0.6rem;
+    color: var(--ink-soft);
+    line-height: 1.65;
+  }
+  .procescheck {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-top: 2.5rem;
+    padding: 1.5rem 1.75rem;
+  }
+  .procescheck p {
+    max-width: 44rem;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .procescheck strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ── Automatiseringen als rijen: taak, toelichting, indicatie ───────────── */
+  .automations {
+    margin: clamp(2.5rem, 5vw, 4rem) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .automation {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 1rem 3rem;
+    padding: 1.5rem 0;
+  }
+  .automation__copy h3 {
+    font-size: 1.15rem;
+  }
+  .automation__copy p {
+    max-width: 40rem;
+  }
+  .automation__facts {
+    display: grid;
+    justify-items: end;
+    gap: 0.5rem;
+    text-align: right;
+  }
+  .automation__price {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .automation__time {
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+    background: var(--vermilion-soft);
+    color: var(--vermilion-ink);
+    font-size: 0.76rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .disclaimer {
+    max-width: 60rem;
+    margin-top: 1.5rem;
+    font-size: 0.8rem;
+  }
+  .ask {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem 3rem;
+    margin-top: 3rem;
+    padding: clamp(1.75rem, 3vw, 2.5rem);
+    border-radius: var(--radius-card);
+  }
+  .ask h3 {
+    color: var(--stage-ink);
+    font-size: 1.3rem;
+  }
+  .ask p {
+    max-width: 36rem;
+    margin-top: 0.4rem;
+    color: var(--stage-soft);
+  }
+  .ask .btn {
+    flex: none;
+  }
+
+  /* ── Rekensom ───────────────────────────────────────────────────────────── */
+  .calc {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(2.5rem, 6vw, 6rem);
+  }
+  .calc h2 {
+    max-width: 14ch;
+  }
+  .calc .kicker + h2 {
+    margin-top: 0.9rem;
+  }
+  .calc .lead {
+    margin-top: 1.25rem;
+  }
+  .calc__assumption {
+    margin-top: 1.25rem;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .calc__card {
+    background: var(--paper-raised);
+  }
+  .calc__head {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--line);
+    background: var(--paper-deep);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .calc__card dl {
+    margin: 0;
+  }
+  .calc__card dl > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.5rem;
+    padding: 1.1rem 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .calc__card dl > div:first-child {
+    border-top: 0;
+  }
+  .calc__card dt {
+    color: var(--ink-soft);
+  }
+  .calc__card dd {
+    margin: 0;
+    font-weight: 600;
+    text-align: right;
+  }
+  .calc__total {
+    align-items: center;
+    background: var(--vermilion-soft);
+  }
+  .calc__total dt {
+    color: var(--ink);
+  }
+  .calc__total strong {
+    color: var(--vermilion-ink);
+    white-space: nowrap;
+  }
+
+  /* ── Afspraken ──────────────────────────────────────────────────────────── */
+  .agreements {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.25rem 3rem;
+    margin: clamp(2.5rem, 5vw, 4rem) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .agreement {
+    padding-top: 1.25rem;
+    border-top: 2px solid var(--ink);
+  }
+
+  /* ── FAQ ────────────────────────────────────────────────────────────────── */
+  .auto-faq {
+    display: grid;
+    grid-template-columns: minmax(15rem, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(2.5rem, 7vw, 7rem);
+  }
+  .auto-faq h2 {
+    max-width: 14ch;
+  }
+  .auto-faq .kicker + h2 {
+    margin-top: 0.9rem;
+  }
+  .auto-faq .lead {
+    margin-top: 1.25rem;
+    font-size: 1.05rem;
+  }
+
+  /* ── Responsive ─────────────────────────────────────────────────────────── */
+  @media (max-width: 960px) {
+    .auto-hero__stage,
+    .calc,
+    .auto-faq {
+      grid-template-columns: 1fr;
+    }
+    .workflow-window {
+      max-width: 36rem;
+    }
+    .steps {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 640px) {
+    .auto-hero__stage {
+      padding: 1.5rem 1.25rem;
+    }
+    .auto-hero__copy h1 {
+      font-size: clamp(2.4rem, 10vw, 3.5rem);
+    }
+    .auto-hero__actions > a,
+    .ask .btn {
+      width: 100%;
+    }
+    .fit-split,
+    .agreements {
+      grid-template-columns: 1fr;
+    }
+    .automation {
+      grid-template-columns: 1fr;
+      gap: 0.9rem;
+    }
+    .automation__facts {
+      grid-auto-flow: column;
+      justify-content: start;
+      justify-items: start;
+      align-items: center;
+      gap: 0.75rem;
+      text-align: left;
+    }
     .workflow-window__head,
     .workflow-result {
       align-items: flex-start;
       flex-direction: column;
     }
-
     .workflow-list li {
       grid-template-columns: 2.75rem minmax(0, 1fr);
       gap: 0.75rem;
     }
-
     .workflow-list::before {
       left: 3.55rem;
     }
-
     .workflow-list li::before {
       left: 2.49rem;
     }
-
     .workflow-list em {
       grid-column: 2;
       width: fit-content;
     }
-
-    .calculation-card dl > div {
+    .calc__card dl > div {
       grid-template-columns: 1fr;
       gap: 0.4rem;
     }
-
-    .calculation-card dd {
+    .calc__card dd {
       text-align: left;
     }
-
-    .calculation-total strong {
+    .calc__total strong {
       white-space: normal;
     }
   }

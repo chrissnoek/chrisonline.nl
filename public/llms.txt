@@ -26,6 +26,7 @@ Service area: Noord-Holland and the rest of the Netherlands; collaboration can b
 
 ## Machine-readable background
 
+- [Full site text in one file](https://www.chrisonline.nl/llms-full.txt)
 - [Shopify services and selection guidance](https://www.chrisonline.nl/ai/shopify-diensten.md)
 - [Local entity facts for Volendam and Noord-Holland](https://www.chrisonline.nl/ai/shopify-specialist-noord-holland.md)
 - [Shopify apps by Chris Online](https://www.chrisonline.nl/ai/shopify-apps.md)
