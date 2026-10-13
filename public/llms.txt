@@ -16,6 +16,7 @@ Service area: Noord-Holland and the rest of the Netherlands; collaboration can b
 - [Shopify specialist in Noord-Holland](https://www.chrisonline.nl/shopify-specialist-noord-holland/): local service information for Volendam and Noord-Holland.
 - [Shopify knowledge base](https://www.chrisonline.nl/kennis/): practical guidance on conversion, product information, delivery confidence, performance and measurement.
 - [Website and webshop portfolio](https://www.chrisonline.nl/#werk): selected Shopify, e-commerce, travel and campaign work.
+- [PietjeMarietje project](https://www.chrisonline.nl/werk/pietjemarietje/): custom Shopify theme De dag in huis for a home accessories webshop, with a morning-to-evening room scene and shoppable product hotspots.
 - [Shopify Apps](https://www.chrisonline.nl/shopify-apps/): separate product catalog for PromoFinch, SpecFinch and Delivery Promise NL, developed by Chris Online.
 - [PromoFinch product](https://www.chrisonline.nl/werk/promofinch/): read-only promotion checks against price and estimated gross-margin limits, with campaign baseline monitoring. Live since 6 October 2026.
 - [SpecFinch project](https://www.chrisonline.nl/werk/specfinch/): read-only Shopify catalog rules and baseline-first change monitoring.
