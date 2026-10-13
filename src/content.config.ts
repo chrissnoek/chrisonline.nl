@@ -138,4 +138,20 @@ const knowledge = defineCollection({
   }),
 });
 
-export const collections = { projects, knowledge };
+/** English product copy links to the original project for images, launch date and install URL. */
+const englishApps = defineCollection({
+  loader: glob({ base: './src/content/apps-en', pattern: '*.md' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    heroTitle: z.string(),
+    intro: z.string(),
+    tagline: z.string(),
+    audience: z.string(),
+    features: z.array(z.string()).min(1),
+    coverAlt: z.string(),
+    galleryAlts: z.array(z.string()),
+  }),
+});
+
+export const collections = { projects, knowledge, englishApps };

@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { SITE } from '../config/site';
+import { appLanguageAlternates } from '../config/app-locales';
 
 export async function getShopifyApps() {
   return (
@@ -56,6 +57,9 @@ Vestiging: Volendam, Noord-Holland, Nederland
 ${entries
   .map((entry) => {
     const { data } = entry;
+    const englishPage = appLanguageAlternates(`/werk/${entry.id}/`).find(
+      (alternate) => alternate.lang === 'en',
+    );
     return `## ${appName(entry)}
 
 ${data.application?.tagline ?? data.summary}
@@ -64,7 +68,7 @@ ${data.summary}
 
 - Productpagina: ${SITE.url}/werk/${entry.id}/
 - Productpagina in Markdown: ${SITE.url}/werk/${entry.id}.md
-- Shopify App Store: ${data.url}
+${englishPage ? `- English product page: ${SITE.url}${englishPage.href}\n` : ''}- Shopify App Store: ${data.url}
 - Gepubliceerd: ${data.pubDate.toISOString().split('T')[0]}
 ${data.application ? `- Voor wie: ${data.application.audience}\n- App-talen: ${data.application.languages.join(', ')}\n\n### Functionaliteit\n\n${data.application.features.map((feature) => `- ${feature}`).join('\n')}` : ''}`;
   })

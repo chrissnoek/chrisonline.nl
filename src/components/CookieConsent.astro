@@ -1,27 +1,49 @@
 ---
 import { ANALYTICS } from '../config/analytics';
+import type { AppLocale } from '../config/app-locales';
+interface Props {
+  lang?: AppLocale;
+}
+const { lang = 'nl' } = Astro.props;
+const english = lang === 'en';
 ---
 
 <!--
   Geen tagmanager-snippet in de <head>: zo is er vóór toestemming ook geen
   verzoek naar Google. Dit is bewust een "basic consent"-implementatie.
 -->
-<aside id="cookie-consent" class="cookie-consent" aria-label="Cookievoorkeuren" hidden>
+<aside
+  id="cookie-consent"
+  class="cookie-consent"
+  aria-label={english ? 'Cookie preferences' : 'Cookievoorkeuren'}
+  hidden
+>
   <div class="cookie-consent__mark" aria-hidden="true">CO</div>
   <div class="cookie-consent__copy">
-    <p class="cookie-consent__title">Jij kiest wat we meten.</p>
+    <p class="cookie-consent__title">
+      {english ? 'You choose what we measure.' : 'Jij kiest wat we meten.'}
+    </p>
     <p>
-      Met jouw toestemming gebruiken we Google Analytics om te zien welke pagina’s en aanvragen
-      werken. Zonder toestemming meten we niets.
-      <a href="/privacy">Lees ons privacy- en cookiebeleid</a>.
+      {
+        english
+          ? 'With your permission, we use Google Analytics to understand which pages and enquiries work. Without permission, we do not measure anything.'
+          : 'Met jouw toestemming gebruiken we Google Analytics om te zien welke pagina’s en aanvragen werken. Zonder toestemming meten we niets.'
+      }
+      <a href="/privacy"
+        >{
+          english
+            ? 'Read our privacy and cookie policy (Dutch)'
+            : 'Lees ons privacy- en cookiebeleid'
+        }</a
+      >.
     </p>
   </div>
   <div class="cookie-consent__actions">
     <button type="button" class="cookie-consent__decline" data-consent-choice="denied">
-      Alleen noodzakelijk
+      {english ? 'Necessary only' : 'Alleen noodzakelijk'}
     </button>
     <button type="button" class="cookie-consent__accept" data-consent-choice="granted">
-      Analyse toestaan
+      {english ? 'Allow analytics' : 'Analyse toestaan'}
     </button>
   </div>
 </aside>

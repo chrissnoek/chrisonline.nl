@@ -1,6 +1,7 @@
 ---
 import { BUSINESS, SITE, SEO, SOCIALS, CONTACT } from '../config/site';
 import { Font } from 'astro:assets';
+import type { AppLocale } from '../config/app-locales';
 
 interface Props {
   title?: string;
@@ -13,6 +14,8 @@ interface Props {
   /** Voorkom indexering van deze pagina (bijv. de bedankt-pagina). */
   noindex?: boolean;
   markdown?: string;
+  lang?: AppLocale;
+  alternates?: { lang: AppLocale; href: string }[];
 }
 
 const {
@@ -23,6 +26,8 @@ const {
   jsonLd = [],
   noindex = false,
   markdown,
+  lang = 'nl',
+  alternates = [],
 } = Astro.props;
 
 const pageTitle = title ? SEO.titleTemplate.replace('%s', title) : SEO.defaultTitle;
@@ -38,7 +43,7 @@ const personLd = {
   '@type': 'Person',
   '@id': `${origin}/#person`,
   name: SITE.author,
-  jobTitle: SITE.jobTitle,
+  jobTitle: lang === 'en' ? 'Shopify designer and frontend developer' : SITE.jobTitle,
   url: origin,
   image: new URL('/og/og-default.png', Astro.site).href,
   sameAs: SOCIALS.filter((s) => s.url.startsWith('http')).map((s) => s.url),
@@ -68,7 +73,10 @@ const businessLd = {
   legalName: BUSINESS.name,
   url: origin,
   email: CONTACT.email,
-  description: SEO.defaultDescription,
+  description:
+    lang === 'en'
+      ? 'Chris Snoek designs, builds and maintains premium Shopify stores and develops focused Shopify apps.'
+      : SEO.defaultDescription,
   image: new URL('/og/og-default.png', Astro.site).href,
   founder: { '@id': `${origin}/#person` },
   identifier: {
@@ -94,7 +102,7 @@ const websiteLd = {
   '@id': `${origin}/#website`,
   name: `${SITE.author} | ${SITE.brand}`,
   url: origin,
-  inLanguage: SITE.lang,
+  inLanguage: ['nl', 'en'],
   publisher: { '@id': `${origin}/#business` },
 };
 
@@ -109,12 +117,17 @@ const allJsonLd = [personLd, businessLd, websiteLd, ...jsonLd];
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalURL} />
 {
+  alternates.map((alternate) => (
+    <link rel="alternate" hreflang={alternate.lang} href={new URL(alternate.href, Astro.site)} />
+  ))
+}
+{
   markdown && (
     <link
       rel="alternate"
       type="text/markdown"
       href={new URL(markdown, Astro.site)}
-      title="Deze pagina in Markdown"
+      title={lang === 'en' ? 'This page in Markdown' : 'Deze pagina in Markdown'}
     />
   )
 }
@@ -122,7 +135,9 @@ const allJsonLd = [personLd, businessLd, websiteLd, ...jsonLd];
   rel="alternate"
   type="text/plain"
   href="/llms.txt"
-  title="Publieke site-informatie voor AI-clients"
+  title={lang === 'en'
+    ? 'Public site information for AI clients'
+    : 'Publieke site-informatie voor AI-clients'}
 />
 {noindex && <meta name="robots" content="noindex, nofollow" />}
 <meta name="author" content={SITE.author} />
@@ -137,7 +152,17 @@ const allJsonLd = [personLd, businessLd, websiteLd, ...jsonLd];
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:site_name" content={SITE.brand} />
-<meta property="og:locale" content={SITE.ogLocale} />
+<meta property="og:locale" content={lang === 'en' ? 'en_US' : SITE.ogLocale} />
+{
+  alternates
+    .filter((alternate) => alternate.lang !== lang)
+    .map((alternate) => (
+      <meta
+        property="og:locale:alternate"
+        content={alternate.lang === 'en' ? 'en_US' : SITE.ogLocale}
+      />
+    ))
+}
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />

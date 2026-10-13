@@ -590,7 +590,8 @@ const breadcrumbLd = {
     }
 
     .app-project-copy h1 {
-      max-width: 12ch;
+      max-width: 100%;
+      overflow-wrap: anywhere;
     }
 
     .app-project-highlights {
@@ -627,7 +628,7 @@ const breadcrumbLd = {
 
   @media (max-width: 560px) {
     .app-project-copy h1 {
-      font-size: clamp(2.65rem, 13vw, 4.2rem);
+      font-size: clamp(2.25rem, 10vw, 3.6rem);
     }
 
     .project-neighbours {

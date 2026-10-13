@@ -6,6 +6,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 import '../styles/global.css';
+import { appLanguageAlternates, type AppLocale } from '../config/app-locales';
 
 interface Props {
   title?: string;
@@ -15,13 +16,25 @@ interface Props {
   jsonLd?: Record<string, unknown>[];
   noindex?: boolean;
   markdown?: string;
+  lang?: AppLocale;
 }
 
-const { title, description, image, type, jsonLd, noindex, markdown } = Astro.props;
+const {
+  title,
+  description,
+  image,
+  type,
+  jsonLd,
+  noindex,
+  markdown,
+  lang = SITE.lang,
+} = Astro.props;
+const alternates = appLanguageAlternates(Astro.url.pathname);
+const languageHref = alternates.find((alternate) => alternate.lang !== lang)?.href;
 ---
 
 <!doctype html>
-<html lang={SITE.lang}>
+<html lang={lang}>
   <head>
     <BaseHead
       title={title}
@@ -31,18 +44,22 @@ const { title, description, image, type, jsonLd, noindex, markdown } = Astro.pro
       jsonLd={jsonLd}
       noindex={noindex}
       markdown={markdown}
+      lang={lang}
+      alternates={alternates}
     />
 
     <ClientRouter />
   </head>
 
   <body class="min-h-screen">
-    <a href="#main" class="skip-link">Direct naar de inhoud</a>
-    <Header />
+    <a href="#main" class="skip-link"
+      >{lang === 'en' ? 'Skip to content' : 'Direct naar de inhoud'}</a
+    >
+    <Header lang={lang} languageHref={languageHref} />
     <main id="main">
       <slot />
     </main>
-    <Footer />
-    <CookieConsent />
+    <Footer lang={lang} />
+    <CookieConsent lang={lang} />
   </body>
 </html>

@@ -3,20 +3,48 @@ import { SITE, SOCIALS, NAV, CONTACT } from '../config/site';
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
 import { getShopifyApps, appName } from '../lib/shopify-apps';
+import { EN_APP_NAV, type AppLocale } from '../config/app-locales';
+interface Props {
+  lang?: AppLocale;
+}
+const { lang = 'nl' } = Astro.props;
+const english = lang === 'en';
+const homeHref = english ? '/en/shopify-apps/' : '/';
 
 const year = new Date().getFullYear();
 const apps = await getShopifyApps();
 ---
 
-<footer class="site-footer" aria-label="Sitevoettekst">
+<footer class="site-footer" aria-label={english ? 'Site footer' : 'Sitevoettekst'}>
   <div class="footer-top">
-    <nav aria-label="Footernavigatie">
-      {NAV.map((item) => <a href={item.href}>{item.label}</a>)}
-      <a href="/shopify-migratie">Shopify-migratie</a>
-      <a href="/shopify-specialist-noord-holland">Shopify-specialist Noord-Holland</a>
-      {apps.map((app) => <a href={`/werk/${app.id}`}>{appName(app)}</a>)}
-      <a href="/automatisering">Automatisering</a>
-      <a href="/contact">Contact</a>
+    <nav aria-label={english ? 'Footer navigation' : 'Footernavigatie'}>
+      {
+        english ? (
+          <>
+            {EN_APP_NAV.map((item) => (
+              <a href={item.href}>{item.label}</a>
+            ))}
+            <a href="mailto:info@chrisonline.nl">App support</a>
+            <a href="/">Dutch website</a>
+          </>
+        ) : (
+          <>
+            {NAV.map((item) => (
+              <a href={item.href}>{item.label}</a>
+            ))}
+            <a href="/shopify-migratie">Shopify-migratie</a>
+            <a href="/shopify-specialist-noord-holland">Shopify-specialist Noord-Holland</a>
+            {apps.map((app) => (
+              <a href={`/werk/${app.id}`}>{appName(app)}</a>
+            ))}
+            <a href="/automatisering">Automatisering</a>
+            <a href="/contact">Contact</a>
+            <a href="/en/shopify-apps/" lang="en">
+              Shopify Apps in English
+            </a>
+          </>
+        )
+      }
     </nav>
     <div class="footer-contact">
       <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
@@ -30,17 +58,29 @@ const apps = await getShopifyApps();
     </div>
   </div>
 
-  <a href="/" class="footer-brand" aria-label={`${SITE.brand}, naar de homepage`}>
+  <a
+    href={homeHref}
+    class="footer-brand"
+    aria-label={`${SITE.brand}, ${english ? 'Shopify Apps' : 'naar de homepage'}`}
+  >
     <Logo height={110} inverse />
   </a>
 
   <div class="footer-bottom">
-    <p>Shopify · Design · Develop · Maintain</p>
+    <p>
+      {
+        english
+          ? 'Independent Shopify apps by Chris Snoek'
+          : 'Shopify · Design · Develop · Maintain'
+      }
+    </p>
     <p>
       &copy; {year}
-      {SITE.author}. Alle rechten voorbehouden.
-      <a href="/privacy">Privacy</a>
-      <button type="button" data-cookie-settings>Cookiekeuze</button>
+      {SITE.author}. {english ? 'All rights reserved.' : 'Alle rechten voorbehouden.'}
+      <a href="/privacy">{english ? 'Privacy & cookies (Dutch)' : 'Privacy'}</a>
+      <button type="button" data-cookie-settings
+        >{english ? 'Cookie settings' : 'Cookiekeuze'}</button
+      >
     </p>
   </div>
 </footer>

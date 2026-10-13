@@ -106,6 +106,14 @@ app ook de verwijzingen in `public/llms.txt` en de overzichtsbeschrijving bij.
 De sitemap en de bestaande IndexNow-plugin nemen nieuwe HTML-pagina's automatisch mee.
 Prijzen en reviews worden niet uit verouderde documentatie overgenomen.
 
+De Engelse producttak staat op `/en/shopify-apps/` met afzonderlijke pagina's
+voor SpecFinch en PromoFinch. De Engelse copy staat in `src/content/apps-en/`;
+bestandsnamen koppelen aan de oorspronkelijke projecten. Afbeeldingen, datums en
+App Store-links komen uit die oorspronkelijke bron. Engelse Markdown-versies
+worden uit dezelfde Engelse content opgebouwd. Taalparen en appnavigatie staan
+in `src/config/app-locales.ts`; de taalkeuze en wederzijdse `hreflang`-links
+worden op beide versies automatisch getoond. Elke taalversie heeft haar eigen canonical.
+
 ### Profielfoto
 
 De hero-foto staat in `src/assets/me/chris-snoek.jpg`. Vervang dit bestand (zelfde naam) om de
