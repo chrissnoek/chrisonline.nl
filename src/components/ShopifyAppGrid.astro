@@ -4,11 +4,17 @@ import type { CollectionEntry } from 'astro:content';
 import Icon from './Icon.astro';
 import { appName } from '../lib/shopify-apps';
 import { withUtm } from '../utils/utm';
+import { englishAppPath } from '../lib/english-apps';
+import type { AppLocale } from '../config/app-locales';
 
 interface Props {
   apps: CollectionEntry<'projects'>[];
+  lang?: AppLocale;
+  translations?: Record<string, CollectionEntry<'englishApps'>['data']>;
 }
-const { apps } = Astro.props;
+const { apps, lang = 'nl', translations = {} } = Astro.props;
+const english = lang === 'en';
+const hrefFor = (id: string) => (english ? englishAppPath(id) : `/werk/${id}`);
 ---
 
 <div class="app-grid">
@@ -17,10 +23,14 @@ const { apps } = Astro.props;
       <article
         class:list={['app-card reveal-up', apps.length > 2 && index === 0 && 'app-card-featured']}
       >
-        <a href={`/werk/${app.id}`} class="app-media" aria-label={`Bekijk ${appName(app)}`}>
+        <a
+          href={hrefFor(app.id)}
+          class="app-media"
+          aria-label={`${english ? 'Explore' : 'Bekijk'} ${appName(app)}`}
+        >
           <Image
             src={app.data.cover}
-            alt={app.data.coverAlt}
+            alt={english ? translations[app.id].coverAlt : app.data.coverAlt}
             widths={[480, 720, 1080]}
             sizes="(max-width: 767px) 100vw, 50vw"
             format="avif"
@@ -30,13 +40,19 @@ const { apps } = Astro.props;
         </a>
         <div class="app-copy">
           <h3>
-            <a href={`/werk/${app.id}`}>{appName(app)}</a>
+            <a href={hrefFor(app.id)}>{appName(app)}</a>
           </h3>
-          <p class="app-tagline">{app.data.application?.tagline ?? app.data.summary}</p>
-          <p class="app-description">{app.data.summary}</p>
+          <p class="app-tagline">
+            {english
+              ? translations[app.id].tagline
+              : (app.data.application?.tagline ?? app.data.summary)}
+          </p>
+          <p class="app-description">
+            {english ? translations[app.id].description : app.data.summary}
+          </p>
           <div class="app-links">
-            <a href={`/werk/${app.id}`} class="app-details">
-              Ontdek de app <Icon name="arrowRight" size={18} />
+            <a href={hrefFor(app.id)} class="app-details">
+              {english ? 'Explore the app' : 'Ontdek de app'} <Icon name="arrowRight" size={18} />
             </a>
             {app.data.url && (
               <a
@@ -44,7 +60,7 @@ const { apps } = Astro.props;
                 target="_blank"
                 rel="noopener"
                 class="app-store"
-                aria-label={`${appName(app)} in de Shopify App Store (nieuw tabblad)`}
+                aria-label={`${appName(app)} ${english ? 'in the Shopify App Store (new tab)' : 'in de Shopify App Store (nieuw tabblad)'}`}
               >
                 Shopify App Store <Icon name="arrowUpRight" size={16} />
               </a>

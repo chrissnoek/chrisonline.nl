@@ -1,0 +1,15 @@
+---
+import { getEnglishApps } from '../../../lib/english-apps';
+import EnglishAppPage from '../../../components/projects/EnglishAppPage.astro';
+
+export async function getStaticPaths() {
+  const apps = await getEnglishApps();
+  return apps.map((app) => ({
+    params: { id: app.project.id },
+    props: { app, relatedApp: apps.find((other) => other.project.id !== app.project.id) ?? null },
+  }));
+}
+const { app, relatedApp } = Astro.props;
+---
+
+<EnglishAppPage app={app} relatedApp={relatedApp} />
