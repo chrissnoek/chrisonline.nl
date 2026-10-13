@@ -1,0 +1,209 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ShopifyAppGrid from '../components/ShopifyAppGrid.astro';
+import Icon from '../components/Icon.astro';
+import { getShopifyApps, appName } from '../lib/shopify-apps';
+import { SITE } from '../config/site';
+
+const apps = await getShopifyApps();
+const pageUrl = `${SITE.url}/shopify-apps/`;
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `${pageUrl}#page`,
+    name: 'Shopify Apps van Chris Online',
+    url: pageUrl,
+    inLanguage: 'nl',
+    description: 'Eigen Shopify-apps voor promotiecontrole, productdata en verwachte bezorgdatums.',
+    isPartOf: { '@id': `${SITE.url}/#website` },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: apps.map((app, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: appName(app),
+        url: `${SITE.url}/werk/${app.id}/`,
+      })),
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE.url}/` },
+      { '@type': 'ListItem', position: 2, name: 'Shopify Apps', item: pageUrl },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Shopify Apps voor promoties, productdata en bezorgdatums"
+  description="Ontdek PromoFinch, SpecFinch en Delivery Promise NL. Eigen Shopify-apps van Chris Snoek voor promotiecontrole, productdata en verwachte bezorgdatums."
+  jsonLd={jsonLd}
+  markdown="/shopify-apps.md"
+>
+  <div class="apps-page">
+    <div class="apps-page-container">
+      <header class="apps-page-hero">
+        <nav aria-label="Broodkruimel">
+          <a href="/">Home</a><span aria-hidden="true">/</span><span>Shopify Apps</span>
+        </nav>
+        <h1 class="enter-up">Shopify Apps.<br />Gemaakt voor de praktijk.</h1>
+        <p class="enter-up">
+          Eigen apps voor promotiecontrole, betrouwbare productdata en duidelijke
+          bezorgverwachtingen. Ontworpen en gebouwd door Chris Snoek.
+        </p>
+      </header>
+
+      <section class="apps-catalog" aria-label="Shopify Apps van Chris Online">
+        <ShopifyAppGrid apps={apps} />
+      </section>
+
+      <section class="app-guidance reveal-up" aria-labelledby="app-guidance-heading">
+        <h2 id="app-guidance-heading">Welke app past bij jouw webshop?</h2>
+        <div class="guidance-grid">
+          <div>
+            <p>
+              Begin bij de vraag die je wilt beantwoorden. Iedere app heeft een eigen taak en is
+              zelfstandig te installeren.
+            </p>
+            <dl>
+              {
+                apps.map((app) => (
+                  <div>
+                    <dt>
+                      <a href={`/werk/${app.id}`}>{appName(app)}</a>
+                    </dt>
+                    <dd>{app.data.application?.audience ?? app.data.summary}</dd>
+                  </div>
+                ))
+              }
+            </dl>
+          </div>
+          <div class="app-help">
+            <h3>Rechtstreeks contact met de maker.</h3>
+            <p>
+              Een vraag over de werking of over welke app bij je winkel past? Ik denk met je mee.
+            </p>
+            <a href="/contact?dienst=shopify">Stel je vraag <Icon name="arrowRight" size={18} /></a>
+            <p class="app-price-note">
+              Actuele prijzen, proefperiodes en installatie vind je in de Shopify App Store.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .apps-page {
+    background: #f5f5f2;
+    color: #111;
+    padding-bottom: clamp(5rem, 9vw, 9rem);
+  }
+  .apps-page-container {
+    width: min(100% - 3rem, 78rem);
+    margin-inline: auto;
+  }
+  .apps-page-hero {
+    padding: clamp(2rem, 4vw, 4rem) 0 clamp(3rem, 5vw, 5rem);
+  }
+  .apps-page-hero nav {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    font-size: 0.88rem;
+    color: #62625e;
+  }
+  .apps-page-hero nav a:hover {
+    text-decoration: underline;
+  }
+  h1 {
+    max-width: 65rem;
+    font-size: clamp(2.65rem, 5.9vw, 5.75rem);
+    font-weight: 580;
+    letter-spacing: -0.06em;
+    line-height: 1.04;
+  }
+  .apps-page-hero > p {
+    max-width: 40rem;
+    margin-top: 1.5rem;
+    color: #62625e;
+    font-size: 1.1rem;
+  }
+  .app-guidance {
+    padding-top: clamp(4rem, 7vw, 7rem);
+  }
+  h2 {
+    font-size: clamp(2rem, 3.5vw, 3.3rem);
+    line-height: 1.1;
+    font-weight: 580;
+    letter-spacing: -0.045em;
+  }
+  .guidance-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    margin-top: 2rem;
+  }
+  .guidance-grid p,
+  dd {
+    color: #62625e;
+    font-size: 1rem;
+  }
+  dl {
+    display: grid;
+    gap: 1.7rem;
+    margin-top: 2rem;
+  }
+  dt {
+    font-weight: 650;
+    margin-bottom: 0.35rem;
+  }
+  dt a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .app-help {
+    align-self: start;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    border-radius: 1.25rem;
+    background: #fff;
+  }
+  .app-help h3 {
+    font-size: 1.5rem;
+    line-height: 1.2;
+    letter-spacing: -0.035em;
+    font-weight: 620;
+  }
+  .app-help p {
+    margin-top: 1rem;
+  }
+  .app-help > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1.3rem;
+    min-height: 2.8rem;
+    color: var(--accent-text);
+    font-weight: 600;
+  }
+  .app-help .app-price-note {
+    font-size: 0.85rem;
+    margin-top: 1.5rem;
+  }
+  @media (max-width: 767px) {
+    .apps-page-container {
+      width: min(100% - 2.5rem, 35rem);
+    }
+    .guidance-grid {
+      grid-template-columns: 1fr;
+    }
+    .apps-page-hero > p {
+      font-size: 1rem;
+    }
+  }
+</style>

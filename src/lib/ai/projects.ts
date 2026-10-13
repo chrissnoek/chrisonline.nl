@@ -19,6 +19,7 @@ export interface CatalogProject {
   client: string;
   summary: string;
   role: string;
+  projectType: 'client-project' | 'shopify-app';
   skills: string[];
   accent: string;
   urlLabel: string;
@@ -37,6 +38,7 @@ export const PROJECTS: CatalogProject[] = entries
     client: e.data.client,
     summary: e.data.summary,
     role: e.data.role,
+    projectType: e.data.projectType,
     skills: e.data.skills,
     accent: e.data.accent,
     urlLabel: e.data.urlLabel,
@@ -47,7 +49,7 @@ export const PROJECTS: CatalogProject[] = entries
 /** Eén regel per project, compact genoeg om volledig in de systeemprompt te passen. */
 export const PROJECT_CATALOG: string = PROJECTS.map(
   (p) =>
-    `- ${p.title} (${p.client}); rol: ${p.role}; skills: ${p.skills.join(', ') || 'onbekend'}. ${p.summary}`,
+    `- ${p.title} (${p.client}); type: ${p.projectType === 'shopify-app' ? 'eigen Shopify-app' : 'website/webshop-project'}; rol: ${p.role}; skills: ${p.skills.join(', ') || 'onbekend'}. ${p.summary}`,
 ).join('\n');
 
 /**

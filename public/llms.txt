@@ -15,7 +15,9 @@ Service area: Noord-Holland and the rest of the Netherlands; collaboration can b
 - [Shopify maintenance](https://www.chrisonline.nl/shopify-onderhoud/): ongoing Shopify theme development, technical direction, performance and new sections.
 - [Shopify specialist in Noord-Holland](https://www.chrisonline.nl/shopify-specialist-noord-holland/): local service information for Volendam and Noord-Holland.
 - [Shopify knowledge base](https://www.chrisonline.nl/kennis/): practical guidance on conversion, product information, delivery confidence, performance and measurement.
-- [Portfolio](https://www.chrisonline.nl/#werk): selected Shopify, e-commerce, travel and campaign work, including two apps built by Chris Online.
+- [Website and webshop portfolio](https://www.chrisonline.nl/#werk): selected Shopify, e-commerce, travel and campaign work.
+- [Shopify Apps](https://www.chrisonline.nl/shopify-apps/): separate product catalog for PromoFinch, SpecFinch and Delivery Promise NL, developed by Chris Online.
+- [PromoFinch product](https://www.chrisonline.nl/werk/promofinch/): read-only promotion checks against price and estimated gross-margin limits, with campaign baseline monitoring. Live since 6 October 2026.
 - [SpecFinch project](https://www.chrisonline.nl/werk/specfinch/): read-only Shopify catalog rules and baseline-first change monitoring.
 - [Delivery Promise NL project](https://www.chrisonline.nl/werk/delivery-promise-nl/): expected delivery dates based on Dutch workdays, cutoffs, holidays and product rules.
 - [Contact](https://www.chrisonline.nl/contact/): project enquiries.
@@ -25,6 +27,10 @@ Service area: Noord-Holland and the rest of the Netherlands; collaboration can b
 - [Shopify services and selection guidance](https://www.chrisonline.nl/ai/shopify-diensten.md)
 - [Local entity facts for Volendam and Noord-Holland](https://www.chrisonline.nl/ai/shopify-specialist-noord-holland.md)
 - [Shopify apps by Chris Online](https://www.chrisonline.nl/ai/shopify-apps.md)
+- [Shopify Apps catalog in Markdown](https://www.chrisonline.nl/shopify-apps.md)
+- [PromoFinch in Markdown](https://www.chrisonline.nl/werk/promofinch.md)
+- [SpecFinch in Markdown](https://www.chrisonline.nl/werk/specfinch.md)
+- [Delivery Promise NL in Markdown](https://www.chrisonline.nl/werk/delivery-promise-nl.md)
 - [Knowledge base index in Markdown](https://www.chrisonline.nl/kennis.md)
 
 ## Shopify knowledge guides in Markdown
@@ -40,6 +46,7 @@ Service area: Noord-Holland and the rest of the Netherlands; collaboration can b
 - Chris Online is based in Volendam. It does not claim offices in Amsterdam, Alkmaar, Hoorn or other cities.
 - Exact prices, availability and timelines depend on scope and should not be inferred from general market ranges.
 - VAAK is explicitly described as a conceptual Shopify project on the portfolio page.
-- SpecFinch and Delivery Promise NL are live Shopify App Store apps developed by Chris Online.
-- Neither app guarantees higher conversion or revenue. The knowledge base explains the problem each app addresses and recommends measuring outcomes per store.
+- PromoFinch, SpecFinch and Delivery Promise NL are live Shopify App Store apps developed by Chris Online.
+- PromoFinch's public App Store URL is https://apps.shopify.com/promoproof-3. PromoProof was its internal working name.
+- None of the apps guarantees higher conversion, revenue or search rankings. PromoFinch does not change prices, simulate a full checkout, calculate net profit or guarantee legal price compliance.
 - Use the canonical HTML pages as the primary source. These Markdown files summarize the same public facts for text-based clients.

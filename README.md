@@ -88,6 +88,24 @@ De inhoud van de projectpagina in **Markdown of MDX**…
 > Nederlandse teksten op basis van de aangeleverde omschrijvingen — vervang of vul ze aan waar
 > nodig.
 
+### Shopify Apps
+
+De homepage toont klantprojecten onder `#werk` en eigen apps onder `#shopify-apps`.
+De aparte overzichtspagina staat op `/shopify-apps/`. Appdetailpagina's behouden
+hun `/werk/<slug>/`-adres. De navigatie naar vorige en volgende projecten blijft
+binnen dezelfde categorie.
+
+Gebruik voor een gepubliceerde app `projectType: 'shopify-app'` en voeg
+`application` toe met `name`, `tagline`, `audience`, `features` en `languages`.
+`pubDate` is de bevestigde publieke lanceringsdatum; de nieuwste app staat bovenaan.
+Gebruik echte screenshots uit `src/assets/projects/<slug>/`.
+
+Dezelfde contentbron levert de productinformatie in HTML, SoftwareApplication-data,
+`/shopify-apps.md`, `/ai/shopify-apps.md` en `/werk/<slug>.md`. Werk bij een nieuwe
+app ook de verwijzingen in `public/llms.txt` en de overzichtsbeschrijving bij.
+De sitemap en de bestaande IndexNow-plugin nemen nieuwe HTML-pagina's automatisch mee.
+Prijzen en reviews worden niet uit verouderde documentatie overgenomen.
+
 ### Profielfoto
 
 De hero-foto staat in `src/assets/me/chris-snoek.jpg`. Vervang dit bestand (zelfde naam) om de

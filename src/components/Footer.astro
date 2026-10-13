@@ -2,8 +2,10 @@
 import { SITE, SOCIALS, NAV, CONTACT } from '../config/site';
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
+import { getShopifyApps, appName } from '../lib/shopify-apps';
 
 const year = new Date().getFullYear();
+const apps = await getShopifyApps();
 ---
 
 <footer class="site-footer" aria-label="Sitevoettekst">
@@ -12,8 +14,7 @@ const year = new Date().getFullYear();
       {NAV.map((item) => <a href={item.href}>{item.label}</a>)}
       <a href="/shopify-migratie">Shopify-migratie</a>
       <a href="/shopify-specialist-noord-holland">Shopify-specialist Noord-Holland</a>
-      <a href="/werk/specfinch">SpecFinch</a>
-      <a href="/werk/delivery-promise-nl">Delivery Promise NL</a>
+      {apps.map((app) => <a href={`/werk/${app.id}`}>{appName(app)}</a>)}
       <a href="/automatisering">Automatisering</a>
       <a href="/contact">Contact</a>
     </nav>

@@ -14,9 +14,10 @@ interface Props {
   type?: 'website' | 'article';
   jsonLd?: Record<string, unknown>[];
   noindex?: boolean;
+  markdown?: string;
 }
 
-const { title, description, image, type, jsonLd, noindex } = Astro.props;
+const { title, description, image, type, jsonLd, noindex, markdown } = Astro.props;
 ---
 
 <!doctype html>
@@ -29,6 +30,7 @@ const { title, description, image, type, jsonLd, noindex } = Astro.props;
       type={type}
       jsonLd={jsonLd}
       noindex={noindex}
+      markdown={markdown}
     />
 
     <ClientRouter />
