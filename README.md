@@ -7,16 +7,16 @@ toegankelijkheid (WCAG 2.2 AA).
 
 ## Stack
 
-| Onderdeel       | Keuze                                                         |
-| --------------- | ------------------------------------------------------------- |
-| Framework       | [Astro](https://astro.build) (statische output)               |
-| Taal            | TypeScript (strict)                                           |
-| Styling         | [Tailwind CSS v4](https://tailwindcss.com) (CSS-first tokens) |
-| Interactiviteit | Vue 3 — alleen als _island_ waar nodig (contactformulier)     |
-| Fonts           | Inter (self-hosted & gesubset via de Astro Fonts API)         |
-| Afbeeldingen    | `astro:assets` → AVIF/WebP, responsive, zonder layout shift   |
-| Content         | Astro Content Collections (Markdown/MDX + Zod-validatie)      |
-| Hosting         | Netlify (statisch) + Netlify Forms voor het contactformulier  |
+| Onderdeel       | Keuze                                                                                      |
+| --------------- | ------------------------------------------------------------------------------------------ |
+| Framework       | [Astro](https://astro.build) (statische output)                                            |
+| Taal            | TypeScript (strict)                                                                        |
+| Styling         | [Tailwind CSS v4](https://tailwindcss.com) + eigen tokensysteem in `src/styles/global.css` |
+| Interactiviteit | Vanilla TypeScript per component; React alleen voor het (niet gemonteerde) chat-eiland     |
+| Fonts           | Inter (body/UI) + Instrument Serif (koppen), self-hosted via de Astro Fonts API            |
+| Afbeeldingen    | `astro:assets` → AVIF/WebP, responsive, zonder layout shift                                |
+| Content         | Astro Content Collections (Markdown/MDX + Zod-validatie)                                   |
+| Hosting         | Netlify (statisch) + Netlify Forms voor het contactformulier                               |
 
 ## Lokaal draaien
 
@@ -121,8 +121,17 @@ foto te wijzigen.
 
 ### Open Graph / social share-afbeelding
 
-De standaard share-afbeelding staat in `public/og/og-default.png` (1200×630). Per pagina kun je een
-andere meegeven via de `image`-prop op `BaseLayout`.
+De standaard share-afbeelding staat in `public/og/og-default.png` (1200×630) en wordt gegenereerd
+met `npm run og` (zie `scripts/generate-og.mjs`). Per pagina kun je een andere meegeven via de
+`image`-prop op `BaseLayout`.
+
+### Designsysteem
+
+Alle kleuren, typografie, knoppen en bouwstenen staan in `src/styles/global.css` (tokens en
+componentklassen) en `src/styles/motion.css` (entree- en scrollanimaties). Componenten gebruiken
+uitsluitend die tokens, zodat de dag-/avondstand overal doorwerkt. Gedeelde bouwstenen:
+`SectionHeading`, `CtaBand`, `Faq`, `Breadcrumbs`, `BrandMark`, `Logo`. De ontwerpkeuzes staan in
+`docs/design/brand-2026.md`.
 
 ## Toegankelijkheid & performance
 
@@ -131,7 +140,10 @@ andere meegeven via de `image`-prop op `BaseLayout`.
 - Kleurcontrast gecontroleerd tegen WCAG AA (zie de tokens in `src/styles/global.css`).
 - Alle animaties (scroll-reveal, hover, page transitions) worden uitgeschakeld bij
   `prefers-reduced-motion`.
-- Light- én dark-mode met een toegankelijke toggle (slaat de voorkeur op, volgt anders het OS).
+- Dag- en avondstand: de site volgt de klok van de bezoeker (ochtend, dag, avond, nacht) en
+  schakelt 's avonds naar een donker schema. Bezoekers kunnen de stand in de footer vastzetten
+  ("Studiolicht"); de keuze wordt lokaal opgeslagen. Zie `src/components/Daylight.astro` en de
+  tokens in `src/styles/global.css`.
 
 ## Contactformulier (Netlify Forms)
 

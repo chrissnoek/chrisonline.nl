@@ -43,16 +43,16 @@ export default defineConfig({
       subsets: ['latin'],
       fallbacks: ['system-ui', 'sans-serif'],
     },
-    // Display-face voor grote koppen (h1/h2/hero-groet): karaktervolle,
-    // licht hoekige grotesk die het hexagon-merk echoot. Body blijft Inter.
+    // Display-face: Instrument Serif voor h1/h2 en grote uitspraken. Romein én
+    // cursief (de cursief draagt nadruk in koppen). Body en UI blijven Inter.
     {
       provider: fontProviders.fontsource(),
-      name: 'Space Grotesk',
+      name: 'Instrument Serif',
       cssVariable: '--font-display',
-      weights: ['500 700'],
-      styles: ['normal'],
+      weights: ['400'],
+      styles: ['normal', 'italic'],
       subsets: ['latin'],
-      fallbacks: ['system-ui', 'sans-serif'],
+      fallbacks: ['Georgia', 'Times New Roman', 'serif'],
     },
   ],
 

@@ -1,0 +1,59 @@
+---
+/**
+ * Dag-/avondstand. Zet vóór de eerste paint de daglichtfase en het kleurschema
+ * op <html>, zodat er geen flits is. De fase volgt de klok van de bezoeker;
+ * de avondstand (donker schema) kan in de footer worden vastgezet of uitgezet.
+ *
+ * - data-daypart: morning (06–11) · day (11–17) · evening (17–21) · night (21–06)
+ * - data-scheme:  light | dark (dark bij night, tenzij de bezoeker anders koos)
+ * - data-scheme-pref: auto | light | dark (gekozen voorkeur)
+ */
+---
+
+<script is:inline data-astro-rerun>
+  (function () {
+    const root = document.documentElement;
+    const colors = { morning: '#f6f6f1', day: '#f4f4ef', evening: '#f3efe7', night: '#121311' };
+    function phase() {
+      const h = new Date().getHours();
+      return h < 6 || h >= 21 ? 'night' : h < 11 ? 'morning' : h < 17 ? 'day' : 'evening';
+    }
+    function apply() {
+      const p = phase();
+      let pref = null;
+      try {
+        pref = localStorage.getItem('co-scheme');
+      } catch {
+        /* privé-modus */
+      }
+      const dark = pref === 'dark' || (pref !== 'light' && p === 'night');
+      root.setAttribute('data-daypart', p);
+      root.setAttribute('data-scheme', dark ? 'dark' : 'light');
+      root.setAttribute('data-scheme-pref', pref || 'auto');
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', dark ? colors.night : colors[p]);
+    }
+    apply();
+    if (!window.coDaylight) {
+      window.coDaylight = {
+        apply: apply,
+        set: function (pref) {
+          try {
+            if (pref && pref !== 'auto') localStorage.setItem('co-scheme', pref);
+            else localStorage.removeItem('co-scheme');
+          } catch {
+            /* privé-modus */
+          }
+          root.classList.add('is-switching');
+          apply();
+          window.setTimeout(function () {
+            root.classList.remove('is-switching');
+          }, 750);
+          document.dispatchEvent(new CustomEvent('co:scheme'));
+        },
+      };
+      document.addEventListener('astro:after-swap', apply);
+      window.setInterval(apply, 60000);
+    }
+  })();
+</script>

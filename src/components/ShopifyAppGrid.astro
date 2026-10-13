@@ -21,11 +21,12 @@ const hrefFor = (id: string) => (english ? englishAppPath(id) : `/werk/${id}`);
   {
     apps.map((app, index) => (
       <article
-        class:list={['app-card reveal-up', apps.length > 2 && index === 0 && 'app-card-featured']}
+        class:list={['app-card reveal-up', apps.length > 2 && index === 0 && 'app-card--featured']}
+        style={`--app-accent:${app.data.accent}`}
       >
         <a
           href={hrefFor(app.id)}
-          class="app-media"
+          class="app-card__media"
           aria-label={`${english ? 'Explore' : 'Bekijk'} ${appName(app)}`}
         >
           <Image
@@ -36,30 +37,31 @@ const hrefFor = (id: string) => (english ? englishAppPath(id) : `/werk/${id}`);
             format="avif"
             quality="high"
             loading="lazy"
+            transition:name={`cover-${app.id}`}
           />
         </a>
-        <div class="app-copy">
-          <h3>
+        <div class="app-card__copy">
+          <h3 class="display-sm">
             <a href={hrefFor(app.id)}>{appName(app)}</a>
           </h3>
-          <p class="app-tagline">
+          <p class="app-card__tagline">
             {english
               ? translations[app.id].tagline
               : (app.data.application?.tagline ?? app.data.summary)}
           </p>
-          <p class="app-description">
+          <p class="app-card__description">
             {english ? translations[app.id].description : app.data.summary}
           </p>
-          <div class="app-links">
-            <a href={hrefFor(app.id)} class="app-details">
-              {english ? 'Explore the app' : 'Ontdek de app'} <Icon name="arrowRight" size={18} />
+          <div class="app-card__links">
+            <a href={hrefFor(app.id)} class="btn btn--ink btn--sm">
+              {english ? 'Explore the app' : 'Ontdek de app'} <Icon name="arrowRight" size={17} />
             </a>
             {app.data.url && (
               <a
                 href={withUtm(app.data.url)}
                 target="_blank"
                 rel="noopener"
-                class="app-store"
+                class="link-arrow link-arrow--up app-card__store"
                 aria-label={`${appName(app)} ${english ? 'in the Shopify App Store (new tab)' : 'in de Shopify App Store (nieuw tabblad)'}`}
               >
                 Shopify App Store <Icon name="arrowUpRight" size={16} />
@@ -76,129 +78,105 @@ const hrefFor = (id: string) => (english ? englishAppPath(id) : `/werk/${id}`);
   .app-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2rem;
+    gap: 3rem 2rem;
   }
   .app-card {
     display: flex;
     flex-direction: column;
     min-width: 0;
   }
-  .app-media {
+  .app-card__media {
     display: block;
     aspect-ratio: 16 / 10;
     overflow: hidden;
-    border-radius: 1.25rem;
-    background: #eaeae5;
+    border-radius: var(--radius-stage);
+    background:
+      radial-gradient(
+        120% 90% at 85% 0%,
+        color-mix(in srgb, var(--app-accent) 22%, transparent),
+        transparent 60%
+      ),
+      var(--paper-raised);
     padding: clamp(1rem, 2.5vw, 2rem);
   }
-  .app-media :global(img) {
+  .app-card__media img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    border-radius: 0.35rem;
-    box-shadow: 0 0.75rem 2rem #11111114;
-    transition: transform 350ms ease;
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow-soft);
+    transition: transform 700ms var(--ease-out-soft);
   }
-  .app-media:hover :global(img),
-  .app-media:focus-visible :global(img) {
-    transform: scale(1.025);
+  .app-card__media:hover img,
+  .app-card__media:focus-visible img {
+    transform: translateY(-4px) scale(1.015);
   }
-  .app-copy {
+  .app-card__copy {
     display: flex;
     flex: 1;
     flex-direction: column;
     padding: 1.6rem 0.15rem 0;
   }
-  h3 {
-    color: #111;
-    font-size: clamp(1.6rem, 2.5vw, 2.25rem);
-    font-weight: 650;
-    line-height: 1.15;
-    letter-spacing: -0.045em;
+  .app-card h3 a {
+    color: var(--ink);
+    text-decoration: none;
   }
-  .app-tagline {
+  .app-card h3 a:hover {
+    color: var(--vermilion-ink);
+  }
+  .app-card__tagline {
     margin-top: 0.65rem;
-    color: #111;
-    font-size: 1.12rem;
-    font-weight: 530;
-    line-height: 1.5;
+    color: var(--ink);
+    font-size: 1.1rem;
+    font-weight: 540;
+    line-height: 1.45;
   }
-  .app-description {
+  .app-card__description {
     max-width: 56ch;
     margin: 0.8rem 0 1.5rem;
-    color: #62625e;
+    color: var(--ink-soft);
     font-size: 0.95rem;
   }
-  .app-links {
+  .app-card__links {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.75rem 1.4rem;
     margin-top: auto;
   }
-  .app-links a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    min-height: 2.8rem;
+  .app-card__store {
+    color: var(--ink-soft);
     font-size: 0.88rem;
-    font-weight: 600;
   }
-  .app-details {
-    padding: 0.6rem 0.95rem;
-    border-radius: 0.75rem;
-    background: #111;
-    color: #fff;
-  }
-  .app-details:hover {
-    background: #343430;
-  }
-  .app-store {
-    color: #575751;
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
-  }
-  .app-store:hover {
-    color: var(--accent-text);
-  }
-  .app-card-featured {
+  .app-card--featured {
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: 1.15fr 1fr;
     align-items: center;
     gap: clamp(2rem, 5vw, 4rem);
-    padding-bottom: 1.5rem;
   }
-  .app-card-featured .app-copy {
+  .app-card--featured .app-card__copy {
     padding: 0;
-  }
-  .app-card-featured .app-links {
-    margin-top: 0.4rem;
   }
   @media (max-width: 767px) {
     .app-grid {
       grid-template-columns: 1fr;
-      gap: 3rem;
     }
-    .app-card-featured {
+    .app-card--featured {
       grid-column: auto;
       display: flex;
       gap: 0;
-      padding-bottom: 0;
     }
-    .app-card-featured .app-copy {
+    .app-card--featured .app-card__copy {
       padding: 1.6rem 0.15rem 0;
     }
-    .app-media {
-      border-radius: 1rem;
+    .app-card__media {
+      border-radius: 1.1rem;
       padding: 1rem;
-    }
-    .app-links {
-      column-gap: 1rem;
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .app-media :global(img) {
+    .app-card__media img {
       transition: none;
     }
   }

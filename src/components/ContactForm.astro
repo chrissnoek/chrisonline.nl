@@ -1,32 +1,21 @@
 ---
 /**
  * Toegankelijk contactformulier met live validatie en AJAX-submit naar
- * Netlify Forms. Vroeger een Vue-eiland; nu server-gerenderde markup met een
- * klein vanilla-script — zelfde UX, zonder framework-runtime (−31 KB op /contact).
+ * Netlify Forms. Server-gerenderde markup met een klein vanilla-script.
  * Netlify detecteert het formulier bij de build via het blueprint-form in
  * contact.astro (zelfde form-naam "contact").
  */
+import Icon from './Icon.astro';
 ---
 
 <div id="contact-form-root">
   <!-- Succes-status (verborgen tot een geslaagde submit) -->
-  <div
-    id="cf-success"
-    class="rounded-card border-accent-500/40 bg-accent-500/10 hidden border p-8 text-center"
-    role="status"
-    aria-live="polite"
-  >
-    <p class="text-lg font-semibold text-[var(--fg)]">Bedankt voor je bericht!</p>
-    <p class="mt-2 text-[var(--fg-muted)]">
-      Ik neem zo snel mogelijk contact met je op, meestal binnen één werkdag.
-    </p>
-    <button
-      type="button"
-      id="cf-again"
-      class="rounded-pill mt-5 border border-[var(--border)] px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-[var(--bg-alt)]"
+  <div id="cf-success" class="cf-success" role="status" aria-live="polite" hidden>
+    <span class="cf-success__mark enter-pop"><Icon name="check" size={26} /></span>
+    <p class="cf-success__title display-sm">Bedankt voor je bericht!</p>
+    <p class="muted">Ik neem zo snel mogelijk contact met je op, meestal binnen één werkdag.</p>
+    <button type="button" id="cf-again" class="btn btn--line btn--sm">Nog een bericht sturen</button
     >
-      Nog een bericht sturen
-    </button>
   </div>
 
   <form
@@ -35,7 +24,7 @@
     method="POST"
     data-netlify="true"
     netlify-honeypot="bot-field"
-    class="grid gap-5"
+    class="cf-form"
     novalidate
   >
     <input type="hidden" name="form-name" value="contact" />
@@ -47,64 +36,59 @@
     <input type="hidden" id="cf-utm-term" name="utm_term" value="" />
 
     <!-- Honeypot: verborgen voor mensen -->
-    <p class="hidden" aria-hidden="true">
+    <p class="visually-hidden" aria-hidden="true">
       <label>Niet invullen: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
     </p>
 
-    <div>
-      <label for="cf-name" class="mb-1.5 block text-sm font-medium text-[var(--fg)]"> Naam </label>
+    <div class="field">
+      <label for="cf-name">Naam</label>
       <input
         id="cf-name"
         name="name"
         type="text"
         autocomplete="name"
         required
-        class="focus:border-accent-500 w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-[var(--fg)] transition-colors placeholder:text-[var(--fg-muted)]"
+        class="input"
         placeholder="Je naam"
       />
-      <p id="cf-name-error" class="mt-1.5 hidden text-sm text-red-600 dark:text-red-400"></p>
+      <p id="cf-name-error" class="field__error" hidden></p>
     </div>
 
-    <div>
-      <label for="cf-email" class="mb-1.5 block text-sm font-medium text-[var(--fg)]">
-        E-mailadres
-      </label>
+    <div class="field">
+      <label for="cf-email">E-mailadres</label>
       <input
         id="cf-email"
         name="email"
         type="email"
         autocomplete="email"
+        inputmode="email"
         required
-        class="focus:border-accent-500 w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-[var(--fg)] transition-colors placeholder:text-[var(--fg-muted)]"
+        class="input"
         placeholder="naam@voorbeeld.nl"
       />
-      <p id="cf-email-error" class="mt-1.5 hidden text-sm text-red-600 dark:text-red-400"></p>
+      <p id="cf-email-error" class="field__error" hidden></p>
     </div>
 
-    <div>
-      <label for="cf-message" class="mb-1.5 block text-sm font-medium text-[var(--fg)]">
-        Bericht
-      </label>
+    <div class="field">
+      <label for="cf-message">Bericht</label>
       <textarea
         id="cf-message"
         name="message"
-        rows="5"
+        rows="6"
         required
-        class="focus:border-accent-500 w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-[var(--fg)] transition-colors placeholder:text-[var(--fg-muted)]"
+        class="input"
         placeholder="Vertel kort over je assortiment, huidige platform en wat je wilt verbeteren…"
       ></textarea>
-      <p id="cf-message-error" class="mt-1.5 hidden text-sm text-red-600 dark:text-red-400"></p>
+      <p id="cf-message-error" class="field__error" hidden></p>
     </div>
 
-    <div class="flex flex-wrap items-center gap-4">
-      <button
-        type="submit"
-        id="cf-submit"
-        class="rounded-pill bg-accent-500 hover:bg-accent-600 inline-flex items-center justify-center px-7 py-3.5 font-semibold text-white transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
-      >
+    <div class="cf-form__actions">
+      <button type="submit" id="cf-submit" class="btn btn--primary">
         Verstuur bericht
+        <Icon name="arrowRight" size={18} />
       </button>
-      <p id="cf-fail" class="hidden text-sm text-red-600 dark:text-red-400" role="alert">
+      <p class="cf-form__note">Meestal binnen één werkdag een persoonlijke reactie.</p>
+      <p id="cf-fail" class="field__error" role="alert" hidden>
         Er ging iets mis. Probeer het later opnieuw of mail direct.
       </p>
     </div>
@@ -120,6 +104,7 @@
     const success = document.getElementById('cf-success')!;
     const again = document.getElementById('cf-again')!;
     const submitBtn = document.getElementById('cf-submit') as HTMLButtonElement;
+    const submitLabel = submitBtn.innerHTML;
     const fail = document.getElementById('cf-fail')!;
 
     type Field = 'name' | 'email' | 'message';
@@ -180,7 +165,7 @@
     function render(f: Field) {
       const msg = touched.has(f) ? validate(f) : '';
       errorEl(f).textContent = msg;
-      errorEl(f).classList.toggle('hidden', !msg);
+      errorEl(f).hidden = !msg;
       input(f).setAttribute('aria-invalid', String(!!msg));
       if (msg) input(f).setAttribute('aria-describedby', `cf-${f}-error`);
       else input(f).removeAttribute('aria-describedby');
@@ -191,7 +176,6 @@
         touched.add(f);
         render(f);
       });
-      // Live bijwerken zodra een veld al fout gemarkeerd is (zelfde gedrag als eerst).
       input(f).addEventListener('input', () => render(f));
     }
 
@@ -201,7 +185,6 @@
       fields.forEach(render);
       const honeypot = form.querySelector<HTMLInputElement>('[name="bot-field"]');
       if (fields.some((f) => validate(f)) || honeypot?.value) {
-        // Focus naar het eerste foute veld voor toetsenbord/screenreader.
         const first = fields.find((f) => validate(f));
         if (first) input(first).focus();
         return;
@@ -209,7 +192,7 @@
 
       submitBtn.disabled = true;
       submitBtn.textContent = 'Versturen…';
-      fail.classList.add('hidden');
+      fail.hidden = true;
 
       const data = new URLSearchParams();
       for (const [key, value] of new FormData(form).entries()) {
@@ -226,25 +209,71 @@
         form.reset();
         touched.clear();
         fields.forEach(render);
-        form.classList.add('hidden');
-        success.classList.remove('hidden');
+        form.hidden = true;
+        success.hidden = false;
         window.dispatchEvent(
           new CustomEvent('co:lead-submitted', { detail: { form_name: 'contact' } }),
         );
       } catch {
-        fail.classList.remove('hidden');
+        fail.hidden = false;
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Verstuur bericht';
+        submitBtn.innerHTML = submitLabel;
       }
     });
 
     again.addEventListener('click', () => {
-      success.classList.add('hidden');
-      form.classList.remove('hidden');
+      success.hidden = true;
+      form.hidden = false;
       input('name').focus();
     });
   }
 
   document.addEventListener('astro:page-load', initContactForm);
 </script>
+
+<style>
+  .cf-form {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .cf-form[hidden],
+  .cf-success[hidden] {
+    display: none;
+  }
+  .cf-form__actions {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  .cf-form__actions .btn {
+    justify-self: start;
+  }
+  .cf-form__note {
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+  }
+  .cf-success {
+    display: grid;
+    justify-items: start;
+    gap: 0.75rem;
+    padding: 1rem 0;
+  }
+  .cf-success__mark {
+    display: grid;
+    width: 3.25rem;
+    height: 3.25rem;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--vermilion);
+    color: #fff;
+  }
+  .cf-success .btn {
+    margin-top: 0.5rem;
+  }
+  @media (max-width: 600px) {
+    .cf-form__actions .btn {
+      justify-self: stretch;
+    }
+  }
+</style>

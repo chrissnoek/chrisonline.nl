@@ -6,7 +6,6 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 import '../styles/global.css';
-import '../styles/project-prose.css';
 import { appLanguageAlternates, type AppLocale } from '../config/app-locales';
 
 interface Props {
@@ -52,7 +51,7 @@ const languageHref = alternates.find((alternate) => alternate.lang !== lang)?.hr
     <ClientRouter />
   </head>
 
-  <body class="min-h-screen">
+  <body>
     <a href="#main" class="skip-link"
       >{lang === 'en' ? 'Skip to content' : 'Direct naar de inhoud'}</a
     >

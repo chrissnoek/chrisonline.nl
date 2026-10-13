@@ -1,9 +1,11 @@
 ---
-import { SITE, SOCIALS, NAV, CONTACT } from '../config/site';
+import { SITE, SOCIALS, CONTACT, BUSINESS } from '../config/site';
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
+import BrandMark from './BrandMark.astro';
 import { getShopifyApps, appName } from '../lib/shopify-apps';
 import { EN_APP_NAV, type AppLocale } from '../config/app-locales';
+
 interface Props {
   lang?: AppLocale;
 }
@@ -13,173 +15,381 @@ const homeHref = english ? '/en/shopify-apps/' : '/';
 
 const year = new Date().getFullYear();
 const apps = await getShopifyApps();
+
+const columns = english
+  ? [
+      {
+        title: 'Shopify Apps',
+        links: [
+          ...EN_APP_NAV.map((item) => ({ label: item.label, href: item.href })),
+          { label: 'App support', href: 'mailto:info@chrisonline.nl' },
+        ],
+      },
+      {
+        title: 'Chris Online',
+        links: [
+          { label: 'Dutch website', href: '/' },
+          { label: 'Privacy & cookies (Dutch)', href: '/privacy' },
+        ],
+      },
+    ]
+  : [
+      {
+        title: 'Diensten',
+        links: [
+          { label: 'Shopify-webshop laten maken', href: '/shopify-webshop-laten-maken' },
+          { label: 'Shopify-migratie', href: '/shopify-migratie' },
+          { label: 'Shopify-onderhoud', href: '/shopify-onderhoud' },
+          { label: 'Shopify-specialist Noord-Holland', href: '/shopify-specialist-noord-holland' },
+          { label: 'Automatisering', href: '/automatisering' },
+        ],
+      },
+      {
+        title: 'Werk en apps',
+        links: [
+          { label: 'Ervaring', href: '/#werk' },
+          { label: 'Shopify Apps', href: '/shopify-apps' },
+          ...apps.map((app) => ({ label: appName(app), href: `/werk/${app.id}` })),
+          { label: 'Shopify Apps in English', href: '/en/shopify-apps/', lang: 'en' },
+        ],
+      },
+      {
+        title: 'Kennis en contact',
+        links: [
+          { label: 'Kennisbank', href: '/kennis' },
+          { label: 'Werkwijze', href: '/#werkwijze' },
+          { label: 'Contact', href: '/contact' },
+          { label: 'Privacy', href: '/privacy' },
+        ],
+      },
+    ];
+
+const lightLabels = english
+  ? { title: 'Studio light', auto: 'Automatic', light: 'Day', dark: 'Evening' }
+  : { title: 'Studiolicht', auto: 'Automatisch', light: 'Dagstand', dark: 'Avondstand' };
 ---
 
 <footer class="site-footer" aria-label={english ? 'Site footer' : 'Sitevoettekst'}>
-  <div class="footer-top">
-    <nav aria-label={english ? 'Footer navigation' : 'Footernavigatie'}>
-      {
-        english ? (
-          <>
-            {EN_APP_NAV.map((item) => (
-              <a href={item.href}>{item.label}</a>
-            ))}
-            <a href="mailto:info@chrisonline.nl">App support</a>
-            <a href="/">Dutch website</a>
-          </>
-        ) : (
-          <>
-            {NAV.map((item) => (
-              <a href={item.href}>{item.label}</a>
-            ))}
-            <a href="/shopify-migratie">Shopify-migratie</a>
-            <a href="/shopify-specialist-noord-holland">Shopify-specialist Noord-Holland</a>
-            {apps.map((app) => (
-              <a href={`/werk/${app.id}`}>{appName(app)}</a>
-            ))}
-            <a href="/automatisering">Automatisering</a>
-            <a href="/contact">Contact</a>
-            <a href="/en/shopify-apps/" lang="en">
-              Shopify Apps in English
-            </a>
-          </>
-        )
-      }
-    </nav>
-    <div class="footer-contact">
-      <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
-      {
-        SOCIALS.filter((social) => social.url.startsWith('http')).map((social) => (
-          <a href={social.url} target="_blank" rel="me noopener" aria-label={social.name}>
-            <Icon name={social.icon} size={20} />
-          </a>
-        ))
-      }
+  <div class="shell shell--wide">
+    <div class="site-footer__top">
+      <div class="site-footer__intro">
+        <a
+          href={homeHref}
+          class="site-footer__brand mark-hover"
+          aria-label={`${SITE.brand}, ${english ? 'Shopify Apps' : 'naar de homepage'}`}
+        >
+          <Logo height={30} />
+        </a>
+        <p class="site-footer__tagline">
+          {english ? 'Independent Shopify apps by Chris Snoek' : SITE.tagline}
+        </p>
+        <address class="site-footer__address">
+          <span
+            ><Icon name="pin" size={16} />
+            {BUSINESS.address.addressLocality}, {BUSINESS.address.addressRegion}</span
+          >
+          <a href={`mailto:${CONTACT.email}`}><Icon name="mail" size={16} /> {CONTACT.email}</a>
+          {
+            SOCIALS.filter((social) => social.url.startsWith('http')).map((social) => (
+              <a href={social.url} target="_blank" rel="me noopener">
+                <Icon name={social.icon} size={16} /> {social.name}
+              </a>
+            ))
+          }
+        </address>
+      </div>
+
+      <nav class="site-footer__nav" aria-label={english ? 'Footer navigation' : 'Footernavigatie'}>
+        {
+          columns.map((column) => (
+            <div class="site-footer__col">
+              <h2>{column.title}</h2>
+              <ul>
+                {column.links.map((link) => (
+                  <li>
+                    <a href={link.href} lang={'lang' in link ? link.lang : undefined}>
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </nav>
     </div>
-  </div>
 
-  <a
-    href={homeHref}
-    class="footer-brand"
-    aria-label={`${SITE.brand}, ${english ? 'Shopify Apps' : 'naar de homepage'}`}
-  >
-    <Logo height={110} inverse />
-  </a>
+    <a href={homeHref} class="site-footer__wordmark" aria-hidden="true" tabindex="-1">
+      <BrandMark size={120} class="site-footer__wordmark-mark" />
+      <span>{SITE.brand}</span>
+    </a>
 
-  <div class="footer-bottom">
-    <p>
-      {
-        english
-          ? 'Independent Shopify apps by Chris Snoek'
-          : 'Shopify · Design · Develop · Maintain'
-      }
-    </p>
-    <p>
-      &copy; {year}
-      {SITE.author}. {english ? 'All rights reserved.' : 'Alle rechten voorbehouden.'}
-      <a href="/privacy">{english ? 'Privacy & cookies (Dutch)' : 'Privacy'}</a>
-      <button type="button" data-cookie-settings
-        >{english ? 'Cookie settings' : 'Cookiekeuze'}</button
-      >
-    </p>
+    <div class="site-footer__bottom">
+      <fieldset class="daylight" data-daylight>
+        <legend>{lightLabels.title}</legend>
+        <div class="daylight__group" role="group">
+          <button type="button" data-scheme-choice="auto" aria-pressed="false">
+            <Icon name="circleHalf" size={15} />
+            {lightLabels.auto}
+          </button>
+          <button type="button" data-scheme-choice="light" aria-pressed="false">
+            <Icon name="sun" size={15} />
+            {lightLabels.light}
+          </button>
+          <button type="button" data-scheme-choice="dark" aria-pressed="false">
+            <Icon name="moon" size={15} />
+            {lightLabels.dark}
+          </button>
+        </div>
+      </fieldset>
+
+      <p class="site-footer__legal">
+        <span
+          >{
+            english
+              ? 'Independent Shopify apps by Chris Snoek'
+              : 'Shopify · Design · Develop · Maintain'
+          }</span
+        >
+        <span>
+          &copy; {year}
+          {SITE.author}. {english ? 'All rights reserved.' : 'Alle rechten voorbehouden.'}
+        </span>
+        <span class="site-footer__legal-links">
+          <a href="/privacy">{english ? 'Privacy & cookies (Dutch)' : 'Privacy'}</a>
+          <button type="button" data-cookie-settings>
+            {english ? 'Cookie settings' : 'Cookiekeuze'}
+          </button>
+        </span>
+      </p>
+    </div>
   </div>
 </footer>
 
+<script>
+  // Studiolicht-keuze: markeert de actieve stand en schakelt via window.coDaylight.
+  function syncDaylight() {
+    const pref = document.documentElement.getAttribute('data-scheme-pref') || 'auto';
+    document.querySelectorAll<HTMLButtonElement>('[data-scheme-choice]').forEach((button) => {
+      button.setAttribute('aria-pressed', String(button.dataset.schemeChoice === pref));
+    });
+  }
+  function initDaylight() {
+    const root = document.querySelector<HTMLElement>('[data-daylight]');
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = 'true';
+    root.querySelectorAll<HTMLButtonElement>('[data-scheme-choice]').forEach((button) => {
+      button.addEventListener('click', () => {
+        window.coDaylight?.set(button.dataset.schemeChoice || 'auto');
+        syncDaylight();
+      });
+    });
+    syncDaylight();
+  }
+  document.addEventListener('astro:page-load', initDaylight);
+  document.addEventListener('co:scheme', syncDaylight);
+  initDaylight();
+</script>
+
 <style>
   .site-footer {
-    padding: clamp(4rem, 7vw, 7rem) max(1.25rem, calc((100vw - 78rem) / 2)) 2rem;
-    background: #0d0d0f;
-    color: #ffffff;
+    padding: clamp(4rem, 7vw, 6.5rem) 0 2rem;
+    border-top: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
   }
 
-  .footer-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 3rem;
+  .site-footer__top {
+    display: grid;
+    grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1.6fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
   }
 
-  .footer-top nav {
-    display: flex;
-    max-width: 39rem;
-    flex-wrap: wrap;
-    gap: 0.55rem 1.6rem;
+  .site-footer__brand {
+    display: inline-flex;
+    color: var(--ink);
+    text-decoration: none;
   }
 
-  .footer-top a {
-    color: #c9c9c5;
+  .site-footer__tagline {
+    max-width: 22rem;
+    margin-top: 1.25rem;
+    color: var(--ink-soft);
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    line-height: 1.2;
+    text-wrap: pretty;
+  }
+
+  .site-footer__address {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1.75rem;
+    font-style: normal;
     font-size: 0.9rem;
+  }
+  .site-footer__address > * {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+  .site-footer__address a:hover,
+  .site-footer__address a:focus-visible {
+    color: var(--vermilion-ink);
+  }
+
+  .site-footer__nav {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+  .site-footer__col h2 {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 650;
+    letter-spacing: 0;
+  }
+  .site-footer__col ul {
+    display: grid;
+    gap: 0.45rem;
+    margin-top: 1rem;
+    list-style: none;
+    padding: 0;
+  }
+  .site-footer__col a {
+    display: inline-block;
+    padding-block: 0.15rem;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    text-decoration: none;
     transition: color 180ms ease;
   }
-
-  .footer-top a:hover,
-  .footer-top a:focus-visible {
-    color: #ff7048;
+  .site-footer__col a:hover,
+  .site-footer__col a:focus-visible {
+    color: var(--vermilion-ink);
   }
 
-  .footer-contact {
+  /* Groot woordmerk: het merk als afsluiter van iedere pagina. */
+  .site-footer__wordmark {
     display: flex;
+    width: 100%;
+    margin-top: clamp(4rem, 8vw, 8rem);
     align-items: center;
-    gap: 1rem;
-  }
-
-  .footer-brand {
-    display: block;
-    width: 100%;
-    margin-top: clamp(5rem, 10vw, 10rem);
+    gap: 3vw;
     overflow: hidden;
+    color: var(--ink);
+    font-size: clamp(3.6rem, 13.2vw, 13rem);
+    font-weight: 650;
+    letter-spacing: -0.06em;
+    line-height: 0.9;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .site-footer__wordmark :global(.site-footer__wordmark-mark) {
+    width: clamp(3rem, 10vw, 9.5rem);
+    height: clamp(3rem, 10vw, 9.5rem);
+    color: var(--vermilion);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .site-footer__wordmark :global(.site-footer__wordmark-mark) {
+        animation: spin-quarter linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 100%;
+      }
+    }
   }
 
-  .footer-brand :global(.brand-lockup) {
-    width: 100%;
-    height: auto;
-    gap: 2vw;
-    font-size: clamp(4.2rem, 13vw, 12.5rem);
-    letter-spacing: -0.075em;
-  }
-
-  .footer-brand :global(.brand-mark) {
-    width: clamp(4rem, 10vw, 9rem);
-    height: clamp(4rem, 10vw, 9rem);
-  }
-
-  .footer-bottom {
-    display: flex;
-    margin-top: 3rem;
-    justify-content: space-between;
-    gap: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #343438;
-    color: #8f8f8b;
-    font-size: 0.78rem;
-  }
-
-  .footer-bottom p:last-child {
+  .site-footer__bottom {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem 3rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
   }
 
-  .footer-bottom a,
-  .footer-bottom button {
-    color: #c9c9c5;
+  .daylight {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .daylight legend {
+    margin-bottom: 0.5rem;
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+  }
+  .daylight__group {
+    display: inline-flex;
+    padding: 0.25rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--paper-deep);
+  }
+  .daylight__group button {
+    display: inline-flex;
+    min-height: 2.25rem;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition:
+      background-color 220ms ease,
+      color 220ms ease;
+  }
+  .daylight__group button[aria-pressed='true'] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .site-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+    color: var(--ink-faint);
+    font-size: 0.78rem;
+  }
+  .site-footer__legal-links {
+    display: inline-flex;
+    gap: 0.75rem;
+  }
+  .site-footer__legal a,
+  .site-footer__legal button {
+    color: var(--ink-soft);
     text-decoration: underline;
     text-underline-offset: 0.16em;
   }
 
-  @media (max-width: 700px) {
-    .footer-top,
-    .footer-bottom {
-      flex-direction: column;
+  @media (max-width: 900px) {
+    .site-footer__top {
+      grid-template-columns: 1fr;
     }
-
-    .footer-top nav {
-      flex-direction: column;
-      flex-wrap: nowrap;
+    .site-footer__nav {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-
-    .footer-brand :global(.brand-lockup) {
-      font-size: clamp(3.4rem, 16vw, 5.4rem);
+  }
+  @media (max-width: 560px) {
+    .site-footer__nav {
+      grid-template-columns: 1fr;
+    }
+    .site-footer__wordmark {
+      gap: 0.6rem;
+      font-size: clamp(2.2rem, 11vw, 5rem);
+    }
+    .site-footer__wordmark :global(.site-footer__wordmark-mark) {
+      width: clamp(2.25rem, 9vw, 9.5rem);
+      height: clamp(2.25rem, 9vw, 9.5rem);
+    }
+    .site-footer__bottom {
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 </style>

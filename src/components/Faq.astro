@@ -1,0 +1,35 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  items: { question: string; answer: string }[];
+  /** Eerste vraag standaard open. */
+  openFirst?: boolean;
+  class?: string;
+}
+const { items, openFirst = false, class: className } = Astro.props;
+---
+
+<div class:list={['faq', className]}>
+  {
+    items.map((faq, index) => (
+      <details class="disclosure" open={openFirst && index === 0 ? true : undefined}>
+        <summary>
+          <span>{faq.question}</span>
+          <span class="disclosure__icon" aria-hidden="true">
+            <Icon name="plus" size={18} />
+          </span>
+        </summary>
+        <div class="disclosure__body">
+          <p>{faq.answer}</p>
+        </div>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  .faq .disclosure__body p {
+    max-width: 44rem;
+  }
+</style>

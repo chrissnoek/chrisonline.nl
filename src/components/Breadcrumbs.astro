@@ -1,0 +1,30 @@
+---
+/**
+ * Zichtbare broodkruimels. Combineer met breadcrumbLd() uit lib/seo.ts voor
+ * de structured data, zodat beide altijd dezelfde route tonen.
+ */
+import Icon from './Icon.astro';
+import type { Crumb } from '../lib/seo';
+
+interface Props {
+  items: Crumb[];
+  lang?: 'nl' | 'en';
+  class?: string;
+}
+const { items, lang = 'nl', class: className } = Astro.props;
+---
+
+<nav class:list={['crumbs', className]} aria-label={lang === 'en' ? 'Breadcrumb' : 'Broodkruimel'}>
+  {
+    items.map((item, index) => (
+      <>
+        {index > 0 && <Icon name="chevronRight" size={14} />}
+        {item.href ? (
+          <a href={item.href}>{item.label}</a>
+        ) : (
+          <span aria-current="page">{item.label}</span>
+        )}
+      </>
+    ))
+  }
+</nav>

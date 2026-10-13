@@ -3,8 +3,10 @@ import { Image } from 'astro:assets';
 import { getEntry, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../Icon.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
 import { type EnglishApp, englishAppPath, englishAppStructuredData } from '../../lib/english-apps';
 import { appName } from '../../lib/shopify-apps';
+import { breadcrumbLd } from '../../lib/seo';
 import { SITE, CONTACT } from '../../config/site';
 import { withUtm } from '../../utils/utm';
 
@@ -18,19 +20,7 @@ const { data } = translation;
 const { Content } = await render(translation);
 const guide = await getEntry('englishGuides', data.relatedGuide);
 const url = `${SITE.url}${englishAppPath(project.id)}`;
-const breadcrumbLd = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
-  itemListElement: [
-    {
-      '@type': 'ListItem',
-      position: 1,
-      name: 'Shopify Apps',
-      item: `${SITE.url}/en/shopify-apps/`,
-    },
-    { '@type': 'ListItem', position: 2, name: appName(project), item: url },
-  ],
-};
+const crumbs = [{ label: 'Shopify Apps', href: '/en/shopify-apps/' }, { label: appName(project) }];
 const pageLd = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
@@ -49,51 +39,58 @@ const pageLd = {
   lang="en"
   title={data.title}
   description={data.description}
-  jsonLd={[englishAppStructuredData(app), pageLd, breadcrumbLd]}
+  jsonLd={[englishAppStructuredData(app), pageLd, breadcrumbLd(crumbs, englishAppPath(project.id))]}
   markdown={`/en/shopify-apps/${project.id}.md`}
 >
-  <article class="english-app">
-    <div class="app-container">
-      <nav class="app-breadcrumbs" aria-label="Breadcrumb">
-        <a href="/en/shopify-apps/">Shopify Apps</a><span aria-hidden="true">/</span><span
-          >{appName(project)}</span
-        >
-      </nav>
-      <header class="app-hero">
-        <div class="app-hero-copy">
-          <h1 class="enter-up">{data.heroTitle}</h1>
-          <p class="app-intro enter-up">{data.intro}</p>
+  <article class="app">
+    <div class="shell">
+      <Breadcrumbs items={crumbs} lang="en" class="enter-up" />
+
+      <header class="app__hero">
+        <div class="app__copy">
+          <h1 class="display-lg enter-up" style="--enter-delay: 0.08s">{data.heroTitle}</h1>
+          <p class="lead enter-up" style="--enter-delay: 0.16s">{data.intro}</p>
           {
             project.data.url && (
-              <a
-                class="store-cta enter-up"
-                href={withUtm(project.data.url)}
-                target="_blank"
-                rel="noopener"
-                aria-label={`View ${appName(project)} in the Shopify App Store (new tab)`}
-              >
-                View in App Store <Icon name="arrowUpRight" size={18} />
-              </a>
+              <div class="app__actions enter-up" style="--enter-delay: 0.24s">
+                <a
+                  class="btn btn--ink btn--up"
+                  href={withUtm(project.data.url)}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label={`View ${appName(project)} in the Shopify App Store (new tab)`}
+                >
+                  View in App Store <Icon name="arrowUpRight" size={18} />
+                </a>
+              </div>
             )
           }
         </div>
-        <figure class="app-hero-image enter-up">
-          <Image
-            src={project.data.cover}
-            alt={data.coverAlt}
-            widths={[640, 960, 1440]}
-            sizes="(max-width: 899px) 100vw, 50vw"
-            format="avif"
-            quality="high"
-            priority
-          />
-          <figcaption>{data.coverAlt}</figcaption>
+        <figure
+          class="app__cover enter-unveil"
+          style="--enter-delay: 0.2s; --unveil-radius: var(--radius-stage)"
+        >
+          <div class="frame frame--lift">
+            <Image
+              src={project.data.cover}
+              alt={data.coverAlt}
+              widths={[640, 960, 1440]}
+              sizes="(max-width: 899px) 100vw, 50vw"
+              format="avif"
+              quality="high"
+              priority
+            />
+          </div>
+          <figcaption class="meta">{data.coverAlt}</figcaption>
         </figure>
       </header>
 
-      <section class="app-facts" aria-labelledby="app-features-heading">
+      <section
+        class="app__facts surface surface--deep reveal-up"
+        aria-labelledby="app-features-heading"
+      >
         <div>
-          <h2 id="app-features-heading">What {appName(project)} does</h2>
+          <h2 id="app-features-heading" class="display-sm">What {appName(project)} does</h2>
           <ul>{data.features.map((feature) => <li>{feature}</li>)}</ul>
         </div>
         <dl>
@@ -102,9 +99,11 @@ const pageLd = {
           <div><dt>Developed by</dt><dd>Chris Snoek, Chris Online</dd></div>
         </dl>
       </section>
+    </div>
 
-      <div class="app-body prose-project">
-        <p class="app-updated">
+    <div class="shell shell--read app__content">
+      <div class="prose reveal-up">
+        <p class="meta">
           Product information updated {
             data.updatedDate.toLocaleDateString('en-GB', {
               day: 'numeric',
@@ -114,29 +113,33 @@ const pageLd = {
           }.
         </p>
         <Content />
-        {
-          guide && (
-            <aside class="app-guide">
-              <>
-                <h2>Try the practical workflow.</h2>
-                <p>{guide.data.intro}</p>
-                <a href={`/en/guides/${guide.id}/`}>
-                  {guide.data.title} <Icon name="arrowRight" size={18} />
-                </a>
-              </>
-            </aside>
-          )
-        }
       </div>
+      {
+        guide && (
+          <aside class="app__guide surface surface--deep reveal-up" aria-labelledby="guide-heading">
+            <h2 id="guide-heading" class="display-sm">
+              Try the practical workflow.
+            </h2>
+            <p>{guide.data.intro}</p>
+            <a href={`/en/guides/${guide.id}/`} class="link-arrow link-arrow--accent">
+              {guide.data.title} <Icon name="arrowRight" size={18} />
+            </a>
+          </aside>
+        )
+      }
+    </div>
 
-      <section class="app-gallery" aria-labelledby="screens-heading">
-        <h2 id="screens-heading">See the checks in context.</h2>
-        <p>Real app screens from a Shopify test store.</p>
-        <div class="screens-grid">
+    <div class="shell">
+      <section class="app__gallery" aria-labelledby="screens-heading">
+        <div class="app__gallery-head lift-in">
+          <h2 id="screens-heading" class="display-md">See the checks in context.</h2>
+          <p class="lead">Real app screens from a Shopify test store.</p>
+        </div>
+        <div class="app__gallery-grid">
           {
             project.data.gallery.map((shot, index) => (
-              <figure>
-                <div class="screen-image">
+              <figure class="reveal-up">
+                <div class="frame app__screen">
                   <Image
                     src={shot.src}
                     alt={data.galleryAlts[index]}
@@ -147,29 +150,29 @@ const pageLd = {
                     loading="lazy"
                   />
                 </div>
-                <figcaption>{data.galleryAlts[index]}</figcaption>
+                <figcaption class="meta">{data.galleryAlts[index]}</figcaption>
               </figure>
             ))
           }
         </div>
       </section>
 
-      <section class="app-support" aria-labelledby="support-heading">
-        <div>
-          <h2 id="support-heading">Talk to the person who built it.</h2>
+      <section class="app__support reveal-up" aria-labelledby="support-heading">
+        <div class="app__support-block surface surface--deep">
+          <h2 id="support-heading" class="display-sm">Talk to the person who built it.</h2>
           <p>
             Have a question about setup, supported checks or whether {appName(project)} fits your store?
           </p>
-          <a href={`mailto:${CONTACT.email}`}
+          <a href={`mailto:${CONTACT.email}`} class="btn btn--ink"
             >Contact app support <Icon name="arrowRight" size={18} /></a
           >
         </div>
         {
           relatedApp && (
-            <div class="related-app">
-              <h3>Also from Chris Online</h3>
+            <div class="app__support-block surface surface--deep">
+              <h3 class="display-sm">Also from Chris Online</h3>
               <p>{relatedApp.translation.data.tagline}</p>
-              <a href={englishAppPath(relatedApp.project.id)}>
+              <a href={englishAppPath(relatedApp.project.id)} class="link-arrow link-arrow--accent">
                 Explore {appName(relatedApp.project)} <Icon name="arrowRight" size={18} />
               </a>
             </div>
@@ -181,214 +184,192 @@ const pageLd = {
 </BaseLayout>
 
 <style>
-  .english-app {
-    padding: clamp(2rem, 4vw, 4rem) 0 clamp(5rem, 8vw, 8rem);
-    background: #fff;
-    color: #111;
+  .app {
+    padding: clamp(1.5rem, 3vw, 2.5rem) 0 clamp(5rem, 8vw, 7rem);
   }
-  .app-container {
-    width: min(100% - 3rem, 78rem);
-    margin-inline: auto;
+
+  .app__hero {
+    display: grid;
+    grid-template-columns: minmax(20rem, 0.95fr) minmax(0, 1.05fr);
+    align-items: center;
+    gap: clamp(2.5rem, 5vw, 5rem);
+    margin-top: clamp(2rem, 4vw, 3.5rem);
   }
-  .app-breadcrumbs {
+  .app__copy h1 {
+    overflow-wrap: anywhere;
+  }
+  .app__copy .lead {
+    max-width: 32rem;
+    margin-top: 1.5rem;
+  }
+  .app__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
-    color: #62625e;
-    font-size: 0.88rem;
-  }
-  .app-breadcrumbs a:hover {
-    text-decoration: underline;
-  }
-  .app-hero {
-    display: grid;
-    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
     align-items: center;
-    gap: clamp(2rem, 5vw, 4rem);
-    padding: 3rem 0;
+    gap: 1rem;
+    margin-top: 2rem;
   }
-  h1 {
-    font-size: clamp(2.5rem, 3.8vw, 4.2rem);
-    font-weight: 620;
-    letter-spacing: -0.055em;
-    line-height: 1.05;
-  }
-  .app-intro {
-    max-width: 32rem;
-    margin: 1.5rem 0 2rem;
-    font-size: 1.2rem;
-    color: #565652;
-    line-height: 1.55;
-  }
-  .store-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    min-height: 3.15rem;
-    padding: 0.8rem 1.2rem;
-    border-radius: 0.75rem;
-    background: #111;
-    color: #fff;
-    font-weight: 650;
-    font-size: 0.9rem;
-  }
-  .store-cta:hover {
-    background: #343430;
-  }
-  .app-hero-image {
+
+  .app__cover {
     min-width: 0;
+    margin: 0;
   }
-  .app-hero-image :global(img) {
+  .app__cover .frame {
+    border-radius: var(--radius-stage);
+    background: var(--paper-raised);
+  }
+  .app__cover img {
     width: 100%;
     height: auto;
-    border-radius: 1.25rem;
-    border: 1px solid #deded9;
   }
-  figcaption {
+  .app__cover figcaption {
+    max-width: 42rem;
     margin-top: 0.8rem;
-    color: #62625e;
-    font-size: 0.8rem;
-    line-height: 1.5;
+    font-size: 0.78rem;
   }
-  .app-facts {
+
+  .app__facts {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
     gap: 3rem;
-    margin-top: 1.5rem;
-    padding: clamp(1.5rem, 3vw, 2.5rem);
-    background: #f5f5f2;
-    border-radius: 1.25rem;
+    margin-top: clamp(3rem, 5vw, 4.5rem);
+    padding: clamp(1.5rem, 3vw, 2.75rem);
   }
-  .app-facts h2 {
-    font-size: 1.7rem;
-    line-height: 1.2;
-    font-weight: 600;
-    letter-spacing: -0.035em;
-  }
-  .app-facts ul {
+  .app__facts ul {
     display: grid;
-    gap: 0.8rem;
+    gap: 0.6rem;
     margin-top: 1.2rem;
     padding-left: 1.1rem;
     list-style: disc;
-    color: #62625e;
+    color: var(--ink-soft);
   }
-  .app-facts dl {
+  .app__facts li::marker {
+    color: var(--vermilion-ink);
+  }
+  .app__facts dl {
     display: grid;
-    gap: 1.2rem;
+    gap: 1.1rem;
     align-content: start;
   }
-  dt {
-    font-weight: 650;
+  .app__facts dt {
+    font-weight: 600;
   }
-  dd {
-    margin-top: 0.25rem;
-    color: #62625e;
+  .app__facts dd {
+    margin-top: 0.2rem;
+    color: var(--ink-soft);
   }
-  .app-body {
-    max-width: 48rem;
-    margin: clamp(4rem, 7vw, 7rem) auto;
+
+  .app__content {
+    margin-top: clamp(4rem, 7vw, 6.5rem);
   }
-  .app-updated {
-    color: #62625e;
-    font-size: 0.85rem;
-  }
-  .app-guide {
+  .app__guide {
     margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid #deded9;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
   }
-  .app-guide a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
+  .app__guide p {
+    max-width: 40rem;
+    margin-top: 0.9rem;
+    color: var(--ink-soft);
   }
-  .app-gallery h2,
-  .app-support h2 {
-    font-size: clamp(2rem, 3.4vw, 3.3rem);
-    line-height: 1.1;
-    font-weight: 580;
-    letter-spacing: -0.045em;
+  .app__guide .link-arrow {
+    margin-top: 0.75rem;
   }
-  .app-gallery > p {
-    margin-top: 1rem;
-    color: #62625e;
+
+  .app__gallery {
+    margin-top: clamp(4.5rem, 8vw, 7rem);
   }
-  .screens-grid {
+  .app__gallery-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .app__gallery-head h2 {
+    max-width: 14ch;
+  }
+  .app__gallery-head .lead {
+    max-width: 28rem;
+    font-size: 1rem;
+  }
+  .app__gallery-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
+    gap: 2.5rem 1.5rem;
+    margin-top: 2.5rem;
   }
-  .screen-image {
+  .app__gallery-grid figure {
+    margin: 0;
+  }
+  .app__screen {
     display: flex;
     align-items: center;
     aspect-ratio: 16 / 10;
     padding: 1rem;
-    border-radius: 1.25rem;
-    background: #f5f5f2;
+    background: var(--paper-deep);
   }
-  .screen-image :global(img) {
+  .app__screen img {
     width: 100%;
     height: auto;
     max-height: 100%;
     object-fit: contain;
   }
-  .app-support {
+  .app__gallery-grid figcaption {
+    margin-top: 0.8rem;
+    font-size: 0.82rem;
+  }
+
+  .app__support {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
-    gap: clamp(2rem, 6vw, 6rem);
-    margin-top: clamp(4rem, 7vw, 7rem);
+    gap: 1.5rem;
+    margin-top: clamp(4rem, 7vw, 6rem);
   }
-  .app-support p {
+  .app__support-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .app__support-block h3 {
+    font-weight: 400;
+  }
+  .app__support-block p {
     max-width: 36rem;
-    margin-top: 1rem;
-    color: #62625e;
+    margin-top: 0.9rem;
+    color: var(--ink-soft);
   }
-  .app-support a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 2.8rem;
-    gap: 0.6rem;
-    margin-top: 1rem;
-    color: var(--accent-text);
-    font-weight: 600;
+  .app__support-block .btn,
+  .app__support-block .link-arrow {
+    margin-top: auto;
+    padding-top: 1.25rem;
   }
-  .related-app {
-    padding: 2rem;
-    background: #f5f5f2;
-    border-radius: 1.25rem;
-    align-self: start;
+  .app__support-block .btn {
+    margin-top: 1.5rem;
+    padding-top: 0.85rem;
   }
-  .related-app h3 {
-    font-size: 1.5rem;
-    line-height: 1.2;
-    font-weight: 620;
-    letter-spacing: -0.035em;
-  }
+
   @media (max-width: 899px) {
-    .app-hero {
-      grid-template-columns: 1fr;
-    }
-    .app-hero-copy {
-      max-width: 38rem;
-    }
-  }
-  @media (max-width: 767px) {
-    .app-container {
-      width: min(100% - 2.5rem, 35rem);
-    }
-    .app-facts,
-    .screens-grid,
-    .app-support {
+    .app__hero {
       grid-template-columns: 1fr;
       gap: 2rem;
     }
-    .app-hero {
-      padding-top: 2rem;
+    .app__facts,
+    .app__support {
+      grid-template-columns: 1fr;
     }
-    .app-intro {
-      font-size: 1.05rem;
+    .app__facts {
+      gap: 2rem;
+    }
+    .app__gallery-head {
+      display: block;
+    }
+    .app__gallery-head .lead {
+      margin-top: 1rem;
+    }
+  }
+  @media (max-width: 640px) {
+    .app__gallery-grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>

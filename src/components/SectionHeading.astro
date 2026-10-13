@@ -1,0 +1,94 @@
+---
+/**
+ * Sectiekop: optionele aanloopzin (sentence case), display-kop en lead.
+ * `split` zet kop en lead naast elkaar op brede schermen.
+ */
+interface Props {
+  id?: string;
+  kicker?: string;
+  title: string;
+  lead?: string;
+  size?: 'lg' | 'md';
+  split?: boolean;
+  align?: 'start' | 'center';
+  class?: string;
+  /** Kleurvarianten voor donkere podia. */
+  tone?: 'paper' | 'stage';
+}
+const {
+  id,
+  kicker,
+  title,
+  lead,
+  size = 'md',
+  split = false,
+  align = 'start',
+  class: className,
+  tone = 'paper',
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    'section-heading lift-in',
+    split && 'section-heading--split',
+    align === 'center' && 'section-heading--center',
+    tone === 'stage' && 'section-heading--stage',
+    className,
+  ]}
+>
+  <div>
+    {kicker && <p class="kicker">{kicker}</p>}
+    <h2 id={id} class:list={[size === 'lg' ? 'display-lg' : 'display-md']} set:html={title} />
+  </div>
+  {
+    (lead || Astro.slots.has('default')) && (
+      <div class="section-heading__lead">
+        {lead && <p class="lead">{lead}</p>}
+        <slot />
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .section-heading {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .section-heading h2 {
+    max-width: 16ch;
+  }
+  .kicker + h2 {
+    margin-top: 0.9rem;
+  }
+  .section-heading__lead {
+    max-width: 36rem;
+  }
+  .section-heading__lead > * + * {
+    margin-top: 1.25rem;
+  }
+  .section-heading--center {
+    justify-items: center;
+    text-align: center;
+  }
+  .section-heading--center h2 {
+    max-width: 22ch;
+  }
+  .section-heading--stage h2 {
+    color: var(--stage-ink);
+  }
+  .section-heading--stage .lead {
+    color: var(--stage-soft);
+  }
+  .section-heading--stage .kicker {
+    color: #ff8d69;
+  }
+  @media (min-width: 900px) {
+    .section-heading--split {
+      grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+      align-items: end;
+      gap: clamp(2rem, 6vw, 6rem);
+    }
+  }
+</style>
