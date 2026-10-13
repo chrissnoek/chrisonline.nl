@@ -13,6 +13,7 @@ skills:
 cover: '../../assets/projects/promofinch/monitoring.png'
 coverAlt: 'PromoFinch met een actieve campagnemonitor, goedgekeurde startwaarden en de resultaten van een controle in een testwinkel.'
 pubDate: 2026-10-06
+updatedDate: 2026-10-13
 order: -1
 url: 'https://apps.shopify.com/promoproof-3'
 urlLabel: 'Bekijk in de Shopify App Store'
@@ -44,6 +45,8 @@ gallery:
     alt: 'De prijsregels in PromoFinch met een minimale prijs, minimale brutomarge, maximale korting en een vereiste bruikbare productkostprijs.'
     url: 'PromoFinch · Eigen prijsregels'
 relatedKnowledge:
+  - title: 'Engelse gids: kortingsprijzen en brutomarges in Shopify controleren'
+    href: '/en/guides/check-shopify-discount-margins/'
   - title: 'Shopify-conversie meten: bepaal wat een verandering werkelijk oplevert'
     href: '/kennis/shopify-conversie-meten'
 ---
@@ -69,6 +72,16 @@ berekening. Ontbrekende kosten of niet-ondersteunde voorwaarden blijven zichtbaa
 De app ondersteunt een afgebakende groep basiskortingen met kortingscodes en automatische
 productpercentagekortingen. Andere constructies worden niet zomaar doorgerekend. Kortingen met
 een actieve of geplande Shopify Rollout vallen buiten de ondersteunde controle.
+
+## Rekenvoorbeeld: korting en brutomarge
+
+Bij een voorbeeldprijs van €100, productkosten van €70 en 20% korting is de berekende
+verkoopprijs €80. De geschatte brutomarge is (€80 − €70) ÷ €80 × 100 = **12,5%**.
+Een eigen bodemprijs van €85 of minimale brutomarge van 20% levert in dit voorbeeld een
+bevinding op. Het zijn illustratieve invoerwaarden, geen resultaten van een klant.
+
+Ontbrekende kosten worden niet als nul behandeld. Een niet-ondersteunde korting is geen
+geslaagde controle: controleer altijd de scope en dekking van het rapport.
 
 ## Een campagne volgen en prijzen achteraf vergelijken
 

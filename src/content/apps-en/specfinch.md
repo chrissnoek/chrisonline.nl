@@ -1,12 +1,14 @@
 ---
-title: 'SpecFinch: Shopify Product Data Monitoring'
-description: 'Monitor required Shopify product fields and metafields. SpecFinch separates new catalog issues from existing cleanup, with read-only scans and CSV exports.'
-heroTitle: 'SpecFinch catches missing fields.'
-intro: 'Find newly missing product fields after imports and edits, while keeping existing cleanup work separate.'
+title: 'SpecFinch: Find Missing Shopify SKUs & Metafields'
+description: 'Find missing Shopify SKUs, barcodes and required metafields after imports or edits. SpecFinch separates new issues from your backlog with read-only scans.'
+heroTitle: 'Find missing SKUs, barcodes & metafields.'
+intro: 'SpecFinch checks the Shopify product data your team requires. See which fields went missing after an import or edit, with new issues separated from existing cleanup.'
+updatedDate: 2026-10-13
+relatedGuide: 'find-missing-shopify-product-data'
 tagline: 'Catch new gaps in your Shopify product data.'
 audience: 'Shopify teams managing product data through supplier imports, integrations, bulk updates and everyday edits.'
 features:
-  - 'Define required product fields, variant fields and existing metafields for your catalog'
+  - 'Check missing variant SKUs, barcodes and required product or variant metafields using your own rules'
   - 'Separate new, returned, worsened and resolved findings from existing cleanup work'
   - 'Review daily scans, scan history and CSV exports without changing product data'
 coverAlt: 'SpecFinch in Shopify Admin showing a data contract, current findings and the last completed catalog scan in a test store.'
@@ -34,6 +36,20 @@ contract. Your rules describe the data your team expects to be present.
 For example, a store might require a material metafield for a product group because its filters
 depend on that value. A later import that leaves that field empty can then produce a finding
 against that specific rule.
+
+## Check missing SKUs and barcodes after a Shopify import
+
+An import can leave a variant SKU or barcode empty while the product still appears in your
+catalog. Make these fields required only for the products that need them. After a successful
+follow-up scan, investigate newly missing values through the finding's Shopify product link.
+
+SpecFinch checks whether required values are present. It does not verify GTIN authenticity,
+check barcode ownership or certify a product feed. A non-empty value can still be wrong.
+
+For a one-off review, a Shopify product CSV can help you inspect SKU and barcode columns.
+Recurring rule-based scans are useful when the same requirements need checking after each
+change. See the [step-by-step product data guide](/en/guides/find-missing-shopify-product-data/)
+for a manual workflow and the limits of product CSVs.
 
 ## Keep new missing fields separate from existing cleanup
 
@@ -68,6 +84,11 @@ the findings and makes any corrections in Shopify.
 
 Yes. Existing product and variant metafields can be marked as required in a data contract,
 alongside supported built-in fields. SpecFinch checks whether required data is present.
+
+### Does SpecFinch validate barcodes or fix missing SKUs?
+
+It can check that a required SKU or barcode is present. It does not validate GTIN authenticity,
+create identifiers or edit your data. Review the value with the responsible supplier or team.
 
 ### What happens to issues that existed before installation?
 

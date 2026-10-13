@@ -42,7 +42,20 @@ const breadcrumbLd = {
   title={data.title}
   description={data.summary}
   type="article"
-  jsonLd={[jsonLd, breadcrumbLd]}
+  jsonLd={[
+    jsonLd,
+    breadcrumbLd,
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      url: `${SITE.url}/werk/${entry.id}/`,
+      name: data.title,
+      description: data.summary,
+      inLanguage: 'nl',
+      mainEntity: { '@id': `${SITE.url}/werk/${entry.id}/#software` },
+      ...(data.updatedDate ? { dateModified: data.updatedDate.toISOString() } : {}),
+    },
+  ]}
   markdown={`/werk/${entry.id}.md`}
 >
   <article class="app-project">
@@ -135,6 +148,21 @@ const breadcrumbLd = {
       }
 
       <div class="app-project-content prose-project reveal-up">
+        {
+          data.updatedDate && (
+            <p>
+              Productinformatie bijgewerkt op{' '}
+              <time datetime={data.updatedDate.toISOString().split('T')[0]}>
+                {data.updatedDate.toLocaleDateString('nl-NL', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}
+              </time>
+              .
+            </p>
+          )
+        }
         <Content />
       </div>
 

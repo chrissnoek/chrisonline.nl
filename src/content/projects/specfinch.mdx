@@ -1,8 +1,8 @@
 ---
-title: 'SpecFinch: catalogusregels bewaken'
-heroTitle: 'SpecFinch houdt nieuwe catalogusfouten klein.'
+title: 'SpecFinch: ontbrekende Shopify-SKU’s en metafields vinden'
+heroTitle: 'Vind ontbrekende SKU’s, barcodes en metafields.'
 client: 'Chris Online'
-summary: 'Een read-only Shopify-app die na imports en productedits zichtbaar maakt welke vereiste productvelden nieuw ontbreken, terwijl bestaand opschoonwerk apart blijft.'
+summary: 'Vind ontbrekende Shopify-SKU’s, barcodes en vereiste metafields na imports of bewerkingen. SpecFinch scheidt nieuwe bevindingen van bestaande achterstand, zonder data te wijzigen.'
 role: 'Productstrategie, design & development'
 skills:
   - Shopify app-development
@@ -12,6 +12,7 @@ skills:
 cover: '../../assets/projects/specfinch/overview.png'
 coverAlt: 'Het SpecFinch-overzicht in Shopify Admin met één actief datacontract, nul actuele bevindingen en de laatst voltooide scan.'
 pubDate: 2026-09-03
+updatedDate: 2026-10-13
 order: 0
 url: 'https://apps.shopify.com/specfinch'
 urlLabel: 'Bekijk in de Shopify App Store'
@@ -23,7 +24,7 @@ application:
   tagline: 'Zie welke productgegevens nieuw ontbreken.'
   audience: 'Shopify-teams die productdata beheren via imports, koppelingen en dagelijkse bewerkingen.'
   features:
-    - 'Eigen regels voor verplichte productvelden, variantvelden en bestaande metafields'
+    - 'Ontbrekende variant-SKU’s, barcodes en vereiste product- of variantmetafields controleren met eigen regels'
     - 'Een baseline die bestaande achterstand scheidt van nieuwe catalogusfouten'
     - 'Dagelijkse scans, scanhistorie en CSV-export zonder productdata te wijzigen'
   languages:
@@ -36,6 +37,8 @@ highlights:
   - title: 'Het doel'
     description: 'Catalogusproblemen eerder en gerichter laten beoordelen, zonder productdata door de app te laten wijzigen.'
 relatedKnowledge:
+  - title: 'Engelse gids: ontbrekende SKU’s, barcodes en metafields controleren'
+    href: '/en/guides/find-missing-shopify-product-data/'
   - title: 'Waarom complete productinformatie twijfel vóór de koopknop wegneemt'
     href: '/kennis/productinformatie-shopify-compleet'
   - title: 'Shopify-conversie verhogen: begin bij de twijfels vóór de koopknop'
@@ -74,6 +77,16 @@ opgeloste bevindingen. Zo hoeft een team niet bij iedere controle opnieuw door d
 - Filterbare bevindingen, scanhistorie en CSV-export
 - Optionele e-maildigest voor relevante veranderingen
 - Uitsluitend leestoegang tot producten; de app wijzigt geen catalogusdata
+
+## Ontbrekende waarden controleren na een import
+
+Maak bijvoorbeeld variant-SKU en barcode verplicht voor de producten waarvoor je deze identifiers
+gebruikt. Een vervolgscan laat zien waar zo’n vereist veld nieuw ontbreekt. Bestaande product-
+en variantmetafields kun je eveneens opnemen in je eigen datacontract.
+
+SpecFinch controleert aanwezigheid volgens je regels. De app valideert geen GTIN-authenticiteit,
+maakt geen identifiers aan en vult niets automatisch in. Een aanwezige waarde kan nog steeds
+onjuist zijn; de inhoudelijke beoordeling blijft bij je team.
 
 ## De relatie met vindbaarheid en conversie
 

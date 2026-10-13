@@ -20,6 +20,7 @@ Canonical: ${SITE.url}/werk/${entry.id}/
 Ontwikkelaar: Chris Snoek / Chris Online
 Shopify App Store: ${data.url}
 Gepubliceerd: ${data.pubDate.toISOString().split('T')[0]}
+${data.updatedDate ? `Bijgewerkt: ${data.updatedDate.toISOString().split('T')[0]}\n` : ''}
 ${data.application ? `Voor wie: ${data.application.audience}\nApp-talen: ${data.application.languages.join(', ')}\n\n## Functionaliteit\n\n${data.application.features.map((feature) => `- ${feature}`).join('\n')}` : ''}
 
 ${entry.body?.trim() ?? ''}

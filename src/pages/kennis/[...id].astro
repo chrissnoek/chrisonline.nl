@@ -60,6 +60,7 @@ const breadcrumbLd = {
   description={data.description}
   type="article"
   jsonLd={[articleLd, breadcrumbLd, ...(data.faqs.length ? [faqLd] : [])]}
+  markdown={`/kennis/${entry.id}.md`}
 >
   <article class="knowledge-article">
     <div class="article-container">

@@ -1,0 +1,124 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Icon from '../../../components/Icon.astro';
+import { SITE } from '../../../config/site';
+const guides = await getCollection('englishGuides');
+const description =
+  'Practical Shopify guides to checking missing SKUs, barcodes and metafields, and calculating estimated gross margins after percentage discounts.';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Shopify product data and discount guides',
+  description,
+  url: `${SITE.url}/en/guides/`,
+  inLanguage: 'en',
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: guides.map((guide, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: guide.data.title,
+      url: `${SITE.url}/en/guides/${guide.id}/`,
+    })),
+  },
+};
+---
+
+<BaseLayout
+  lang="en"
+  title="Shopify Product Data & Discount Margin Guides"
+  description={description}
+  jsonLd={[jsonLd]}
+>
+  <section class="guides">
+    <div class="guides-container">
+      <h1>Practical checks for your Shopify catalog & campaigns.</h1>
+      <p class="guides-intro">
+        Learn the manual workflow, review the inputs and decide when a recurring app check helps.
+      </p>
+      <nav aria-label="Practical Shopify guides">
+        {
+          guides.map((guide) => (
+            <a href={`/en/guides/${guide.id}/`}>
+              <>
+                <div>
+                  <>
+                    <h2>{guide.data.title}</h2>
+                    <p>{guide.data.intro}</p>
+                  </>
+                </div>
+                <Icon name="arrowRight" size={24} />
+              </>
+            </a>
+          ))
+        }
+      </nav>
+      <a class="apps-link" href="/en/shopify-apps/"
+        >Explore Shopify Apps <Icon name="arrowRight" size={18} /></a
+      >
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .guides {
+    background: #fff;
+    color: #111;
+    padding: clamp(3rem, 6vw, 6rem) 0 clamp(5rem, 9vw, 9rem);
+  }
+  .guides-container {
+    width: min(100% - 2.5rem, 68rem);
+    margin-inline: auto;
+  }
+  h1 {
+    max-width: 58rem;
+    font-size: clamp(2.4rem, 5vw, 4.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.055em;
+    font-weight: 620;
+  }
+  .guides-intro {
+    max-width: 40rem;
+    margin-top: 1.5rem;
+    color: #62625e;
+    font-size: 1.15rem;
+  }
+  nav {
+    margin-top: 3rem;
+    border-top: 1px solid #deded9;
+  }
+  nav a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid #deded9;
+  }
+  h2 {
+    font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+    font-weight: 620;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+  }
+  nav p {
+    max-width: 48rem;
+    margin-top: 0.75rem;
+    color: #62625e;
+  }
+  nav svg {
+    flex: none;
+  }
+  a:hover h2 {
+    color: var(--accent-text);
+  }
+  .apps-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 2rem;
+    color: var(--accent-text);
+    font-weight: 650;
+    min-height: 2.8rem;
+  }
+</style>

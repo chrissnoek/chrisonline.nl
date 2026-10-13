@@ -5,7 +5,7 @@ intro: '“Op werkdagen vóór 16:00 besteld” laat de klant nog rekenen. Een c
 answer: 'Bereken een verwachte bezorgdatum vanuit besteltijd, cutoff, verwerkingsdagen, transportdagen, weekenden, feestdagen en productuitzonderingen. Toon de uitkomst bij de koopknop als verwachting en voorkom taal die op een garantie lijkt.'
 category: 'Levering'
 pubDate: 2026-09-05
-updatedDate: 2026-09-05
+updatedDate: 2026-10-13
 readingMinutes: 8
 order: 2
 featured: false
@@ -16,7 +16,7 @@ keyTakeaways:
   - 'Meet naast conversie ook te late leveringen, contactvragen en annuleringen.'
 faqs:
   - question: 'Kan Shopify standaard een verwachte bezorgdatum op de productpagina tonen?'
-    answer: 'Shopify-thema’s tonen dit niet altijd op basis van je eigen volledige werkschema. Je kunt een thema-aanpassing of appblok gebruiken, afhankelijk van de gewenste regels en beheerbaarheid.'
+    answer: 'Shopify heeft eigen bezorgdatumopties. Shop Promise kan voor geschikte winkels ook datums op productpagina’s tonen. Controleer de actuele voorwaarden. Een appblok kan helpen wanneer je je eigen Nederlandse kalender, cutoffs en productuitzonderingen wilt beheren.'
   - question: 'Waar toon je een verwachte bezorgdatum?'
     answer: 'Toon de belangrijkste verwachting dicht bij de koopknop en herhaal of bevestig relevante leveringsinformatie later in winkelmand en checkout zonder tegenstrijdige datums.'
   - question: 'Garandeert Delivery Promise NL de bezorgdatum?'
@@ -36,6 +36,20 @@ onderliggende UX-les geldt breder: leveringsvoorwaarden horen bij de productbesl
 bij de checkout. Zie [Baymards onderzoek naar verzendinformatie op
 productpagina's](https://baymard.com/blog/show-shipping-costs-on-product-pages).
 
+## Begin met de bezorgdatumopties van Shopify
+
+Shopify biedt eigen bezorgdatumopties. Handmatige datumbereiken gebruiken ingestelde
+verwerkingstijd en transporttijd; andere opties zijn afhankelijk van de winkel en inrichting.
+Shop Promise kan voor geschikte winkels ook informatie op productpagina’s tonen. Controleer
+de actuele [Shopify-bezorgdatumopties](https://help.shopify.com/en/manual/fulfillment/setup/delivery-expectations/overview)
+en [voorwaarden voor Shop Promise](https://help.shopify.com/en/manual/fulfillment/setup/shop-promise/activate)
+voordat je een extra oplossing kiest.
+
+Wil je op de productpagina een verwachting vanuit je eigen Nederlandse werkkalender,
+cutoffs, feestdagen en productuitzonderingen? Dan is een beheersbaar appblok zoals
+Delivery Promise NL een gerichte optie. Stem die boodschap af op eventuele datums van
+Shopify verderop in de bestelling.
+
 ## Bouw de berekening vanuit de operatie
 
 Een bruikbare verwachting combineert minimaal:
@@ -50,6 +64,18 @@ Een bruikbare verwachting combineert minimaal:
 
 Leg ook vast wat “0 verwerkingsdagen” betekent en hoe een bestelling precies op de cutoff wordt
 behandeld. Zulke randen veroorzaken anders verschillen tussen preview, storefront en servicebelofte.
+
+## Test een weekend en een sluitingsdag
+
+Illustratief testscenario: je werkt maandag tot en met vrijdag, hebt een cutoff van 16:00,
+0 verwerkingsdagen en 1 transportwerkdag. Vrijdag vóór 16:00 valt binnen de vrijdagplanning.
+Precies om 16:00 en later schuift de besteldag in Delivery Promise NL naar de volgende
+beschikbare werkdag. Als maandag in je kalender gesloten is, moet die dag worden overgeslagen.
+
+Test daarom vier momenten met dezelfde productcontext: vóór de cutoff, precies op de cutoff,
+na de cutoff en op een sluitingsdag. Herhaal dit voor een product met een uitzondering. De
+preview moet de gebruikte regel en kalender verklaren. Dit scenario test de configuratie en
+is geen belofte over een echte zending.
 
 ## Kies datum, periode of neutrale levertijd
 
@@ -78,8 +104,9 @@ feestdagen, sluitingsdagen en maximaal 25 regels voor producthandle, tag of leve
 preview laat zien welke regel op een testmoment wordt toegepast. Daarna plaatst de merchant een
 Nederlands of Engels OS 2.0-appblok in het producttemplate.
 
-De app gebruikt geen product-, klant-, order-, voorraad- of trackingdata en doet geen
-bezorggarantie. Dat maakt hem geschikt voor een afgebakende productpagina-belofte, niet voor
+De app haalt via de Admin API geen product-, klant-, order-, voorraad- of trackingdata op
+en doet geen bezorggarantie. Het appblok gebruikt handle, tags en leverancier uit de
+productpagina om de ingestelde uitzondering te kiezen. Dat maakt hem geschikt voor een afgebakende productpagina-belofte, niet voor
 postcode-, voorraad-, locatie- of carrierafhankelijke logistiek.
 
 ## Meet of de uitleg echt helpt

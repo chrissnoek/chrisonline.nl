@@ -52,6 +52,12 @@ Use the English product pages for English-language product questions. They share
 - [Improve Shopify storefront performance](https://www.chrisonline.nl/kennis/shopify-snelheid-verbeteren.md)
 - [Measure Shopify conversion](https://www.chrisonline.nl/kennis/shopify-conversie-meten.md)
 
+## English practical guides
+
+- [English practical Shopify guides](https://www.chrisonline.nl/en/guides/)
+- [Find missing Shopify product data](https://www.chrisonline.nl/en/guides/find-missing-shopify-product-data/): manual SKU, barcode and metafield audit; product CSV limitations and baseline workflow. [Markdown](https://www.chrisonline.nl/en/guides/find-missing-shopify-product-data.md).
+- [Check Shopify discount margins](https://www.chrisonline.nl/en/guides/check-shopify-discount-margins/): worked estimated gross-margin calculation, missing costs, supported coverage and campaign checklist. [Markdown](https://www.chrisonline.nl/en/guides/check-shopify-discount-margins.md).
+
 ## Important factual boundaries
 
 - Chris Online is based in Volendam. It does not claim offices in Amsterdam, Alkmaar, Hoorn or other cities.

@@ -38,6 +38,7 @@ const projects = defineCollection({
       coverAlt: z.string(),
       /** Publicatiedatum (ISO 8601, bijv. 2026-02-11). */
       pubDate: z.coerce.date(),
+      updatedDate: z.coerce.date().optional(),
       /** Volgorde in de grid; lager = eerder getoond. */
       order: z.number().default(99),
       /** Optionele live-URL van het project. */
@@ -151,7 +152,24 @@ const englishApps = defineCollection({
     features: z.array(z.string()).min(1),
     coverAlt: z.string(),
     galleryAlts: z.array(z.string()),
+    updatedDate: z.coerce.date(),
+    relatedGuide: z.string(),
   }),
 });
 
-export const collections = { projects, knowledge, englishApps };
+const englishGuides = defineCollection({
+  loader: glob({ base: './src/content/guides-en', pattern: '*.md' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    intro: z.string(),
+    answer: z.string(),
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date(),
+    appId: z.enum(['specfinch', 'promofinch']),
+    appName: z.string(),
+    keyTakeaways: z.array(z.string()).min(2).max(6),
+  }),
+});
+
+export const collections = { projects, knowledge, englishApps, englishGuides };

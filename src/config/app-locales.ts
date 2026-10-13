@@ -23,4 +23,5 @@ export const EN_APP_NAV = [
   { label: 'Shopify Apps', href: '/en/shopify-apps/' },
   { label: 'SpecFinch', href: '/en/shopify-apps/specfinch/' },
   { label: 'PromoFinch', href: '/en/shopify-apps/promofinch/' },
+  { label: 'Guides', href: '/en/guides/' },
 ] as const;

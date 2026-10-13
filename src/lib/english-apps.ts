@@ -10,11 +10,18 @@ export interface EnglishApp {
 export async function getEnglishApps(): Promise<EnglishApp[]> {
   const projects = await getShopifyApps();
   const translations = await getCollection('englishApps');
+  const guides = await getCollection('englishGuides');
   return translations
     .map((translation) => {
       const project = projects.find((entry) => entry.id === translation.id);
       if (!project)
         throw new Error(`English app ${translation.id} must reference a published Shopify app.`);
+      if (
+        !guides.some(
+          (guide) => guide.id === translation.data.relatedGuide && guide.data.appId === project.id,
+        )
+      )
+        throw new Error(`English app ${translation.id} must link to its own published guide.`);
       if (project.data.gallery.length !== translation.data.galleryAlts.length) {
         throw new Error(
           `English app ${translation.id} needs an English caption for every gallery image.`,
@@ -51,6 +58,7 @@ Language: English
 Developer: Chris Snoek / Chris Online
 Shopify App Store: ${project.data.url}
 Published: ${project.data.pubDate.toISOString().split('T')[0]}
+Updated: ${data.updatedDate.toISOString().split('T')[0]}
 App interface: English
 For: ${data.audience}
 
@@ -63,6 +71,7 @@ ${translation.body?.trim() ?? ''}
 ## Related pages
 
 - [Shopify Apps in English](${SITE.url}/en/shopify-apps/)
+- [Practical guide](${SITE.url}/en/guides/${data.relatedGuide}/)
 - [Dutch product page](${SITE.url}/werk/${project.id}/)
 `;
 }
