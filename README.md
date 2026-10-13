@@ -202,3 +202,15 @@ src/
 ├─ pages/             # routes: index, contact, bedankt, werk/[id], robots.txt
 └─ styles/            # global.css — design tokens & basisstijlen
 ```
+
+## Engelse gidsen en app-vindbaarheid
+
+`src/content/guides-en/*.md` levert `/en/guides/<id>/` en de bijbehorende
+Markdown-route. Titel, kort antwoord, auteur/datum en praktische inhoud komen
+uit dezelfde bron. `englishApps.relatedGuide` moet naar een gids voor diezelfde
+app verwijzen; de build controleert de koppeling. De Engelse navigatie en footer
+verwijzen naar de gidsenindex. Gidsen met andere inhoud dan Nederlandse artikelen
+krijgen geen fictieve vertaalkoppeling via hreflang.
+
+Onderzoek, concurrentiesnapshot, per-app zoekintenties en meetplan staan in
+[het SEO/GEO-onderzoek van 13 oktober 2026](docs/marketing/seo-geo-2026-10-13.md).

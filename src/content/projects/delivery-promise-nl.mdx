@@ -1,6 +1,6 @@
 ---
-title: 'Delivery Promise NL: verwachte bezorgdatums'
-heroTitle: 'Delivery Promise NL maakt levertijd concreet.'
+title: 'Delivery Promise NL: bezorgdatum op je Shopify-productpagina'
+heroTitle: 'Een bezorgdatum met Nederlandse werkdagen.'
 client: 'Chris Online'
 summary: 'Een Shopify-app die een verwachte bezorgdatum of -periode op productpagina’s toont, berekend met Nederlandse werkdagen, cutoffs, feestdagen en productregels.'
 role: 'Productstrategie, design & development'
@@ -12,6 +12,7 @@ skills:
 cover: '../../assets/projects/delivery-promise-nl/preview.png'
 coverAlt: 'De deterministische preview van Delivery Promise NL met een verwachte bezorgperiode en uitleg van de berekening.'
 pubDate: 2026-09-02
+updatedDate: 2026-10-13
 order: 1
 url: 'https://apps.shopify.com/delivery-promise-nl'
 urlLabel: 'Bekijk in de Shopify App Store'
@@ -67,7 +68,7 @@ op de plek waar de klant de aankoop overweegt.
 
 ## Wat de app doet
 
-De merchant configureert één Europe/Amsterdam-werkschema met werkdagen, dagelijkse cutoffs,
+De merchant configureert één werkschema (standaard Europe/Amsterdam) met werkdagen, dagelijkse cutoffs,
 verwerkingstijd, transporttijd, Nederlandse feestdagen en eigen sluitingsdagen. Voor afwijkende
 producten zijn maximaal 25 regels op producthandle, tag of leverancier mogelijk.
 
@@ -78,8 +79,44 @@ Online Store 2.0-appblok in het producttemplate.
 - Nederlandse of Engelse tekst op de productpagina
 - Verwachte datum of periode, geen bezorggarantie
 - Product-, tag- en leveranciersregels voor afwijkende doorlooptijden
-- Geen toegang tot producten, klanten, bestellingen, voorraad of trackingdata
+- Geen product-, klant-, order-, voorraad- of trackinggegevens ophalen via de Admin API; het appblok gebruikt handle, tags en leverancier uit de productpagina voor de regelkeuze
 - Geen automatische wijziging van themabestanden
+
+## Nederlandse feestdagen, cutoffs en productuitzonderingen
+
+Je kunt Nederlandse feestdagen inschakelen en eigen sluitingsdagen toevoegen. Het ingestelde
+werkschema wordt gebruikt bij de besteldag, verwerking en transport. Een bestelling precies op
+de cutoff telt als na de cutoff. De preview laat zien hoe die keuzes de verwachte uitkomst
+veranderen, ook rond weekenden en sluitingsdagen.
+
+Bij meerdere uitzonderingen gebruikt de app eerst de producthandle, daarna de eerste passende
+tagregel, daarna de leverancier en ten slotte het standaardschema. Controleer die volgorde in
+de preview voordat je publiceert.
+
+## Veelgestelde vragen over Delivery Promise NL
+
+### Biedt Shopify zelf ook bezorgdatums?
+
+Ja. Shopify biedt eigen bezorgdatumopties en Shop Promise kan voor geschikte winkels ook
+productpagina’s bedienen. Beschikbaarheid en voorwaarden verschillen. Delivery Promise NL
+is gericht op je eigen kalender, Nederlandse feestdagen en productregels in een controleerbaar
+productpagina-appblok. De [praktische bezorgdatumgids](/kennis/verwachte-bezorgdatum-shopify/)
+helpt kiezen en verwijst naar Shopify’s actuele documentatie.
+
+### Waar kan ik het appblok plaatsen?
+
+In een producttemplate van een Online Store 2.0-thema dat appblokken ondersteunt. Je plaatst en
+verplaatst het via de thema-editor. De app past geen themabestanden automatisch aan.
+
+### Berekent de app datums voor checkout of tracking?
+
+Nee. Dit productblok berekent een verwachting vanuit je ingestelde kalender. Het wijzigt geen
+checkout, orderbevestiging of carriertracking en houdt geen rekening met postcode of voorraad.
+
+### Is de datum gegarandeerd?
+
+Nee. De datum of periode is een verwachting volgens de ingestelde regels. Controleer regelmatig
+of die regels overeenkomen met je werkelijke verwerking en transport.
 
 ## De relatie met conversie
 

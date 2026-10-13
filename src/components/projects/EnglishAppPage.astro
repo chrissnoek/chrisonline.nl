@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import { render } from 'astro:content';
+import { getEntry, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../Icon.astro';
 import { type EnglishApp, englishAppPath, englishAppStructuredData } from '../../lib/english-apps';
@@ -16,6 +16,7 @@ const { app, relatedApp } = Astro.props;
 const { project, translation } = app;
 const { data } = translation;
 const { Content } = await render(translation);
+const guide = await getEntry('englishGuides', data.relatedGuide);
 const url = `${SITE.url}${englishAppPath(project.id)}`;
 const breadcrumbLd = {
   '@context': 'https://schema.org',
@@ -38,6 +39,7 @@ const pageLd = {
   description: data.description,
   url,
   inLanguage: 'en',
+  dateModified: data.updatedDate.toISOString(),
   isPartOf: { '@id': `${SITE.url}/#website` },
   mainEntity: { '@id': `${SITE.url}/werk/${project.id}/#software` },
 };
@@ -101,7 +103,31 @@ const pageLd = {
         </dl>
       </section>
 
-      <div class="app-body prose-project"><Content /></div>
+      <div class="app-body prose-project">
+        <p class="app-updated">
+          Product information updated {
+            data.updatedDate.toLocaleDateString('en-GB', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            })
+          }.
+        </p>
+        <Content />
+        {
+          guide && (
+            <aside class="app-guide">
+              <>
+                <h2>Try the practical workflow.</h2>
+                <p>{guide.data.intro}</p>
+                <a href={`/en/guides/${guide.id}/`}>
+                  {guide.data.title} <Icon name="arrowRight" size={18} />
+                </a>
+              </>
+            </aside>
+          )
+        }
+      </div>
 
       <section class="app-gallery" aria-labelledby="screens-heading">
         <h2 id="screens-heading">See the checks in context.</h2>
@@ -262,6 +288,20 @@ const pageLd = {
   .app-body {
     max-width: 48rem;
     margin: clamp(4rem, 7vw, 7rem) auto;
+  }
+  .app-updated {
+    color: #62625e;
+    font-size: 0.85rem;
+  }
+  .app-guide {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #deded9;
+  }
+  .app-guide a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
   }
   .app-gallery h2,
   .app-support h2 {

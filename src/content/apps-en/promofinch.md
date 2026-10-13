@@ -1,8 +1,10 @@
 ---
-title: 'PromoFinch: Shopify Discount & Gross Margin Checks'
+title: 'PromoFinch: Shopify Discount Margin Checker'
 description: 'Check Shopify percentage discounts against price and gross-margin limits. Monitor campaign changes and review missing costs with read-only PromoFinch.'
-heroTitle: 'PromoFinch checks your sale.'
-intro: 'Check supported Shopify percentage discounts against your price and estimated gross-margin limits before and during a sale.'
+heroTitle: 'Check Shopify discount prices & margins.'
+intro: 'PromoFinch checks supported percentage discounts against your price floor and estimated gross-margin limits. Review missing costs and monitor changes during your sale.'
+updatedDate: 2026-10-13
+relatedGuide: 'check-shopify-discount-margins'
 tagline: 'Check discount prices and estimated gross margins before your sale.'
 audience: 'Shopify teams running recurring promotions with available product costs and their own price or gross-margin limits.'
 features:
@@ -33,6 +35,17 @@ The report shows findings and the product costs and inputs behind each calculati
 For example, if the calculated discounted price falls below your own price floor, PromoFinch
 shows that finding and the inputs used. Missing costs and unsupported conditions remain visible
 rather than being treated as a successful calculation.
+
+## A 20% discount can leave a 12.5% gross margin
+
+Illustrative example: a product priced at $100 with a $70 product cost receives a supported
+20% discount. The calculated selling price is $80. Estimated gross margin is
+($80 − $70) ÷ $80 × 100 = **12.5%**. With a $85 price floor or a 20% minimum gross-margin
+rule, this example produces a finding. These are example inputs, not merchant results.
+
+Missing cost is not treated as a zero cost. Check scope and coverage before relying on a
+report: an unsupported discount is not a passed discount. The [discount margin guide](/en/guides/check-shopify-discount-margins/)
+explains the calculation, missing costs and a practical campaign checklist.
 
 ## Monitor changes during and after a promotion
 
@@ -68,6 +81,11 @@ compliance certification.
 ### Does PromoFinch change my prices or discounts?
 
 No. PromoFinch is read-only. You review the findings and make any corrections in Shopify.
+
+### Does PromoFinch block a discount or restore prices automatically?
+
+No. It reports findings for your team to review. It does not block checkout discounts,
+change selling prices or automatically restore prices after a sale.
 
 ### Is gross margin the same as net profit?
 
