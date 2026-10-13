@@ -164,6 +164,7 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
   }
 
   document.addEventListener('astro:page-load', initHeader);
+  initHeader();
 </script>
 
 <style>
@@ -217,6 +218,7 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
     color: #565652;
     font-size: 0.85rem;
     font-weight: 540;
+    white-space: nowrap;
     transition: color 180ms ease;
   }
 
@@ -340,7 +342,7 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
     backdrop-filter: saturate(140%) blur(18px);
   }
 
-  @media (max-width: 1023px) {
+  @media (max-width: 1199px) {
     .site-header {
       padding-inline: 0.5rem;
     }

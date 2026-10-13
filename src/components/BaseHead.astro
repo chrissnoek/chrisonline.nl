@@ -12,6 +12,7 @@ interface Props {
   jsonLd?: Record<string, unknown>[];
   /** Voorkom indexering van deze pagina (bijv. de bedankt-pagina). */
   noindex?: boolean;
+  markdown?: string;
 }
 
 const {
@@ -21,6 +22,7 @@ const {
   type = 'website',
   jsonLd = [],
   noindex = false,
+  markdown,
 } = Astro.props;
 
 const pageTitle = title ? SEO.titleTemplate.replace('%s', title) : SEO.defaultTitle;
@@ -54,6 +56,7 @@ const personLd = {
     'Shopify-appontwikkeling',
     'SpecFinch',
     'Delivery Promise NL',
+    'PromoFinch',
   ],
 };
 
@@ -105,6 +108,22 @@ const allJsonLd = [personLd, businessLd, websiteLd, ...jsonLd];
 <title>{pageTitle}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalURL} />
+{
+  markdown && (
+    <link
+      rel="alternate"
+      type="text/markdown"
+      href={new URL(markdown, Astro.site)}
+      title="Deze pagina in Markdown"
+    />
+  )
+}
+<link
+  rel="alternate"
+  type="text/plain"
+  href="/llms.txt"
+  title="Publieke site-informatie voor AI-clients"
+/>
 {noindex && <meta name="robots" content="noindex, nofollow" />}
 <meta name="author" content={SITE.author} />
 <meta name="theme-color" content="#FFFFFF" />

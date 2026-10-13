@@ -3,16 +3,21 @@ import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import Icon from '../Icon.astro';
 
-const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const projects = (
+  await getCollection(
+    'projects',
+    ({ data }) => data.projectType === 'client-project' && !data.placeholder,
+  )
+).sort((a, b) => a.data.order - b.data.order);
 ---
 
 <section id="werk" class="work-section scroll-mt-24" aria-labelledby="work-heading">
   <div class="work-heading-row reveal-up">
     <div>
-      <h2 id="work-heading">Webshops, platforms en eigen Shopify-apps</h2>
+      <h2 id="work-heading">Websites en webshops.<br />Gebouwd voor het merk.</h2>
       <p>
-        Van merkervaring en complexe boekingsflow tot twee apps die ik zelf van productspecificatie
-        naar de Shopify App Store bracht.
+        Een selectie van mijn werk voor merken en bureaus. Van premium Shopify-webshops tot
+        reisplatforms, boekingsflows en campagnes.
       </p>
     </div>
     <div class="carousel-controls" role="group" aria-label="Bediening projectcarrousel">
@@ -74,27 +79,42 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
 
     const getStep = () => {
       const slide = track.querySelector<HTMLElement>('.project-slide');
-      return slide ? slide.offsetWidth + 24 : track.clientWidth * 0.75;
+      return slide
+        ? slide.offsetWidth + parseFloat(getComputedStyle(track).gap)
+        : track.clientWidth * 0.75;
     };
 
     previous.addEventListener(
       'click',
-      () => track.scrollBy({ left: -getStep(), behavior: 'smooth' }),
+      () =>
+        track.scrollBy({
+          left: -getStep(),
+          behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+        }),
       {
         signal,
       },
     );
-    next.addEventListener('click', () => track.scrollBy({ left: getStep(), behavior: 'smooth' }), {
-      signal,
-    });
+    next.addEventListener(
+      'click',
+      () =>
+        track.scrollBy({
+          left: getStep(),
+          behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+        }),
+      {
+        signal,
+      },
+    );
   }
 
   document.addEventListener('astro:page-load', initProjects);
+  initProjects();
 </script>
 
 <style>
   .work-section {
-    padding: 0 0 clamp(7rem, 11vw, 11rem);
+    padding: 0 0 clamp(4rem, 7vw, 7rem);
     overflow: hidden;
     background: #ffffff;
   }

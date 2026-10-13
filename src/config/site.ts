@@ -95,6 +95,7 @@ export const SOCIALS = [
 export const NAV = [
   { label: 'Shopify-webshop', href: '/shopify-webshop-laten-maken' },
   { label: 'Ervaring', href: '/#werk' },
+  { label: 'Shopify Apps', href: '/shopify-apps' },
   { label: 'Kennisbank', href: '/kennis' },
   { label: 'Werkwijze', href: '/#werkwijze' },
   { label: 'Shopify-onderhoud', href: '/shopify-onderhoud' },

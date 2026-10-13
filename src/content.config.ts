@@ -77,6 +77,16 @@ const projects = defineCollection({
         .default([]),
       /** Eigen Shopify-apps krijgen een productgerichte projectpagina. */
       projectType: z.enum(['client-project', 'shopify-app']).default('client-project'),
+      /** Feitelijke productinformatie, gedeeld door HTML, structured data en Markdown. */
+      application: z
+        .object({
+          name: z.string(),
+          tagline: z.string(),
+          audience: z.string(),
+          features: z.array(z.string()).min(1),
+          languages: z.array(z.string()).min(1),
+        })
+        .optional(),
       /** Drie feitelijke kolommen voor probleem, mechanisme en doel. */
       highlights: z
         .array(

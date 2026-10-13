@@ -1,0 +1,189 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import Icon from './Icon.astro';
+import { appName } from '../lib/shopify-apps';
+import { withUtm } from '../utils/utm';
+
+interface Props {
+  apps: CollectionEntry<'projects'>[];
+}
+const { apps } = Astro.props;
+---
+
+<div class="app-grid">
+  {
+    apps.map((app, index) => (
+      <article
+        class:list={['app-card reveal-up', apps.length > 2 && index === 0 && 'app-card-featured']}
+      >
+        <a href={`/werk/${app.id}`} class="app-media" aria-label={`Bekijk ${appName(app)}`}>
+          <Image
+            src={app.data.cover}
+            alt={app.data.coverAlt}
+            widths={[480, 720, 1080]}
+            sizes="(max-width: 767px) 100vw, 50vw"
+            format="avif"
+            quality="high"
+            loading="lazy"
+          />
+        </a>
+        <div class="app-copy">
+          <h3>
+            <a href={`/werk/${app.id}`}>{appName(app)}</a>
+          </h3>
+          <p class="app-tagline">{app.data.application?.tagline ?? app.data.summary}</p>
+          <p class="app-description">{app.data.summary}</p>
+          <div class="app-links">
+            <a href={`/werk/${app.id}`} class="app-details">
+              Ontdek de app <Icon name="arrowRight" size={18} />
+            </a>
+            {app.data.url && (
+              <a
+                href={withUtm(app.data.url)}
+                target="_blank"
+                rel="noopener"
+                class="app-store"
+                aria-label={`${appName(app)} in de Shopify App Store (nieuw tabblad)`}
+              >
+                Shopify App Store <Icon name="arrowUpRight" size={16} />
+              </a>
+            )}
+          </div>
+        </div>
+      </article>
+    ))
+  }
+</div>
+
+<style>
+  .app-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+  }
+  .app-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .app-media {
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: 1.25rem;
+    background: #eaeae5;
+    padding: clamp(1rem, 2.5vw, 2rem);
+  }
+  .app-media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 0.35rem;
+    box-shadow: 0 0.75rem 2rem #11111114;
+    transition: transform 350ms ease;
+  }
+  .app-media:hover :global(img),
+  .app-media:focus-visible :global(img) {
+    transform: scale(1.025);
+  }
+  .app-copy {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 1.6rem 0.15rem 0;
+  }
+  h3 {
+    color: #111;
+    font-size: clamp(1.6rem, 2.5vw, 2.25rem);
+    font-weight: 650;
+    line-height: 1.15;
+    letter-spacing: -0.045em;
+  }
+  .app-tagline {
+    margin-top: 0.65rem;
+    color: #111;
+    font-size: 1.12rem;
+    font-weight: 530;
+    line-height: 1.5;
+  }
+  .app-description {
+    max-width: 56ch;
+    margin: 0.8rem 0 1.5rem;
+    color: #62625e;
+    font-size: 0.95rem;
+  }
+  .app-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.4rem;
+    margin-top: auto;
+  }
+  .app-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.8rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+  .app-details {
+    padding: 0.6rem 0.95rem;
+    border-radius: 0.75rem;
+    background: #111;
+    color: #fff;
+  }
+  .app-details:hover {
+    background: #343430;
+  }
+  .app-store {
+    color: #575751;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .app-store:hover {
+    color: var(--accent-text);
+  }
+  .app-card-featured {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4rem);
+    padding-bottom: 1.5rem;
+  }
+  .app-card-featured .app-copy {
+    padding: 0;
+  }
+  .app-card-featured .app-links {
+    margin-top: 0.4rem;
+  }
+  @media (max-width: 767px) {
+    .app-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    .app-card-featured {
+      grid-column: auto;
+      display: flex;
+      gap: 0;
+      padding-bottom: 0;
+    }
+    .app-card-featured .app-copy {
+      padding: 1.6rem 0.15rem 0;
+    }
+    .app-media {
+      border-radius: 1rem;
+      padding: 1rem;
+    }
+    .app-links {
+      column-gap: 1rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .app-media :global(img) {
+      transition: none;
+    }
+  }
+</style>

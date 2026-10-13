@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import AppProjectPage from '../../components/projects/AppProjectPage.astro';
 import StandardProjectPage from '../../components/projects/StandardProjectPage.astro';
+import { appStructuredData } from '../../lib/shopify-apps';
 
 export async function getStaticPaths() {
   const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
@@ -9,36 +10,25 @@ export async function getStaticPaths() {
     params: { id: entry.id },
     props: {
       entry,
-      prev: index > 0 ? projects[index - 1] : null,
-      next: index < projects.length - 1 ? projects[index + 1] : null,
+      prev:
+        projects
+          .slice(0, index)
+          .filter((project) => project.data.projectType === entry.data.projectType)
+          .at(-1) ?? null,
+      next:
+        projects
+          .slice(index + 1)
+          .find((project) => project.data.projectType === entry.data.projectType) ?? null,
     },
   }));
 }
 
 const { entry, prev, next } = Astro.props;
-const { data } = entry;
-const origin = Astro.site!.origin;
-const creativeWorkLd = {
-  '@context': 'https://schema.org',
-  '@type': data.projectType === 'shopify-app' ? 'SoftwareApplication' : 'CreativeWork',
-  name: data.title,
-  headline: data.title,
-  description: data.summary,
-  url: new URL(Astro.url.pathname, Astro.site).href,
-  about: data.skills.join(', '),
-  dateCreated: data.pubDate.toISOString().split('T')[0],
-  image: new URL(data.cover.src, Astro.site).href,
-  creator: { '@id': `${origin}/#person` },
-  ...(data.projectType === 'shopify-app'
-    ? { applicationCategory: 'BusinessApplication', operatingSystem: 'Shopify' }
-    : {}),
-  ...(data.url ? { sameAs: [data.url] } : {}),
-};
 ---
 
 {
-  data.projectType === 'shopify-app' ? (
-    <AppProjectPage entry={entry} prev={prev} next={next} jsonLd={creativeWorkLd} />
+  entry.data.projectType === 'shopify-app' ? (
+    <AppProjectPage entry={entry} prev={prev} next={next} jsonLd={appStructuredData(entry)} />
   ) : (
     <StandardProjectPage entry={entry} prev={prev} next={next} />
   )
